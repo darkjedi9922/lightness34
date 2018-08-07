@@ -10,6 +10,7 @@ use frame\views\Page;
 use frame\exceptions\ErrorException;
 use frame\exceptions\StrictException;
 use frame\LatePropsObject;
+use frame\database\Database;
 
 /**
  * @property-read Database $db
