@@ -26,14 +26,14 @@ class Router extends LatePropsObject
     public $pagename;
 
     /**
+     * @var array Массив GET параметров из заданного url
+     */
+    public $args;
+
+    /**
      * @var array Части в имени страницы (которые разделяются через "/")
      */
     private $pathElements;
-
-    /**
-     * @var array Массив GET параметров из заданного url
-     */
-    private $queryElements;
 
     /**
      * Преобразует url в тот же url с обновленными get параметрами
@@ -49,9 +49,9 @@ class Router extends LatePropsObject
         else {
             $url = trim($url, '=&');
             $query = parse_url($url, PHP_URL_QUERY);
-            parse_str($query, $queryElements);
-            $newQueryElements = array_merge($queryElements, $newGet);
-            $newQuery = http_build_query($newQueryElements);
+            parse_str($query, $args);
+            $newArgs = array_merge($args, $newGet);
+            $newQuery = http_build_query($newArgs);
             $oldQuery = $query;
             if (!empty($oldQuery)) return str_replace($oldQuery, $newQuery, $url);
             else return $url.'?'.$newQuery;
@@ -67,7 +67,7 @@ class Router extends LatePropsObject
         $this->pagename = trim(parse_url($this->url, PHP_URL_PATH), '/');
         $this->pathElements = explode('/', $this->pagename);
         $query = parse_url($this->url, PHP_URL_QUERY);
-        parse_str($query, $this->queryElements);
+        parse_str($query, $this->args);
     }
 
     /**
@@ -79,7 +79,7 @@ class Router extends LatePropsObject
      */
     public function getArg($name)
     {
-        if (isset($this->queryElements[$name])) return $this->queryElements[$name];
+        if (isset($this->args[$name])) return $this->args[$name];
         else return null;
     }
 

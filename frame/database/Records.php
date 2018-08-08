@@ -21,7 +21,7 @@ class Records
     /**
      * @var Database
      */
-    private $db;
+    public $db;
 
     /**
      * Создает экземпляр класса

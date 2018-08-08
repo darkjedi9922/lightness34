@@ -181,3 +181,14 @@ function ob_restart()
     if (ob_get_length() != 0) ob_clean();
     ob_start();
 }
+
+function http_parse_query($query, $arg_separator)
+{
+    $query = explode($arg_separator, $query);
+    $args = [];
+    for ($i = 0, $c = count($query); $i < $c; ++$i) {
+        $arg = explode('=', $query[$i]);
+        $args[urldecode($arg[0])] = urldecode($arg[1]);
+    }
+    return $args;
+}
