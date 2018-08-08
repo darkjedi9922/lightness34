@@ -11,9 +11,11 @@ use frame\exceptions\ErrorException;
 use frame\exceptions\StrictException;
 use frame\LatePropsObject;
 use frame\database\Database;
+use frame\Action;
 
 /**
  * @property-read Database $db
+ * @property-read Action $action Текущий выполняющийся action. Если его нет, вернет null.
  */
 final class Core extends LatePropsObject
 {
@@ -59,6 +61,17 @@ final class Core extends LatePropsObject
         return new Database($host, $username, $password, $dbname);
     }
 
+    protected function __create__action()
+    {
+        if ($action = self::$router->getArg('action')) {
+            $args = http_parse_query($action, ';');
+            $name = explode('_', $args['action']);
+            $id = $name[0];
+            $class = $name[1];
+            return $class::instance($args, $id);
+        } else return null;
+    }
+
     private function __construct() {}
 
     private static function setup()
@@ -82,6 +95,7 @@ final class Core extends LatePropsObject
 
     private static function render()
     {
+        if (self::$app->action) self::$app->action->exec();
         foreach (self::$modules as $module) $module->preparePage();
         $page = self::$router->pagename;
         if (Page::find($page)) (new Page($page))->show();
