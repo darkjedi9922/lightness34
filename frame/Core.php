@@ -25,12 +25,6 @@ final class Core extends LatePropsObject
     public static $app = null;
 
     /**
-     * @var array Ассоциативный массив зарегистрированных модулей.
-     * Ключи - имена классов модулей, значения - экземпляры модулей. 
-     */
-    public static $modules = [];
-
-    /**
      * @var Router Роутер текущего запроса
      */
     public static $router = null;
@@ -96,15 +90,9 @@ final class Core extends LatePropsObject
     private static function render()
     {
         if (self::$app->action) self::$app->action->exec();
-        foreach (self::$modules as $module) $module->preparePage();
         $page = self::$router->pagename;
         if (Page::find($page)) (new Page($page))->show();
         else throw new HttpError(404, 'Page '.$page.' does not exist.');
-    }
-
-    private static function addModule(Module $module)
-    {
-        self::$modules[get_class($module)] = $module;
     }
 
     private static function setErrorHandler()
