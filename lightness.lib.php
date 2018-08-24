@@ -182,6 +182,15 @@ function ob_restart()
     ob_start();
 }
 
+/**
+ * Стирает содержимое со всех уровней output buffer'а,
+ * выходя на самый первый
+ */
+function ob_end_clean_all()
+{
+    while (ob_get_level() > 0) ob_end_clean();
+}
+
 function http_parse_query($query, $arg_separator)
 {
     $query = explode($arg_separator, $query);
