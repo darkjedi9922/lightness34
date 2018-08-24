@@ -1,15 +1,15 @@
 <?php namespace frame;
 
-use frame\Router;
+use frame\route\Router;
 use frame\LatePropsObject;
-use frame\http\Request;
+use frame\route\Request;
 use frame\views\Page;
 use frame\database\Database;
 use frame\tools\Json;
 use frame\tools\Logger;
-use frame\exceptions\ErrorException;
-use frame\exceptions\StrictException;
-use frame\exceptions\HttpError;
+use frame\errors\ErrorException;
+use frame\errors\StrictException;
+use frame\errors\HttpError;
 
 /**
  * Application - не только экземпляр приложения, а также это сосредоточение 

@@ -7,11 +7,11 @@ require_once __DIR__.'/autoload.php';
 require_once __DIR__.'/lightness.lib.php';
 
 use frame\Application;
-use frame\exceptions\HttpError;
-use frame\exceptions\StrictException;
-use frame\handlers\HttpErrorHandler;
-use frame\handlers\DefaultErrorHandler;
-use frame\handlers\StrictExceptionHandler;
+use frame\errors\HttpError;
+use frame\errors\StrictException;
+use frame\errors\handlers\HttpErrorHandler;
+use frame\errors\handlers\DefaultErrorHandler;
+use frame\errors\handlers\StrictExceptionHandler;
 
 $app = new Application;
 $app->setDefaultHandler(DefaultErrorHandler::class);

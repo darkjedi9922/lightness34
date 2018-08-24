@@ -1,8 +1,8 @@
-<?php namespace frame\handlers;
+<?php namespace frame\errors\handlers;
 
 use frame\Core;
 use frame\views\Page;
-use frame\exceptions\StrictException;
+use frame\errors\StrictException;
 
 class DefaultErrorHandler implements ErrorHandler
 {

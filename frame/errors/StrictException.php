@@ -1,4 +1,4 @@
-<?php namespace frame\exceptions;
+<?php namespace frame\errors;
 
 /**
  * Такие исключения должны игнорировать любые настройки о выводе ошибок

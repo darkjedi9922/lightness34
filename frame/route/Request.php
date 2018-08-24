@@ -1,4 +1,4 @@
-<?php namespace frame\http;
+<?php namespace frame\route;
 
 class Request
 {

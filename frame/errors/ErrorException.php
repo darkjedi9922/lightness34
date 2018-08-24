@@ -1,4 +1,4 @@
-<?php namespace frame\exceptions;
+<?php namespace frame\errors;
 
 class ErrorException extends \ErrorException
 {

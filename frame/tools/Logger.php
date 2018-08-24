@@ -1,6 +1,6 @@
 <?php namespace frame\tools;
 
-use frame\Client;
+use frame\tools\Client;
 
 class Logger
 {

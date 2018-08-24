@@ -1,7 +1,6 @@
-<?php namespace frame;
+<?php namespace frame\route;
 
-use modules\core\CoreModule;
-use frame\http\Request;
+use frame\route\Request;
 use frame\LatePropsObject;
 
 /**

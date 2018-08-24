@@ -1,4 +1,4 @@
-<?php namespace frame\handlers;
+<?php namespace frame\errors\handlers;
 
 interface ErrorHandler
 {

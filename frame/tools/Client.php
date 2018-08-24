@@ -1,4 +1,4 @@
-<?php namespace frame;
+<?php namespace frame\tools;
 
 class Client 
 {
