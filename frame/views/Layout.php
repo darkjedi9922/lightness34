@@ -17,7 +17,7 @@ class Layout extends View
      */
     public static function find($name)
     {
-        return parent::find(Core::$config->{'layouts.folder'} . '/' . $name);
+        return parent::find(Core::$app->config->{'layouts.folder'} . '/' . $name);
     }
 
     /**

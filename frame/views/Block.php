@@ -11,7 +11,7 @@ class Block extends View
      */
     public static function find($name)
     {
-        return parent::find(Core::$config->{'blocks.folder'} . '/' . $name);
+        return parent::find(Core::$app->config->{'blocks.folder'} . '/' . $name);
     }
 
     /**
@@ -20,6 +20,6 @@ class Block extends View
     public function __construct($name, $layout = null)
     {
         parent::__construct($name, $layout);
-        if ($this->layoutname === null) $this->layoutname = Core::$config->{'blocks.defaultLayout'};
+        if ($this->layoutname === null) $this->layoutname = Core::$app->config->{'blocks.defaultLayout'};
     }
 }

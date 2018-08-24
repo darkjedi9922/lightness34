@@ -87,7 +87,7 @@ abstract class Action extends LatePropsObject
     public final function getUrl()
     {
         $this->params['action'] = $this->name;
-        return Core::$router->toUrl(['action' => http_build_query($this->params, '', ';')]);
+        return Core::$app->router->toUrl(['action' => http_build_query($this->params, '', ';')]);
     }
 
     /**
@@ -243,7 +243,7 @@ abstract class Action extends LatePropsObject
      */
     protected function getFailRedirect()
     {
-        if (Core::$config->{'actions.defaultFailRedirectMode'} === 'back') {
+        if (Core::$app->config->{'actions.defaultFailRedirectMode'} === 'back') {
             if (Request::hasReferer()) return Request::getReferer();
             else return '/';
         } else return null;

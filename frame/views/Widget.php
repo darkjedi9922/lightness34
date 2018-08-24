@@ -11,7 +11,7 @@ class Widget extends View
      */
     public static function find($name)
     {
-        return parent::find(Core::$config->{'widgets.folder'} . '/' . $name);
+        return parent::find(Core::$app->config->{'widgets.folder'} . '/' . $name);
     }
 
     /**
@@ -20,6 +20,6 @@ class Widget extends View
     public function __construct($name, $layout = null)
     {
         parent::__construct($name, $layout);
-        if ($this->layoutname === null) $this->layoutname = Core::$config->{'widgets.defaultLayout'};
+        if ($this->layoutname === null) $this->layoutname = Core::$app->config->{'widgets.defaultLayout'};
     }
 }

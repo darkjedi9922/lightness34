@@ -4,9 +4,9 @@
 
 use frame\Core;
 
-$this->setLayout('page'); 
+$this->setLayout('page');
 
 ?>
 
-Hello <?= Core::$config->{'site.name'} ?><br>
+Hello <?= Core::$app->config->{'site.name'} ?><br>
 <?php $this->includeBlock('block') ?>
