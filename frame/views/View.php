@@ -1,6 +1,8 @@
 <?php namespace frame\views;
 
+use frame\Application;
 use frame\LatePropsObject;
+use frame\Core;
 
 /**
  * @property-read string $content Внутреннее полностью сгенерированное содержимое вида.
@@ -9,6 +11,11 @@ use frame\LatePropsObject;
  */
 class View extends LatePropsObject
 {
+    /**
+     * @var Application Ссылка на экземпляр приложения для удобства
+     */
+    public $app;
+
     /**
      * @var string Имя вида
      */
@@ -52,6 +59,7 @@ class View extends LatePropsObject
      */
     public function __construct($name, $layout = null)
     {
+        $this->app = Core::$app;
         $this->file = static::find($name);
         $this->name = $name;
         if (!$this->file) throw new \Exception('Viewfile for view "'.$name.'" was not found');

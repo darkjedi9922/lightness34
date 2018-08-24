@@ -34,6 +34,11 @@ abstract class Action extends LatePropsObject
     const FAIL = -1;
 
     /**
+     * @var Application Ссылка на экземпляр приложения для удобства
+     */
+    public $app;
+
+    /**
      * @var string $name Имя экшна. Складывается из id экшна и имени класса
      */
     public $name = '';
@@ -69,6 +74,7 @@ abstract class Action extends LatePropsObject
         if (isset(Core::$app->action) && Core::$app->action->name === $id . '_' . static::class) return Core::$app->action;
         else {
             $action = new static;
+            $action->app = Core::$app;
             $action->name = $id . '_' . static::class;
             $action->params = $params;
             $action->load();
