@@ -33,6 +33,18 @@ class Application extends LatePropsObject
     public $config;
 
     /**
+     * @var array Ключ - имя класса исключения, 
+     * значение - имя класса обработчика
+     */
+    private $hanlders = [];
+
+    /**
+     * @var string Имя класса, обрабатывающего ошибки,
+     * на которые не был задан обработчик
+     */
+    private $defaultHandler = null;
+
+    /**
      * Конструктор
      */
     public function __construct()
@@ -45,20 +57,36 @@ class Application extends LatePropsObject
         define('ROOT_DIR', $_SERVER['DOCUMENT_ROOT']);
         date_default_timezone_set('Europe/Kiev');
 
-        self::setExceptionHandler();
-        self::setErrorHandler();
-        self::registerShutdownFunction();
-
+        $this->enableErrorHundlers();
         $this->config = new Json('config/core.json');
         $this->router = new Router(Request::getRequest());
 
-        Core::$app = $this; // ВРЕМЕННО
+        Core::$app = $this;
     }
 
     public function writeInLog(string $type, string $message)
     {
         $logger = new Logger(ROOT_DIR . '/' . $this->config->{'log.file'});
         $logger->write($type, $message);
+    }
+
+    /**
+     * @param string $throwableClass Имя класса Throwable исключения
+     * @param string $handlerClass Имя класса его обработчика. Обработчик
+     * должен реализовывать интерфейс ErrorHandler
+     */
+    public function setHandler($throwableClass, $handlerClass)
+    {
+        $this->hanlders[$throwableClass] = $handlerClass;
+    }
+
+    /**
+     * Устанавливает обработчик ошибок, на которые не был задан обработчик
+     * @param string $handlerClass Имя класса обработчика
+     */
+    public function setDefaultHandler($handlerClass)
+    {
+        $this->defaultHandler = $handlerClass;
     }
 
     public function exec()
@@ -89,27 +117,26 @@ class Application extends LatePropsObject
         return new Database($host, $username, $password, $dbname);
     }
 
-    private function setErrorHandler()
+    /**
+     * Регистрирует все обработчики ошибок, где они преобразуют ошибки в Throwable
+     * и делегируют их методу handleError()
+     */
+    private function enableErrorHundlers()
     {
+        // error
         set_error_handler(function ($type, $message, $file, $line) {
-            $this->handleException(new ErrorException($type, $message, $file, $line));
+            $this->handleError(new ErrorException($type, $message, $file, $line));
         });
-    }
-
-    private function registerShutdownFunction()
-    {
+        // shutdown error
         register_shutdown_function(function () {
             $e = error_get_last();
             if ($e && in_array($e['type'], ErrorException::FATAL_ERRORS)) {
-                $this->handleException(new ErrorException($e['type'], $e['message'], $e['file'], $e['line']));
+                $this->handleError(new ErrorException($e['type'], $e['message'], $e['file'], $e['line']));
             }
         });
-    }
-
-    private function setExceptionHandler()
-    {
+        // exceptions
         set_exception_handler(function (\Throwable $e) {
-            $this->handleException($e);
+            $this->handleError($e);
         });
     }
 
@@ -117,45 +144,12 @@ class Application extends LatePropsObject
      * Абсолютно все необработанные ошибки и исключения всех видов
      * и уровней попадают сюда в виде Throwable
      */
-    private function handleException(\Throwable $e)
+    private function handleError(\Throwable $e)
     {
         $logging = $this->config->{'log.enabled'};
         if ($logging) $this->writeInLog(Logger::ERROR, $e);
 
-        switch (get_class($e)) {
-            case HttpError::class:
-                $this->handleHttpError($e);
-                break;
-
-            case StrictException::class:
-                echo 'Error has occured but ' . $e->getMessage() . ($logging ? '. See more in the log.' : '');
-                break;
-
-            default:
-                $errorsMode = $this->config->{"errors.showMode"};
-                if ($errorsMode == "errorPage" || $errorsMode == "errorDevPage") {
-                    $page = $this->config->{"errors." . $errorsMode};
-                    try {
-                        (new Page($page))->show();
-                    } catch (\Exception $pe) {
-                        $this->handleException(new StrictException('Error page or error development page does not exist', 0, $e));
-                    }
-                } else if ($errorsMode == "display") {
-                    /**
-                     * Все виды при своей загрузке входят в новый вложенный уровень буфера.
-                     * Благодаря этому при ошибке, стираем все что должно было быть выведено
-                     * на каждом из уровней, потом выводим ошибку и прекращаем выполнение скрипта.
-                     */
-                    while (ob_get_level() > 1) ob_end_clean();
-                    echo str_replace("\n", endl, $e);
-                    exit;
-                }
-        }
-    }
-
-    private function handleHttpError(HttpError $e)
-    {
-        $page = $this->config->{'errors.' . $e->getCode() . '.page'};
-        (new Page($page))->show();
+        if (isset($this->hanlders[get_class($e)])) (new $this->hanlders[get_class($e)])->handle($e);
+        else if ($this->defaultHandler) (new $this->defaultHandler)->handle($e);
     }
 }
