@@ -5,7 +5,7 @@ RewriteEngine On
 RewriteBase /
 
 #Главный файл:
-DirectoryIndex core.php
+DirectoryIndex index.php
 
 #Установка кодировки сайта
 AddDefaultCharset UTF-8
@@ -19,13 +19,13 @@ RewriteCond %{DOCUMENT_ROOT}/public/%{REQUEST_URI} -f
 #$0 - это первое выражение в скобках, то есть (.*)
 RewriteRule ^(.*)$ public/$0 [L]
 
-#По умолчанию всегда переходим на core.php
+#По умолчанию всегда переходим на index.php
 #При этом нужно разрешить входить в папку public напрямую,
 #чтобы можно было реализовать правила выше
-RewriteRule !(^public/) core.php [L]
+RewriteRule !(^public/) index.php [L]
 
 #Страницы ошибок
-#Запросы к этим файлам пройдут через переадресацию к core
+#Запросы к этим файлам пройдут через переадресацию к index
 #А он уже решит, что с этим делать
 ErrorDocument 403 /403
 ErrorDocument 404 /404
