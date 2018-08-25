@@ -1,6 +1,5 @@
 <?php namespace frame\views;
 
-use frame\Application;
 use frame\LatePropsObject;
 use frame\Core;
 
@@ -12,7 +11,7 @@ use frame\Core;
 class View extends LatePropsObject
 {
     /**
-     * @var Application Ссылка на экземпляр приложения для удобства
+     * @var Core Ссылка на экземпляр приложения для удобства
      */
     public $app;
 

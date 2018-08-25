@@ -34,7 +34,7 @@ abstract class Action extends LatePropsObject
     const FAIL = -1;
 
     /**
-     * @var Application Ссылка на экземпляр приложения для удобства
+     * @var Core Ссылка на экземпляр приложения для удобства
      */
     public $app;
 
