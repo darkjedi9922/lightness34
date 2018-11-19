@@ -66,7 +66,18 @@ function generate_unique_filename($file)
 
 // =============================================================================
 
-function move_uploaded_unique_file(array $file, string $path, bool $translit = true) : string
+/**
+ * Перемещает загруженный файл из $_FILES в директорию, добавляя номер к имени,
+ * чтобы оно было уникально (если такой файл уже существует).
+ * 
+ * Если заданная директория не существует, создает ее.
+ * 
+ * @param array $file Массив из $_FILES
+ * @param string $path Директория, куда нужно переместить файл
+ * @param bool $translit Нужно ли конвертировать имя файла в транслит
+ * @return string Имя файла после перемещения
+ */
+function move_uploaded_unique_file($file, $path, $translit = true)
 {
     $path = rtrim($path, '/');
     $name = ($translit ? translit($file['name']) : $file['name']);
@@ -78,16 +89,35 @@ function move_uploaded_unique_file(array $file, string $path, bool $translit = t
 
 // =============================================================================
 
-function substring(string $str, int $start, int $length = NULL) : string
+/**
+ * Выделяет подстроку из строки.
+ * Аналогично substr() с кодировкой UTF-8.
+ * 
+ * @param string $str
+ * @param int $start
+ * @param int $length
+ * @return string
+ */
+function substring($str, $start, $length = NULL)
 {
     return mb_substr($str, $start, $length, 'UTF-8');
 }
 
 // =============================================================================
 
-function shorten(string $str, int $length) : string
+/**
+ * Сокращает строку до заданной длинны. 
+ * Если строка была сокращена, добавляет заданное окончание к результату
+ * (например, можно использовать '...', для результата в виде 'This i...').
+ * 
+ * @param string $str
+ * @param int $length
+ * @param string $ending
+ * @return string
+ */
+function shorten($str, $length, $ending = '')
 {
-	if (mb_strlen($str, 'UTF-8') > $length) return substring($str, 0, $length - 3).'...';
+	if (mb_strlen($str, 'UTF-8') > $length) return substring($str, 0, $length).$ending;
 	else return $str;
 }
 
