@@ -3,6 +3,8 @@
 use frame\database\Database;
 use frame\Core;
 
+use function lightlib\array_assemble;
+
 /**
  * Работает с набором записей из таблицы БД
  */

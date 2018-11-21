@@ -10,6 +10,8 @@ use frame\tools\Logger;
 use frame\errors\ErrorException;
 use frame\errors\HttpError;
 
+use function lightlib\http_parse_query;
+
 /**
  * @todo ?Behaviour
  * 

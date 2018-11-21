@@ -1,4 +1,5 @@
-<?php
+<?php namespace lightlib;
+
 // Длинну строки вычисляй через mb_strlen() для кириллицы
 
 function session_start_once()

@@ -1,5 +1,7 @@
 <?php namespace frame\tools\transmitters;
 
+use function lightlib\session_start_once;
+
 class SessionTransmitter extends DataTransmitter
 {
     /**

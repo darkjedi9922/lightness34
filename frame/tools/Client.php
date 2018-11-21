@@ -1,5 +1,7 @@
 <?php namespace frame\tools;
 
+use function lightlib\session_start_once;
+
 class Client 
 {
     public static function getIp(): string

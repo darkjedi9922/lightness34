@@ -4,6 +4,8 @@ use frame\Core;
 use frame\views\Page;
 use frame\errors\StrictException;
 
+use function lightlib\ob_end_clean_all;
+
 class DefaultErrorHandler implements ErrorHandler
 {
     /**

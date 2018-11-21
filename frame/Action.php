@@ -7,6 +7,8 @@ use frame\route\Request;
 use frame\route\Response;
 use frame\tools\transmitters\SessionTransmitter;
 
+use function lightlib\encode_specials;
+
 /**
  * Класс служит для обработки форм, но можно использовать для запуска
  * определенных процессов/скриптов по ссылке.
