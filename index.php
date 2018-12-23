@@ -12,9 +12,17 @@ use frame\errors\StrictException;
 use frame\errors\handlers\HttpErrorHandler;
 use frame\errors\handlers\DefaultErrorHandler;
 use frame\errors\handlers\StrictExceptionHandler;
+use frame\macros\ActionMacro;
+use frame\macros\ValueMacro;
+use frame\macros\BlockMacro;
+use frame\macros\WidgetMacro;
 
 $app = new Core;
 $app->setDefaultHandler(DefaultErrorHandler::class);
 $app->setHandler(HttpError::class, HttpErrorHandler::class);
 $app->setHandler(StrictException::class, StrictExceptionHandler::class);
+$app->setMacro('action', ActionMacro::class);
+$app->setMacro('value', ValueMacro::class);
+$app->setMacro('block', BlockMacro::class);
+$app->setMacro('widget', WidgetMacro::class);
 $app->exec();

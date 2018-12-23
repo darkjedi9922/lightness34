@@ -36,6 +36,13 @@ abstract class Action extends LatePropsObject
     const FAIL = -1;
 
     /**
+     * @var Action|null Текущий активированный экшн.
+     * Определяется при срабатывании ActionMacro.
+     * Используется в служебных целях фреймворка.
+     */
+    public static $_current = null;
+
+    /**
      * @var Core Ссылка на экземпляр приложения для удобства
      */
     public $app;
@@ -73,15 +80,15 @@ abstract class Action extends LatePropsObject
      */
     public static function instance($params = [], $id = '')
     {
-        if (isset(Core::$app->action) && Core::$app->action->name === $id . '_' . static::class) return Core::$app->action;
-        else {
-            $action = new static;
-            $action->app = Core::$app;
-            $action->name = $id . '_' . static::class;
-            $action->params = $params;
-            $action->load();
-            return $action;
-        }
+        if (isset(static::$_current) && static::$_current->name === $id . '_' . static::class) 
+            return static::$_current;
+        
+        $action = new static;
+        $action->app = Core::$app;
+        $action->name = $id . '_' . static::class;
+        $action->params = $params;
+        $action->load();
+        return $action;
     }
 
     /**

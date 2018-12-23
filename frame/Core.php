@@ -10,13 +10,10 @@ use frame\tools\Logger;
 use frame\errors\ErrorException;
 use frame\errors\HttpError;
 
-use function lightlib\http_parse_query;
-
 /**
  * @todo ?Behaviour
  * 
  * @property-read Database $db База данных
- * @property-read Action $action Текущий выполняющийся action. Если его нет, вернет null.
  */
 class Core extends LatePropsObject
 {
@@ -49,6 +46,12 @@ class Core extends LatePropsObject
     private $defaultHandler = null;
 
     /**
+     * @var array Ключ - команда (GET-параметр) макроса,
+     * значение - имя класса действия макроса.
+     */
+    private $macros = [];
+
+    /**
      * Конструктор
      */
     public function __construct()
@@ -68,7 +71,13 @@ class Core extends LatePropsObject
         static::$app = $this;
     }
 
-    public function writeInLog(string $type, string $message)
+    /**
+     * Записывает сообщение в лог. Файл лога настраивается в конфиге фреймворка.
+     * @param string $type Тип сообщения. Класс Logger содержит константы
+     * с предопределенными названиями многих типов.
+     * @param string $message
+     */
+    public function writeInLog($type, $message)
     {
         $logger = new Logger(ROOT_DIR . '/' . $this->config->{'log.file'});
         $logger->write($type, $message);
@@ -93,23 +102,30 @@ class Core extends LatePropsObject
         $this->defaultHandler = $handlerClass;
     }
 
+    /**
+     * @param string $name Ключ - команда (GET-параметр) макроса
+     * @param string $macro Имя класса действия макроса
+     */
+    public function setMacro($name, $macro)
+    {
+        $this->macros[$name] = $macro;
+    }
+
     public function exec()
     {
-        if ($this->action) $this->action->exec();
+        $this->execMacros();
         $page = $this->router->pagename;
         if (Page::find($page)) (new Page($page))->show();
         else throw new HttpError(404, 'Page ' . $page . ' does not exist.');
     }
 
-    protected function __create__action()
+    private function execMacros()
     {
-        if ($action = $this->router->getArg('action')) {
-            $args = http_parse_query($action, ';');
-            $name = explode('_', $args['action']);
-            $id = $name[0];
-            $class = $name[1];
-            return $class::instance($args, $id);
-        } else return null;
+        foreach ($this->router->args as $key => $value) {
+            if (isset($this->macros[$key])) {
+                (new $this->macros[$key])->exec($value);
+            }
+        }
     }
 
     protected function __create__db()
