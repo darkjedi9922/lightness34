@@ -36,6 +36,12 @@ class View extends LatePropsObject
     public $layoutname = null;
 
     /**
+     * @var array Ассоциативный массив мета-данных вида. 
+     * Это может быть использовано, например, в layout'e для получения данных из дочернего элемента.
+     */
+    private $meta = [];
+
+    /**
      * Ищет сам view файл. Он может быть таких типов (в порядке приоритета): php, html. 
      * Приоритетность - если есть два файла: один - php, а другой - html, - будет выбран php.
      * 
@@ -91,31 +97,56 @@ class View extends LatePropsObject
     }
 
     /**
+     * Возвращает вид вместе со своим шаблоном, если он есть.
+     * Предупреждение: вызов в самом себе может привести к бесконечной рекурсии и/или ошибкам.
+     */
+    public function __toString()
+    {
+        $content = $this->content; // загружаем на случай, если внутри шаблон изменился
+        if ($this->layoutname) {
+            $this->layout = new Layout($this->layoutname, $this);
+            return $this->layout; // внутри layout сам выведет содержимое текущего вида
+        } else return $content;
+    }
+
+    /**
      * Выводит вид вместе со своим шаблоном, если он есть.
      * Предупреждение: вызов в самом себе может привести к бесконечной рекурсии и/или ошибкам.
      */
     public function show()
     {
-        $content = $this->content; // загружаем на случай, если внутри шаблон изменился
-        if ($this->layoutname) {
-            $this->layout = new Layout($this->layoutname, $this);
-            $this->layout->show(); // внутри layout сам выведет содержимое текущего вида
-        } else echo $content;
+        echo $this->__toString();
     }
 
     /**
-     * @param string $name Имя блока без расширения
+     * Устанавливает мета-информацию вида.
+     * Это может быть использовано, например, в layout'e для получения данных из дочернего элемента.
+     * @param string $name
+     * @param mixed $value
      */
-    public function includeBlock($name)
+    public function setMetaOne($name, $value)
     {
-        (new Block($name))->show();
+        $this->meta[$name] = $value;
     }
 
     /**
-     * @param string $name Имя виджета без расширения
+     * Устанавливает мета-информацию вида.
+     * Это может быть использовано, например, в layout'e для получения данных из дочернего элемента.
+     * @param array $data Ассоциативный массив мета-данных вида.
      */
-    public function includeWidget($name)
+    public function setMetaArray($data)
     {
-        (new Widget($name))->show();
+        $this->meta = $data;
+    }
+
+    /**
+     * Возвращает мета-информацию вида.
+     * Это может быть использовано, например, в layout'e для получения данных из дочернего элемента.
+     * @param string $name
+     * @return mixed
+     */
+    public function getMeta($name)
+    {
+        return $this->meta[$name];
     }
 }

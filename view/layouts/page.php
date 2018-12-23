@@ -4,7 +4,7 @@
 
 ?>
 
-Hello Page Layout<br>
+Hello Page Layout for <?= $this->child->getMeta('name') ?><br>
 
 <?= $this->child->content ?>
 
