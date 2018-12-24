@@ -2,7 +2,7 @@
 
 use frame\Core;
 
-class Widget extends View
+class Widget extends Layouted
 {
     /**
      * Ищет сам view файл виджета

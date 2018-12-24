@@ -13,13 +13,4 @@ class Value extends View
     {
         return parent::find(Core::$app->config->{'values.folder'} . '/' . $name);
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function __construct($name, $layout = null)
-    {
-        parent::__construct($name, $layout);
-        if ($this->layoutname === null) $this->layoutname = Core::$app->config->{'values.defaultLayout'};
-    }
 }

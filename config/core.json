@@ -7,7 +7,6 @@
     "widgets.folder": "view/widgets",
     "widgets.defaultLayout": null,
     "values.folder": "view/values",
-    "values.defaultLayout": null,
     "layouts.folder": "view/layouts",
     "log.enabled": true,
     "log.file": "log.txt",

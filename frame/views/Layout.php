@@ -5,7 +5,7 @@ use frame\Core;
 /**
  * Внутри вида Layout для вывода дочернего вида нужно использовать $layout->child->content.
  */
-class Layout extends View
+class Layout extends Layouted
 {
     /**
      * @var View $child Вид-содержимое

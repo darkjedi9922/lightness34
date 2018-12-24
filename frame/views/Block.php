@@ -2,7 +2,7 @@
 
 use frame\Core;
 
-class Block extends View
+class Block extends Layouted
 {
     /**
      * Ищет сам view файл блока

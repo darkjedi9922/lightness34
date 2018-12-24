@@ -2,7 +2,7 @@
 
 use frame\Core;
 
-class Page extends View
+class Page extends Layouted
 {
     /**
      * Ищет сам view файл страницы
