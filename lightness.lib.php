@@ -2,45 +2,83 @@
 
 // Длинну строки вычисляй через mb_strlen() для кириллицы
 
+/**
+ * @return bool Была ли запущена сессия
+ */
 function session_start_once()
 {
-	if (!session_id()) session_start();
-}
-
-// =============================================================================
-
-function translit(string $s) : string
-{
-	$s = mb_strtolower($s, 'UTF-8'); // переводим строку в нижний регистр (иногда надо задать локаль)
-	$s = strtr($s, array('а'=>'a','б'=>'b','в'=>'v','г'=>'g','д'=>'d','е'=>'e','ё'=>'e','ж'=>'j','з'=>'z','и'=>'i','й'=>'y','к'=>'k','л'=>'l','м'=>'m','н'=>'n','о'=>'o','п'=>'p','р'=>'r','с'=>'s','т'=>'t','у'=>'u','ф'=>'f','х'=>'h','ц'=>'c','ч'=>'ch','ш'=>'sh','щ'=>'shch','ы'=>'y','э'=>'e','ю'=>'yu','я'=>'ya','ъ'=>'','ь'=>''));
-	return $s; // возвращаем результат
+	if (session_id()) return false;
+    return session_start();
 }
 
 // =============================================================================
 
 /**
- * @throws Exception if file is '' or '/'
+ * @param string $str Строка, которую нужно перевести в транслит
+ * @return string
  */
-function generate_unique_filename(string $file)
+function translit($str)
 {
-    if ($file == '' || $file == '/') throw new Exception('The filename of the file "'.$file.'" is empty.');
-
-    for ($i = 1; file_exists($file); ++$i) {
-        $pathElements = explode('/', $file);
-        $lastIndex = count($pathElements) - 1;
-        $nameIndex = ($pathElements[$lastIndex] != '' ? $lastIndex : $lastIndex - 1);
-        $nameParts = explode('.', $pathElements[$nameIndex]);
-
-        $nameParts[0] = $nameParts[0].$i;
-        $pathElements[$nameIndex] = implode('.', $nameParts);
-        $file = implode('/', $pathElements);
-    }
-    return $file;
+    $pairs = [
+        'а' => 'a', 'б' => 'b', 'в' => 'v', 'г' => 'g', 'д' => 'd', 'е' => 'e', 'ё' => 'e', 'ж' => 'j', 'з' => 'z',
+        'и' => 'i', 'й' => 'y', 'к' => 'k', 'л' => 'l', 'м' => 'm', 'н' => 'n', 'о' => 'o', 'п' => 'p', 'р' => 'r',
+        'с' => 's', 'т' => 't', 'у' => 'u', 'ф' => 'f', 'х' => 'h', 'ц' => 'c', 'ч' => 'ch', 'ш' => 'sh',
+        'щ' => 'shch', 'ы' => 'y', 'э' => 'e', 'ю' => 'yu', 'я' => 'ya', 'ъ' => '', 'ь' => '',
+        'А' => 'A', 'Б' => 'B', 'В' => 'V', 'Г' => 'G', 'Д' => 'D', 'Е' => 'E', 'Ё' => 'E', 'Ж' => 'J', 'З' => 'Z',
+        'И' => 'I', 'Й' => 'Y', 'К' => 'K', 'Л' => 'L', 'М' => 'M', 'Н' => 'N', 'О' => 'O', 'П' => 'P', 'Р' => 'R',
+        'С' => 'S', 'Т' => 'T', 'У' => 'U', 'Ф' => 'F', 'Х' => 'H', 'Ц' => 'C', 'Ч' => 'Ch', 'Ш' => 'Sh',
+        'Щ' => 'Shch', 'Ы' => 'Y', 'Э' => 'E', 'Ю' => 'Yu', 'Я' => 'Ya', 'Ъ' => '', 'Ь' => '',
+    ];
+	return strtr($str, $pairs);
 }
 
 // =============================================================================
 
-function move_uploaded_unique_file(array $file, string $path, bool $translit = true) : string
+/**
+ * Добавляет номер дубликата к имени файла, если такой файл уже существует
+ * @param string $file
+ * @return string
+ */
+function generate_unique_filename($file)
+{
+    $file = trim($file);
+    if ($file === '/' || $file === '') return $file;
+    while ($file[strlen($file) - 1] === '/') $file = rtrim($file, '/');
+    if (!file_exists($file)) return $file;
+
+    $sections = explode('/', $file);
+    $lastIndex = count($sections) - 1;
+    $nameParts = explode('.', $sections[$lastIndex]);
+
+    $newName = $file;
+    $newSections = $nameParts;
+    $newPathElements = $sections;
+
+    for ($i = 1; file_exists($newName); ++$i) {
+        if (is_file($file)) $newSections[0] = $nameParts[0].'_'.$i;
+        else $newSections[count($newSections) - 1] = $nameParts[count($nameParts) - 1].'_'.$i;
+
+        $newPathElements[$lastIndex] = implode('.', $newSections);
+        $newName = implode('/', $newPathElements);
+    }
+    
+    return $newName;
+}
+
+// =============================================================================
+
+/**
+ * Перемещает загруженный файл из $_FILES в директорию, добавляя номер к имени,
+ * чтобы оно было уникально (если такой файл уже существует).
+ * 
+ * Если заданная директория не существует, создает ее.
+ * 
+ * @param array $file Массив из $_FILES
+ * @param string $path Директория, куда нужно переместить файл
+ * @param bool $translit Нужно ли конвертировать имя файла в транслит
+ * @return string Имя файла после перемещения
+ */
+function move_uploaded_unique_file($file, $path, $translit = true)
 {
     $path = rtrim($path, '/');
     $name = ($translit ? translit($file['name']) : $file['name']);
@@ -52,16 +90,35 @@ function move_uploaded_unique_file(array $file, string $path, bool $translit = t
 
 // =============================================================================
 
-function substring(string $str, int $start, int $length = NULL) : string
+/**
+ * Выделяет подстроку из строки.
+ * Аналогично substr() с кодировкой UTF-8.
+ * 
+ * @param string $str
+ * @param int $start
+ * @param int $length
+ * @return string
+ */
+function substring($str, $start, $length = NULL)
 {
     return mb_substr($str, $start, $length, 'UTF-8');
 }
 
 // =============================================================================
 
-function shorten(string $str, int $length) : string
+/**
+ * Сокращает строку до заданной длинны. 
+ * Если строка была сокращена, добавляет заданное окончание к результату
+ * (например, можно использовать '...', для результата в виде 'This i...').
+ * 
+ * @param string $str
+ * @param int $length
+ * @param string $ending
+ * @return string
+ */
+function shorten($str, $length, $ending = '')
 {
-	if (mb_strlen($str, 'UTF-8') > $length) return substring($str, 0, $length - 3).'...';
+	if (mb_strlen($str, 'UTF-8') > $length) return substring($str, 0, $length).$ending;
 	else return $str;
 }
 
