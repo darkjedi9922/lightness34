@@ -14,6 +14,7 @@ final class LightnessLibTest extends TestCase
     /**
      * @test
      * @testdox starts session in the first time
+     * @runInSeparateProcess
      */
     public function session_start_once_1()
     {
@@ -23,6 +24,7 @@ final class LightnessLibTest extends TestCase
     /**
      * @test
      * @testdox does not start session in the second times
+     * @runInSeparateProcess
      */
     public function session_start_once_2()
     {
