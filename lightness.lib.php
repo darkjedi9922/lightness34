@@ -259,3 +259,15 @@ function http_parse_query($query, $arg_separator)
     }
     return $args;
 }
+
+/**
+ * Полезная функция для отладки.
+ * Выводит print_r или var_dump переменной, после чего полностью завершает скрипт.
+ * @param mixed $value
+ */
+function dump($value)
+{
+    if (is_array($value)) print_r($value);
+    else var_dump($value);
+    exit;
+}
