@@ -50,8 +50,6 @@ abstract class Action extends LatePropsObject
     const SUCCESS = 1;
     const FAIL = -1;
 
-    const E_MANDATORY = 1;
-
     /**
      * @var Action|null Текущий активированный экшн.
      * Определяется при срабатывании ActionMacro.
@@ -93,6 +91,11 @@ abstract class Action extends LatePropsObject
      * @var Json Настройки валидации.
      */
     private $validationJson = null;
+
+    /**
+     * @var array Ассоциативный массив вида [string => [callable, bool]
+     */
+    private $ruleCallbacks = [];
 
     /**
      * @var array Массив вида ['field' => [1, 2, 3]] с кодами ошибок post полей,
@@ -141,6 +144,15 @@ abstract class Action extends LatePropsObject
     public final function getParameter($name, $default = null)
     {
         return isset($this->params[$name]) ? $this->params[$name] : $default;
+    }
+
+    /**
+     * @param string $name
+     * @param string|null $value Если передано null, удаляет значение.
+     */
+    public function setPostOne($name, $value)
+    {
+        $_POST[$name] = $value;
     }
 
     /**
@@ -198,7 +210,7 @@ abstract class Action extends LatePropsObject
     /**
      * Возвращает есть ли у заданного post-поля заданный код ошибки.
      * 
-     * @param int $error Код ошибки
+     * @param string|int $error Имя или код ошибки.
      * @return bool
      */
     public function hasPostError($field, $error)
@@ -235,6 +247,29 @@ abstract class Action extends LatePropsObject
     public function getValidationFile()
     {
         return $this->validationJson ? $this->validationJson->getFile() : null;
+    }
+
+    /**
+     * Устанавливает callback-функцию, которая будет вызываться при проверке
+     * поля, заданной в json-настройках валидации.
+     * 
+     * Callback-функция вида (mixed $rule, $mixed $value): bool,
+     * где $rule - значение правила, $value - проверяемое значение. Если проверяемого
+     * значения изначально нет, будет передано null. Callback возвращает true, если
+     * проверка пройдена, иначе false.
+     * 
+     * Если проверка не пройдена, в post errors добавится имя ошибки, равное $name.
+     * 
+     * @param string $name Имя проверки
+     * @param callable $callback
+     * @param bool $onlyPresentValues Запускать проверку только когда значение было
+     * передано 
+     * 
+     */
+    public function setRule($name, $callback, $onlyPresentValues = false)
+    {
+        $this->ruleCallbacks[$name][0] = $callback;
+        $this->ruleCallbacks[$name][1] = $onlyPresentValues;
     }
 
     /**
@@ -398,14 +433,21 @@ abstract class Action extends LatePropsObject
         if (!$this->validationJson->isset('post')) return $errors;
 
         foreach ($this->validationJson->get('post') as $field => $rules) {
-            foreach ($rules as $rule => $value) {
-                switch ($value) {
-                    case 'mandatory':
-                    if ($value == true && !isset($data[$field])) {
+            $fieldValue = isset($data[$field]) ? $data[$field] : null; 
+            foreach ($rules as $rule => $ruleValue) {
+                if (isset($this->ruleCallbacks[$rule])) {
+                    $onlyPresentValues = $this->ruleCallbacks[$rule][1];
+                    if ($onlyPresentValues && $fieldValue === null) continue;
+                    $check = $this->ruleCallbacks[$rule][0];
+                    if (!$check($ruleValue, $fieldValue)) {
                         if (!isset($errors[$field])) $errors[$field] = [];
-                        $errors[$field][] = self::E_MANDATORY;
+                        // Вместо int-кода ошибки, добавляем имя правила
+                        // @todo В будущем это можно улучшить, присвоив каждому
+                        // правилу числовой id. Где-то в библиотеке даже была
+                        // функция, которая превращает строку в число, суммируя
+                        // коды символов в слове.
+                        $errors[$field][] = $rule;
                     }
-                    break;
                 }
             }
         }

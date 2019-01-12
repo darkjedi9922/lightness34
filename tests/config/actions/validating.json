@@ -1,7 +1,8 @@
 {
     "post": {
         "username": {
-            "mandatory": true
+            "mandatory": true,
+            "emptiness": false
         }
     }
 }
