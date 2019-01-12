@@ -6,12 +6,24 @@ use frame\route\Router;
 use frame\route\Request;
 use frame\route\Response;
 use frame\tools\transmitters\SessionTransmitter;
+use frame\tools\Json;
 
 use function lightlib\encode_specials;
 
 /**
  * Класс служит для обработки форм, но можно использовать для запуска
  * определенных процессов/скриптов по ссылке.
+ * 
+ * Чтобы создать новый экшн, нужно наследоваться от данного класса и реализовать
+ * все абстрактные методы этого класса.
+ * 
+ * Создание экземпляра класса делается с помощью статического метода instance().
+ * Это нужно, чтобы экшн, который выполнялся в коде до кода страницы, не создавался
+ * заново, а использовался тот же сохраненный в Core объект.
+ * 
+ * Действия после завершения выполнения экшна контролируются через методы вида
+ * get*Redirect. В них указывается либо адрес, куда нужно перейти (на какую
+ * страницу), либо null, если не нужно никуда переходить.
  * 
  * Чтобы использовать экшн, нужно добавить нужный экземпляр на страницу,
  * а в атрибут action форм или просто в url ссылок указать значение,
@@ -28,12 +40,17 @@ use function lightlib\encode_specials;
  * в дочерних экшнах. С помощью него можно определять используемые в экшне данные,
  * которые потом можно брать из него на обычных страницах, вместо того, чтобы повторно
  * создавать их.
+ * 
+ * @todo Выделить методы, которые нужно переопределять в отдельный класс (например,
+ * ActionBody) ибо методов уже слишком много, трудно ориентироваться.
  */
 abstract class Action extends LatePropsObject
 {
     const NONE = 0;
     const SUCCESS = 1;
     const FAIL = -1;
+
+    const E_MANDATORY = 1;
 
     /**
      * @var Action|null Текущий активированный экшн.
@@ -71,6 +88,17 @@ abstract class Action extends LatePropsObject
      * @var array Параметры, заданные в конструкторе
      */
     public $params = [];
+
+    /**
+     * @var Json Настройки валидации.
+     */
+    private $validationJson = null;
+
+    /**
+     * @var array Массив вида ['field' => [1, 2, 3]] с кодами ошибок post полей,
+     * которые возникли во время выполнения экшна.
+     */
+    private $postErrors = [];
 
     /**
      * @param array $params Параметры экшна
@@ -123,8 +151,9 @@ abstract class Action extends LatePropsObject
     {
         $this->initialization();
         $this->post = $this->encodeSpecials($_POST);
+        $this->postErrors = $this->fileValidatePost($this->post);
         $this->errors = $this->validate($this->post, $_FILES);
-        if (empty($this->errors)) {
+        if (empty($this->postErrors) && empty($this->errors)) {
             $this->successBody($this->post, $_FILES);
             $this->status = self::SUCCESS;
             if ($this->getSuccessRedirect() !== null) {
@@ -167,6 +196,17 @@ abstract class Action extends LatePropsObject
     }
 
     /**
+     * Возвращает есть ли у заданного post-поля заданный код ошибки.
+     * 
+     * @param int $error Код ошибки
+     * @return bool
+     */
+    public function hasPostError($field, $error)
+    {
+        return isset($this->postErrors[$field]) && in_array($error, $this->postErrors[$field]);
+    }
+
+    /**
      * @param string $name
      * @param mixed $default
      * @return string|null|mixed
@@ -175,6 +215,26 @@ abstract class Action extends LatePropsObject
     {
         if (isset($this->post[$name])) return $this->post[$name];
         else return $default;
+    }
+
+    /**
+     * @param string|null $file Путь к json-файлу валидации или null, если его нужно
+     * отключить от экшна.
+     * 
+     * @todo Что если задавать напрямую Json? Это более гибко, можно сгенерировать
+     * настройки валидации "на ходу" и сразу применить их, никуда не сохраняя.
+     */
+    public function setValidationFile($file)
+    {
+        $this->validationJson = new Json($file);
+    }
+
+    /**
+     * @param string|null Путь к json-файлу валидации или null, если его нет.
+     */
+    public function getValidationFile()
+    {
+        return $this->validationJson ? $this->validationJson->getFile() : null;
     }
 
     /**
@@ -241,7 +301,11 @@ abstract class Action extends LatePropsObject
     }
 
     /**
-     * Suggests override if it is needed
+     * Возвращает адрес веб-страницы, на которую нужно перейти после успешного
+     * (без ошибок во время валидации данных) завершения экшна или null, 
+     * если не нужно никуда переходить.
+     * 
+     * Suggests override if it is needed.
      * 
      * @return string|null
      */
@@ -252,7 +316,11 @@ abstract class Action extends LatePropsObject
     }
 
     /**
-     * Suggests override if it is needed
+     * Возвращает адрес веб-страницы, на которую нужно перейти после неудачного
+     * (с ошибками во время валидации данных) завершения экшна или null, 
+     * если не нужно никуда переходить.
+     * 
+     * Suggests override if it is needed.
      * 
      * @return string|null
      */
@@ -274,6 +342,7 @@ abstract class Action extends LatePropsObject
         $this->beforeSave();
         $sessions = new SessionTransmitter;
         $sessions->setData($this->name.'_status', $this->status);
+        if ($this->isFail()) $sessions->setData($this->name . '_post-errors', serialize($this->postErrors));
         if ($this->isFail()) $sessions->setData($this->name.'_errors', serialize($this->errors));
         if ($this->isFail()) $sessions->setData($this->name.'_data', serialize($this->post));
     }
@@ -287,6 +356,10 @@ abstract class Action extends LatePropsObject
         if ($sessions->isSetData($this->name . '_status')) {
             $this->status = $sessions->getData($this->name . '_status');
             $sessions->removeData($this->name . '_status');
+            if ($sessions->isSetData($this->name . '_post-errors')) {
+                $this->postErrors = unserialize($sessions->getData($this->name . '_post-errors'));
+                $sessions->removeData($this->name . '_post-errors');
+            }
             if ($sessions->isSetData($this->name . '_errors')) {
                 $this->errors = unserialize($sessions->getData($this->name . '_errors'));
                 $sessions->removeData($this->name . '_errors');
@@ -312,5 +385,31 @@ abstract class Action extends LatePropsObject
             else $data[$key] = encode_specials($value);
         }
         return $data;
+    }
+
+    /**
+     * Возвращает массив вида ['field' => [1, 2, 3]] с кодами ошибок post полей.
+     * @return array
+     */
+    private function fileValidatePost($data)
+    {
+        $errors = [];
+        if (!$this->validationJson) return $errors;
+        if (!$this->validationJson->isset('post')) return $errors;
+
+        foreach ($this->validationJson->get('post') as $field => $rules) {
+            foreach ($rules as $rule => $value) {
+                switch ($value) {
+                    case 'mandatory':
+                    if ($value == true && !isset($data[$field])) {
+                        if (!isset($errors[$field])) $errors[$field] = [];
+                        $errors[$field][] = self::E_MANDATORY;
+                    }
+                    break;
+                }
+            }
+        }
+
+        return $errors;
     }
 }
