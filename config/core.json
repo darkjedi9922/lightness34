@@ -20,4 +20,5 @@
     "database.password": "",
     "database.dbname": "lightness",
     "actions.defaultFailRedirectMode": null
+    "actions.validationConfigFolder": "public/actions"
 }
