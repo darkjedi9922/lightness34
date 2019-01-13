@@ -3,6 +3,7 @@
 use PHPUnit\Framework\TestCase;
 use tests\engine\JsonValidatedAction;
 use frame\actions\rules\BaseActionRules;
+use frame\tools\Json;
 
 /**
  * `Run in separate process` заглушает сообщения вида `headers already sent`, когда
@@ -25,8 +26,8 @@ class ActionJsonValidateTest extends TestCase
         // правила, которое можно затем использовать в json-валидации.
         $action->setRule('mandatory', $rules->getMandatoryRule());
 
-        $file = ROOT_DIR . '/tests/config/actions/validating.json';
-        $action->setValidationFile($file);
+        $config = new Json(ROOT_DIR . '/tests/config/actions/validating.json');
+        $action->setValidationConfig($config);
 
         $action->exec();
 
@@ -46,8 +47,8 @@ class ActionJsonValidateTest extends TestCase
         // переданные в них значения.
         $rules = new BaseActionRules();
 
-        $file = ROOT_DIR . '/tests/config/actions/validating.json';
-        $action->setValidationFile($file);
+        $config = new Json(ROOT_DIR . '/tests/config/actions/validating.json');
+        $action->setValidationConfig($config);
 
         // Последний параметр говорит, что запускать проверку нужно только когда
         // значение было передано.

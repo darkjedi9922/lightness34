@@ -230,23 +230,19 @@ abstract class Action extends LatePropsObject
     }
 
     /**
-     * @param string|null $file Путь к json-файлу валидации или null, если его нужно
-     * отключить от экшна.
-     * 
-     * @todo Что если задавать напрямую Json? Это более гибко, можно сгенерировать
-     * настройки валидации "на ходу" и сразу применить их, никуда не сохраняя.
+     * @param Json|null $config
      */
-    public function setValidationFile($file)
+    public function setValidationConfig($config)
     {
-        $this->validationJson = new Json($file);
+        $this->validationJson = $config;
     }
 
     /**
-     * @param string|null Путь к json-файлу валидации или null, если его нет.
+     * @return Json|null
      */
-    public function getValidationFile()
+    public function getValidationConfig()
     {
-        return $this->validationJson ? $this->validationJson->getFile() : null;
+        return $this->validationJson ? $this->validationJson : null;
     }
 
     /**
