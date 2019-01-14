@@ -89,4 +89,55 @@ class ActionJsonValidateTest extends TestCase
         // установлены в экшн.
         $action->exec();
     }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testRuleHandlerCanStopRuleHandling()
+    {
+        // По конфигу, поле username не должно быть пустым (правило emptiness).
+        // Также минимальная длинна этого поля равна 4. Но бессмысленно проверять
+        // минимальную длинну поля, (да и другие проверки) если оно пустое. 
+        // Поэтому правило emptiness при своей обработке должно остановить 
+        // проверку дальнейших правил для этого поля.
+        $config = new Json(ROOT_DIR . '/tests/config/actions/validating.json');
+
+        $action = new JsonValidatedAction([], '', Action::NO_RULE_IGNORE);
+        $action->setValidationConfig($config);
+        
+        $baseRules = new BaseActionRules;
+        $action->setRule('emptiness', $baseRules->getEmptinessRule());
+        $action->setRule('min-length', $baseRules->getMinLengthRule());
+        
+        $action->setPostOne('username', '');
+        $action->exec();
+
+        $emptyError = $action->hasPostError('username', 'emptiness');
+        $minLengthError = $action->hasPostError('username', 'min-length');
+        $this->assertTrue($emptyError && !$minLengthError);
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testRuleHandlerMayNotStopRuleHandling()
+    {
+        $config = new Json(ROOT_DIR . '/tests/config/actions/validating.json');
+
+        $action = new JsonValidatedAction([], '', Action::NO_RULE_IGNORE);
+        $action->setValidationConfig($config);
+
+        $baseRules = new BaseActionRules;
+        $action->setRule('emptiness', $baseRules->getEmptinessRule());
+        $action->setRule('min-length', $baseRules->getMinLengthRule());
+
+        $action->setPostOne('username', 'Jed');
+        $action->exec();
+
+        // emptiness теперь должно пройти нормально и позволить остальным проверкам
+        // проверять то, что они там проверяют. 
+        $emptyError = $action->hasPostError('username', 'emptiness');
+        $minLengthError = $action->hasPostError('username', 'min-length');
+        $this->assertTrue(!$emptyError && $minLengthError);
+    }
 }

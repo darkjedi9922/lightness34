@@ -1,5 +1,7 @@
 <?php namespace frame;
 
+use function lightlib\encode_specials;
+
 use frame\Core;
 use frame\LatePropsObject;
 use frame\route\Router;
@@ -8,8 +10,7 @@ use frame\route\Response;
 use frame\tools\transmitters\SessionTransmitter;
 use frame\tools\Json;
 use frame\actions\NoRuleError;
-
-use function lightlib\encode_specials;
+use frame\actions\StopRuleException;
 
 /**
  * Класс служит для обработки форм, но можно использовать для запуска
@@ -191,7 +192,7 @@ abstract class Action extends LatePropsObject
     {
         $this->initialization();
         $this->post = $this->encodeSpecials($_POST);
-        $this->postErrors = $this->fileValidatePost($this->post);
+        $this->postErrors = $this->configValidatePost($this->post);
         $this->errors = $this->validate($this->post, $_FILES);
         if (empty($this->postErrors) && empty($this->errors)) {
             $this->successBody($this->post, $_FILES);
@@ -283,6 +284,11 @@ abstract class Action extends LatePropsObject
      * проверка пройдена, иначе false.
      * 
      * Если проверка не пройдена, в post errors добавится имя ошибки, равное $name.
+     * 
+     * При этом callback может выбросить исключение StopRuleException с результатом
+     * проверки. Тогда все оставшиеся правила проверяемого поля не будут обработаны.
+     * Это нужно, когда нет смысла проверять значение поля дальше, например, если
+     * значение поля не было передано вообще и тогда проверять дальше нечего.
      * 
      * @param string $name Имя проверки
      * @param callable $callback
@@ -450,7 +456,7 @@ abstract class Action extends LatePropsObject
      * Возвращает массив вида ['field' => [1, 2, 3]] с кодами ошибок post полей.
      * @return array
      */
-    private function fileValidatePost($data)
+    private function configValidatePost($data)
     {
         $errors = [];
         if (!$this->validationJson) return $errors;
@@ -463,14 +469,24 @@ abstract class Action extends LatePropsObject
                     $onlyPresentValues = $this->ruleCallbacks[$rule][1];
                     if ($onlyPresentValues && $fieldValue === null) continue;
                     $check = $this->ruleCallbacks[$rule][0];
-                    if (!$check($ruleValue, $fieldValue)) {
-                        if (!isset($errors[$field])) $errors[$field] = [];
-                        // Вместо int-кода ошибки, добавляем имя правила
-                        // @todo В будущем это можно улучшить, присвоив каждому
-                        // правилу числовой id. Где-то в библиотеке даже была
-                        // функция, которая превращает строку в число, суммируя
-                        // коды символов в слове.
-                        $errors[$field][] = $rule;
+                    try {
+                        $result = $check($ruleValue, $fieldValue);
+                        if (!$result) {
+                            if (!isset($errors[$field])) $errors[$field] = [];
+                            // Вместо int-кода ошибки, добавляем имя правила.
+                            // @todo В будущем это можно улучшить, присвоив каждому
+                            // правилу числовой id. Где-то в библиотеке даже была
+                            // функция, которая превращает строку в число, суммируя
+                            // коды символов в слове.
+                            $errors[$field][] = $rule;
+                        }
+                    } catch (StopRuleException $e) {
+                        if ($e->isFail()) {
+                            // @todo Убрать дублирование.
+                            if (!isset($errors[$field])) $errors[$field] = [];
+                            $errors[$field][] = $rule;
+                        }
+                        break;
                     }
                 } else {
                     if ($this->noRuleMode == self::NO_RULE_ERROR) {

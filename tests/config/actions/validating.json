@@ -2,7 +2,8 @@
     "post": {
         "username": {
             "mandatory": true,
-            "emptiness": false
+            "emptiness": false,
+            "min-length": 4
         }
     }
 }
