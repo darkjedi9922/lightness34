@@ -475,21 +475,9 @@ abstract class Action extends LatePropsObject
                     $check = $this->ruleCallbacks[$rule][0];
                     try {
                         $result = $check($ruleValue, $fieldValue);
-                        if (!$result) {
-                            if (!isset($errors[$field])) $errors[$field] = [];
-                            // Вместо int-кода ошибки, добавляем имя правила.
-                            // @todo В будущем это можно улучшить, присвоив каждому
-                            // правилу числовой id. Где-то в библиотеке даже была
-                            // функция, которая превращает строку в число, суммируя
-                            // коды символов в слове.
-                            $errors[$field][] = $rule;
-                        }
+                        if (!$result) $this->_setPostError($errors, $field, $rule);
                     } catch (StopRuleException $e) {
-                        if ($e->isFail()) {
-                            // @todo Убрать дублирование.
-                            if (!isset($errors[$field])) $errors[$field] = [];
-                            $errors[$field][] = $rule;
-                        }
+                        if ($e->isFail()) $this->_setPostError($errors, $field, $rule);
                         break;
                     }
                 } else {
@@ -501,5 +489,16 @@ abstract class Action extends LatePropsObject
         }
 
         return $errors;
+    }
+
+    private function _setPostError(&$errors, $field, $rule)
+    {
+        if (!isset($errors[$field])) $errors[$field] = [];
+        // Вместо int-кода ошибки, добавляем имя правила.
+        // @todo В будущем это можно улучшить, присвоив каждому
+        // правилу числовой id. Где-то в библиотеке даже была
+        // функция, которая превращает строку в число, суммируя
+        // коды символов в слове.
+        $errors[$field][] = $rule;
     }
 }
