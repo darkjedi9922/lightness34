@@ -1,9 +1,11 @@
 {
     "post": {
         "username": {
-            "mandatory": true,
-            "emptiness": false,
-            "min-length": 4
+            "rules": {
+                "mandatory": true,
+                "emptiness": false,
+                "min-length": 4
+            }
         }
     }
 }

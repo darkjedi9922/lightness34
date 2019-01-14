@@ -462,9 +462,13 @@ abstract class Action extends LatePropsObject
         if (!$this->validationJson) return $errors;
         if (!$this->validationJson->isset('post')) return $errors;
 
+        // Проходимся по каждому полю
         foreach ($this->validationJson->get('post') as $field => $rules) {
-            $fieldValue = isset($data[$field]) ? $data[$field] : null; 
-            foreach ($rules as $rule => $ruleValue) {
+            if (!isset($rules['rules'])) continue;
+            $fieldValue = isset($data[$field]) ? $data[$field] : null;
+
+            // Проходимся по каждому правилу проверок поля
+            foreach ($rules['rules'] as $rule => $ruleValue) {
                 if (isset($this->ruleCallbacks[$rule])) {
                     $onlyPresentValues = $this->ruleCallbacks[$rule][1];
                     if ($onlyPresentValues && $fieldValue === null) continue;
