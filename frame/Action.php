@@ -7,6 +7,7 @@ use frame\route\Request;
 use frame\route\Response;
 use frame\tools\transmitters\SessionTransmitter;
 use frame\tools\Json;
+use frame\actions\NoRuleError;
 
 use function lightlib\encode_specials;
 
@@ -49,6 +50,9 @@ abstract class Action extends LatePropsObject
     const NONE = 0;
     const SUCCESS = 1;
     const FAIL = -1;
+
+    const NO_RULE_ERROR = 'error';
+    const NO_RULE_IGNORE = 'ignore';
 
     /**
      * @var Action|null Текущий активированный экшн.
@@ -104,6 +108,11 @@ abstract class Action extends LatePropsObject
     private $postErrors = [];
 
     /**
+     * @var string
+     */
+    private $noRuleMode = self::NO_RULE_ERROR;
+
+    /**
      * @param array $params Параметры экшна
      * @param int $id Id экшна. Нужен, если на одной странице используется несколько экшнов
      * одного класса с разными параметрами, чтобы понимать какой из них выполнять
@@ -114,18 +123,37 @@ abstract class Action extends LatePropsObject
         if (isset(static::$_current) && static::$_current->name === $id . '_' . static::class) 
             return static::$_current;
         
-        $action = new static;
-        $action->app = Core::$app;
-        $action->name = $id . '_' . static::class;
-        $action->params = $params;
-        $action->load();
+        $noRuleMode = Core::$app->config->{'actions.noRuleMode'};
+        $action = new static($params, $id, $noRuleMode);
         return $action;
     }
 
     /**
-     * @see instance()
+     * Warning: Создание объекта непосредственно через конструктор создает отдельный
+     * независимый экземпляр экшна, независимо от состояния всего приложения. 
+     * Это больше подходит для тестирования. Для получения экземпляра экшна при
+     * работе приложения (с инициализированным Core) требуется использовать
+     * статический метод instance().
+     * 
+     * @param array $params Параметры экшна.
+     * @param int $id Id экшна. Нужен, если на одной странице используется несколько 
+     * экшнов одного класса с разными параметрами, чтобы понимать какой из них 
+     * выполнять.
+     * @param string $noRuleMode Что делать, если для конфиг-валидации экшна в экшне
+     * не установлен механизм обработки правила. Значения: 'error' (выбрасывает
+     * исключение типа NoRuleError) или 'ignore' (пропускает правило).
      */
-    private function __construct() {}
+    public function __construct(
+        $params = [],
+        $id = '',
+        $noRuleMode = self::NO_RULE_ERROR)
+    {
+        $this->app = Core::$app;
+        $this->name = $id . '_' . static::class;
+        $this->params = $params;
+        $this->noRuleMode = $noRuleMode;
+        $this->load();
+    }
 
     /**
      * @return string Триггерное url на выполнение экшна
@@ -443,6 +471,10 @@ abstract class Action extends LatePropsObject
                         // функция, которая превращает строку в число, суммируя
                         // коды символов в слове.
                         $errors[$field][] = $rule;
+                    }
+                } else {
+                    if ($this->noRuleMode == self::NO_RULE_ERROR) {
+                        throw new NoRuleError;
                     }
                 }
             }

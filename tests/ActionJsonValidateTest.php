@@ -4,6 +4,8 @@ use PHPUnit\Framework\TestCase;
 use tests\engine\JsonValidatedAction;
 use frame\actions\rules\BaseActionRules;
 use frame\tools\Json;
+use frame\actions\NoRuleError;
+use frame\Action;
 
 /**
  * `Run in separate process` заглушает сообщения вида `headers already sent`, когда
@@ -16,7 +18,7 @@ class ActionJsonValidateTest extends TestCase
      */
     public function testCallbackValidate()
     {
-        $action = JsonValidatedAction::instance();
+        $action = new JsonValidatedAction([], '', Action::NO_RULE_IGNORE);
 
         // Методы классов ActionRules возвращают callback-функции, проверяющие
         // переданные в них значения.
@@ -41,7 +43,7 @@ class ActionJsonValidateTest extends TestCase
      */
     public function testCallbackValidateWithOnlyPresent()
     {
-        $action = JsonValidatedAction::instance();
+        $action = new JsonValidatedAction([], '', Action::NO_RULE_IGNORE);
 
         // Методы классов ActionRules возвращают callback-функции, проверяющие
         // переданные в них значения.
@@ -70,5 +72,21 @@ class ActionJsonValidateTest extends TestCase
         $action->setPostOne('username', 'Jed');
         $action->exec();
         $this->assertTrue($action->isSuccess());
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testRuleIsNotFoundRaisesError()
+    {
+        $action = new JsonValidatedAction([], '', Action::NO_RULE_ERROR);
+        $config = new Json(ROOT_DIR . '/tests/config/actions/validating.json');
+        $action->setValidationConfig($config);
+
+        $this->expectException(NoRuleError::class);
+        
+        // В конфиге экшна установлены проверки, механизмы которых не были
+        // установлены в экшн.
+        $action->exec();
     }
 }

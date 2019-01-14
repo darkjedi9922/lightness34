@@ -19,6 +19,7 @@
     "database.username": "root",
     "database.password": "",
     "database.dbname": "lightness",
-    "actions.defaultFailRedirectMode": null
-    "actions.validationConfigFolder": "public/actions"
+    "actions.defaultFailRedirectMode": null,
+    "actions.validationConfigFolder": "public/actions",
+    "actions.noRuleMode": "error"
 }
