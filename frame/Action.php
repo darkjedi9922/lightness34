@@ -99,7 +99,7 @@ abstract class Action extends LatePropsObject
     private $validationJson = null;
 
     /**
-     * @var array Ассоциативный массив вида [string => [callable, bool]
+     * @var array Ассоциативный массив вида [string => callable]
      */
     private $ruleCallbacks = [];
 
@@ -287,20 +287,15 @@ abstract class Action extends LatePropsObject
      * Если проверка не пройдена, в post errors добавится имя ошибки, равное $name.
      * 
      * При этом callback может выбросить исключение StopRuleException с результатом
-     * проверки. Тогда все оставшиеся правила проверяемого поля не будут обработаны.
-     * Это нужно, когда нет смысла проверять значение поля дальше, например, если
-     * значение поля не было передано вообще и тогда проверять дальше нечего.
+     * проверки.
+     * @see StopRuleException.
      * 
      * @param string $name Имя проверки
      * @param callable $callback
-     * @param bool $onlyPresentValues Запускать проверку только когда значение было
-     * передано 
-     * 
      */
-    public function setRule($name, $callback, $onlyPresentValues = false)
+    public function setRule($name, $callback)
     {
-        $this->ruleCallbacks[$name][0] = $callback;
-        $this->ruleCallbacks[$name][1] = $onlyPresentValues;
+        $this->ruleCallbacks[$name] = $callback;
     }
 
     /**
@@ -473,9 +468,7 @@ abstract class Action extends LatePropsObject
             // Проходимся по каждому правилу проверок поля
             foreach ($rules['rules'] as $rule => $ruleValue) {
                 if (isset($this->ruleCallbacks[$rule])) {
-                    $onlyPresentValues = $this->ruleCallbacks[$rule][1];
-                    if ($onlyPresentValues && $fieldValue === null) continue;
-                    $check = $this->ruleCallbacks[$rule][0];
+                    $check = $this->ruleCallbacks[$rule];
                     try {
                         $result = $check($ruleValue, $fieldValue);
                         if (!$result) $this->_setPostError($errors, $field, $rule);

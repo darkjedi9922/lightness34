@@ -42,42 +42,6 @@ class ActionJsonValidateTest extends TestCase
     /**
      * @runInSeparateProcess
      */
-    public function testCallbackValidateWithOnlyPresent()
-    {
-        $action = new JsonValidatedAction([], '', Action::NO_RULE_IGNORE);
-
-        // Методы классов ActionRules возвращают callback-функции, проверяющие
-        // переданные в них значения.
-        $rules = new BaseActionRules();
-
-        $config = new Json(ROOT_DIR . '/tests/config/actions/validating.json');
-        $action->setValidationConfig($config);
-
-        // Последний параметр говорит, что запускать проверку нужно только когда
-        // значение было передано.
-        $action->setRule('emptiness', $rules->getEmptinessRule(), true);
-        $action->exec();
-
-        // В экшн пока не было передано post значения `username`. Проверка на
-        // пустоту не сработает.
-        $this->assertTrue($action->isSuccess());
-
-        // Передаем пустое значение.
-        $action->setPostOne('username', '');
-        $action->exec();
-
-        // Теперь сработает проверка.
-        $this->assertTrue($action->hasPostError('username', 'emptiness'));
-
-        // Ну все таки проверим саму работу проверки...
-        $action->setPostOne('username', 'Jed');
-        $action->exec();
-        $this->assertTrue($action->isSuccess());
-    }
-
-    /**
-     * @runInSeparateProcess
-     */
     public function testRuleIsNotFoundRaisesError()
     {
         $action = new JsonValidatedAction([], '', Action::NO_RULE_ERROR);
