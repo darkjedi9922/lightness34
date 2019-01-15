@@ -6,6 +6,7 @@ use frame\actions\rules\BaseActionRules;
 use frame\tools\Json;
 use frame\actions\NoRuleError;
 use frame\Action;
+use frame\actions\RuleCheckFailedException;
 
 /**
  * `Run in separate process` заглушает сообщения вида `headers already sent`, когда
@@ -139,5 +140,24 @@ class ActionJsonValidateTest extends TestCase
         $emptyError = $action->hasPostError('username', 'emptiness');
         $minLengthError = $action->hasPostError('username', 'min-length');
         $this->assertTrue(!$emptyError && $minLengthError);
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testFailedRuleMayThrowException()
+    {
+        $config = new Json(ROOT_DIR . '/tests/config/actions/validating.json');
+
+        $action = new JsonValidatedAction([], '', Action::NO_RULE_IGNORE);
+        $action->setValidationConfig($config);
+
+        $rules = new BaseActionRules;
+        $action->setRule('max-length', $rules->getMaxLengthRule());
+
+        $this->expectException(RuleCheckFailedException::class);
+
+        $action->setPostOne('username', 'Kostyak');
+        $action->exec();
     }
 }

@@ -11,6 +11,7 @@ use frame\tools\transmitters\SessionTransmitter;
 use frame\tools\Json;
 use frame\actions\NoRuleError;
 use frame\actions\StopRuleException;
+use frame\actions\RuleCheckFailedException;
 
 /**
  * Класс служит для обработки форм, но можно использовать для запуска
@@ -455,6 +456,8 @@ abstract class Action extends LatePropsObject
     /**
      * Возвращает массив вида ['field' => [1, 2, 3]] с кодами ошибок post полей.
      * @return array
+     * @throws NoRuleError|RuleCheckFailedException Подробнее в описании классов 
+     * этих исключений.
      */
     private function configValidatePost($data)
     {
@@ -493,6 +496,14 @@ abstract class Action extends LatePropsObject
 
     private function _setPostError(&$errors, $field, $rule)
     {
+        // Не проверяем validationJson и post и $field на наличие, т.к. эта функция 
+        // вызывается только там, где это уже проверено и используется.
+        if (isset($this->validationJson->post[$field]['errorRules'])
+            && in_array($rule, $this->validationJson->post[$field]['errorRules']))
+        {
+            throw new RuleCheckFailedException($this, $field, $rule);
+        }
+
         if (!isset($errors[$field])) $errors[$field] = [];
         // Вместо int-кода ошибки, добавляем имя правила.
         // @todo В будущем это можно улучшить, присвоив каждому

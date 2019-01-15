@@ -4,8 +4,12 @@
             "rules": {
                 "mandatory": true,
                 "emptiness": false,
-                "min-length": 4
-            }
+                "min-length": 4,
+                "max-length": 4
+            },
+            "errorRules": [
+                "max-length"
+            ]
         }
     }
 }

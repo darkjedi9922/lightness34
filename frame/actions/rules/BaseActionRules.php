@@ -57,4 +57,20 @@ class BaseActionRules
             return strlen($value) >= $rule;
         };
     }
+
+    /**
+     * Проверяет максимальную длинну поля (с заданным int значением).
+     * @return \callable
+     */
+    public function getMaxLengthRule()
+    {
+        /**
+         * @param int $rule
+         * @param string $value
+         * @return bool
+         */
+        return function ($rule, $value) {
+            return strlen($value) <= $rule;
+        };
+    }
 }
