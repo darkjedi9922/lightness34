@@ -1,0 +1,11 @@
+{
+    "post": {
+        "id": {
+            "rules": {
+                "mandatory": true,
+                "emptiness": false,
+                "userIdExists": true
+            }
+        }
+    }
+}

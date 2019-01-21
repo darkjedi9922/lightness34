@@ -1,6 +1,6 @@
 <?php namespace frame\actions\rules;
 
-use frame\actions\StopRuleException;
+use frame\actions\RuleResult;
 
 /**
  * Методы класса возвращают callback-функции для установки как rule в Action.
@@ -10,6 +10,7 @@ class BaseActionRules
 {
     /**
      * Обязательно ли поле для передачи (true|false).
+     * Если поле не обязательно и его нет, завершает цепочку обработчиков.
      * @return \callable
      */
     public function getMandatoryRule()
@@ -17,16 +18,17 @@ class BaseActionRules
         /**
          * @param bool $rule
          * @param mixed $value
-         * @throws StopRuleException
+         * @param RuleResult $result
          */
-        return function($rule, $value) {
-            if ($value !== null) return true;
-            throw new StopRuleException(!$rule);
+        return function($rule, $value, $result) {
+            if ($value !== null) return $result->succeed();
+            return $result->result(!$rule)->stop();
         };
     }
 
     /**
      * Разрешено ли пустое значение в поле (true|false).
+     * Если разрешено пустое значение и оно пусто, завершает цепочку обработчиков.
      * @return \callable
      */
     public function getEmptinessRule()
@@ -34,11 +36,11 @@ class BaseActionRules
         /**
          * @param bool $rule
          * @param mixed $value
-         * @throws StopRuleException Если поле пустое.
+         * @param RuleResult $result
          */
-        return function($rule, $value) {
-            if ($value) return true;
-            throw new StopRuleException($rule);
+        return function($rule, $value, $result) {
+            if ($value) return $result->succeed();
+            return $result->result($rule)->stop();
         };
     }
 
@@ -51,10 +53,12 @@ class BaseActionRules
         /**
          * @param int $rule
          * @param string $value
+         * @param RuleResult $result
          * @return bool
          */
-        return function($rule, $value) {
-            return strlen($value) >= $rule;
+        return function($rule, $value, $result) {
+            $isOk = strlen($value) >= $rule;
+            return $result->result($isOk);
         };
     }
 
@@ -67,10 +71,12 @@ class BaseActionRules
         /**
          * @param int $rule
          * @param string $value
+         * @param RuleResult $result
          * @return bool
          */
-        return function ($rule, $value) {
-            return strlen($value) <= $rule;
+        return function ($rule, $value, $result) {
+            $isOk = strlen($value) <= $rule;
+            return $result->result($isOk);
         };
     }
 }

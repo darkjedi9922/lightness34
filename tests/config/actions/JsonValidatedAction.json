@@ -10,6 +10,15 @@
             "errorRules": [
                 "max-length"
             ]
+        },
+        "alter": {
+            "default": ["Doctor Who", "TARDIS"],
+            "rules": {
+                "mandatory": true
+            }
+        },
+        "enemy": {
+            "default": ["Dalek"]
         }
     }
 }

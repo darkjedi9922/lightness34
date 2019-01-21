@@ -9,6 +9,7 @@ use frame\route\Request;
 use frame\route\Response;
 use frame\tools\transmitters\SessionTransmitter;
 use frame\tools\Json;
+use frame\actions\RuleResult;
 use frame\actions\NoRuleError;
 use frame\actions\StopRuleException;
 use frame\actions\RuleCheckFailedException;
@@ -113,6 +114,11 @@ abstract class Action extends LatePropsObject
      * @var string
      */
     private $noRuleMode = self::NO_RULE_ERROR;
+
+    /**
+     * @var array [type => [field => [name => [value]]]]
+     */
+    private $interData = [];
 
     /**
      * @param array $params Параметры экшна
@@ -276,6 +282,35 @@ abstract class Action extends LatePropsObject
     }
 
     /**
+     * Если заданной данной нет, вернет null.
+     * 
+     * @param string $field Поле, по которому эта данная связана (генерируется
+     * в цепочке правил поля).
+     * @return mixed|null
+     */
+    public function getInterData(string $type, string $field, string $name)
+    {
+        if (!isset($this->interData[$type])) return null;
+        if (!isset($this->interData[$type][$field])) return null;
+        if (!isset($this->interData[$type][$field][$name])) return null;
+        return $this->interData[$type][$field][$name];
+    }
+
+    /**
+     * @param string $field Поле, по которому эта данная связана (генерируется
+     * в цепочке правил поля).
+     * @return mixed
+     * @throws \Exception Если заданной данной нет (или она null).
+     */
+    public function requireInterData(string $type, string $field, string $name)
+    {
+        $data = $this->getInterData($type, $field, $name);
+        if ($data === null) throw new \Exception('There is no "' . $type . 
+            '" inter data "' . $name . '" from "' . $field . '"');
+        return $data;
+    }
+
+    /**
      * Устанавливает callback-функцию, которая будет вызываться при проверке
      * поля, заданной в json-настройках валидации.
      * 
@@ -296,6 +331,21 @@ abstract class Action extends LatePropsObject
     public function setRule($name, $callback)
     {
         $this->ruleCallbacks[$name] = $callback;
+    }
+
+    /**
+     * @return callable|null
+     * @throws NoRuleError Если обработчик правила не установлен при условии, если 
+     * флаг noRuleMode для экшна задан как error
+     */
+    public function getRuleCallback(string $rule)
+    {
+        if (!isset($this->ruleCallbacks[$rule])) {
+            if ($this->noRuleMode == self::NO_RULE_ERROR) throw new NoRuleError;
+            return null;
+        }
+
+        return $this->ruleCallbacks[$rule];
     }
 
     /**
@@ -459,29 +509,42 @@ abstract class Action extends LatePropsObject
         $errors = [];
         if (!$this->validationJson) return $errors;
         if (!$this->validationJson->isset('post')) return $errors;
+        
+        $this->interData['post'] = [];
 
         // Проходимся по каждому полю
         foreach ($this->validationJson->get('post') as $field => $rules) {
+
+            $this->interData['post'][$field] = [];
+
+            // Правил может не быть.
             if (!isset($rules['rules'])) continue;
+
             $fieldValue = isset($data[$field]) ? $data[$field] : null;
+            $result = new RuleResult;
 
             // Проходимся по каждому правилу проверок поля
             foreach ($rules['rules'] as $rule => $ruleValue) {
-                if (isset($this->ruleCallbacks[$rule])) {
-                    $check = $this->ruleCallbacks[$rule];
-                    try {
-                        $result = $check($ruleValue, $fieldValue);
-                        if (!$result) $this->_setPostError($errors, $field, $rule);
-                    } catch (StopRuleException $e) {
-                        if ($e->isFail()) $this->_setPostError($errors, $field, $rule);
-                        break;
-                    }
-                } else {
-                    if ($this->noRuleMode == self::NO_RULE_ERROR) {
-                        throw new NoRuleError;
-                    }
-                }
+                $check = $this->getRuleCallback($rule);
+
+                // При noRuleMode = ignore, метод вернет null.
+                if (!$check) continue;
+
+                // Т.к. для всей цепочки проверок правила используется один и тот
+                // же экземпляр класса, перед каждой обработкой необходимо
+                // восстанавливать результат после предыдущей обработки.
+                $result->restoreResult();
+                $result = $check($ruleValue, $fieldValue, $result);
+
+                // Каждая проверка должна вернуть результат с одним из двух
+                // состояний: провал и успех.
+                if (!$result->hasResult()) 
+                    throw new \Exception('Rule result state has not changed.');
+                if ($result->isFail()) $this->_setPostError($errors, $field, $rule);
+                if ($result->isStopped()) break;
             }
+
+            $this->interData['post'][$field] = $result->getInterDataAll();
         }
 
         return $errors;

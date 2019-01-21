@@ -7,6 +7,7 @@ use frame\tools\Json;
 use frame\actions\NoRuleError;
 use frame\Action;
 use frame\actions\RuleCheckFailedException;
+use tests\engine\UserDeleteAction;
 
 /**
  * `Run in separate process` заглушает сообщения вида `headers already sent`, когда
@@ -29,7 +30,7 @@ class ActionJsonValidateTest extends TestCase
         // правила, которое можно затем использовать в json-валидации.
         $action->setRule('mandatory', $rules->getMandatoryRule());
 
-        $config = new Json(ROOT_DIR . '/tests/config/actions/validating.json');
+        $config = new Json(ROOT_DIR . '/tests/config/actions/JsonValidatedAction.json');
         $action->setValidationConfig($config);
 
         $action->exec();
@@ -45,7 +46,7 @@ class ActionJsonValidateTest extends TestCase
     public function testRuleIsNotFoundRaisesError()
     {
         $action = new JsonValidatedAction([], '', Action::NO_RULE_ERROR);
-        $config = new Json(ROOT_DIR . '/tests/config/actions/validating.json');
+        $config = new Json(ROOT_DIR . '/tests/config/actions/JsonValidatedAction.json');
         $action->setValidationConfig($config);
 
         $this->expectException(NoRuleError::class);
@@ -65,7 +66,7 @@ class ActionJsonValidateTest extends TestCase
         // минимальную длинну поля, (да и другие проверки) если оно пустое. 
         // Поэтому правило emptiness при своей обработке должно остановить 
         // проверку дальнейших правил для этого поля.
-        $config = new Json(ROOT_DIR . '/tests/config/actions/validating.json');
+        $config = new Json(ROOT_DIR . '/tests/config/actions/JsonValidatedAction.json');
 
         $action = new JsonValidatedAction([], '', Action::NO_RULE_IGNORE);
         $action->setValidationConfig($config);
@@ -87,7 +88,7 @@ class ActionJsonValidateTest extends TestCase
      */
     public function testRuleHandlerMayNotStopRuleHandling()
     {
-        $config = new Json(ROOT_DIR . '/tests/config/actions/validating.json');
+        $config = new Json(ROOT_DIR . '/tests/config/actions/JsonValidatedAction.json');
 
         $action = new JsonValidatedAction([], '', Action::NO_RULE_IGNORE);
         $action->setValidationConfig($config);
@@ -111,7 +112,7 @@ class ActionJsonValidateTest extends TestCase
      */
     public function testFailedRuleMayThrowException()
     {
-        $config = new Json(ROOT_DIR . '/tests/config/actions/validating.json');
+        $config = new Json(ROOT_DIR . '/tests/config/actions/JsonValidatedAction.json');
 
         $action = new JsonValidatedAction([], '', Action::NO_RULE_IGNORE);
         $action->setValidationConfig($config);
@@ -123,5 +124,24 @@ class ActionJsonValidateTest extends TestCase
 
         $action->setPostOne('username', 'Kostyak');
         $action->exec();
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testInnerInterData()
+    {
+        $action = new UserDeleteAction([], '');
+        $config = new Json(ROOT_DIR . '/tests/config/actions/UserDeleteAction.json');
+        $action->setValidationConfig($config);
+
+        // В этом тестовом экшне id = 1 является единственным путем успешно 
+        // пройти проверки.
+        $action->setPostOne('id', 1);
+
+        // В теле экшна используются промежуточные данные. Если их нет, будет ошибка.
+        $action->exec();
+
+        $this->assertTrue($action->isSuccess());
     }
 }
