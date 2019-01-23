@@ -1,6 +1,6 @@
 <?php namespace frame\actions;
 
-use frame\Action;
+use frame\actions\Action;
 
 /**
  * Исключение выбрасывается во время проверки экшна через конфиг правил проверок

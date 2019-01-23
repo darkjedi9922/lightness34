@@ -1,4 +1,4 @@
-<?php namespace frame;
+<?php namespace frame\actions;
 
 use function lightlib\encode_specials;
 
@@ -11,7 +11,6 @@ use frame\tools\transmitters\SessionTransmitter;
 use frame\tools\Json;
 use frame\actions\RuleResult;
 use frame\actions\NoRuleError;
-use frame\actions\StopRuleException;
 use frame\actions\RuleCheckFailedException;
 
 /**
@@ -320,6 +319,8 @@ abstract class Action extends LatePropsObject
      * проверка пройдена, иначе false.
      * 
      * Если проверка не пройдена, в post errors добавится имя ошибки, равное $name.
+     * Но вместо этого может быть выброшено исключение.
+     * @see RuleCheckFailedException.
      * 
      * При этом callback может выбросить исключение StopRuleException с результатом
      * проверки.
@@ -346,6 +347,32 @@ abstract class Action extends LatePropsObject
         }
 
         return $this->ruleCallbacks[$rule];
+    }
+
+    /**
+     * Возвращает установленное значение default поля в конфиге экшна.
+     * Значение по умолчанию устанавливается в виде [значение1, значение2] или
+     * [значение]. Значение 1 используется когда поле не было передано вообще,
+     * значение 2 - когда поле было передано, но оно равно пустой строке. В последнем
+     * случае будет использоваться одно значение на оба случая.
+     * 
+     * @param string $category Только post (пока что).
+     * @param string $field Имя поля.
+     * @param bool $existing Если false, возвращает значение, когда поле не было
+     * передано совсем, а если true, то когда оно было передано, но равняется пустой
+     * строке.
+     */
+    public function getFieldDefault($category, $field, $existing)
+    {
+        if ($this->validationJson
+            && isset($this->validationJson->$category[$field]['default'])) 
+        {
+            $defaultRule = $this->validationJson->$category[$field]['default'];
+            if (count($defaultRule) == 1) return $defaultRule[0];
+        } else $defaultRule = [null, ''];
+
+        if ($existing) return $defaultRule[1];
+        else return $defaultRule[0];
     }
 
     /**

@@ -4,7 +4,7 @@ use frame\actions\RuleResult;
 
 /**
  * Методы класса возвращают callback-функции для установки как rule в Action.
- * @see \frame\Action::setRule
+ * @see \frame\actions\Action::setRule
  */
 class BaseActionRules
 {

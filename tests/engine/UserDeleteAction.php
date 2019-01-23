@@ -1,6 +1,6 @@
 <?php namespace tests\engine;
 
-use frame\Action;
+use frame\actions\Action;
 use frame\actions\rules\BaseActionRules;
 use function lightlib\dump;
 

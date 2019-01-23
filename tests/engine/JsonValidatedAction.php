@@ -1,6 +1,6 @@
 <?php namespace tests\engine;
 
-use frame\Action;
+use frame\actions\Action;
 
 class JsonValidatedAction extends Action
 {

@@ -1,6 +1,6 @@
 <?php namespace frame\macros;
 
-use frame\Action;
+use frame\actions\Action;
 use frame\Core;
 use frame\tools\Json;
 

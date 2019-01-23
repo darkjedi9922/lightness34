@@ -5,7 +5,7 @@ use tests\engine\JsonValidatedAction;
 use frame\actions\rules\BaseActionRules;
 use frame\tools\Json;
 use frame\actions\NoRuleError;
-use frame\Action;
+use frame\actions\Action;
 use frame\actions\RuleCheckFailedException;
 use tests\engine\UserDeleteAction;
 

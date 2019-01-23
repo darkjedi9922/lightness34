@@ -1,6 +1,6 @@
 <?php namespace engine;
 
-use frame\Action;
+use frame\actions\Action;
 
 /**
  * Логирует полученное сообщение message и возвращается обратно.
