@@ -369,14 +369,20 @@ abstract class Action extends LatePropsObject
      * значение 2 - когда поле было передано, но оно равно пустой строке. В последнем
      * случае будет использоваться одно значение на оба случая.
      * 
+     * Если значение по умолчанию не установлено, вернет null при $existing = false,
+     * или пустую строку при $existing = true.
+     * 
      * @param string $category Только post (пока что).
      * @param string $field Имя поля.
      * @param bool $existing Если false, возвращает значение, когда поле не было
      * передано совсем, а если true, то когда оно было передано, но равняется пустой
      * строке.
+     * @return mixed
      */
-    public function getFieldDefault($category, $field, $existing)
+    public function getFieldDefault($category, $field, $existing = false)
     {
+        if ($category !== 'post') throw new NotImplementedException;
+
         if ($this->validationJson
             && isset($this->validationJson->$category[$field]['default'])) 
         {
@@ -386,6 +392,26 @@ abstract class Action extends LatePropsObject
 
         if ($existing) return $defaultRule[1];
         else return $defaultRule[0];
+    }
+
+    /**
+     * Возвращает входящее значение поля, если оно есть, или значение по умолчанию, 
+     * если нет.
+     * 
+     * @param string $category Только post (пока что).
+     * @param string $name Имя поля.
+     * @return mixed
+     */
+    public function getField($category, $name) 
+    {
+        if ($category !== 'post') throw new NotImplementedException;
+
+        if (isset($this->post[$name])) {
+            $value = $this->post[$name];
+            if ($value !== '') return $value; 
+            return $this->getFieldDefault($category, $name, true);
+        }
+        return $this->getFieldDefault($category, $name, false);
     }
 
     /**
