@@ -124,13 +124,26 @@ function shorten($str, $length, $ending = '')
 
 // =============================================================================
 
-function encode_specials(string $text) : string
+/**
+ * Кодирует спецсимволы в $data.
+ * @param string|array $data Если передан массив, то функция будет вызвана рекурсивно
+ * для каждого элемента массива. Если значение массива является массивом, то для него
+ * тоже будет вызвана эта функция и т.д.
+ * @return string|array
+ */
+function encode_specials($data)
 {
-	$text = str_replace("<", "&lt;", $text);
-	$text = str_replace(">", "&gt;", $text);
-	$text = str_replace("\"", "&quot;", $text);
-	$text = str_replace("'", "&#39;", $text);
-	return $text;
+    if (is_array($data)) {
+        $result = [];
+        foreach ($data as $key => $value) $result[$key] = encode_specials($value);
+        return $result;
+    }
+
+    return str_replace(
+        ['<', '>', '"', '\''], 
+        ['&lt;', '&gt;', '&quot;', '&#39;'],
+        $data
+    );
 }
 
 // =============================================================================
