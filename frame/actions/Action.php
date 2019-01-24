@@ -12,6 +12,7 @@ use frame\tools\Json;
 use frame\actions\RuleResult;
 use frame\actions\NoRuleError;
 use frame\actions\RuleCheckFailedException;
+use frame\errors\NotImplementedException;
 
 /**
  * Класс служит для обработки форм, но можно использовать для запуска
@@ -182,12 +183,25 @@ abstract class Action extends LatePropsObject
     }
 
     /**
+     * @param string $type Пока-что только post.
+     * @param array $data [name => value]
+     */
+    public function setData($type, $data)
+    {
+        if ($type !== 'post') throw new NotImplementedException;
+        //$this->data[$type] = encode_specials($data);
+        $this->post = encode_specials($data);
+    }
+
+    /**
      * @param string $name
-     * @param string|null $value Если передано null, удаляет значение.
+     * @param string|null $value Если передано null, считается что значения нет 
+     * совсем.
      */
     public function setPostOne($name, $value)
     {
-        $_POST[$name] = $value;
+        //$this->data['post'][$name] = encode_specials($value);
+        $this->post[$name] = encode_specials($value);
     }
 
     /**
@@ -197,7 +211,6 @@ abstract class Action extends LatePropsObject
     public final function exec()
     {
         $this->initialization();
-        $this->post = $this->encodeSpecials($_POST);
         $this->postErrors = $this->configValidatePost($this->post);
         $this->errors = $this->validate($this->post, $_FILES);
         if (empty($this->postErrors) && empty($this->errors)) {
@@ -508,21 +521,6 @@ abstract class Action extends LatePropsObject
             }
             $this->afterLoad();
         }
-    }
-    
-    /**
-     * Кодирует спецсимволы во благо безопасности
-     * 
-     * @param array $data
-     * @return array
-     */
-    private function encodeSpecials($data) : array
-    {
-        foreach ($data as $key => $value) {
-            if (is_array($data[$key])) $data[$key] = $this->encodeSpecials($data[$key]);
-            else $data[$key] = encode_specials($value);
-        }
-        return $data;
     }
 
     /**

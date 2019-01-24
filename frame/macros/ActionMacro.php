@@ -15,6 +15,7 @@ class ActionMacro extends Macro
         $id = $name[0];
         $class = $name[1];
         $action = Action::$_current = $class::instance($args, $id);
+        $action->setData('post', $_POST);
 
         $ruleDir = Core::$app->config->{'actions.validationConfigFolder'};
         if ($ruleDir) {
