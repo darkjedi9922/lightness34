@@ -5,6 +5,7 @@ use function lightlib\session_start_once;
 use function lightlib\translit;
 use function lightlib\substring;
 use function lightlib\shorten;
+use function lightlib\empty_recursive;
 
 /**
  * @testdox lightness.lib
@@ -97,5 +98,29 @@ final class LightnessLibTest extends TestCase
             ['', '', 1, '...'],
             ['', '', 0, '...']
         ];
+    }
+
+    public function testEmptyRecursive()
+    {
+        $deepEmpty = [[], [], 'a' => [
+            'b' => [
+                false,
+                null,
+                '',
+                []
+            ]
+        ]];
+
+        $notEmpty = [[], [], 'a' => [
+            'b' => [
+                null,
+                '',
+                [],
+                true // not entirely empty
+            ]
+        ]];
+
+        $this->assertTrue(empty_recursive($deepEmpty));
+        $this->assertFalse(empty_recursive($notEmpty));
     }
 }

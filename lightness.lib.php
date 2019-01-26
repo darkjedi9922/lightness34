@@ -284,3 +284,21 @@ function dump($value)
     else var_dump($value);
     exit;
 }
+
+/**
+ * Работает как empty(), но если значение является массивом, то рекурсивно проводит
+ * ту же проверку на всех детей (и если они массивы на их детей и т.д.).
+ * 
+ * @param mixed $value
+ */
+function empty_recursive($value)
+{
+    if (is_array($value)) {
+        foreach ($value as $k => $v) {
+            if (!empty_recursive($v)) return false;
+        }
+        return true;
+    }
+
+    return empty($value);
+}
