@@ -15,7 +15,7 @@ class ActionMacro extends Macro
         $id = $name[0];
         $class = $name[1];
         $action = Action::$_current = $class::instance($args, $id);
-        $action->setData('post', $_POST);
+        $action->setDataAll('post', $_POST);
 
         $ruleDir = Core::$app->config->{'actions.validationConfigFolder'};
         if ($ruleDir) {
@@ -24,7 +24,7 @@ class ActionMacro extends Macro
             $configFile = $ruleDir . '/' . $classPath . '.json';
             if (file_exists($configFile)) {
                 $config = new Json($configFile);
-                $action->setValidationConfig($config);
+                $action->setConfig($config);
             }
         }
 

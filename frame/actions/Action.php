@@ -13,6 +13,7 @@ use frame\actions\RuleResult;
 use frame\actions\NoRuleError;
 use frame\actions\RuleCheckFailedException;
 use frame\errors\NotImplementedException;
+use function lightlib\empty_recursive;
 
 /**
  * Класс служит для обработки форм, но можно использовать для запуска
@@ -57,6 +58,10 @@ abstract class Action extends LatePropsObject
     const NO_RULE_ERROR = 'error';
     const NO_RULE_IGNORE = 'ignore';
 
+    const OWN = 'own';
+    const DATA_GET = 'get';
+    const DATA_POST = 'post';
+
     /**
      * @var Action|null Текущий активированный экшн.
      * Определяется при срабатывании ActionMacro.
@@ -80,35 +85,26 @@ abstract class Action extends LatePropsObject
     public $status = self::NONE;
 
     /**
-     * @var array Коды ошибок, которые возникли в процессе выполненя валидации
+     * @var array Ошибки, возникшие во время валидации. OWN хранит коды ошибок после
+     * validate(), остальные - массивы вида ['field' => ['rule1', 'rule2']] с именами
+     * правил валидации данных соответствующего типа из конфига.
      */
-    public $errors = [];
+    public $errors = [self::OWN => [], self::DATA_GET => [], self::DATA_POST => []];
 
     /**
-     * @var array Переданные данные через POST
+     * @var array [get => [name => value], post => [name => value]]
      */
-    public $post = [];
+    public $data = [self::DATA_GET => [], self::DATA_POST => []];
 
     /**
-     * @var array Параметры, заданные в конструкторе
+     * @var Json.
      */
-    public $params = [];
-
-    /**
-     * @var Json Настройки валидации.
-     */
-    private $validationJson = null;
+    private $config = null;
 
     /**
      * @var array Ассоциативный массив вида [string => callable]
      */
     private $ruleCallbacks = [];
-
-    /**
-     * @var array Массив вида ['field' => [1, 2, 3]] с кодами ошибок post полей,
-     * которые возникли во время выполнения экшна.
-     */
-    private $postErrors = [];
 
     /**
      * @var string
@@ -121,18 +117,18 @@ abstract class Action extends LatePropsObject
     private $interData = [];
 
     /**
-     * @param array $params Параметры экшна
+     * @param array $get Параметры экшна
      * @param int $id Id экшна. Нужен, если на одной странице используется несколько экшнов
      * одного класса с разными параметрами, чтобы понимать какой из них выполнять
      * @return static
      */
-    public static function instance($params = [], $id = '')
+    public static function instance($get = [], $id = '')
     {
         if (isset(static::$_current) && static::$_current->name === $id . '_' . static::class) 
             return static::$_current;
         
         $noRuleMode = Core::$app->config->{'actions.noRuleMode'};
-        $action = new static($params, $id, $noRuleMode);
+        $action = new static($get, $id, $noRuleMode);
         return $action;
     }
 
@@ -143,7 +139,7 @@ abstract class Action extends LatePropsObject
      * работе приложения (с инициализированным Core) требуется использовать
      * статический метод instance().
      * 
-     * @param array $params Параметры экшна.
+     * @param array $get Параметры экшна.
      * @param int $id Id экшна. Нужен, если на одной странице используется несколько 
      * экшнов одного класса с разными параметрами, чтобы понимать какой из них 
      * выполнять.
@@ -152,145 +148,82 @@ abstract class Action extends LatePropsObject
      * исключение типа NoRuleError) или 'ignore' (пропускает правило).
      */
     public function __construct(
-        $params = [],
+        $get = [],
         $id = '',
         $noRuleMode = self::NO_RULE_ERROR)
     {
         $this->app = Core::$app;
         $this->name = $id . '_' . static::class;
-        $this->params = $params;
         $this->noRuleMode = $noRuleMode;
+        $this->setDataAll(self::DATA_GET, $get);
         $this->load();
     }
 
     /**
-     * @return string Триггерное url на выполнение экшна
-     */
-    public final function getUrl()
-    {
-        $this->params['action'] = $this->name;
-        return Core::$app->router->toUrl(['action' => http_build_query($this->params, '', ';')]);
-    }
-
-    /**
-     * @param string $name
-     * @param mixed $default
-     * @return string|null|mixed
-     */
-    public final function getParameter($name, $default = null)
-    {
-        return isset($this->params[$name]) ? $this->params[$name] : $default;
-    }
-
-    /**
-     * @param string $type Пока-что только post.
+     * @param string $type post|get.
      * @param array $data [name => value]
      */
-    public function setData($type, $data)
+    public function setDataAll($type, $data)
     {
-        if ($type !== 'post') throw new NotImplementedException;
-        //$this->data[$type] = encode_specials($data);
-        $this->post = encode_specials($data);
+        $this->data[$type] = encode_specials($data);
     }
 
     /**
+     * @param string $type post|get.
      * @param string $name
      * @param string|null $value Если передано null, считается что значения нет 
      * совсем.
      */
-    public function setPostOne($name, $value)
+    public function setData($type, $name, $value)
     {
-        //$this->data['post'][$name] = encode_specials($value);
-        $this->post[$name] = encode_specials($value);
+        $this->data[$type][$name] = encode_specials($value);
     }
 
     /**
-     * После данного метода скрипт завершает свое выполнение.
-     * Кодирует спецсимволы полученных POST данных.
-     */
-    public final function exec()
-    {
-        $this->initialization();
-        $this->postErrors = $this->configValidatePost($this->post);
-        $this->errors = $this->validate($this->post, $_FILES);
-        if (empty($this->postErrors) && empty($this->errors)) {
-            $this->successBody($this->post, $_FILES);
-            $this->status = self::SUCCESS;
-            if ($this->getSuccessRedirect() !== null) {
-                $this->save();
-                Response::setUrl(Router::toUrlOf($this->getSuccessRedirect()));
-            }
-        } else {
-            $this->failBody($this->post, $_FILES);
-            $this->status = self::FAIL;
-            if ($this->getFailRedirect() !== null) {
-                $this->save();
-                Response::setUrl(Router::toUrlOf($this->getFailRedirect()));
-            }
-        }
-    }
-
-    /**
-     * @return bool
-     */
-    public function isSuccess()
-    {
-        return $this->status === self::SUCCESS;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isFail()
-    {
-        return $this->status === self::FAIL;
-    }
-
-    /**
-     * @param int $error Код ошибки
-     * @return bool
-     */
-    public function hasError($error)
-    {
-        return in_array($error, $this->errors);
-    }
-
-    /**
-     * Возвращает есть ли у заданного post-поля заданный код ошибки.
+     * Возвращает входящее значение, если оно есть, или значение по умолчанию, если 
+     * его нет.
      * 
-     * @param string|int $error Имя или код ошибки.
-     * @return bool
-     */
-    public function hasPostError($field, $error)
-    {
-        return isset($this->postErrors[$field]) && in_array($error, $this->postErrors[$field]);
-    }
-
-    /**
+     * @param string $type post|get.
      * @param string $name
-     * @param mixed $default
-     * @return string|null|mixed
+     * @return mixed
      */
-    public function getPost($name, $default = null)
+    public function getData($type, $name)
     {
-        if (isset($this->post[$name])) return $this->post[$name];
-        else return $default;
+        if (isset($this->data[$type][$name])) {
+            $value = $this->data[$type][$name];
+            if ($value !== '') return $value;
+            return $this->getDataDefault($type, $name, true);
+        }
+        return $this->getDataDefault($type, $name, false);
     }
 
     /**
-     * @param Json|null $config
+     * Возвращает установленное значение default поля в конфиге экшна.
+     * Значение по умолчанию устанавливается в виде [значение1, значение2] или
+     * [значение]. Значение 1 используется когда поле не было передано вообще,
+     * значение 2 - когда поле было передано, но оно равно пустой строке. В последнем
+     * случае будет использоваться одно значение на оба случая.
+     * 
+     * Если значение по умолчанию не установлено, вернет null при $existing = false,
+     * или пустую строку при $existing = true.
+     * 
+     * @param string $type post|get.
+     * @param string $name.
+     * @param bool $existing Если false, возвращает значение, когда поле не было
+     * передано совсем, а если true, то когда оно было передано, но равняется пустой
+     * строке.
+     * @return mixed
      */
-    public function setValidationConfig($config)
+    public function getDataDefault($type, $name, $existing = false)
     {
-        $this->validationJson = $config;
-    }
+        if ($this->config
+            && isset($this->config->$type[$name]['default'])) {
+            $defaultRule = $this->config->$type[$name]['default'];
+            if (count($defaultRule) == 1) return $defaultRule[0];
+        } else $defaultRule = [null, ''];
 
-    /**
-     * @return Json|null
-     */
-    public function getValidationConfig()
-    {
-        return $this->validationJson ? $this->validationJson : null;
+        if ($existing) return $defaultRule[1];
+        else return $defaultRule[0];
     }
 
     /**
@@ -317,9 +250,108 @@ abstract class Action extends LatePropsObject
     public function requireInterData(string $type, string $field, string $name)
     {
         $data = $this->getInterData($type, $field, $name);
-        if ($data === null) throw new \Exception('There is no "' . $type . 
+        if ($data === null) throw new \Exception('There is no "' . $type .
             '" inter data "' . $name . '" from "' . $field . '"');
         return $data;
+    }
+
+    /**
+     * @param Router $router Устройство заданного роутера будет использовано для 
+     * построения url.
+     * @return string Триггерное url на выполнение экшна
+     * 
+     * @todo Чтобы убрать зависимость экшна от Router (в целом-то он от него не
+     * зависит, можно вынести этот метод в какой-нибудь ActionSetup или метод в 
+     * view).
+     */
+    public final function getUrl($router)
+    {
+        $queryData = array_merge([$this->name], $this->data[Action::DATA_GET]);
+        return $router->toUrl(['action' => http_build_query($queryData, '', ';')]);
+    }
+
+    /**
+     * После данного метода скрипт завершает свое выполнение.
+     * Кодирует спецсимволы полученных POST данных.
+     */
+    public final function exec()
+    {
+        $this->initialization();
+        $this->errors[self::DATA_GET] = $this->ruleValidate(self::DATA_GET);
+        $this->errors[self::DATA_POST] = $this->ruleValidate(self::DATA_POST);
+        $this->errors[self::OWN] = $this->validate($this->data);
+        if (empty_recursive($this->errors)) {
+            $this->successBody($this->data);
+            $this->status = self::SUCCESS;
+            if ($this->getSuccessRedirect() !== null) {
+                $this->save();
+                Response::setUrl(Router::toUrlOf($this->getSuccessRedirect()));
+            }
+        } else {
+            $this->failBody($this->data);
+            $this->status = self::FAIL;
+            if ($this->getFailRedirect() !== null) {
+                $this->save();
+                Response::setUrl(Router::toUrlOf($this->getFailRedirect()));
+            }
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSuccess()
+    {
+        return $this->status === self::SUCCESS;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFail()
+    {
+        return $this->status === self::FAIL;
+    }
+
+    /**
+     * Возвращает есть ли ошибка типа OWN (после validate()).
+     * 
+     * @param int $error Код ошибки.
+     * @return bool
+     */
+    public function hasError($error)
+    {
+        return in_array($error, $this->errors[self::OWN]);
+    }
+
+    /**
+     * Возвращает есть ли у заданного значения ошибка rule.
+     * 
+     * @param string $type get|post.
+     * @param string $data Имя значения.
+     * @param string|int $error Имя провалившегося rule правила.
+     * @return bool
+     */
+    public function hasDataError($type, $data, $error)
+    {
+        return isset($this->errors[$type][$data])
+            && in_array($error, $this->errors[$type][$data]);
+    }
+
+    /**
+     * @param Json|null $config
+     */
+    public function setConfig($config)
+    {
+        $this->config = $config;
+    }
+
+    /**
+     * @return Json|null
+     */
+    public function getConfig()
+    {
+        return $this->config ? $this->config : null;
     }
 
     /**
@@ -363,58 +395,6 @@ abstract class Action extends LatePropsObject
     }
 
     /**
-     * Возвращает установленное значение default поля в конфиге экшна.
-     * Значение по умолчанию устанавливается в виде [значение1, значение2] или
-     * [значение]. Значение 1 используется когда поле не было передано вообще,
-     * значение 2 - когда поле было передано, но оно равно пустой строке. В последнем
-     * случае будет использоваться одно значение на оба случая.
-     * 
-     * Если значение по умолчанию не установлено, вернет null при $existing = false,
-     * или пустую строку при $existing = true.
-     * 
-     * @param string $category Только post (пока что).
-     * @param string $field Имя поля.
-     * @param bool $existing Если false, возвращает значение, когда поле не было
-     * передано совсем, а если true, то когда оно было передано, но равняется пустой
-     * строке.
-     * @return mixed
-     */
-    public function getFieldDefault($category, $field, $existing = false)
-    {
-        if ($category !== 'post') throw new NotImplementedException;
-
-        if ($this->validationJson
-            && isset($this->validationJson->$category[$field]['default'])) 
-        {
-            $defaultRule = $this->validationJson->$category[$field]['default'];
-            if (count($defaultRule) == 1) return $defaultRule[0];
-        } else $defaultRule = [null, ''];
-
-        if ($existing) return $defaultRule[1];
-        else return $defaultRule[0];
-    }
-
-    /**
-     * Возвращает входящее значение поля, если оно есть, или значение по умолчанию, 
-     * если нет.
-     * 
-     * @param string $category Только post (пока что).
-     * @param string $name Имя поля.
-     * @return mixed
-     */
-    public function getField($category, $name) 
-    {
-        if ($category !== 'post') throw new NotImplementedException;
-
-        if (isset($this->post[$name])) {
-            $value = $this->post[$name];
-            if ($value !== '') return $value; 
-            return $this->getFieldDefault($category, $name, true);
-        }
-        return $this->getFieldDefault($category, $name, false);
-    }
-
-    /**
      * Is run first
      * Suggests override if it is needed
      */
@@ -428,30 +408,22 @@ abstract class Action extends LatePropsObject
      * Returns array of error codes
      * Suggests override if it is needed
      * 
-     * @param array $post
-     * @param array $files
      * @return array Коды ошибок
      */
-    protected function validate($post, $files)
+    protected function validate()
     {
         return []; // Here is nothing to validate
     }
 
     /**
      * Is run third in case of the success
-     * 
-     * @param array $post
-     * @param array $files
      */
-    abstract protected function successBody($data, $files);
+    abstract protected function successBody();
 
     /**
      * Is run third in case of the fail
-     * 
-     * @param array $post
-     * @param array $files
      */
-    protected function failBody($data, $file)
+    protected function failBody()
     {
         // Here is nothing to do
     }
@@ -519,9 +491,8 @@ abstract class Action extends LatePropsObject
         $this->beforeSave();
         $sessions = new SessionTransmitter;
         $sessions->setData($this->name.'_status', $this->status);
-        if ($this->isFail()) $sessions->setData($this->name . '_post-errors', serialize($this->postErrors));
         if ($this->isFail()) $sessions->setData($this->name.'_errors', serialize($this->errors));
-        if ($this->isFail()) $sessions->setData($this->name.'_data', serialize($this->post));
+        if ($this->isFail()) $sessions->setData($this->name.'_data', serialize($this->data));
     }
 
     /**
@@ -533,16 +504,12 @@ abstract class Action extends LatePropsObject
         if ($sessions->isSetData($this->name . '_status')) {
             $this->status = $sessions->getData($this->name . '_status');
             $sessions->removeData($this->name . '_status');
-            if ($sessions->isSetData($this->name . '_post-errors')) {
-                $this->postErrors = unserialize($sessions->getData($this->name . '_post-errors'));
-                $sessions->removeData($this->name . '_post-errors');
-            }
             if ($sessions->isSetData($this->name . '_errors')) {
                 $this->errors = unserialize($sessions->getData($this->name . '_errors'));
                 $sessions->removeData($this->name . '_errors');
             }
             if ($sessions->isSetData($this->name . '_data')) {
-                $this->post = unserialize($sessions->getData($this->name . '_data'));
+                $this->data = unserialize($sessions->getData($this->name . '_data'));
                 $sessions->removeData($this->name . '_data');
             }
             $this->afterLoad();
@@ -550,23 +517,27 @@ abstract class Action extends LatePropsObject
     }
 
     /**
-     * Возвращает массив вида ['field' => [1, 2, 3]] с кодами ошибок post полей.
+     * Возвращает массив вида ['field' => ['rule1', 'rule2']] с именами
+     * правил валидации данных соответствующего типа из конфига.
+     * 
+     * @param string $type get|post.
      * @return array
      * @throws NoRuleError|RuleCheckFailedException Подробнее в описании классов 
      * этих исключений.
      */
-    private function configValidatePost($data)
+    private function ruleValidate($type)
     {
         $errors = [];
-        if (!$this->validationJson) return $errors;
-        if (!$this->validationJson->isset('post')) return $errors;
-        
-        $this->interData['post'] = [];
+        if (!$this->config) return $errors;
+        if (!$this->config->isset($type)) return $errors;
+
+        $data = $this->data[$type];
+        $this->interData[$type] = [];
 
         // Проходимся по каждому полю
-        foreach ($this->validationJson->get('post') as $field => $rules) {
+        foreach ($this->config->$type as $field => $rules) {
 
-            $this->interData['post'][$field] = [];
+            $this->interData[$type][$field] = [];
 
             // Правил может не быть.
             if (!isset($rules['rules'])) continue;
@@ -577,8 +548,8 @@ abstract class Action extends LatePropsObject
             // Проходимся по каждому правилу проверок поля
             foreach ($rules['rules'] as $rule => $ruleValue) {
                 $check = $this->getRuleCallback($rule);
-
-                // При noRuleMode = ignore, метод вернет null.
+                // При noRuleMode = ignore, метод вернет null, иначе будет выброшено
+                // исключение еще в getRuleCallback.
                 if (!$check) continue;
 
                 // Т.к. для всей цепочки проверок правила используется один и тот
@@ -591,24 +562,24 @@ abstract class Action extends LatePropsObject
                 // состояний: провал и успех.
                 if (!$result->hasResult()) 
                     throw new \Exception('Rule result state has not changed.');
-                if ($result->isFail()) $this->_setPostError($errors, $field, $rule);
+                if ($result->isFail()) $this->_setError($type, $errors, $field, $rule);
                 if ($result->isStopped()) break;
             }
 
-            $this->interData['post'][$field] = $result->getInterDataAll();
+            $this->interData[$type][$field] = $result->getInterDataAll();
         }
 
         return $errors;
     }
 
-    private function _setPostError(&$errors, $field, $rule)
+    private function _setError($type, &$errors, $field, $rule)
     {
-        // Не проверяем validationJson и post и $field на наличие, т.к. эта функция 
+        // Не проверяем config и post и $field на наличие, т.к. эта функция 
         // вызывается только там, где это уже проверено и используется.
-        if (isset($this->validationJson->post[$field]['errorRules'])
-            && in_array($rule, $this->validationJson->post[$field]['errorRules']))
+        if (isset($this->config->$type[$field]['errorRules'])
+            && in_array($rule, $this->config->$type[$field]['errorRules']))
         {
-            throw new RuleCheckFailedException($this, $field, $rule);
+            throw new RuleCheckFailedException($this, $type, $field, $rule);
         }
 
         if (!isset($errors[$field])) $errors[$field] = [];

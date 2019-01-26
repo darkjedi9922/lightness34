@@ -1,4 +1,12 @@
 {
+    "get": {
+        "user_id": {
+            "rules": {
+                "regexp": "/007/"
+            },
+            "default": ["some-user"]
+        }
+    },
     "post": {
         "username": {
             "rules": {

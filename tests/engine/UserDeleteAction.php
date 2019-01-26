@@ -42,7 +42,7 @@ class UserDeleteAction extends Action
         });
     }
 
-    protected function successBody($data, $files)
+    protected function successBody()
     {
         $deletedUser = $this->requireInterData('post', 'id', 'user');
         // Используем данные, загруженные ранее, дальше...

@@ -12,12 +12,11 @@ use tests\engine\UserDeleteAction;
 /**
  * `Run in separate process` заглушает сообщения вида `headers already sent`, когда
  * устанавливаются куки. Используется вместо (слегка костыльной) @ заглушки.
+ * 
+ * @runTestsInSeparateProcesses
  */
 class ActionJsonValidateTest extends TestCase
 {
-    /**
-     * @runInSeparateProcess
-     */
     public function testCallbackValidate()
     {
         $action = new JsonValidatedAction([], '', Action::NO_RULE_IGNORE);
@@ -31,23 +30,20 @@ class ActionJsonValidateTest extends TestCase
         $action->setRule('mandatory', $rules->getMandatoryRule());
 
         $config = new Json(ROOT_DIR . '/tests/config/actions/JsonValidatedAction.json');
-        $action->setValidationConfig($config);
+        $action->setConfig($config);
 
         $action->exec();
 
         // В экшн не было передано post значения `username`.
-        $this->assertTrue($action->hasPostError('username', 'mandatory'));
+        $this->assertTrue($action->hasDataError('post', 'username', 'mandatory'));
         $this->assertTrue($action->isFail());
     }
 
-    /**
-     * @runInSeparateProcess
-     */
     public function testRuleIsNotFoundRaisesError()
     {
         $action = new JsonValidatedAction([], '', Action::NO_RULE_ERROR);
         $config = new Json(ROOT_DIR . '/tests/config/actions/JsonValidatedAction.json');
-        $action->setValidationConfig($config);
+        $action->setConfig($config);
 
         $this->expectException(NoRuleError::class);
         
@@ -56,9 +52,6 @@ class ActionJsonValidateTest extends TestCase
         $action->exec();
     }
 
-    /**
-     * @runInSeparateProcess
-     */
     public function testRuleHandlerCanStopRuleHandling()
     {
         // По конфигу, поле username не должно быть пустым (правило emptiness).
@@ -69,65 +62,56 @@ class ActionJsonValidateTest extends TestCase
         $config = new Json(ROOT_DIR . '/tests/config/actions/JsonValidatedAction.json');
 
         $action = new JsonValidatedAction([], '', Action::NO_RULE_IGNORE);
-        $action->setValidationConfig($config);
+        $action->setConfig($config);
         
         $baseRules = new BaseActionRules;
         $action->setRule('emptiness', $baseRules->getEmptinessRule());
         $action->setRule('min-length', $baseRules->getMinLengthRule());
         
-        $action->setPostOne('username', '');
+        $action->setData('post', 'username', '');
         $action->exec();
 
-        $emptyError = $action->hasPostError('username', 'emptiness');
-        $minLengthError = $action->hasPostError('username', 'min-length');
+        $emptyError = $action->hasDataError('post', 'username', 'emptiness');
+        $minLengthError = $action->hasDataError('post', 'username', 'min-length');
         $this->assertTrue($emptyError && !$minLengthError);
     }
 
-    /**
-     * @runInSeparateProcess
-     */
     public function testRuleHandlerMayNotStopRuleHandling()
     {
         $config = new Json(ROOT_DIR . '/tests/config/actions/JsonValidatedAction.json');
 
         $action = new JsonValidatedAction([], '', Action::NO_RULE_IGNORE);
-        $action->setValidationConfig($config);
+        $action->setConfig($config);
 
         $baseRules = new BaseActionRules;
         $action->setRule('emptiness', $baseRules->getEmptinessRule());
         $action->setRule('min-length', $baseRules->getMinLengthRule());
 
-        $action->setPostOne('username', 'Jed');
+        $action->setData('post', 'username', 'Jed');
         $action->exec();
 
         // emptiness теперь должно пройти нормально и позволить остальным проверкам
         // проверять то, что они там проверяют. 
-        $emptyError = $action->hasPostError('username', 'emptiness');
-        $minLengthError = $action->hasPostError('username', 'min-length');
+        $emptyError = $action->hasDataError('post', 'username', 'emptiness');
+        $minLengthError = $action->hasDataError('post', 'username', 'min-length');
         $this->assertTrue(!$emptyError && $minLengthError);
     }
 
-    /**
-     * @runInSeparateProcess
-     */
     public function testDefaultValue()
     {
         $config = new Json(ROOT_DIR . '/tests/config/actions/JsonValidatedAction.json');
 
         $action = new JsonValidatedAction([], '', Action::NO_RULE_IGNORE);
-        $action->setValidationConfig($config);
+        $action->setConfig($config);
 
-        $this->assertEquals('Doctor Who', $action->getFieldDefault('post', 'alter', false));
-        $this->assertEquals('TARDIS', $action->getFieldDefault('post', 'alter', true));
-        $this->assertEquals('Dalek', $action->getFieldDefault('post', 'enemy', false));
-        $this->assertEquals('Dalek', $action->getFieldDefault('post', 'enemy', true));
-        $this->assertEquals(null, $action->getFieldDefault('post', 'true-name', false));
-        $this->assertEquals('', $action->getFieldDefault('post', 'true-name', true));
+        $this->assertEquals('Doctor Who', $action->getDataDefault('post', 'alter', false));
+        $this->assertEquals('TARDIS', $action->getDataDefault('post', 'alter', true));
+        $this->assertEquals('Dalek', $action->getDataDefault('post', 'enemy', false));
+        $this->assertEquals('Dalek', $action->getDataDefault('post', 'enemy', true));
+        $this->assertEquals(null, $action->getDataDefault('post', 'true-name', false));
+        $this->assertEquals('', $action->getDataDefault('post', 'true-name', true));
     }
 
-    /**
-     * @runInSeparateProcess
-     */
     public function testGetField()
     {
         $config = new Json(null);
@@ -141,54 +125,97 @@ class ActionJsonValidateTest extends TestCase
         ];
 
         $action = new UserDeleteAction;
-        $action->setValidationConfig($config);
+        $action->setConfig($config);
 
-        $action->setPostOne('username', 'BadUser');
-        $action->setPostOne('empty-field', '');
-        $action->setPostOne('question', '');
+        $action->setData('post', 'username', 'BadUser');
+        $action->setData('post', 'empty-field', '');
+        $action->setData('post', 'question', '');
         
-        $this->assertEquals('BadUser', $action->getField('post', 'username'));
-        $this->assertEquals('', $action->getField('post', 'empty-field'));
-        $this->assertEquals(null, $action->getField('post', 'non-existence-field'));
-        $this->assertEquals(42, $action->getField('post', 'answer'));
-        $this->assertEquals('...', $action->getField('post', 'question'));
+        $this->assertEquals('BadUser', $action->getData('post', 'username'));
+        $this->assertEquals('', $action->getData('post', 'empty-field'));
+        $this->assertEquals(null, $action->getData('post', 'non-existence-field'));
+        $this->assertEquals(42, $action->getData('post', 'answer'));
+        $this->assertEquals('...', $action->getData('post', 'question'));
     }
 
-    /**
-     * @runInSeparateProcess
-     */
     public function testFailedRuleMayThrowException()
     {
         $config = new Json(ROOT_DIR . '/tests/config/actions/JsonValidatedAction.json');
 
         $action = new JsonValidatedAction([], '', Action::NO_RULE_IGNORE);
-        $action->setValidationConfig($config);
+        $action->setConfig($config);
 
         $rules = new BaseActionRules;
         $action->setRule('max-length', $rules->getMaxLengthRule());
 
         $this->expectException(RuleCheckFailedException::class);
 
-        $action->setPostOne('username', 'Kostyak');
+        $action->setData('post', 'username', 'Kostyak');
         $action->exec();
     }
 
-    /**
-     * @runInSeparateProcess
-     */
     public function testInnerInterData()
     {
         $action = new UserDeleteAction([], '');
         $config = new Json(ROOT_DIR . '/tests/config/actions/UserDeleteAction.json');
-        $action->setValidationConfig($config);
+        $action->setConfig($config);
 
         // В этом тестовом экшне id = 1 является единственным путем успешно 
         // пройти проверки.
-        $action->setPostOne('id', 1);
+        $action->setData('post', 'id', 1);
 
         // В теле экшна используются промежуточные данные. Если их нет, будет ошибка.
         $action->exec();
 
         $this->assertTrue($action->isSuccess());
+    }
+
+    public function testGetSetup()
+    {
+        $action = new JsonValidatedAction([], '', Action::NO_RULE_IGNORE);
+        $action->setDataAll('get', ['arg1' => 1, 'arg2' => 2]);
+        $action->setData('get', 'arg3', 3);
+
+        $this->assertEquals(1, $action->getData('get', 'arg1'));
+        $this->assertEquals(2, $action->getData('get', 'arg2'));
+        $this->assertEquals(3, $action->getData('get', 'arg3'));
+        $this->assertEquals(null, $action->getData('get', 'arg4'));
+    }
+
+    public function testRegexpRuleFindsErrorInWrongValue()
+    {
+        $rules = new BaseActionRules;
+        $config = new Json(ROOT_DIR . '/tests/config/actions/JsonValidatedAction.json');
+        $action = new JsonValidatedAction([], '', Action::NO_RULE_IGNORE);
+        $action->setRule('regexp', $rules->getRegexpRule());
+        $action->setConfig($config);
+
+        $action->setData('get', 'user_id', '008');
+        $action->exec();
+
+        $this->assertTrue($action->hasDataError('get', 'user_id', 'regexp'));
+    }
+
+    public function testRegexpRuleDoesNotFindErrorInCorrectValue()
+    {
+        $rules = new BaseActionRules;
+        $config = new Json(ROOT_DIR . '/tests/config/actions/JsonValidatedAction.json');
+        $action = new JsonValidatedAction([], '', Action::NO_RULE_IGNORE);
+        $action->setRule('regexp', $rules->getRegexpRule());
+        $action->setConfig($config);
+
+        $action->setData('get', 'user_id', '007');
+        $action->exec();
+
+        $this->assertTrue(!$action->hasDataError('get', 'user_id', 'regexp'));
+    }
+
+    public function testReturnsDefaultGetValue()
+    {
+        $config = new Json(ROOT_DIR . '/tests/config/actions/JsonValidatedAction.json');
+        $action = new JsonValidatedAction([], '', Action::NO_RULE_IGNORE);
+        $action->setConfig($config);
+
+        $this->assertEquals('some-user', $action->getDataDefault('get', 'user_id'));
     }
 }
