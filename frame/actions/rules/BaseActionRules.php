@@ -5,12 +5,14 @@ use frame\actions\RuleResult;
 /**
  * Методы класса возвращают callback-функции для установки как rule в Action.
  * @see \frame\actions\Action::setRule
+ * @todo Написать тесты чисто для проверки работы самих обработчиков.
  */
 class BaseActionRules
 {
     /**
      * Обязательно ли поле для передачи (true|false).
-     * Если поле не обязательно и его нет, завершает цепочку обработчиков.
+     * Если поля нет, завершает цепочку обработчиков, независимо от результата 
+     * проверки.
      * @return \callable
      */
     public function getMandatoryRule()
@@ -28,7 +30,8 @@ class BaseActionRules
 
     /**
      * Разрешено ли пустое значение в поле (true|false).
-     * Если разрешено пустое значение и оно пусто, завершает цепочку обработчиков.
+     * Если значение пусто, завершает цепочку обработчиков, независимо от результата
+     * проверки.
      * @return \callable
      */
     public function getEmptinessRule()
@@ -77,6 +80,23 @@ class BaseActionRules
         return function ($rule, $value, $result) {
             $isOk = strlen($value) <= $rule;
             return $result->result($isOk);
+        };
+    }
+
+    /**
+     * Проверяет на совпадение значения с регулярным выражением.
+     * @return \callable
+     */
+    public function getRegexpRule()
+    {
+        /**
+         * @param string $rule
+         * @param string $value
+         * @param RuleResult $result
+         * @return bool
+         */
+        return function($rule, $value, $result) {
+            return $result->result(preg_match($rule, $value));
         };
     }
 }
