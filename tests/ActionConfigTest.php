@@ -8,6 +8,9 @@ use frame\actions\NoRuleError;
 use frame\actions\Action;
 use frame\actions\RuleCheckFailedException;
 use tests\engine\UserDeleteAction;
+use function lightlib\dump;
+use frame\actions\UploadedFile;
+use frame\actions\rules\ActionFileRules;
 
 /**
  * `Run in separate process` заглушает сообщения вида `headers already sent`, когда
@@ -207,7 +210,7 @@ class ActionJsonValidateTest extends TestCase
         $action->setData('get', 'user_id', '007');
         $action->exec();
 
-        $this->assertTrue(!$action->hasDataError('get', 'user_id', 'regexp'));
+        $this->assertFalse($action->hasDataError('get', 'user_id', 'regexp'));
     }
 
     public function testReturnsDefaultGetValue()
@@ -217,5 +220,51 @@ class ActionJsonValidateTest extends TestCase
         $action->setConfig($config);
 
         $this->assertEquals('some-user', $action->getDataDefault('get', 'user_id'));
+    }
+
+    public function testFileMaxSizeRuleCanFindOutError()
+    {
+        $rules = new ActionFileRules;
+        $config = new Json(ROOT_DIR . '/tests/config/actions/JsonValidatedAction.json');
+        $action = new JsonValidatedAction([], '', Action::NO_RULE_IGNORE);
+        $action->setConfig($config);
+        $action->setRule('max-size', $rules->getMaxSizeRule());
+
+        $_FILES = ['avatar' => [
+            'name' => 'my-new-avatar.jpg',
+            'type' => 'image/gif',
+            'size' => 1024 * 1024 * 1024, // 1 GB
+            'tmp_name' => '',
+            'error' => UploadedFile::UPLOAD_ERR_OK
+        ]];
+        $action->setData($action::DATA_FILES, 'avatar', new UploadedFile('avatar'));
+
+        $action->exec();
+
+        $hasError = $action->hasDataError($action::DATA_FILES, 'avatar', 'max-size');
+        $this->assertTrue($hasError);
+    }
+
+    public function testFileMaxSizeRuleCanFindOutSuccess()
+    {
+        $rules = new ActionFileRules;
+        $config = new Json(ROOT_DIR . '/tests/config/actions/JsonValidatedAction.json');
+        $action = new JsonValidatedAction([], '', Action::NO_RULE_IGNORE);
+        $action->setConfig($config);
+        $action->setRule('max-size', $rules->getMaxSizeRule());
+
+        $_FILES = ['avatar' => [
+            'name' => 'my-new-avatar.jpg',
+            'type' => 'image/gif',
+            'size' => 1024 * 1024, // 1 MB
+            'tmp_name' => '',
+            'error' => UploadedFile::UPLOAD_ERR_OK
+        ]];
+        $action->setData($action::DATA_FILES, 'avatar', new UploadedFile('avatar'));
+
+        $action->exec();
+
+        $hasError = $action->hasDataError($action::DATA_FILES, 'avatar', 'max-size');
+        $this->assertFalse($hasError);
     }
 }

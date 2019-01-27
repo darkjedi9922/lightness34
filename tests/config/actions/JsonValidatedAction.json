@@ -28,5 +28,12 @@
         "enemy": {
             "default": ["Dalek"]
         }
+    },
+    "files": {
+        "avatar": {
+            "rules": {
+                "max-size": [1, "MB"]
+            }
+        }
     }
 }

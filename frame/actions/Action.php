@@ -61,6 +61,7 @@ abstract class Action extends LatePropsObject
     const OWN = 'own';
     const DATA_GET = 'get';
     const DATA_POST = 'post';
+    const DATA_FILES = 'files';
 
     /**
      * @var Action|null Текущий активированный экшн.
@@ -89,12 +90,21 @@ abstract class Action extends LatePropsObject
      * validate(), остальные - массивы вида ['field' => ['rule1', 'rule2']] с именами
      * правил валидации данных соответствующего типа из конфига.
      */
-    public $errors = [self::OWN => [], self::DATA_GET => [], self::DATA_POST => []];
+    public $errors = [
+        self::OWN => [], 
+        self::DATA_GET => [], 
+        self::DATA_POST => [],
+        self::DATA_FILES => []
+    ];
 
     /**
      * @var array [get => [name => value], post => [name => value]]
      */
-    public $data = [self::DATA_GET => [], self::DATA_POST => []];
+    public $data = [
+        self::DATA_GET => [], 
+        self::DATA_POST => [], 
+        self::DATA_FILES => []
+    ];
 
     /**
      * @var Json.
@@ -160,32 +170,35 @@ abstract class Action extends LatePropsObject
     }
 
     /**
-     * @param string $type post|get.
+     * @param string $type post|get|files. В случае files, value массива должно
+     * быть UploadedFile типа.
      * @param array $data [name => value]
      */
     public function setDataAll($type, $data)
     {
-        $this->data[$type] = encode_specials($data);
+        $safeValue = ($type === self::DATA_FILES ? $data : encode_specials($data));
+        $this->data[$type] = $safeValue;
     }
 
     /**
      * @param string $type post|get.
      * @param string $name
-     * @param string|null $value Если передано null, считается что значения нет 
-     * совсем.
+     * @param string|UploadedFile|null $value Если передано null, считается что 
+     * значения нет совсем.
      */
     public function setData($type, $name, $value)
     {
-        $this->data[$type][$name] = encode_specials($value);
+        $safeValue = ($type === self::DATA_FILES ? $value : encode_specials($value));
+        $this->data[$type][$name] = $safeValue;
     }
 
     /**
      * Возвращает входящее значение, если оно есть, или значение по умолчанию, если 
      * его нет.
      * 
-     * @param string $type post|get.
+     * @param string $type post|get|files.
      * @param string $name
-     * @return mixed
+     * @return string|UploadedFile|null
      */
     public function getData($type, $name)
     {
@@ -207,15 +220,19 @@ abstract class Action extends LatePropsObject
      * Если значение по умолчанию не установлено, вернет null при $existing = false,
      * или пустую строку при $existing = true.
      * 
-     * @param string $type post|get.
+     * Для данных типа DATA_FILES, всегда вернет null.
+     * 
+     * @param string $type post|get|files.
      * @param string $name.
      * @param bool $existing Если false, возвращает значение, когда поле не было
      * передано совсем, а если true, то когда оно было передано, но равняется пустой
      * строке.
-     * @return mixed
+     * @return string|null
      */
     public function getDataDefault($type, $name, $existing = false)
     {
+        if ($type == self::DATA_FILES) return null;
+
         if ($this->config
             && isset($this->config->$type[$name]['default'])) {
             $defaultRule = $this->config->$type[$name]['default'];
@@ -279,6 +296,7 @@ abstract class Action extends LatePropsObject
         $this->initialization();
         $this->errors[self::DATA_GET] = $this->ruleValidate(self::DATA_GET);
         $this->errors[self::DATA_POST] = $this->ruleValidate(self::DATA_POST);
+        $this->errors[self::DATA_FILES] = $this->ruleValidate(self::DATA_FILES);
         $this->errors[self::OWN] = $this->validate($this->data);
         if (empty_recursive($this->errors)) {
             $this->successBody($this->data);
@@ -560,7 +578,9 @@ abstract class Action extends LatePropsObject
 
                 // Каждая проверка должна вернуть результат с одним из двух
                 // состояний: провал и успех.
-                if (!$result->hasResult()) 
+                if (!$result || !$result->hasResult()) 
+                    // @todo Добавить параметры, какая проверка и т.д.
+                    // Может даже отдельный класс исключения под это создать.
                     throw new \Exception('Rule result state has not changed.');
                 if ($result->isFail()) $this->_setError($type, $errors, $field, $rule);
                 if ($result->isStopped()) break;
