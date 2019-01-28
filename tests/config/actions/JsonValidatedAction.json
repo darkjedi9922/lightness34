@@ -31,6 +31,7 @@
     },
     "files": {
         "avatar": {
+            "default": ["no-avatar.jpg"],
             "rules": {
                 "max-size": [1, "MB"]
             }

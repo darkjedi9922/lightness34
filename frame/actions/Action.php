@@ -220,8 +220,6 @@ abstract class Action extends LatePropsObject
      * Если значение по умолчанию не установлено, вернет null при $existing = false,
      * или пустую строку при $existing = true.
      * 
-     * Для данных типа DATA_FILES, всегда вернет null.
-     * 
      * @param string $type post|get|files.
      * @param string $name.
      * @param bool $existing Если false, возвращает значение, когда поле не было
@@ -231,8 +229,6 @@ abstract class Action extends LatePropsObject
      */
     public function getDataDefault($type, $name, $existing = false)
     {
-        if ($type == self::DATA_FILES) return null;
-
         if ($this->config
             && isset($this->config->$type[$name]['default'])) {
             $defaultRule = $this->config->$type[$name]['default'];

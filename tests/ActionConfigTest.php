@@ -267,4 +267,14 @@ class ActionJsonValidateTest extends TestCase
         $hasError = $action->hasDataError($action::DATA_FILES, 'avatar', 'max-size');
         $this->assertFalse($hasError);
     }
+    
+    public function testFileDefaultValue()
+    {
+        $config = new Json(ROOT_DIR . '/tests/config/actions/JsonValidatedAction.json');
+        $action = new JsonValidatedAction([], '', Action::NO_RULE_IGNORE);
+        $action->setConfig($config);
+        
+        $default = $action->getDataDefault('files', 'avatar');
+        $this->assertEquals('no-avatar.jpg', $default);
+    }
 }
