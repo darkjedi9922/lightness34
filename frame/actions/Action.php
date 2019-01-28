@@ -1,18 +1,18 @@
 <?php namespace frame\actions;
 
-use function lightlib\encode_specials;
-
 use frame\Core;
 use frame\LatePropsObject;
 use frame\route\Router;
 use frame\route\Request;
 use frame\route\Response;
-use frame\tools\transmitters\SessionTransmitter;
-use frame\tools\Json;
 use frame\actions\RuleResult;
-use frame\actions\NoRuleError;
-use frame\actions\RuleCheckFailedException;
-use frame\errors\NotImplementedException;
+use frame\actions\errors\NoRuleException;
+use frame\actions\errors\RuleRuntimeException;
+use frame\actions\errors\RuleCheckFailedException;
+use frame\tools\Json;
+use frame\tools\transmitters\SessionTransmitter;
+
+use function lightlib\encode_specials;
 use function lightlib\empty_recursive;
 
 /**
@@ -394,14 +394,16 @@ abstract class Action extends LatePropsObject
     }
 
     /**
+     * @param string $rule
      * @return callable|null
-     * @throws NoRuleError Если обработчик правила не установлен при условии, если 
-     * флаг noRuleMode для экшна задан как error
+     * @throws NoRuleException Если обработчик правила не установлен при условии, 
+     * если флаг noRuleMode для экшна задан как error.
      */
-    public function getRuleCallback(string $rule)
+    public function getRuleCallback($rule)
     {
         if (!isset($this->ruleCallbacks[$rule])) {
-            if ($this->noRuleMode == self::NO_RULE_ERROR) throw new NoRuleError;
+            if ($this->noRuleMode == self::NO_RULE_ERROR) 
+                throw new NoRuleException($rule);
             return null;
         }
 
@@ -575,9 +577,9 @@ abstract class Action extends LatePropsObject
                 // Каждая проверка должна вернуть результат с одним из двух
                 // состояний: провал и успех.
                 if (!$result || !$result->hasResult()) 
-                    // @todo Добавить параметры, какая проверка и т.д.
-                    // Может даже отдельный класс исключения под это создать.
-                    throw new \Exception('Rule result state has not changed.');
+                    throw new RuleRuntimeException($this, $type, $field, $rule, 
+                        'Rule result state has not changed.');
+
                 if ($result->isFail()) $this->_setError($type, $errors, $field, $rule);
                 if ($result->isStopped()) break;
             }

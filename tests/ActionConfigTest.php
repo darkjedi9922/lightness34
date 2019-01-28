@@ -4,13 +4,12 @@ use PHPUnit\Framework\TestCase;
 use tests\engine\JsonValidatedAction;
 use frame\actions\rules\BaseActionRules;
 use frame\tools\Json;
-use frame\actions\NoRuleError;
 use frame\actions\Action;
-use frame\actions\RuleCheckFailedException;
 use tests\engine\UserDeleteAction;
-use function lightlib\dump;
 use frame\actions\UploadedFile;
 use frame\actions\rules\ActionFileRules;
+use frame\actions\errors\NoRuleException;
+use frame\actions\errors\RuleCheckFailedException;
 
 /**
  * `Run in separate process` заглушает сообщения вида `headers already sent`, когда
@@ -48,7 +47,7 @@ class ActionJsonValidateTest extends TestCase
         $config = new Json(ROOT_DIR . '/tests/config/actions/JsonValidatedAction.json');
         $action->setConfig($config);
 
-        $this->expectException(NoRuleError::class);
+        $this->expectException(NoRuleException::class);
         
         // В конфиге экшна установлены проверки, механизмы которых не были
         // установлены в экшн.
