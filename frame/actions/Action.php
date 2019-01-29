@@ -45,9 +45,6 @@ use function lightlib\empty_recursive;
  * в дочерних экшнах. С помощью него можно определять используемые в экшне данные,
  * которые потом можно брать из него на обычных страницах, вместо того, чтобы повторно
  * создавать их.
- * 
- * @todo Выделить методы, которые нужно переопределять в отдельный класс (например,
- * ActionBody) ибо методов уже слишком много, трудно ориентироваться.
  */
 abstract class Action extends LatePropsObject
 {
@@ -289,20 +286,20 @@ abstract class Action extends LatePropsObject
      */
     public final function exec()
     {
-        $this->initialization();
+        $this->initialize();
         $this->errors[self::DATA_GET] = $this->ruleValidate(self::DATA_GET);
         $this->errors[self::DATA_POST] = $this->ruleValidate(self::DATA_POST);
         $this->errors[self::DATA_FILES] = $this->ruleValidate(self::DATA_FILES);
-        $this->errors[self::OWN] = $this->validate($this->data);
+        $this->errors[self::OWN] = $this->validate();
         if (empty_recursive($this->errors)) {
-            $this->successBody($this->data);
+            $this->succeed();
             $this->status = self::SUCCESS;
             if ($this->getSuccessRedirect() !== null) {
                 $this->save();
                 Response::setUrl(Router::toUrlOf($this->getSuccessRedirect()));
             }
         } else {
-            $this->failBody($this->data);
+            $this->fail();
             $this->status = self::FAIL;
             if ($this->getFailRedirect() !== null) {
                 $this->save();
@@ -414,7 +411,7 @@ abstract class Action extends LatePropsObject
      * Is run first
      * Suggests override if it is needed
      */
-    protected function initialization()
+    protected function initialize()
     {
         // Here is nothing to initialize
     }
@@ -434,33 +431,32 @@ abstract class Action extends LatePropsObject
     /**
      * Is run third in case of the success
      */
-    abstract protected function successBody();
+    abstract protected function succeed();
 
     /**
      * Is run third in case of the fail
      */
-    protected function failBody()
+    protected function fail()
     {
         // Here is nothing to do
     }
 
     /**
-     * Выполняется перед сохранением состояния экшна.
-     * Оно сохраняется при успехе/неудаче, только если соответсвующие редиректы не null.
-     * Тут можно очистить данные, которые не нужно сохранять (например, пароли).
-     * Suggests override if it is needed
+     * Выполняется перед сохранением состояния экшна. Оно сохраняется при 
+     * успехе/неудаче, только если соответсвующие редиректы не null. Тут можно 
+     * очистить данные, которые не нужно сохранять (например, пароли).
      */
-    protected function beforeSave() 
+    protected function doBeforeSave() 
     { 
         // Here is nothing to do 
     }
 
     /**
-     * Выполняется после загрузки состояния экшна. Оно загружается, только если было сохранено. 
-     * Оно сохраняется при успехе/неудаче, только если соответсвующие редиректы не null.
-     * Suggests override if it is needed
+     * Выполняется после загрузки состояния экшна. Оно загружается, только если было 
+     * сохранено. Оно сохраняется при успехе/неудаче, только если соответсвующие 
+     * редиректы не null.
      */
-    protected function afterLoad()
+    protected function doAfterLoad()
     {
         // Here is nothing to do
     }
@@ -469,8 +465,6 @@ abstract class Action extends LatePropsObject
      * Возвращает адрес веб-страницы, на которую нужно перейти после успешного
      * (без ошибок во время валидации данных) завершения экшна или null, 
      * если не нужно никуда переходить.
-     * 
-     * Suggests override if it is needed.
      * 
      * @return string|null
      */
@@ -484,8 +478,6 @@ abstract class Action extends LatePropsObject
      * Возвращает адрес веб-страницы, на которую нужно перейти после неудачного
      * (с ошибками во время валидации данных) завершения экшна или null, 
      * если не нужно никуда переходить.
-     * 
-     * Suggests override if it is needed.
      * 
      * @return string|null
      */
@@ -504,7 +496,7 @@ abstract class Action extends LatePropsObject
      */
     private function save()
     {
-        $this->beforeSave();
+        $this->doBeforeSave();
         $sessions = new SessionTransmitter;
         $sessions->setData($this->name.'_status', $this->status);
         if ($this->isFail()) $sessions->setData($this->name.'_errors', serialize($this->errors));
@@ -528,7 +520,7 @@ abstract class Action extends LatePropsObject
                 $this->data = unserialize($sessions->getData($this->name . '_data'));
                 $sessions->removeData($this->name . '_data');
             }
-            $this->afterLoad();
+            $this->doAfterLoad();
         }
     }
 

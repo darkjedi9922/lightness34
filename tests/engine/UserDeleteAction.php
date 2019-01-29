@@ -6,7 +6,7 @@ use function lightlib\dump;
 
 class UserDeleteAction extends Action
 {
-    protected function initialization()
+    protected function initialize()
     {
         $baseRules = new BaseActionRules;
         $this->setRule('mandatory', $baseRules->getMandatoryRule());
@@ -42,7 +42,7 @@ class UserDeleteAction extends Action
         });
     }
 
-    protected function successBody()
+    protected function succeed()
     {
         $deletedUser = $this->requireInterData('post', 'id', 'user');
         // Используем данные, загруженные ранее, дальше...
