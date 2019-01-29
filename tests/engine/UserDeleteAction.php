@@ -1,14 +1,13 @@
 <?php namespace tests\engine;
 
 use frame\actions\Action;
-use frame\actions\rules\BaseActionRules;
-use function lightlib\dump;
+use frame\actions\rules\ActionBaseRules;
 
 class UserDeleteAction extends Action
 {
     protected function initialize()
     {
-        $baseRules = new BaseActionRules;
+        $baseRules = new ActionBaseRules;
         $this->setRule('mandatory', $baseRules->getMandatoryRule());
         $this->setRule('emptiness', $baseRules->getEmptinessRule());
         
@@ -20,7 +19,6 @@ class UserDeleteAction extends Action
             else $userInfo = null;
 
             if ($rule == true && !$userInfo) {
-                dump($userInfo);
                 return $result->fail()->stop();
             }
 

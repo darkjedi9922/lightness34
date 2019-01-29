@@ -5,9 +5,8 @@ use frame\actions\RuleResult;
 /**
  * Методы класса возвращают callback-функции для установки как rule в Action.
  * @see \frame\actions\Action::setRule
- * @todo Написать тесты чисто для проверки работы самих обработчиков.
  */
-class BaseActionRules
+class ActionBaseRules
 {
     /**
      * Обязательно ли поле для передачи (true|false).
@@ -60,7 +59,7 @@ class BaseActionRules
          * @return bool
          */
         return function($rule, $value, $result) {
-            $isOk = strlen($value) >= $rule;
+            $isOk = mb_strlen($value) >= $rule;
             return $result->result($isOk);
         };
     }
@@ -78,7 +77,7 @@ class BaseActionRules
          * @return bool
          */
         return function ($rule, $value, $result) {
-            $isOk = strlen($value) <= $rule;
+            $isOk = mb_strlen($value) <= $rule;
             return $result->result($isOk);
         };
     }

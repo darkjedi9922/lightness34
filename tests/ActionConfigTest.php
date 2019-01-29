@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 use tests\engine\JsonValidatedAction;
-use frame\actions\rules\BaseActionRules;
+use frame\actions\rules\ActionBaseRules;
 use frame\tools\Json;
 use frame\actions\Action;
 use tests\engine\UserDeleteAction;
@@ -25,7 +25,7 @@ class ActionJsonValidateTest extends TestCase
 
         // Методы классов ActionRules возвращают callback-функции, проверяющие
         // переданные в них значения.
-        $rules = new BaseActionRules();
+        $rules = new ActionBaseRules();
 
         // addValidationRule устанавливает callback-функцию на ключевое слово 
         // правила, которое можно затем использовать в json-валидации.
@@ -66,7 +66,7 @@ class ActionJsonValidateTest extends TestCase
         $action = new JsonValidatedAction([], '', Action::NO_RULE_IGNORE);
         $action->setConfig($config);
         
-        $baseRules = new BaseActionRules;
+        $baseRules = new ActionBaseRules;
         $action->setRule('emptiness', $baseRules->getEmptinessRule());
         $action->setRule('min-length', $baseRules->getMinLengthRule());
         
@@ -85,7 +85,7 @@ class ActionJsonValidateTest extends TestCase
         $action = new JsonValidatedAction([], '', Action::NO_RULE_IGNORE);
         $action->setConfig($config);
 
-        $baseRules = new BaseActionRules;
+        $baseRules = new ActionBaseRules;
         $action->setRule('emptiness', $baseRules->getEmptinessRule());
         $action->setRule('min-length', $baseRules->getMinLengthRule());
 
@@ -147,7 +147,7 @@ class ActionJsonValidateTest extends TestCase
         $action = new JsonValidatedAction([], '', Action::NO_RULE_IGNORE);
         $action->setConfig($config);
 
-        $rules = new BaseActionRules;
+        $rules = new ActionBaseRules;
         $action->setRule('max-length', $rules->getMaxLengthRule());
 
         $this->expectException(RuleCheckFailedException::class);
@@ -186,7 +186,7 @@ class ActionJsonValidateTest extends TestCase
 
     public function testRegexpRuleFindsErrorInWrongValue()
     {
-        $rules = new BaseActionRules;
+        $rules = new ActionBaseRules;
         $config = new Json(ROOT_DIR . '/tests/config/actions/JsonValidatedAction.json');
         $action = new JsonValidatedAction([], '', Action::NO_RULE_IGNORE);
         $action->setRule('regexp', $rules->getRegexpRule());
@@ -200,7 +200,7 @@ class ActionJsonValidateTest extends TestCase
 
     public function testRegexpRuleDoesNotFindErrorInCorrectValue()
     {
-        $rules = new BaseActionRules;
+        $rules = new ActionBaseRules;
         $config = new Json(ROOT_DIR . '/tests/config/actions/JsonValidatedAction.json');
         $action = new JsonValidatedAction([], '', Action::NO_RULE_IGNORE);
         $action->setRule('regexp', $rules->getRegexpRule());
