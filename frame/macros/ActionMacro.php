@@ -18,9 +18,9 @@ class ActionMacro extends Macro
         $action = Action::$_current = $class::instance($args, $id);
         $action->setDataAll(Action::DATA_GET, Core::$app->router->args);
         $action->setDataAll(Action::DATA_POST, $_POST);
-        $action->setDataAll(Action::DATA_FILES, array_map(function($field) {
-            return new UploadedFile($field);
-        }, array_keys($_FILES)));
+        $action->setDataAll(Action::DATA_FILES, array_map(function($filedata) {
+            return new UploadedFile($filedata);
+        }, $_FILES));
 
         $ruleDir = Core::$app->config->{'actions.validationConfigFolder'};
         if ($ruleDir) {

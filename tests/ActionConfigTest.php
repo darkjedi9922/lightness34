@@ -229,14 +229,14 @@ class ActionJsonValidateTest extends TestCase
         $action->setConfig($config);
         $action->setRule('max-size', $rules->getMaxSizeRule());
 
-        $_FILES = ['avatar' => [
+        $file = [
             'name' => 'my-new-avatar.jpg',
             'type' => 'image/gif',
             'size' => 1024 * 1024 * 1024, // 1 GB
             'tmp_name' => '',
             'error' => UploadedFile::UPLOAD_ERR_OK
-        ]];
-        $action->setData($action::DATA_FILES, 'avatar', new UploadedFile('avatar'));
+        ];
+        $action->setData($action::DATA_FILES, 'avatar', new UploadedFile($file));
 
         $action->exec();
 
@@ -252,14 +252,14 @@ class ActionJsonValidateTest extends TestCase
         $action->setConfig($config);
         $action->setRule('max-size', $rules->getMaxSizeRule());
 
-        $_FILES = ['avatar' => [
+        $file = [
             'name' => 'my-new-avatar.jpg',
             'type' => 'image/gif',
             'size' => 1024 * 1024, // 1 MB
             'tmp_name' => '',
             'error' => UploadedFile::UPLOAD_ERR_OK
-        ]];
-        $action->setData($action::DATA_FILES, 'avatar', new UploadedFile('avatar'));
+        ];
+        $action->setData($action::DATA_FILES, 'avatar', new UploadedFile($file));
 
         $action->exec();
 

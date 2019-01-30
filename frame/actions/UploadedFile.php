@@ -50,19 +50,17 @@ class UploadedFile
     const UPLOAD_ERR_EXTENSION = 8;
 
     /**
-     * @param string $name Имя файла из массива $_FILES. При создании экземпляра,
-     * данные об этом файле автоматически будут подгружены из этого массива.
+     * @param array $data Массив по структуре равный элементу $_FILES:
+     *  name => string,
+     *  type => string,
+     *  size => int, // в байтах
+     *  tmp_name => string,
+     *  error => int
      */
-    public function __construct($name)
+    public function __construct($data)
     {
-        if (isset($_FILES[$name])) $this->file = $_FILES[$name];
-        else $this->file = [
-            'name' => '',
-            'type' => '',
-            'size' => 0, // в байтах
-            'tmp_name' => '',
-            'error' => self::UPLOAD_ERR_NO_FILE
-        ];
+        $this->file = $data;
+        $this->throwImportantErrorException();
     }
 
     /**
@@ -115,7 +113,28 @@ class UploadedFile
     }
 
     /**
-     * @var array элемент $_FILES. Структуру массива смотри в конструкторе.
+     * @return bool
+     */
+    public function isLoaded()
+    {
+        return $this->hasError(self::UPLOAD_ERR_OK);
+    }
+
+    private function throwImportantErrorException()
+    {
+        // Если одна из ошибок ниже появляется, нужно сразу бросить исключение
+        // чтобы оно хотя-бы залогировалось куда-нибудь ибо при таких ошибках
+        // будет не сразу ясно в чем проблема.
+        if ($this->file['error'] === UPLOAD_ERR_NO_TMP_DIR)
+            throw new \Exception('File uploading UPLOAD_ERR_NO_TMP_DIR error.');
+        else if ($this->file['error'] === UPLOAD_ERR_CANT_WRITE)
+            throw new \Exception('File uploading UPLOAD_ERR_CANT_WRITE error.');
+        else if ($this->file['error'] === UPLOAD_ERR_EXTENSION)
+            throw new \Exception('File uploading UPLOAD_ERR_EXTENSION error.');
+    }
+
+    /**
+     * @var array
      */
     private $file = [];
 }
