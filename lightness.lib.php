@@ -148,7 +148,12 @@ function encode_specials($data)
 
 // =============================================================================
 
-function bytes(int $number, string $unit) : int
+/**
+ * @param int $number
+ * @param string $unit KB|MB|GB
+ * @return int
+ */
+function bytes($number, $unit)
 {
 	if ($unit === 'KB') return $number * 1024;
 	else if ($unit === 'MB') return $number * 1024 * 1024;

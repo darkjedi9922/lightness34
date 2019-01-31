@@ -4,7 +4,7 @@ use PHPUnit\Framework\TestCase;
 use frame\actions\rules\ActionBaseRules;
 use frame\actions\RuleResult;
 
-class ActionRulesTest extends TestCase
+class ActionBaseRulesTest extends TestCase
 {
     public function testMandatoryRuleReturnsSuccessIfRuleIsTrueAndValueIsNotNull()
     {

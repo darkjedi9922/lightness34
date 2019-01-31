@@ -6,6 +6,7 @@ use function lightlib\translit;
 use function lightlib\substring;
 use function lightlib\shorten;
 use function lightlib\empty_recursive;
+use function lightlib\bytes;
 
 /**
  * @testdox lightness.lib
@@ -122,5 +123,13 @@ final class LightnessLibTest extends TestCase
 
         $this->assertTrue(empty_recursive($deepEmpty));
         $this->assertFalse(empty_recursive($notEmpty));
+    }
+
+    public function testTransformsSizesInVariousUnitsToBytes()
+    {
+        $this->assertEquals(1024, bytes(1, 'KB'));
+        $this->assertEquals(1024 * 1024, bytes(1, 'MB'));
+        $this->assertEquals(1024 * 1024 * 1024, bytes(1, 'GB'));
+        $this->assertEquals(1024 * 1024 * 500, bytes(500, 'MB'));
     }
 }

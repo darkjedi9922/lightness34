@@ -1,8 +1,9 @@
 <?php namespace frame\actions;
 
+use frame\tools\File;
 use function lightlib\move_uploaded_unique_file;
 
-class UploadedFile
+class UploadedFile extends File
 {
     /**
      * @var int Ошибок не возникло, файл был успешно загружен на сервер.
@@ -59,6 +60,7 @@ class UploadedFile
      */
     public function __construct($data)
     {
+        parent::__construct($data['tmp_name']);
         $this->file = $data;
         $this->throwImportantErrorException();
     }
@@ -93,6 +95,14 @@ class UploadedFile
     public function getSize()
     {
         return $this->file['size'];
+    }
+
+    /**
+     * @return string
+     */
+    public function getTempName()
+    {
+        return $this->file['tmp_name'];
     }
 
     /**
