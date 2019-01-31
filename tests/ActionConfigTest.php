@@ -206,7 +206,7 @@ class ActionConfigTest extends TestCase
         $action->exec();
     }
 
-    public function testInnerInterData()
+    public function testInnerInterDataReturnsNotNullValue()
     {
         $action = new UserDeleteAction([], '');
         $action->setConfig($this->userDeleteActionConfig);
@@ -219,6 +219,12 @@ class ActionConfigTest extends TestCase
         $action->exec();
 
         $this->assertTrue($action->isSuccess());
+    }
+
+    public function testInnerInterDataReturnsNullValue()
+    {
+        $action = new UserDeleteAction([], '');
+        $this->assertNull($action->getInterData('post', 'some-field', 'no-value'));
     }
 
     public function testGetSetup()

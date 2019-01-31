@@ -20,6 +20,7 @@ class ActionBaseRules
          * @param bool $rule
          * @param mixed $value
          * @param RuleResult $result
+         * @return RuleResult
          */
         return function($rule, $value, $result) {
             if ($value !== null) return $result->succeed();
@@ -39,6 +40,7 @@ class ActionBaseRules
          * @param bool $rule
          * @param mixed $value
          * @param RuleResult $result
+         * @return RuleResult
          */
         return function($rule, $value, $result) {
             if ($value) return $result->succeed();
@@ -56,7 +58,7 @@ class ActionBaseRules
          * @param int $rule
          * @param string $value
          * @param RuleResult $result
-         * @return bool
+         * @return RuleResult
          */
         return function($rule, $value, $result) {
             $isOk = mb_strlen($value) >= $rule;
@@ -74,7 +76,7 @@ class ActionBaseRules
          * @param int $rule
          * @param string $value
          * @param RuleResult $result
-         * @return bool
+         * @return RuleResult
          */
         return function ($rule, $value, $result) {
             $isOk = mb_strlen($value) <= $rule;
@@ -92,7 +94,7 @@ class ActionBaseRules
          * @param string $rule
          * @param string $value
          * @param RuleResult $result
-         * @return bool
+         * @return RuleResult
          */
         return function($rule, $value, $result) {
             return $result->result(preg_match($rule, $value));

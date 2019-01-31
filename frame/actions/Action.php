@@ -236,25 +236,23 @@ abstract class Action extends LatePropsObject
     }
 
     /**
-     * Если заданной данной нет, вернет null.
+     * Если заданного значения нет, вернет null.
      * 
-     * @param string $field Поле, по которому эта данная связана (генерируется
+     * @param string $field Поле, по которому это значение связано (генерируется
      * в цепочке правил поля).
      * @return mixed|null
      */
     public function getInterData(string $type, string $field, string $name)
     {
-        if (!isset($this->interData[$type])) return null;
-        if (!isset($this->interData[$type][$field])) return null;
         if (!isset($this->interData[$type][$field][$name])) return null;
         return $this->interData[$type][$field][$name];
     }
 
     /**
-     * @param string $field Поле, по которому эта данная связана (генерируется
+     * @param string $field Поле, по которому значение связано (генерируется
      * в цепочке правил поля).
      * @return mixed
-     * @throws \Exception Если заданной данной нет (или она null).
+     * @throws \Exception Если заданного значения нет (или оно null).
      */
     public function requireInterData(string $type, string $field, string $name)
     {
@@ -268,10 +266,6 @@ abstract class Action extends LatePropsObject
      * @param Router $router Устройство заданного роутера будет использовано для 
      * построения url.
      * @return string Триггерное url на выполнение экшна
-     * 
-     * @todo Чтобы убрать зависимость экшна от Router (в целом-то он от него не
-     * зависит, можно вынести этот метод в какой-нибудь ActionSetup или метод в 
-     * view).
      */
     public final function getUrl($router)
     {
@@ -591,11 +585,10 @@ abstract class Action extends LatePropsObject
         }
 
         if (!isset($errors[$field])) $errors[$field] = [];
-        // Вместо int-кода ошибки, добавляем имя правила.
-        // @todo В будущем это можно улучшить, присвоив каждому
-        // правилу числовой id. Где-то в библиотеке даже была
-        // функция, которая превращает строку в число, суммируя
-        // коды символов в слове.
+        
+        // Вместо int-кода ошибки, добавляем имя правила. Это лучше для читаемости
+        // и в целом красиво. Пока что нет необходимости оптимизировать это, чтобы
+        // хранить числа вместо строк.
         $errors[$field][] = $rule;
     }
 }
