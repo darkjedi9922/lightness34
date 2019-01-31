@@ -104,7 +104,7 @@ abstract class Action extends LatePropsObject
     ];
 
     /**
-     * @var Json.
+     * @var array
      */
     private $config = null;
 
@@ -226,9 +226,8 @@ abstract class Action extends LatePropsObject
      */
     public function getDataDefault($type, $name, $existing = false)
     {
-        if ($this->config
-            && isset($this->config->$type[$name]['default'])) {
-            $defaultRule = $this->config->$type[$name]['default'];
+        if (isset($this->config[$type][$name]['default'])) {
+            $defaultRule = $this->config[$type][$name]['default'];
             if (count($defaultRule) == 1) return $defaultRule[0];
         } else $defaultRule = [null, ''];
 
@@ -350,7 +349,7 @@ abstract class Action extends LatePropsObject
     }
 
     /**
-     * @param Json|null $config
+     * @param array|null $config
      */
     public function setConfig($config)
     {
@@ -358,11 +357,11 @@ abstract class Action extends LatePropsObject
     }
 
     /**
-     * @return Json|null
+     * @return array|null
      */
     public function getConfig()
     {
-        return $this->config ? $this->config : null;
+        return $this->config;
     }
 
     /**
@@ -536,14 +535,13 @@ abstract class Action extends LatePropsObject
     private function ruleValidate($type)
     {
         $errors = [];
-        if (!$this->config) return $errors;
-        if (!$this->config->isset($type)) return $errors;
+        if (!isset($this->config[$type])) return $errors;
 
         $data = $this->data[$type];
         $this->interData[$type] = [];
 
         // Проходимся по каждому полю
-        foreach ($this->config->$type as $field => $rules) {
+        foreach ($this->config[$type] as $field => $rules) {
 
             $this->interData[$type][$field] = [];
 
@@ -586,8 +584,8 @@ abstract class Action extends LatePropsObject
     {
         // Не проверяем config и post и $field на наличие, т.к. эта функция 
         // вызывается только там, где это уже проверено и используется.
-        if (isset($this->config->$type[$field]['errorRules'])
-            && in_array($rule, $this->config->$type[$field]['errorRules']))
+        if (isset($this->config[$type][$field]['errorRules'])
+            && in_array($rule, $this->config[$type][$field]['errorRules']))
         {
             throw new RuleCheckFailedException($this, $type, $field, $rule);
         }

@@ -3,7 +3,6 @@
 use PHPUnit\Framework\TestCase;
 use tests\engine\JsonValidatedAction;
 use frame\actions\rules\ActionBaseRules;
-use frame\tools\Json;
 use frame\actions\Action;
 use tests\engine\UserDeleteAction;
 use frame\actions\UploadedFile;
@@ -17,8 +16,67 @@ use frame\actions\errors\RuleCheckFailedException;
  * 
  * @runTestsInSeparateProcesses
  */
-class ActionJsonValidateTest extends TestCase
+class ActionConfigTest extends TestCase
 {
+    protected $jsonValidatedActionConfig;
+    protected $userDeleteActionConfig;
+
+    protected function setUp()
+    {
+        $this->jsonValidatedActionConfig = [
+            "get" => [
+                "user_id" => [
+                    "rules" => [
+                        "regexp" => "/007/"
+                    ],
+                    "default" => ["some-user"]
+                ]
+            ],
+            "post" => [
+                "username" => [
+                    "rules" => [
+                        "mandatory" => true,
+                        "emptiness" => false,
+                        "min-length" => 4,
+                        "max-length" => 4
+                    ],
+                    "errorRules" => [
+                        "max-length"
+                    ]
+                ],
+                "alter" => [
+                    "default" => ["Doctor Who", "TARDIS"],
+                    "rules" => [
+                        "mandatory" => true
+                    ]
+                ],
+                "enemy" => [
+                    "default" => ["Dalek"]
+                ]
+            ],
+            "files" => [
+                "avatar" => [
+                    "default" => ["no-avatar.jpg"],
+                    "rules" => [
+                        "max-size" => [1, "MB"]
+                    ]
+                ]
+            ]
+        ];
+
+        $this->userDeleteActionConfig = [
+            "post" => [
+                "id" => [
+                    "rules" => [
+                        "mandatory" => true,
+                            "emptiness" => false,
+                            "userIdExists" => true
+                    ]
+                ]
+            ]
+        ];
+    }
+
     public function testCallbackValidate()
     {
         $action = new JsonValidatedAction([], '', Action::NO_RULE_IGNORE);
@@ -31,8 +89,7 @@ class ActionJsonValidateTest extends TestCase
         // правила, которое можно затем использовать в json-валидации.
         $action->setRule('mandatory', $rules->getMandatoryRule());
 
-        $config = new Json(ROOT_DIR . '/tests/config/actions/JsonValidatedAction.json');
-        $action->setConfig($config);
+        $action->setConfig($this->jsonValidatedActionConfig);
 
         $action->exec();
 
@@ -44,8 +101,7 @@ class ActionJsonValidateTest extends TestCase
     public function testRuleIsNotFoundRaisesError()
     {
         $action = new JsonValidatedAction([], '', Action::NO_RULE_ERROR);
-        $config = new Json(ROOT_DIR . '/tests/config/actions/JsonValidatedAction.json');
-        $action->setConfig($config);
+        $action->setConfig($this->jsonValidatedActionConfig);
 
         $this->expectException(NoRuleException::class);
         
@@ -56,15 +112,14 @@ class ActionJsonValidateTest extends TestCase
 
     public function testRuleHandlerCanStopRuleHandling()
     {
+        $action = new JsonValidatedAction([], '', Action::NO_RULE_IGNORE);
+
         // По конфигу, поле username не должно быть пустым (правило emptiness).
         // Также минимальная длинна этого поля равна 4. Но бессмысленно проверять
         // минимальную длинну поля, (да и другие проверки) если оно пустое. 
         // Поэтому правило emptiness при своей обработке должно остановить 
         // проверку дальнейших правил для этого поля.
-        $config = new Json(ROOT_DIR . '/tests/config/actions/JsonValidatedAction.json');
-
-        $action = new JsonValidatedAction([], '', Action::NO_RULE_IGNORE);
-        $action->setConfig($config);
+        $action->setConfig($this->jsonValidatedActionConfig);
         
         $baseRules = new ActionBaseRules;
         $action->setRule('emptiness', $baseRules->getEmptinessRule());
@@ -80,10 +135,8 @@ class ActionJsonValidateTest extends TestCase
 
     public function testRuleHandlerMayNotStopRuleHandling()
     {
-        $config = new Json(ROOT_DIR . '/tests/config/actions/JsonValidatedAction.json');
-
         $action = new JsonValidatedAction([], '', Action::NO_RULE_IGNORE);
-        $action->setConfig($config);
+        $action->setConfig($this->jsonValidatedActionConfig);
 
         $baseRules = new ActionBaseRules;
         $action->setRule('emptiness', $baseRules->getEmptinessRule());
@@ -101,10 +154,8 @@ class ActionJsonValidateTest extends TestCase
 
     public function testDefaultValue()
     {
-        $config = new Json(ROOT_DIR . '/tests/config/actions/JsonValidatedAction.json');
-
         $action = new JsonValidatedAction([], '', Action::NO_RULE_IGNORE);
-        $action->setConfig($config);
+        $action->setConfig($this->jsonValidatedActionConfig);
 
         $this->assertEquals('Doctor Who', $action->getDataDefault('post', 'alter', false));
         $this->assertEquals('TARDIS', $action->getDataDefault('post', 'alter', true));
@@ -116,13 +167,14 @@ class ActionJsonValidateTest extends TestCase
 
     public function testGetField()
     {
-        $config = new Json(null);
-        $config->post = [
-            'answer' => [
-                'default' => [42]
-            ],
-            'question' => [
-                'default' => ['...']
+        $config = [
+            'post' => [
+                'answer' => [
+                    'default' => [42]
+                ],
+                'question' => [
+                    'default' => ['...']
+                ]
             ]
         ];
 
@@ -142,10 +194,8 @@ class ActionJsonValidateTest extends TestCase
 
     public function testFailedRuleMayThrowException()
     {
-        $config = new Json(ROOT_DIR . '/tests/config/actions/JsonValidatedAction.json');
-
         $action = new JsonValidatedAction([], '', Action::NO_RULE_IGNORE);
-        $action->setConfig($config);
+        $action->setConfig($this->jsonValidatedActionConfig);
 
         $rules = new ActionBaseRules;
         $action->setRule('max-length', $rules->getMaxLengthRule());
@@ -159,8 +209,7 @@ class ActionJsonValidateTest extends TestCase
     public function testInnerInterData()
     {
         $action = new UserDeleteAction([], '');
-        $config = new Json(ROOT_DIR . '/tests/config/actions/UserDeleteAction.json');
-        $action->setConfig($config);
+        $action->setConfig($this->userDeleteActionConfig);
 
         // В этом тестовом экшне id = 1 является единственным путем успешно 
         // пройти проверки.
@@ -187,10 +236,9 @@ class ActionJsonValidateTest extends TestCase
     public function testRegexpRuleFindsErrorInWrongValue()
     {
         $rules = new ActionBaseRules;
-        $config = new Json(ROOT_DIR . '/tests/config/actions/JsonValidatedAction.json');
         $action = new JsonValidatedAction([], '', Action::NO_RULE_IGNORE);
         $action->setRule('regexp', $rules->getRegexpRule());
-        $action->setConfig($config);
+        $action->setConfig($this->jsonValidatedActionConfig);
 
         $action->setData('get', 'user_id', '008');
         $action->exec();
@@ -201,10 +249,9 @@ class ActionJsonValidateTest extends TestCase
     public function testRegexpRuleDoesNotFindErrorInCorrectValue()
     {
         $rules = new ActionBaseRules;
-        $config = new Json(ROOT_DIR . '/tests/config/actions/JsonValidatedAction.json');
         $action = new JsonValidatedAction([], '', Action::NO_RULE_IGNORE);
         $action->setRule('regexp', $rules->getRegexpRule());
-        $action->setConfig($config);
+        $action->setConfig($this->jsonValidatedActionConfig);
 
         $action->setData('get', 'user_id', '007');
         $action->exec();
@@ -214,9 +261,8 @@ class ActionJsonValidateTest extends TestCase
 
     public function testReturnsDefaultGetValue()
     {
-        $config = new Json(ROOT_DIR . '/tests/config/actions/JsonValidatedAction.json');
         $action = new JsonValidatedAction([], '', Action::NO_RULE_IGNORE);
-        $action->setConfig($config);
+        $action->setConfig($this->jsonValidatedActionConfig);
 
         $this->assertEquals('some-user', $action->getDataDefault('get', 'user_id'));
     }
@@ -224,9 +270,8 @@ class ActionJsonValidateTest extends TestCase
     public function testFileMaxSizeRuleCanFindOutError()
     {
         $rules = new ActionFileRules;
-        $config = new Json(ROOT_DIR . '/tests/config/actions/JsonValidatedAction.json');
         $action = new JsonValidatedAction([], '', Action::NO_RULE_IGNORE);
-        $action->setConfig($config);
+        $action->setConfig($this->jsonValidatedActionConfig);
         $action->setRule('max-size', $rules->getMaxSizeRule());
 
         $file = [
@@ -247,9 +292,8 @@ class ActionJsonValidateTest extends TestCase
     public function testFileMaxSizeRuleCanFindOutSuccess()
     {
         $rules = new ActionFileRules;
-        $config = new Json(ROOT_DIR . '/tests/config/actions/JsonValidatedAction.json');
         $action = new JsonValidatedAction([], '', Action::NO_RULE_IGNORE);
-        $action->setConfig($config);
+        $action->setConfig($this->jsonValidatedActionConfig);
         $action->setRule('max-size', $rules->getMaxSizeRule());
 
         $file = [
@@ -269,10 +313,9 @@ class ActionJsonValidateTest extends TestCase
     
     public function testFileDefaultValue()
     {
-        $config = new Json(ROOT_DIR . '/tests/config/actions/JsonValidatedAction.json');
         $action = new JsonValidatedAction([], '', Action::NO_RULE_IGNORE);
-        $action->setConfig($config);
-        
+        $action->setConfig($this->jsonValidatedActionConfig);
+
         $default = $action->getDataDefault('files', 'avatar');
         $this->assertEquals('no-avatar.jpg', $default);
     }

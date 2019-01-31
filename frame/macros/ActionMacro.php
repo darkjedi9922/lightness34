@@ -15,6 +15,7 @@ class ActionMacro extends Macro
         $name = explode('_', $args['action']);
         $id = $name[0];
         $class = $name[1];
+        
         $action = Action::$_current = $class::instance($args, $id);
         $action->setDataAll(Action::DATA_GET, Core::$app->router->args);
         $action->setDataAll(Action::DATA_POST, $_POST);
@@ -29,7 +30,7 @@ class ActionMacro extends Macro
             $configFile = $ruleDir . '/' . $classPath . '.json';
             if (file_exists($configFile)) {
                 $config = new Json($configFile);
-                $action->setConfig($config);
+                $action->setConfig($config->getData());
             }
         }
 
