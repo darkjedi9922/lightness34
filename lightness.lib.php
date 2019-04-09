@@ -299,11 +299,60 @@ function dump($value)
 function empty_recursive($value)
 {
     if (is_array($value)) {
-        foreach ($value as $k => $v) {
+        foreach ($value as $v) {
             if (!empty_recursive($v)) return false;
         }
         return true;
     }
 
     return empty($value);
+}
+
+/**
+ * Получает значение многомерного массива.
+ * 
+ * @param array $array Сам массив.
+ * @param mixed|array $key Индекс/ключ значения. Если значение вложенное, то
+ * указывается массив ключей, ведущими к значению. Например, если массив [1, [2, 3]], 
+ * чтобы получить второе значение второго элемента, $key = [1, 1].
+ */
+function array_get_value($array, $key)
+{
+    if (!is_array($key)) $key = [$key];
+    
+    $result = &$array;
+    for ($i = 0, $c = count($key); $i < $c; ++$i) {
+        $nextKey = $key[$i];
+        if (!isset($result[$nextKey])) {
+            throw new \Exception('Key ' . $nextKey .
+                ' does not exist at current level of the array.');
+        }
+        $result = &$result[$nextKey];
+    }
+
+    return $result;
+}
+
+/**
+ * Устанавливает значение многомерного массива.
+ * 
+ * @param array $array Сам массив.
+ * @param mixed|array $key Индекс/ключ значения. Если значение вложенное, то
+ * указывается массив ключей, ведущими к значению. Например, если массив [1, [2, 3]], 
+ * чтобы установить второе значение второго элемента, $key = [1, 1].
+ * @return array
+ */
+function array_set_value($array, $key, $value)
+{
+    if (!is_array($key)) $key = [$key];
+
+    $elem = &$array;
+    for ($i = 0, $c = count($key) - 1; $i < $c; ++$i) {
+        $nextKey = $key[$i];
+        if (!isset($array[$nextKey])) $array[$nextKey] = [];
+        $elem = &$array[$nextKey];
+    }
+
+    $elem[last($key)] = $value;
+    return $array;
 }

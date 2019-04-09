@@ -37,4 +37,15 @@ class PhpTest extends TestCase
         $array = null;
         $this->assertFalse(isset($array['key']));
     }
+
+    // public function testMagicGetParamCanNotBeAnArray()
+    // {
+    //     $obj = new class {
+    //         public function __get($param) {
+    //             return is_array($param);
+    //         }
+    //     };
+
+    //     $this->assertFalse($obj->{['a' => 1, 2]});
+    // }
 }
