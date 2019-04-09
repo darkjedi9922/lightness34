@@ -75,16 +75,6 @@ final class GenerateUniqueFilenameTest extends TestCase
     }
 
     /**
-     * @test 
-     * @testdox working correct with root path /
-     */
-    public function test_7()
-    {
-        $this->assertEquals('/', generate_unique_filename('/'));
-        $this->assertEquals('/usr/bin_1', generate_unique_filename('/usr/bin'));
-    }
-
-    /**
      * @test
      * @testdox generates unique filename for dirs which path ends with /
      */
