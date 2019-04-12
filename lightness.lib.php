@@ -323,10 +323,6 @@ function array_get_value($array, $key)
     $result = &$array;
     for ($i = 0, $c = count($key); $i < $c; ++$i) {
         $nextKey = $key[$i];
-        if (!isset($result[$nextKey])) {
-            throw new \Exception('Key ' . $nextKey .
-                ' does not exist at current level of the array.');
-        }
         $result = &$result[$nextKey];
     }
 
@@ -355,4 +351,27 @@ function array_set_value($array, $key, $value)
 
     $elem[last($key)] = $value;
     return $array;
+}
+
+/**
+ * isset значения многомерного массива.
+ * 
+ * @param array $array Сам массив.
+ * @param mixed|array $key Индекс/ключ значения. Если значение вложенное, то
+ * указывается массив ключей, ведущими к значению. Например, если массив [1, [2, 3]], 
+ * чтобы узнать, существует ли второе значение второго элемента, $key = [1, 1].
+ * @return array
+ */
+function array_isset_value($array, $key)
+{
+    if (!is_array($key)) $key = [$key];
+
+    $elem = &$array;
+    for ($i = 0, $c = count($key); $i < $c; ++$i) {
+        $nextKey = $key[$i];
+        if (!isset($elem[$nextKey])) return false;
+        $elem = &$array[$nextKey];
+    }
+
+    return true;
 }

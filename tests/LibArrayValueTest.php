@@ -3,6 +3,7 @@
 use PHPUnit\Framework\TestCase;
 use function lightlib\array_get_value;
 use function lightlib\array_set_value;
+use function lightlib\array_isset_value;
 
 class LibArrayValueTest extends TestCase
 {
@@ -20,22 +21,10 @@ class LibArrayValueTest extends TestCase
         $this->assertEquals(['c' => 3], $value);
     }
 
-    public function testThrowsExceptionIfTheSimpleKeyDoesNotExist()
-    {
-        $this->expectException(Exception::class);
-        array_get_value($this->array, 'non-existence-key');
-    }
-
     public function testReturnsArrayNestedKeyedValue()
     {
         $value = array_get_value($this->array, ['b', 'c']);
         $this->assertEquals(3, $value);
-    }
-
-    public function testThrowsErrorIfTheNestedKeyDoesNotExist()
-    {
-        $this->expectException(Exception::class);
-        array_get_value($this->array, ['b', 'non-existence']);
     }
 
     public function testReturnsTheSameArrayIfNestedKeyArrayIsEmpty()
@@ -80,5 +69,21 @@ class LibArrayValueTest extends TestCase
         $array = array_set_value($this->array, [], 'dj');
 
         $this->assertEquals($expected, $array);
+    }
+
+    public function testReturnsWhetherValueIssetBySimpleIndex()
+    {
+        $b = array_isset_value($this->array, 'b');
+        $d = array_isset_value($this->array, 'd');
+        $this->assertTrue($b);
+        $this->assertFalse($d);
+    }
+
+    public function testReturnsWhetherValueIssetByArrayIndex()
+    {
+        $c = array_isset_value($this->array, ['b', 'c']);
+        $d = array_isset_value($this->array, ['b', 'c', 'd']);
+        $this->assertTrue($c);
+        $this->assertFalse($d);
     }
 }
