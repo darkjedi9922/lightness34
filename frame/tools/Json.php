@@ -9,8 +9,6 @@ use frame\tools\Data;
  * И сделать статический метод для считывания json с файла. Но тогда нужна
  * переменная, с названием файла. Можно либо унаследовать, либо воспользоваться
  * композицией.
- * @todo Сделать наконец метод save(), вместо встроенного автоматического
- * пересохранения. Очень мешает при тестировании как минимум.
  */
 class Json extends Data
 {
@@ -18,11 +16,6 @@ class Json extends Data
      * @var string
      */
     private $file;
-
-    /**
-     * @var bool
-     */
-    private $changed = false;
 
     /**
      * @param string $file
@@ -47,18 +40,21 @@ class Json extends Data
             parent::__construct(json_decode(file_get_contents($file), true));
     }
 
-    public function __destruct()
-    {
-        if (!$this->file) return;
-        if ($this->changed) 
-            file_put_contents($this->getFile(), json_encode($this->getData(), JSON_PRETTY_PRINT));
-    }
-
     /**
      * @return string Путь к файлу.
      */
     public function getFile()
     {
         return $this->file;
+    }
+
+    /**
+     * Чтобы применить изменения конфига, нужно его сохранить.
+     */
+    public function save()
+    {
+        if (!$this->file) return;
+        
+        file_put_contents($this->getFile(), json_encode($this->getData(), JSON_PRETTY_PRINT));   
     }
 }

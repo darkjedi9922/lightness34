@@ -3,3 +3,6 @@ log.txt
 
 # other
 *.fuse_*
+
+#cache
+.phpunit.result.cache
