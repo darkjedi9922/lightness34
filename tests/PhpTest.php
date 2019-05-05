@@ -1,16 +1,14 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Error\{Error};
 use tests\engine\CallbackProvider;
-use function lightlib\dump;
 
 class PhpTest extends TestCase
 {
-    /**
-     * @expectedException PHPUnit\Framework\Error\Error
-     */
     public function testObjectMethodAsCallbackIsError()
     {
+        $this->expectException(Error::class);
         $provider = new CallbackProvider;
         $callback = $provider->sumCallback;
     }

@@ -21,7 +21,7 @@ class ActionConfigTest extends TestCase
     protected $jsonValidatedActionConfig;
     protected $userDeleteActionConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->jsonValidatedActionConfig = [
             "get" => [

@@ -5,8 +5,6 @@ use tests\engine\UserDeleteAction;
 use frame\actions\Action;
 use frame\route\Router;
 
-use function lightlib\http_parse_query;
-
 class ActionTest extends TestCase
 {
     /**
