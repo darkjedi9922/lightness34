@@ -5,7 +5,7 @@ use frame\LatePropsObject;
 use frame\route\Request;
 use frame\views\Page;
 use frame\database\Database;
-use frame\tools\Json;
+use frame\config\Json;
 use frame\tools\Logger;
 use frame\errors\ErrorException;
 use frame\errors\HttpError;

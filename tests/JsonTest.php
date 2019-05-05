@@ -1,7 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use frame\tools\Json;
+use frame\config\Json;
 
 class JsonTest extends TestCase
 {

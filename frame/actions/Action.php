@@ -9,7 +9,7 @@ use frame\actions\RuleResult;
 use frame\actions\errors\NoRuleException;
 use frame\actions\errors\RuleRuntimeException;
 use frame\actions\errors\RuleCheckFailedException;
-use frame\tools\Json;
+use frame\config\Json;
 use frame\tools\transmitters\SessionTransmitter;
 
 use function lightlib\encode_specials;

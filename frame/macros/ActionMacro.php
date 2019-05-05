@@ -3,7 +3,7 @@
 use frame\Core;
 use frame\actions\Action;
 use frame\actions\UploadedFile;
-use frame\tools\Json;
+use frame\config\Json;
 
 use function lightlib\http_parse_query;
 
