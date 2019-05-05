@@ -17,7 +17,7 @@ class Json implements FileConfig
     private $data;
 
     /**
-     * @param string|null $file
+     * @param string $file
      */
     public function __construct($file) {
         $this->data = new ArrayData;
@@ -35,7 +35,6 @@ class Json implements FileConfig
     }
 
     public function save() {
-        if (!$this->file) return;
         file_put_contents($this->file, json_encode($this->getData(), JSON_PRETTY_PRINT));   
     }
 
