@@ -6,6 +6,7 @@ use frame\route\Request;
 use frame\views\Page;
 use frame\database\Database;
 use frame\config\Json;
+use frame\config\DefaultedConfig;
 use frame\tools\Logger;
 use frame\errors\ErrorException;
 use frame\errors\HttpError;
@@ -29,7 +30,7 @@ class Core extends LatePropsObject
     public $router;
 
     /**
-     * @var Json Конфиг core.json
+     * @var DefaultedConfig Конфиг core.json
      */
     public $config;
 
@@ -65,7 +66,11 @@ class Core extends LatePropsObject
         date_default_timezone_set('Europe/Kiev');
 
         $this->enableErrorHundlers();
-        $this->config = new Json('config/core.json');
+
+        $mainConfig = new Json('config/core.json');
+        $defaultConfig = new Json('config/default/core.json');
+        $this->config = new DefaultedConfig($mainConfig, $defaultConfig);
+
         $this->router = new Router(Request::getRequest());
 
         static::$app = $this;
