@@ -7,6 +7,8 @@ use frame\Core;
  */
 class Layout extends Layouted
 {
+    const FOLDER = 'view/layouts';
+
     /**
      * @var View $child Вид-содержимое
      */
@@ -17,7 +19,7 @@ class Layout extends Layouted
      */
     public static function find($name)
     {
-        return parent::find(Core::$app->config->{'layouts.folder'} . '/' . $name);
+        return parent::find(self::FOLDER . '/' . $name);
     }
 
     /**

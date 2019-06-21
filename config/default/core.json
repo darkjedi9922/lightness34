@@ -1,13 +1,8 @@
 {
     "site.name": "Lightness 3.4 Framework",
-    "pages.folder": "view/pages",
     "pages.defaultLayout": null,
-    "blocks.folder": "view/blocks",
     "blocks.defaultLayout": null,
-    "widgets.folder": "view/widgets",
     "widgets.defaultLayout": null,
-    "values.folder": "view/values",
-    "layouts.folder": "view/layouts",
     "log.enabled": true,
     "log.file": "log.txt",
     "errors.showMode": "display",
@@ -20,6 +15,5 @@
     "database.password": "",
     "database.dbname": "lightness",
     "actions.defaultFailRedirectMode": null,
-    "actions.validationConfigFolder": "public/actions",
     "actions.noRuleMode": "error"
 }

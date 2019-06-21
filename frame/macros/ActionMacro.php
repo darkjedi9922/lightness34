@@ -9,6 +9,8 @@ use function lightlib\http_parse_query;
 
 class ActionMacro extends Macro
 {
+    const VALIDATION_CONFIG_FOLDER = 'public/actions';
+
     public function exec($action)
     {
         $args = http_parse_query($action, ';');
@@ -23,15 +25,12 @@ class ActionMacro extends Macro
             return new UploadedFile($filedata);
         }, $_FILES));
 
-        $ruleDir = Core::$app->config->{'actions.validationConfigFolder'};
-        if ($ruleDir) {
-            $class = get_class($action);
-            $classPath = str_replace('\\', '/', $class);
-            $configFile = $ruleDir . '/' . $classPath . '.json';
-            if (file_exists($configFile)) {
-                $config = new Json($configFile);
-                $action->setConfig($config->getData());
-            }
+        $class = get_class($action);
+        $classPath = str_replace('\\', '/', $class);
+        $configFile = self::VALIDATION_CONFIG_FOLDER . '/' . $classPath . '.json';
+        if (file_exists($configFile)) {
+            $config = new Json($configFile);
+            $action->setConfig($config->getData());
         }
 
         $action->exec();

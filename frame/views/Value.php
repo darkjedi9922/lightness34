@@ -4,6 +4,8 @@ use frame\Core;
 
 class Value extends View
 {
+    const FOLDER = 'view/values';
+
     /**
      * Ищет сам view файл виджета
      * 
@@ -11,6 +13,6 @@ class Value extends View
      */
     public static function find($name)
     {
-        return parent::find(Core::$app->config->{'values.folder'} . '/' . $name);
+        return parent::find(self::FOLDER . '/' . $name);
     }
 }

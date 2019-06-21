@@ -4,6 +4,8 @@ use frame\Core;
 
 class Page extends Layouted
 {
+    const FOLDER = 'view/pages';
+
     /**
      * Ищет сам view файл страницы
      * 
@@ -11,7 +13,7 @@ class Page extends Layouted
      */
     public static function find($name)
     {
-        return parent::find(Core::$app->config->{'pages.folder'} . '/' . $name);
+        return parent::find(self::FOLDER . '/' . $name);
     }
 
     /**
