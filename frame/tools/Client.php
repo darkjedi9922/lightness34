@@ -1,8 +1,9 @@
 <?php namespace frame\tools;
 
 use function lightlib\session_start_once;
+use frame\tools\transmitters\CookieTransmitter;
 
-class Client 
+class Client
 {
     public static function getIp(): string
     {
@@ -15,7 +16,14 @@ class Client
     }
     public static function getId(): string
     {
-        return md5($_SERVER['HTTP_USER_AGENT'].$_SERVER['REMOTE_ADDR']);
+        $cookies = new CookieTransmitter(60*60*24*7*365);
+        if (!$cookies->isSetData('cid')) {
+            srand(time());
+            $id = rand();
+            $cookies->setData('cid', $id);
+            return $id;
+        }
+        return $cookies->cid;
     }
     public static function getUserAgent(): string
     {

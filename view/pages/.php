@@ -2,6 +2,7 @@
 
 use frame\views\Block;
 use frame\views\Value;
+use frame\tools\Client;
 
 $this->setLayout('page');
 $this->setMetaArray(['name' => $this->file]);
@@ -14,3 +15,4 @@ $answer = new Value('answer');
 Hello <?= $this->app->config->{'site.name'} ?><br>
 <?= $block ?>
 The answer is <?= $answer ?><br>
+Your client id: <?= Client::getId() ?><br>
