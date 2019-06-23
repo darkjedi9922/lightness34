@@ -14,8 +14,8 @@ final class GenerateUniqueFilenameTest extends TestCase
      */
     public function test_1()
     {
-        $input = 'files/file_1';
-        $expected = 'files/file_1_1';
+        $input = ROOT_DIR.'/tests/files/file_1';
+        $expected = ROOT_DIR.'/tests/files/file_1_1';
 
         $actual = generate_unique_filename($input);
         $this->assertEquals($expected, $actual);
@@ -27,7 +27,7 @@ final class GenerateUniqueFilenameTest extends TestCase
      */
     public function test_2()
     {
-        $input = 'files/non-existence-file';
+        $input = ROOT_DIR.'/tests/files/non-existence-file';
         $expected = $input;
 
         $actual = generate_unique_filename($input);
@@ -53,7 +53,8 @@ final class GenerateUniqueFilenameTest extends TestCase
      */
     public function test_4()
     {
-        $this->assertEquals('files_1', generate_unique_filename(('files')));
+        $this->assertEquals(ROOT_DIR.'/tests/files_1', 
+            generate_unique_filename(ROOT_DIR.'/tests/files'));
     }
 
     /**
@@ -80,7 +81,8 @@ final class GenerateUniqueFilenameTest extends TestCase
      */
     public function test_8()
     {
-        $this->assertEquals('files_1', generate_unique_filename('files/'));
+        $this->assertEquals(ROOT_DIR.'/tests/files_1', 
+            generate_unique_filename(ROOT_DIR.'/tests/files/'));
     }
 
     /**
@@ -89,6 +91,7 @@ final class GenerateUniqueFilenameTest extends TestCase
      */
     public function test_9()
     {
-        $this->assertEquals('files/file_2_2', generate_unique_filename('files/file_2'));
+        $this->assertEquals(ROOT_DIR.'/tests/files/file_2_2', 
+            generate_unique_filename(ROOT_DIR.'/tests/files/file_2'));
     }
 }
