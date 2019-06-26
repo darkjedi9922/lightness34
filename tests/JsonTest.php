@@ -5,7 +5,7 @@ use frame\config\Json;
 
 class JsonTest extends TestCase
 {
-    private $file = 'config/json.json';
+    private $file = ROOT_DIR.'/tests/config/json.json';
     private $filedata = [
         'a' => 1,
         'b' => [
