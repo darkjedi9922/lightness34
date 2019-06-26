@@ -62,6 +62,11 @@ class Router extends LatePropsObject
      */
     public function __construct($url = '')
     {
+        $this->setUrl($url);
+    }
+
+    public function setUrl(string $url): void
+    {
         $this->url = trim($url, '=&');
         $this->pagename = trim(parse_url($this->url, PHP_URL_PATH), '/');
         $this->pathElements = explode('/', $this->pagename);
