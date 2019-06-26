@@ -67,8 +67,10 @@ abstract class Action extends LatePropsObject
 
     /**
      * @var Action|null Текущий активированный экшн.
+     * Определяется при срабатывании ActionMacro.
+     * Используется в служебных целях фреймворка.
      */
-    private static $current = null;
+    public static $_current = null;
 
     /**
      * @var Core Ссылка на экземпляр приложения для удобства
@@ -130,22 +132,25 @@ abstract class Action extends LatePropsObject
      * @param array $get Параметры экшна
      * @param int $id Id экшна. Нужен, если на одной странице используется несколько экшнов
      * одного класса с разными параметрами, чтобы понимать какой из них выполнять
-     * @param string $noRuleMode Что делать, если для конфиг-валидации экшна в экшне
-     * не установлен механизм обработки правила. Значения: 'error' (выбрасывает
-     * исключение типа NoRuleError) или 'ignore' (пропускает правило).
      * @return static
      */
-    public static function instance($get = [], $id = '', 
-        $noRuleMode = self::NO_RULE_ERROR)
+    public static function instance($get = [], $id = '')
     {
-        if (isset(self::$current) && self::$current->name === $id . '_' . static::class) 
-            return self::$current;
-        
+        if (isset(self::$_current) && self::$_current->name === $id . '_' . static::class) 
+            return self::$_current;
+
+        $noRuleMode = Core::$app->config->{'actions.noRuleMode'};
         $action = new static($get, $id, $noRuleMode);
         return $action;
     }
 
-    public static function fromTriggerUrl(string $actionArg): ?Action
+    /**
+     * @param string $noRuleMode Что делать, если для конфиг-валидации экшна в экшне
+     * не установлен механизм обработки правила. Значения: 'error' (выбрасывает
+     * исключение типа NoRuleError) или 'ignore' (пропускает правило).
+     */
+    public static function fromTriggerUrl(string $actionArg, 
+        $noRuleMode = self::NO_RULE_ERROR): Action
     {
         $name = explode('_', $actionArg);
         $id = $name[0];
@@ -153,7 +158,7 @@ abstract class Action extends LatePropsObject
         $query = implode('_', array_slice($name, 2, null, true));
         $args = http_parse_query($query, ';');
 
-        $action = Action::$current = $class::instance($args, $id);
+        $action = new $class($args, $id, $noRuleMode);
         $action->setDataAll(Action::DATA_GET, $args);
         $action->setDataAll(Action::DATA_POST, $_POST);
         $action->setDataAll(Action::DATA_FILES, array_map(function ($filedata) {
