@@ -1,17 +1,9 @@
 <?php namespace frame\route;
 
-use frame\route\Request;
-use frame\LatePropsObject;
-
 /**
  * Router занимается обработкой URL.
- * 
- * @property-read Router|null $previous Роутер предыдущего запроса. Если
- * предыдущего запроса нет - вернет null.
- * @property-read int $pagenumber Номер страницы по счету в списке. Определяется get параметром "p".
- * Если его нет, то всегда равен 1.
  */
-class Router extends LatePropsObject
+class Router
 {
     /**
      * @var string $url Url страницы
@@ -106,24 +98,5 @@ class Router extends LatePropsObject
     public function toUrl(array $newGet = array()) : string
     {
         return static::toUrlOf($this->url, $newGet);
-    }
-
-    /**
-     * @see $previous
-     */
-    protected function __create__previous()
-    {
-        if (Request::hasReferer()) return new Router(Request::getReferer());
-        else return null;
-    }
-
-    /**
-     * @see $pagenumber
-     */
-    protected function __create__pagenumber()
-    {
-        $p = $this->getArg('p');
-        if ($p === null || $p === '' || $p <= 0) return 1;
-        else return (int) $p;
     }
 }

@@ -2,9 +2,12 @@
 
 use function lightlib\session_start_once;
 use frame\tools\transmitters\CookieTransmitter;
+use function lightlib\stored;
 
 class Client
 {
+    private static $storage = [];
+
     public static function getIp(): string
     {
         return $_SERVER['REMOTE_ADDR'];
@@ -22,13 +25,15 @@ class Client
      */
     public static function getId(): string
     {
-        $cookies = new CookieTransmitter(60*60*24*7*365*10);
-        if (!$cookies->isSetData('cid')) {
-            $newId = md5(self::getSessionId() . time());
-            $cookies->setData('cid', $newId);
-            return $newId;
-        }
-        return $cookies->cid;
+        return stored(self::$storage, 'id', function() {
+            $cookies = new CookieTransmitter(60 * 60 * 24 * 7 * 365 * 10);
+            if (!$cookies->isSetData('cid')) {
+                $newId = md5(self::getSessionId() . time());
+                $cookies->setData('cid', $newId);
+                return $newId;
+            }
+            return $cookies->cid;
+        });
     }
     
     public static function getUserAgent(): string

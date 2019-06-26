@@ -44,7 +44,7 @@ class Layouted extends View
      */
     public function __toString()
     {
-        $content = $this->content; // загружаем на случай, если внутри шаблон изменился
+        $content = $this->getContent(); // загружаем на случай, если внутри шаблон изменился
         if ($this->layoutname) {
             $this->layout = new Layout($this->layoutname, $this);
             return $this->layout; // внутри layout сам выведет содержимое текущего вида

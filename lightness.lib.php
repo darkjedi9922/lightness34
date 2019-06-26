@@ -376,3 +376,8 @@ function array_isset_value($array, $key)
 
     return true;
 }
+
+function stored(array &$storage, string $key, callable $creator) 
+{
+    return $storage[$key] ?? $storage[$key] = $creator();
+}

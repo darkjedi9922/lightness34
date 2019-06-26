@@ -1,7 +1,7 @@
 <?php namespace frame\actions;
 
 use frame\Core;
-use frame\LatePropsObject;
+use frame\GlobalAccess;
 use frame\route\Router;
 use frame\route\Request;
 use frame\route\Response;
@@ -9,7 +9,6 @@ use frame\actions\RuleResult;
 use frame\actions\errors\NoRuleException;
 use frame\actions\errors\RuleRuntimeException;
 use frame\actions\errors\RuleCheckFailedException;
-use frame\config\Json;
 use frame\tools\transmitters\SessionTransmitter;
 
 use function lightlib\encode_specials;
@@ -40,13 +39,8 @@ use function lightlib\empty_recursive;
  * Корректная работа checkbox:
  * <input type="hidden" name="property" value="0">
  * <input type="checkbox" name="property" value="1">
- * 
- * Очень хорошей практикой будет активное использование механизма LatePropsObject
- * в дочерних экшнах. С помощью него можно определять используемые в экшне данные,
- * которые потом можно брать из него на обычных страницах, вместо того, чтобы повторно
- * создавать их.
  */
-abstract class Action extends LatePropsObject
+abstract class Action extends GlobalAccess
 {
     const NONE = 0;
     const SUCCESS = 1;
