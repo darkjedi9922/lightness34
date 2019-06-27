@@ -80,6 +80,7 @@ class ActionConfigTest extends TestCase
     public function testCallbackValidate()
     {
         $action = new JsonValidatedAction([], Action::NO_RULE_IGNORE);
+        $action->setData(Action::ARGS, Action::TOKEN, $action->getExpectedToken());
 
         // Методы классов ActionRules возвращают callback-функции, проверяющие
         // переданные в них значения.
@@ -101,6 +102,7 @@ class ActionConfigTest extends TestCase
     public function testRuleIsNotFoundRaisesError()
     {
         $action = new JsonValidatedAction([], Action::NO_RULE_ERROR);
+        $action->setData(Action::ARGS, Action::TOKEN, $action->getExpectedToken());
         $action->setConfig($this->jsonValidatedActionConfig);
 
         $this->expectException(NoRuleException::class);
@@ -113,6 +115,7 @@ class ActionConfigTest extends TestCase
     public function testRuleHandlerCanStopRuleHandling()
     {
         $action = new JsonValidatedAction([], Action::NO_RULE_IGNORE);
+        $action->setData(Action::ARGS, Action::TOKEN, $action->getExpectedToken());
 
         // По конфигу, поле username не должно быть пустым (правило emptiness).
         // Также минимальная длинна этого поля равна 4. Но бессмысленно проверять
@@ -136,6 +139,7 @@ class ActionConfigTest extends TestCase
     public function testRuleHandlerMayNotStopRuleHandling()
     {
         $action = new JsonValidatedAction([], Action::NO_RULE_IGNORE);
+        $action->setData(Action::ARGS, Action::TOKEN, $action->getExpectedToken());
         $action->setConfig($this->jsonValidatedActionConfig);
 
         $baseRules = new ActionBaseRules;
@@ -195,6 +199,7 @@ class ActionConfigTest extends TestCase
     public function testFailedRuleMayThrowException()
     {
         $action = new JsonValidatedAction([], Action::NO_RULE_IGNORE);
+        $action->setData(Action::ARGS, Action::TOKEN, $action->getExpectedToken());
         $action->setConfig($this->jsonValidatedActionConfig);
 
         $rules = new ActionBaseRules;
@@ -209,6 +214,7 @@ class ActionConfigTest extends TestCase
     public function testInnerInterDataReturnsNotNullValue()
     {
         $action = new UserDeleteAction;
+        $action->setData(Action::ARGS, Action::TOKEN, $action->getExpectedToken());
         $action->setConfig($this->userDeleteActionConfig);
 
         // В этом тестовом экшне id = 1 является единственным путем успешно 
@@ -243,6 +249,7 @@ class ActionConfigTest extends TestCase
     {
         $rules = new ActionBaseRules;
         $action = new JsonValidatedAction([], Action::NO_RULE_IGNORE);
+        $action->setData(Action::ARGS, Action::TOKEN, $action->getExpectedToken());
         $action->setRule('regexp', $rules->getRegexpRule());
         $action->setConfig($this->jsonValidatedActionConfig);
 
@@ -256,6 +263,7 @@ class ActionConfigTest extends TestCase
     {
         $rules = new ActionBaseRules;
         $action = new JsonValidatedAction([], Action::NO_RULE_IGNORE);
+        $action->setData(Action::ARGS, Action::TOKEN, $action->getExpectedToken());
         $action->setRule('regexp', $rules->getRegexpRule());
         $action->setConfig($this->jsonValidatedActionConfig);
 
@@ -277,6 +285,7 @@ class ActionConfigTest extends TestCase
     {
         $rules = new ActionFileRules;
         $action = new JsonValidatedAction([], Action::NO_RULE_IGNORE);
+        $action->setData(Action::ARGS, Action::TOKEN, $action->getExpectedToken());
         $action->setConfig($this->jsonValidatedActionConfig);
         $action->setRule('max-size', $rules->getMaxSizeRule());
 
@@ -287,11 +296,11 @@ class ActionConfigTest extends TestCase
             'tmp_name' => '',
             'error' => UploadedFile::UPLOAD_ERR_OK
         ];
-        $action->setData($action::DATA_FILES, 'avatar', new UploadedFile($file));
+        $action->setData($action::FILES, 'avatar', new UploadedFile($file));
 
         $action->exec();
 
-        $hasError = $action->hasDataError($action::DATA_FILES, 'avatar', 'max-size');
+        $hasError = $action->hasDataError($action::FILES, 'avatar', 'max-size');
         $this->assertTrue($hasError);
     }
 
@@ -299,6 +308,7 @@ class ActionConfigTest extends TestCase
     {
         $rules = new ActionFileRules;
         $action = new JsonValidatedAction([], Action::NO_RULE_IGNORE);
+        $action->setData(Action::ARGS, Action::TOKEN, $action->getExpectedToken());
         $action->setConfig($this->jsonValidatedActionConfig);
         $action->setRule('max-size', $rules->getMaxSizeRule());
 
@@ -309,11 +319,11 @@ class ActionConfigTest extends TestCase
             'tmp_name' => '',
             'error' => UploadedFile::UPLOAD_ERR_OK
         ];
-        $action->setData($action::DATA_FILES, 'avatar', new UploadedFile($file));
+        $action->setData($action::FILES, 'avatar', new UploadedFile($file));
 
         $action->exec();
 
-        $hasError = $action->hasDataError($action::DATA_FILES, 'avatar', 'max-size');
+        $hasError = $action->hasDataError($action::FILES, 'avatar', 'max-size');
         $this->assertFalse($hasError);
     }
     

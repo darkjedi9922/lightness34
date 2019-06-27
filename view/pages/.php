@@ -11,7 +11,7 @@ $this->setMetaArray(['name' => $this->file]);
 $message = 'This is an action message to log in';
 $block = new Block('block');
 $answer = new Value('answer');
-$action = HelloAction::instance([Action::ARG_ID => 'the_id', 'answer' => $answer]);
+$action = HelloAction::instance([Action::ID => 'the_id', 'answer' => $answer]);
 ?>
 
 Hello <?= $this->app->config->{'site.name'} ?><br>

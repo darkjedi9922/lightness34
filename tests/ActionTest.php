@@ -12,7 +12,7 @@ class ActionTest extends TestCase
      */
     public function testUrl()
     {
-        $get = [Action::ARG_ID => 'del', 'object' => 1, 'subject' => 21];
+        $get = [Action::ID => 'del', 'object' => 1, 'subject' => 21];
         $action = new UserDeleteAction($get, Action::NO_RULE_IGNORE);
 
         $slash = '%255C'; // \ coded
@@ -21,7 +21,8 @@ class ActionTest extends TestCase
 
         $url = "?action=_id${equals}del${and}".
             "object${equals}1${and}subject${equals}21${and}".
-            "_type${equals}tests${slash}engine${slash}UserDeleteAction";
+            "_type${equals}tests${slash}engine${slash}UserDeleteAction${and}".
+            "_csrf${equals}{$action->getExpectedToken()}";
 
         $this->assertEquals($url, $action->getUrl(new Router));
     }

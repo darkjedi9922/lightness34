@@ -16,7 +16,8 @@ use frame\actions\UploadedFile;
 use function lightlib\encode_specials;
 use function lightlib\empty_recursive;
 use function lightlib\http_parse_query;
-use function lightlib\dump;
+use frame\tools\Client;
+use frame\errors\HttpError;
 
 /**
  * Класс служит для обработки форм, но можно использовать для запуска
@@ -58,20 +59,24 @@ abstract class Action extends LatePropsObject
     const NO_RULE_ERROR = 'error';
     const NO_RULE_IGNORE = 'ignore';
 
+    /**
+     * Type of Action data.
+     */
     const OWN = 'own';
-    const DATA_GET = 'get';
-    const DATA_POST = 'post';
-    const DATA_FILES = 'files';
+    const ARGS = 'get';
+    const POST = 'post';
+    const FILES = 'files';
 
     /** 
-     * Имена GET-параметров, используемых для работы самого экшна. Публичные данные
-     * можно переопределять.
+     * Имена GET-параметров, используемых для работы самого экшна.
+     * Задавать в параметрах можно только ID.
      * 
-     * ARG_ID нужен, если на одной странице используется несколько экшнов одного типа 
+     * ID нужен, если на одной странице используется несколько экшнов одного типа 
      * с разными параметрами, чтобы понимать какой из них выполнять.
      */
-    public const ARG_ID = '_id';
-    private const ARG_TYPE = '_type';
+    const ID = '_id';
+    const TYPE = '_type';
+    const TOKEN = '_csrf';
 
     const VALIDATION_CONFIG_FOLDER = 'public/actions';
 
@@ -99,18 +104,18 @@ abstract class Action extends LatePropsObject
      */
     public $errors = [
         self::OWN => [], 
-        self::DATA_GET => [], 
-        self::DATA_POST => [],
-        self::DATA_FILES => []
+        self::ARGS => [], 
+        self::POST => [],
+        self::FILES => []
     ];
 
     /**
      * @var array [get => [name => value], post => [name => value]]
      */
     public $data = [
-        self::DATA_GET => [], 
-        self::DATA_POST => [], 
-        self::DATA_FILES => []
+        self::ARGS => [], 
+        self::POST => [], 
+        self::FILES => []
     ];
 
     /**
@@ -141,8 +146,8 @@ abstract class Action extends LatePropsObject
     {
         if (isset(self::$_current) 
             && get_class(self::$_current) === static::class 
-            && self::$_current->getData(self::DATA_GET, self::ARG_ID) === 
-                $get[self::ARG_ID])
+            && self::$_current->getData(self::ARGS, self::ID) === 
+                $get[self::ID])
         { 
             return self::$_current;
         }
@@ -161,12 +166,12 @@ abstract class Action extends LatePropsObject
         $noRuleMode = self::NO_RULE_ERROR): Action
     {
         $args = http_parse_query($actionArg, ';');
-        $class = $args[self::ARG_TYPE];
+        $class = $args[self::TYPE];
 
         $action = new $class($args, $noRuleMode);
-        $action->setDataAll(Action::DATA_GET, $args);
-        $action->setDataAll(Action::DATA_POST, $_POST);
-        $action->setDataAll(Action::DATA_FILES, array_map(function ($filedata) {
+        $action->setDataAll(Action::ARGS, $args);
+        $action->setDataAll(Action::POST, $_POST);
+        $action->setDataAll(Action::FILES, array_map(function ($filedata) {
             return new UploadedFile($filedata);
         }, $_FILES));
 
@@ -199,9 +204,7 @@ abstract class Action extends LatePropsObject
     {
         $this->app = Core::$app;
         $this->noRuleMode = $noRuleMode;
-        $this->setDataAll(self::DATA_GET, $get);
-        $this->setData(self::DATA_GET, self::ARG_ID, $get[self::ARG_ID] ?? '');
-        $this->setData(self::DATA_GET, self::ARG_TYPE, static::class);
+        $this->setDataAll(self::ARGS, $get);
         $this->load();
     }
 
@@ -212,7 +215,13 @@ abstract class Action extends LatePropsObject
      */
     public function setDataAll($type, $data)
     {
-        $safeValue = ($type === self::DATA_FILES ? $data : encode_specials($data));
+        if ($type === self::ARGS) $data = array_merge($data, [
+            self::ID => $data[self::ID] ?? '',
+            self::TYPE => static::class,
+            self::TOKEN => $data[self::TOKEN] ?? ''
+        ]);
+
+        $safeValue = ($type === self::FILES ? $data : encode_specials($data));
         $this->data[$type] = $safeValue;
     }
 
@@ -224,7 +233,7 @@ abstract class Action extends LatePropsObject
      */
     public function setData($type, $name, $value)
     {
-        $safeValue = ($type === self::DATA_FILES ? $value : encode_specials($value));
+        $safeValue = ($type === self::FILES ? $value : encode_specials($value));
         $this->data[$type][$name] = $safeValue;
     }
 
@@ -308,7 +317,9 @@ abstract class Action extends LatePropsObject
      */
     public final function getUrl($router)
     {
-        $action = http_build_query($this->data[Action::DATA_GET], '', ';');
+        $queryData = $this->data[Action::ARGS];
+        $queryData[self::TOKEN] = $this->getExpectedToken();
+        $action = http_build_query($queryData, '', ';');
         return $router->toUrl(['action' => $action]);
     }
 
@@ -318,10 +329,11 @@ abstract class Action extends LatePropsObject
      */
     public final function exec()
     {
+        $this->assertToken($this->data[self::ARGS][self::TOKEN]);
         $this->initialize();
-        $this->errors[self::DATA_GET] = $this->ruleValidate(self::DATA_GET);
-        $this->errors[self::DATA_POST] = $this->ruleValidate(self::DATA_POST);
-        $this->errors[self::DATA_FILES] = $this->ruleValidate(self::DATA_FILES);
+        $this->errors[self::ARGS] = $this->ruleValidate(self::ARGS);
+        $this->errors[self::POST] = $this->ruleValidate(self::POST);
+        $this->errors[self::FILES] = $this->ruleValidate(self::FILES);
         $this->errors[self::OWN] = $this->validate();
         if (empty_recursive($this->errors)) {
             $this->succeed();
@@ -439,6 +451,11 @@ abstract class Action extends LatePropsObject
         return $this->ruleCallbacks[$rule];
     }
 
+    public function getExpectedToken(): string
+    {
+        return md5('tkn_salt' . Client::getId());
+    }
+
     /**
      * Is run first
      * Suggests override if it is needed
@@ -523,8 +540,8 @@ abstract class Action extends LatePropsObject
 
     private function getIdName(): string
     {
-        $id = $this->data[self::DATA_GET][self::ARG_ID];
-        $type = $this->data[self::DATA_GET][self::ARG_TYPE];
+        $id = $this->data[self::ARGS][self::ID];
+        $type = $this->data[self::ARGS][self::TYPE];
         return $id . '_' . $type;
     }
 
@@ -565,6 +582,13 @@ abstract class Action extends LatePropsObject
             }
             $this->doAfterLoad();
         }
+    }
+
+    private function assertToken(string $token): void
+    {
+        if ($token != $this->getExpectedToken()) 
+            throw new HttpError(HttpError::BAD_REQUEST,
+                'Recieved TOKEN token does not match expected token.');
     }
 
     /**

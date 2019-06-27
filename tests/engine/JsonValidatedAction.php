@@ -8,7 +8,7 @@ class JsonValidatedAction extends Action
     {
         // Some actions...
 
-        // $avatar = $this->getData(self::DATA_FILES, 'avatar'); // File
+        // $avatar = $this->getData(self::FILES, 'avatar'); // File
         // echo 'Handling a file with a size:' . $avatar->getSize();
 
         // Some actions ...

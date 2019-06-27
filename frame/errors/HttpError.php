@@ -2,10 +2,12 @@
 
 class HttpError extends \Exception
 {
-    const FORBIDDEN = 403;
-    const NOT_FOUND = 404;
+    const BAD_REQUEST   = 400;
+    const FORBIDDEN     = 403;
+    const NOT_FOUND     = 404;
 
     private $HEADERS = [
+        400 => '400 Bad Request',
         403 => '403 Forbidden',
         404 => '404 Not Found'
     ];
