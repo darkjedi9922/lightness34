@@ -79,7 +79,7 @@ class ActionConfigTest extends TestCase
 
     public function testCallbackValidate()
     {
-        $action = new JsonValidatedAction([], '', Action::NO_RULE_IGNORE);
+        $action = new JsonValidatedAction([], Action::NO_RULE_IGNORE);
 
         // Методы классов ActionRules возвращают callback-функции, проверяющие
         // переданные в них значения.
@@ -100,7 +100,7 @@ class ActionConfigTest extends TestCase
 
     public function testRuleIsNotFoundRaisesError()
     {
-        $action = new JsonValidatedAction([], '', Action::NO_RULE_ERROR);
+        $action = new JsonValidatedAction([], Action::NO_RULE_ERROR);
         $action->setConfig($this->jsonValidatedActionConfig);
 
         $this->expectException(NoRuleException::class);
@@ -112,7 +112,7 @@ class ActionConfigTest extends TestCase
 
     public function testRuleHandlerCanStopRuleHandling()
     {
-        $action = new JsonValidatedAction([], '', Action::NO_RULE_IGNORE);
+        $action = new JsonValidatedAction([], Action::NO_RULE_IGNORE);
 
         // По конфигу, поле username не должно быть пустым (правило emptiness).
         // Также минимальная длинна этого поля равна 4. Но бессмысленно проверять
@@ -135,7 +135,7 @@ class ActionConfigTest extends TestCase
 
     public function testRuleHandlerMayNotStopRuleHandling()
     {
-        $action = new JsonValidatedAction([], '', Action::NO_RULE_IGNORE);
+        $action = new JsonValidatedAction([], Action::NO_RULE_IGNORE);
         $action->setConfig($this->jsonValidatedActionConfig);
 
         $baseRules = new ActionBaseRules;
@@ -154,7 +154,7 @@ class ActionConfigTest extends TestCase
 
     public function testDefaultValue()
     {
-        $action = new JsonValidatedAction([], '', Action::NO_RULE_IGNORE);
+        $action = new JsonValidatedAction([], Action::NO_RULE_IGNORE);
         $action->setConfig($this->jsonValidatedActionConfig);
 
         $this->assertEquals('Doctor Who', $action->getDataDefault('post', 'alter', false));
@@ -194,7 +194,7 @@ class ActionConfigTest extends TestCase
 
     public function testFailedRuleMayThrowException()
     {
-        $action = new JsonValidatedAction([], '', Action::NO_RULE_IGNORE);
+        $action = new JsonValidatedAction([], Action::NO_RULE_IGNORE);
         $action->setConfig($this->jsonValidatedActionConfig);
 
         $rules = new ActionBaseRules;
@@ -208,7 +208,7 @@ class ActionConfigTest extends TestCase
 
     public function testInnerInterDataReturnsNotNullValue()
     {
-        $action = new UserDeleteAction([], '');
+        $action = new UserDeleteAction;
         $action->setConfig($this->userDeleteActionConfig);
 
         // В этом тестовом экшне id = 1 является единственным путем успешно 
@@ -223,13 +223,13 @@ class ActionConfigTest extends TestCase
 
     public function testInnerInterDataReturnsNullValue()
     {
-        $action = new UserDeleteAction([], '');
+        $action = new UserDeleteAction;
         $this->assertNull($action->getInterData('post', 'some-field', 'no-value'));
     }
 
     public function testGetSetup()
     {
-        $action = new JsonValidatedAction([], '', Action::NO_RULE_IGNORE);
+        $action = new JsonValidatedAction([], Action::NO_RULE_IGNORE);
         $action->setDataAll('get', ['arg1' => 1, 'arg2' => 2]);
         $action->setData('get', 'arg3', 3);
 
@@ -242,7 +242,7 @@ class ActionConfigTest extends TestCase
     public function testRegexpRuleFindsErrorInWrongValue()
     {
         $rules = new ActionBaseRules;
-        $action = new JsonValidatedAction([], '', Action::NO_RULE_IGNORE);
+        $action = new JsonValidatedAction([], Action::NO_RULE_IGNORE);
         $action->setRule('regexp', $rules->getRegexpRule());
         $action->setConfig($this->jsonValidatedActionConfig);
 
@@ -255,7 +255,7 @@ class ActionConfigTest extends TestCase
     public function testRegexpRuleDoesNotFindErrorInCorrectValue()
     {
         $rules = new ActionBaseRules;
-        $action = new JsonValidatedAction([], '', Action::NO_RULE_IGNORE);
+        $action = new JsonValidatedAction([], Action::NO_RULE_IGNORE);
         $action->setRule('regexp', $rules->getRegexpRule());
         $action->setConfig($this->jsonValidatedActionConfig);
 
@@ -267,7 +267,7 @@ class ActionConfigTest extends TestCase
 
     public function testReturnsDefaultGetValue()
     {
-        $action = new JsonValidatedAction([], '', Action::NO_RULE_IGNORE);
+        $action = new JsonValidatedAction([], Action::NO_RULE_IGNORE);
         $action->setConfig($this->jsonValidatedActionConfig);
 
         $this->assertEquals('some-user', $action->getDataDefault('get', 'user_id'));
@@ -276,7 +276,7 @@ class ActionConfigTest extends TestCase
     public function testFileMaxSizeRuleCanFindOutError()
     {
         $rules = new ActionFileRules;
-        $action = new JsonValidatedAction([], '', Action::NO_RULE_IGNORE);
+        $action = new JsonValidatedAction([], Action::NO_RULE_IGNORE);
         $action->setConfig($this->jsonValidatedActionConfig);
         $action->setRule('max-size', $rules->getMaxSizeRule());
 
@@ -298,7 +298,7 @@ class ActionConfigTest extends TestCase
     public function testFileMaxSizeRuleCanFindOutSuccess()
     {
         $rules = new ActionFileRules;
-        $action = new JsonValidatedAction([], '', Action::NO_RULE_IGNORE);
+        $action = new JsonValidatedAction([], Action::NO_RULE_IGNORE);
         $action->setConfig($this->jsonValidatedActionConfig);
         $action->setRule('max-size', $rules->getMaxSizeRule());
 
@@ -319,7 +319,7 @@ class ActionConfigTest extends TestCase
     
     public function testFileDefaultValue()
     {
-        $action = new JsonValidatedAction([], '', Action::NO_RULE_IGNORE);
+        $action = new JsonValidatedAction([], Action::NO_RULE_IGNORE);
         $action->setConfig($this->jsonValidatedActionConfig);
 
         $default = $action->getDataDefault('files', 'avatar');

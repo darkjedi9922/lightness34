@@ -63,6 +63,16 @@ abstract class Action extends LatePropsObject
     const DATA_POST = 'post';
     const DATA_FILES = 'files';
 
+    /** 
+     * Имена GET-параметров, используемых для работы самого экшна. Публичные данные
+     * можно переопределять.
+     * 
+     * ARG_ID нужен, если на одной странице используется несколько экшнов одного типа 
+     * с разными параметрами, чтобы понимать какой из них выполнять.
+     */
+    public const ARG_ID = '_id';
+    private const ARG_TYPE = '_type';
+
     const VALIDATION_CONFIG_FOLDER = 'public/actions';
 
     /**
@@ -103,9 +113,6 @@ abstract class Action extends LatePropsObject
         self::DATA_FILES => []
     ];
 
-    /** @var string */
-    private $id = '';
-
     /**
      * @var array
      */
@@ -127,23 +134,21 @@ abstract class Action extends LatePropsObject
     private $interData = [];
 
     /**
-     * @param array $get Параметры экшна
-     * @param string $id Id экшна. Нужен, если на одной странице используется 
-     * несколько экшнов одного класса с разными параметрами, чтобы понимать какой из 
-     * них выполнять
+     * @param array $get Параметры экшна.
      * @return static
      */
-    public static function instance($get = [], $id = '')
+    public static function instance($get = [])
     {
         if (isset(self::$_current) 
             && get_class(self::$_current) === static::class 
-            && self::$_current->id === $id)
+            && self::$_current->getData(self::DATA_GET, self::ARG_ID) === 
+                $get[self::ARG_ID])
         { 
             return self::$_current;
         }
 
         $noRuleMode = Core::$app->config->{'actions.noRuleMode'};
-        $action = new static($get, $id, $noRuleMode);
+        $action = new static($get, $noRuleMode);
         return $action;
     }
 
@@ -156,10 +161,9 @@ abstract class Action extends LatePropsObject
         $noRuleMode = self::NO_RULE_ERROR): Action
     {
         $args = http_parse_query($actionArg, ';');
-        $id = $args['_id'];
-        $class = $args['_type'];
+        $class = $args[self::ARG_TYPE];
 
-        $action = new $class($args, $id, $noRuleMode);
+        $action = new $class($args, $noRuleMode);
         $action->setDataAll(Action::DATA_GET, $args);
         $action->setDataAll(Action::DATA_POST, $_POST);
         $action->setDataAll(Action::DATA_FILES, array_map(function ($filedata) {
@@ -185,33 +189,20 @@ abstract class Action extends LatePropsObject
      * статический метод instance().
      * 
      * @param array $get Параметры экшна.
-     * @param string $id Id экшна. Нужен, если на одной странице используется 
-     * несколько экшнов одного класса с разными параметрами, чтобы понимать какой 
-     * из них выполнять.
      * @param string $noRuleMode Что делать, если для конфиг-валидации экшна в экшне
      * не установлен механизм обработки правила. Значения: 'error' (выбрасывает
      * исключение типа NoRuleError) или 'ignore' (пропускает правило).
      */
     public function __construct(
         $get = [],
-        $id = '',
         $noRuleMode = self::NO_RULE_ERROR)
     {
         $this->app = Core::$app;
-        $this->setId($id);
         $this->noRuleMode = $noRuleMode;
         $this->setDataAll(self::DATA_GET, $get);
+        $this->setData(self::DATA_GET, self::ARG_ID, $get[self::ARG_ID] ?? '');
+        $this->setData(self::DATA_GET, self::ARG_TYPE, static::class);
         $this->load();
-    }
-
-    public function getId(): string
-    {
-        return $this->id;
-    }
-
-    public function setId(string $id)
-    {
-        $this->id = $id;
     }
 
     /**
@@ -317,11 +308,7 @@ abstract class Action extends LatePropsObject
      */
     public final function getUrl($router)
     {
-        $queryData = array_merge([
-            '_id' => $this->id,
-            '_type' => static::class
-        ], $this->data[Action::DATA_GET]);
-        $action = http_build_query($queryData, '', ';');
+        $action = http_build_query($this->data[Action::DATA_GET], '', ';');
         return $router->toUrl(['action' => $action]);
     }
 
@@ -536,7 +523,9 @@ abstract class Action extends LatePropsObject
 
     private function getIdName(): string
     {
-        return $this->id . '_' . static::class;
+        $id = $this->data[self::DATA_GET][self::ARG_ID];
+        $type = $this->data[self::DATA_GET][self::ARG_TYPE];
+        return $id . '_' . $type;
     }
 
     /**

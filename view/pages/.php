@@ -4,13 +4,14 @@ use frame\views\Block;
 use frame\views\Value;
 use frame\tools\Client;
 use engine\HelloAction;
+use frame\actions\Action;
 
 $this->setLayout('page');
 $this->setMetaArray(['name' => $this->file]);
 $message = 'This is an action message to log in';
 $block = new Block('block');
 $answer = new Value('answer');
-$action = HelloAction::instance(['answer' => $answer], 'the_id');
+$action = HelloAction::instance([Action::ARG_ID => 'the_id', 'answer' => $answer]);
 ?>
 
 Hello <?= $this->app->config->{'site.name'} ?><br>

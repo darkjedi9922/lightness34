@@ -12,17 +12,16 @@ class ActionTest extends TestCase
      */
     public function testUrl()
     {
-        $get = ['object' => 1, 'subject' => 21];
-        $actionId = 'del';
-        $action = new UserDeleteAction($get, $actionId, Action::NO_RULE_IGNORE);
+        $get = [Action::ARG_ID => 'del', 'object' => 1, 'subject' => 21];
+        $action = new UserDeleteAction($get, Action::NO_RULE_IGNORE);
 
         $slash = '%255C'; // \ coded
         $and = '%3B'; // ; coded
         $equals = '%3D'; // = coded
 
-        $url = "?action=_id${equals}${actionId}${and}".
-            "_type${equals}tests${slash}engine${slash}UserDeleteAction${and}".
-            "object${equals}1${and}subject${equals}21";
+        $url = "?action=_id${equals}del${and}".
+            "object${equals}1${and}subject${equals}21${and}".
+            "_type${equals}tests${slash}engine${slash}UserDeleteAction";
 
         $this->assertEquals($url, $action->getUrl(new Router));
     }
