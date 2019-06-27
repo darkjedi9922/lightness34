@@ -78,11 +78,6 @@ abstract class Action extends LatePropsObject
     public $app;
 
     /**
-     * @var string $name Имя экшна. Складывается из id экшна и имени класса
-     */
-    public $name = '';
-
-    /**
      * @var int $status Статус: NONE, SUCCESS или FAIL.
      */
     public $status = self::NONE;
@@ -108,6 +103,9 @@ abstract class Action extends LatePropsObject
         self::DATA_FILES => []
     ];
 
+    /** @var string */
+    private $id = '';
+
     /**
      * @var array
      */
@@ -130,14 +128,19 @@ abstract class Action extends LatePropsObject
 
     /**
      * @param array $get Параметры экшна
-     * @param int $id Id экшна. Нужен, если на одной странице используется несколько экшнов
-     * одного класса с разными параметрами, чтобы понимать какой из них выполнять
+     * @param string $id Id экшна. Нужен, если на одной странице используется 
+     * несколько экшнов одного класса с разными параметрами, чтобы понимать какой из 
+     * них выполнять
      * @return static
      */
     public static function instance($get = [], $id = '')
     {
-        if (isset(self::$_current) && self::$_current->name === $id . '_' . static::class) 
+        if (isset(self::$_current) 
+            && get_class(self::$_current) === static::class 
+            && self::$_current->id === $id)
+        { 
             return self::$_current;
+        }
 
         $noRuleMode = Core::$app->config->{'actions.noRuleMode'};
         $action = new static($get, $id, $noRuleMode);
@@ -152,11 +155,9 @@ abstract class Action extends LatePropsObject
     public static function fromTriggerUrl(string $actionArg, 
         $noRuleMode = self::NO_RULE_ERROR): Action
     {
-        $name = explode('_', $actionArg);
-        $id = $name[0];
-        $class = $name[1];
-        $query = implode('_', array_slice($name, 2, null, true));
-        $args = http_parse_query($query, ';');
+        $args = http_parse_query($actionArg, ';');
+        $id = $args['_id'];
+        $class = $args['_type'];
 
         $action = new $class($args, $id, $noRuleMode);
         $action->setDataAll(Action::DATA_GET, $args);
@@ -184,9 +185,9 @@ abstract class Action extends LatePropsObject
      * статический метод instance().
      * 
      * @param array $get Параметры экшна.
-     * @param int $id Id экшна. Нужен, если на одной странице используется несколько 
-     * экшнов одного класса с разными параметрами, чтобы понимать какой из них 
-     * выполнять.
+     * @param string $id Id экшна. Нужен, если на одной странице используется 
+     * несколько экшнов одного класса с разными параметрами, чтобы понимать какой 
+     * из них выполнять.
      * @param string $noRuleMode Что делать, если для конфиг-валидации экшна в экшне
      * не установлен механизм обработки правила. Значения: 'error' (выбрасывает
      * исключение типа NoRuleError) или 'ignore' (пропускает правило).
@@ -197,10 +198,20 @@ abstract class Action extends LatePropsObject
         $noRuleMode = self::NO_RULE_ERROR)
     {
         $this->app = Core::$app;
-        $this->name = $id . '_' . static::class;
+        $this->setId($id);
         $this->noRuleMode = $noRuleMode;
         $this->setDataAll(self::DATA_GET, $get);
         $this->load();
+    }
+
+    public function getId(): string
+    {
+        return $this->id;
+    }
+
+    public function setId(string $id)
+    {
+        $this->id = $id;
     }
 
     /**
@@ -306,8 +317,12 @@ abstract class Action extends LatePropsObject
      */
     public final function getUrl($router)
     {
-        $queryData = http_build_query($this->data[Action::DATA_GET], '', ';');
-        return $router->toUrl(['action' => $this->name.'_'.$queryData]);
+        $queryData = array_merge([
+            '_id' => $this->id,
+            '_type' => static::class
+        ], $this->data[Action::DATA_GET]);
+        $action = http_build_query($queryData, '', ';');
+        return $router->toUrl(['action' => $action]);
     }
 
     /**
@@ -519,6 +534,11 @@ abstract class Action extends LatePropsObject
         } else return null;
     }
 
+    private function getIdName(): string
+    {
+        return $this->id . '_' . static::class;
+    }
+
     /**
      * Сохраняет свое состояние перед редиректом.
      * Сохраняются статус, ошибки и введенные данные.
@@ -527,10 +547,13 @@ abstract class Action extends LatePropsObject
     private function save()
     {
         $this->doBeforeSave();
+        $idName = $this->getIdName();
         $sessions = new SessionTransmitter;
-        $sessions->setData($this->name.'_status', $this->status);
-        if ($this->isFail()) $sessions->setData($this->name.'_errors', serialize($this->errors));
-        if ($this->isFail()) $sessions->setData($this->name.'_data', serialize($this->data));
+        $sessions->setData($idName . '_status', $this->status);
+        if ($this->isFail()) {
+            $sessions->setData($idName . '_errors', serialize($this->errors));
+            $sessions->setData($idName . '_data', serialize($this->data));
+        }
     }
 
     /**
@@ -538,17 +561,18 @@ abstract class Action extends LatePropsObject
      */
     private function load()
     {
+        $idName = $this->getIdName();
         $sessions = new SessionTransmitter;
-        if ($sessions->isSetData($this->name . '_status')) {
-            $this->status = $sessions->getData($this->name . '_status');
-            $sessions->removeData($this->name . '_status');
-            if ($sessions->isSetData($this->name . '_errors')) {
-                $this->errors = unserialize($sessions->getData($this->name . '_errors'));
-                $sessions->removeData($this->name . '_errors');
+        if ($sessions->isSetData($idName . '_status')) {
+            $this->status = $sessions->getData($idName . '_status');
+            $sessions->removeData($idName . '_status');
+            if ($sessions->isSetData($idName . '_errors')) {
+                $this->errors = unserialize($sessions->getData($idName . '_errors'));
+                $sessions->removeData($idName . '_errors');
             }
-            if ($sessions->isSetData($this->name . '_data')) {
-                $this->data = unserialize($sessions->getData($this->name . '_data'));
-                $sessions->removeData($this->name . '_data');
+            if ($sessions->isSetData($idName . '_data')) {
+                $this->data = unserialize($sessions->getData($idName . '_data'));
+                $sessions->removeData($idName . '_data');
             }
             $this->doAfterLoad();
         }
