@@ -1,15 +1,13 @@
 <?php namespace tests\engine;
 
 use frame\actions\Action;
-use frame\actions\rules\ActionBaseRules;
 
 class UserDeleteAction extends Action
 {
     protected function initialize()
     {
-        $baseRules = new ActionBaseRules;
-        $this->setRule('mandatory', $baseRules->getMandatoryRule());
-        $this->setRule('emptiness', $baseRules->getEmptinessRule());
+        $this->setRule('mandatory', Action::loadRule('base/mandatory'));
+        $this->setRule('emptiness', Action::loadRule('base/emptiness'));
         
         // Эта проверка в идеале выделена в другой класс и не имеет доступа к данным
         // этого.

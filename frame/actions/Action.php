@@ -164,6 +164,14 @@ abstract class Action extends LatePropsObject
         return $action;
     }
 
+    /** @return callable|null */
+    public static function loadRule(string $rule)
+    {
+        $file = ROOT_DIR . '/rules/' . $rule . '.php';
+        if (file_exists($file)) return require($file);
+        return null;
+    }
+
     /**
      * @param array $get Параметры экшна.
      * @param string $noRuleMode Что делать, если для конфиг-валидации экшна в экшне

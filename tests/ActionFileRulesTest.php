@@ -1,16 +1,16 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use frame\actions\rules\ActionFileRules;
 use frame\actions\UploadedFile;
 use frame\actions\RuleResult;
 use frame\tools\File;
+use frame\actions\Action;
 
 class ActionFileRulesTest extends TestCase
 {
     public function testMustLoadRuleReturnsSuccessIfRuleIsTrueAndFileIsLoaded()
     {
-        $mustLoad = (new ActionFileRules)->getMustLoadRule();
+        $mustLoad = Action::loadRule('file/must-load');
         $file = new UploadedFile([
             'name' => 'my-new-avatar.jpg',
             'type' => 'image/gif',
@@ -24,7 +24,7 @@ class ActionFileRulesTest extends TestCase
 
     public function testMustLoadRuleReturnsSuccessIfRuleIsFalseAndFileIsLoaded()
     {
-        $mustLoad = (new ActionFileRules)->getMustLoadRule();
+        $mustLoad = Action::loadRule('file/must-load');
         $file = new UploadedFile([
             'name' => 'my-new-avatar.jpg',
             'type' => 'image/gif',
@@ -38,7 +38,7 @@ class ActionFileRulesTest extends TestCase
 
     public function testMustLoadRuleReturnsSuccessIfRuleIsFalseAndFileIsNotLoaded()
     {
-        $mustLoad = (new ActionFileRules)->getMustLoadRule();
+        $mustLoad = Action::loadRule('file/must-load');
         $file = new UploadedFile([
             'name' => '',
             'type' => '',
@@ -52,7 +52,7 @@ class ActionFileRulesTest extends TestCase
 
     public function testMustLoadRuleReturnsFailIfRuleIsTrueAndFileIsNotLoaded()
     {
-        $mustLoad = (new ActionFileRules)->getMustLoadRule();
+        $mustLoad = Action::loadRule('file/must-load');
         $file = new UploadedFile([
             'name' => '',
             'type' => '',
@@ -66,7 +66,7 @@ class ActionFileRulesTest extends TestCase
 
     public function testMaxSizeRuleReturnsSuccessIfFileSizeIsMoreThanThatValue()
     {
-        $maxSize = (new ActionFileRules)->getMaxSizeRule();
+        $maxSize = Action::loadRule('file/max-size');
         $file = new UploadedFile([
             'name' => 'my-new-avatar.jpg',
             'type' => 'image/gif',
@@ -80,7 +80,7 @@ class ActionFileRulesTest extends TestCase
 
     public function testMaxSizeRuleReturnsFailIfFileSizeIsMoreThanThatValue()
     {
-        $maxSize = (new ActionFileRules)->getMaxSizeRule();
+        $maxSize = Action::loadRule('file/max-size');
         $file = new UploadedFile([
             'name' => 'my-new-avatar.jpg',
             'type' => 'image/gif',
@@ -94,7 +94,7 @@ class ActionFileRulesTest extends TestCase
 
     public function testMaxSizeRuleReturnsFailIfThereIsUploadIniSizeError()
     {
-        $maxSize = (new ActionFileRules)->getMaxSizeRule();
+        $maxSize = Action::loadRule('file/max-size');
         $file = new UploadedFile([
             'name' => 'my-new-avatar.jpg',
             'type' => 'image/gif',
@@ -108,7 +108,7 @@ class ActionFileRulesTest extends TestCase
 
     public function testMaxSizeRuleReturnsFailIfThereIsUploadHtmlFormSizeError()
     {
-        $maxSize = (new ActionFileRules)->getMaxSizeRule();
+        $maxSize = Action::loadRule('file/max-size');
         $file = new UploadedFile([
             'name' => 'my-new-avatar.jpg',
             'type' => 'image/gif',
@@ -122,7 +122,7 @@ class ActionFileRulesTest extends TestCase
 
     public function testTypeRuleReturnsSuccessIfTheFileHasThatType()
     {
-        $mime = (new ActionFileRules)->getMimeRule();
+        $mime = Action::loadRule('file/mime');
         $file = new File(ROOT_DIR . '/tests/config/some.json');
 
         $this->assertTrue($mime(['text/plain'], $file, new RuleResult)->isSuccess());

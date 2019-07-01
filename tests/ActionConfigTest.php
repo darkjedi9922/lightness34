@@ -2,11 +2,9 @@
 
 use PHPUnit\Framework\TestCase;
 use tests\engine\JsonValidatedAction;
-use frame\actions\rules\ActionBaseRules;
 use frame\actions\Action;
 use tests\engine\UserDeleteAction;
 use frame\actions\UploadedFile;
-use frame\actions\rules\ActionFileRules;
 use frame\actions\errors\NoRuleException;
 use frame\actions\errors\RuleCheckFailedException;
 
@@ -82,13 +80,9 @@ class ActionConfigTest extends TestCase
         $action = new JsonValidatedAction([], Action::NO_RULE_IGNORE);
         $action->setData(Action::ARGS, Action::TOKEN, $action->getExpectedToken());
 
-        // Методы классов ActionRules возвращают callback-функции, проверяющие
-        // переданные в них значения.
-        $rules = new ActionBaseRules();
-
         // addValidationRule устанавливает callback-функцию на ключевое слово 
         // правила, которое можно затем использовать в json-валидации.
-        $action->setRule('mandatory', $rules->getMandatoryRule());
+        $action->setRule('mandatory', Action::loadRule('base/mandatory'));
 
         $action->setConfig($this->jsonValidatedActionConfig);
 
@@ -124,9 +118,8 @@ class ActionConfigTest extends TestCase
         // проверку дальнейших правил для этого поля.
         $action->setConfig($this->jsonValidatedActionConfig);
         
-        $baseRules = new ActionBaseRules;
-        $action->setRule('emptiness', $baseRules->getEmptinessRule());
-        $action->setRule('min-length', $baseRules->getMinLengthRule());
+        $action->setRule('emptiness', Action::loadRule('base/emptiness'));
+        $action->setRule('min-length', Action::loadRule('base/min-length'));
         
         $action->setData('post', 'username', '');
         $action->exec();
@@ -142,9 +135,8 @@ class ActionConfigTest extends TestCase
         $action->setData(Action::ARGS, Action::TOKEN, $action->getExpectedToken());
         $action->setConfig($this->jsonValidatedActionConfig);
 
-        $baseRules = new ActionBaseRules;
-        $action->setRule('emptiness', $baseRules->getEmptinessRule());
-        $action->setRule('min-length', $baseRules->getMinLengthRule());
+        $action->setRule('emptiness', Action::loadRule('base/emptiness'));
+        $action->setRule('min-length', Action::loadRule('base/min-length'));
 
         $action->setData('post', 'username', 'Jed');
         $action->exec();
@@ -202,8 +194,7 @@ class ActionConfigTest extends TestCase
         $action->setData(Action::ARGS, Action::TOKEN, $action->getExpectedToken());
         $action->setConfig($this->jsonValidatedActionConfig);
 
-        $rules = new ActionBaseRules;
-        $action->setRule('max-length', $rules->getMaxLengthRule());
+        $action->setRule('max-length', Action::loadRule('base/max-length'));
 
         $this->expectException(RuleCheckFailedException::class);
 
@@ -247,10 +238,9 @@ class ActionConfigTest extends TestCase
 
     public function testRegexpRuleFindsErrorInWrongValue()
     {
-        $rules = new ActionBaseRules;
         $action = new JsonValidatedAction([], Action::NO_RULE_IGNORE);
         $action->setData(Action::ARGS, Action::TOKEN, $action->getExpectedToken());
-        $action->setRule('regexp', $rules->getRegexpRule());
+        $action->setRule('regexp', Action::loadRule('base/regexp'));
         $action->setConfig($this->jsonValidatedActionConfig);
 
         $action->setData('get', 'user_id', '008');
@@ -261,10 +251,9 @@ class ActionConfigTest extends TestCase
 
     public function testRegexpRuleDoesNotFindErrorInCorrectValue()
     {
-        $rules = new ActionBaseRules;
         $action = new JsonValidatedAction([], Action::NO_RULE_IGNORE);
         $action->setData(Action::ARGS, Action::TOKEN, $action->getExpectedToken());
-        $action->setRule('regexp', $rules->getRegexpRule());
+        $action->setRule('regexp', Action::loadRule('base/regexp'));
         $action->setConfig($this->jsonValidatedActionConfig);
 
         $action->setData('get', 'user_id', '007');
@@ -283,11 +272,10 @@ class ActionConfigTest extends TestCase
 
     public function testFileMaxSizeRuleCanFindOutError()
     {
-        $rules = new ActionFileRules;
         $action = new JsonValidatedAction([], Action::NO_RULE_IGNORE);
         $action->setData(Action::ARGS, Action::TOKEN, $action->getExpectedToken());
         $action->setConfig($this->jsonValidatedActionConfig);
-        $action->setRule('max-size', $rules->getMaxSizeRule());
+        $action->setRule('max-size', Action::loadRule('file/max-size'));
 
         $file = [
             'name' => 'my-new-avatar.jpg',
@@ -306,11 +294,10 @@ class ActionConfigTest extends TestCase
 
     public function testFileMaxSizeRuleCanFindOutSuccess()
     {
-        $rules = new ActionFileRules;
         $action = new JsonValidatedAction([], Action::NO_RULE_IGNORE);
         $action->setData(Action::ARGS, Action::TOKEN, $action->getExpectedToken());
         $action->setConfig($this->jsonValidatedActionConfig);
-        $action->setRule('max-size', $rules->getMaxSizeRule());
+        $action->setRule('max-size', Action::loadRule('file/max-size'));
 
         $file = [
             'name' => 'my-new-avatar.jpg',
