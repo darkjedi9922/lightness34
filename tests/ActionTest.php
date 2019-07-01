@@ -13,7 +13,7 @@ class ActionTest extends TestCase
     public function testUrl()
     {
         $get = [Action::ID => 'del', 'object' => 1, 'subject' => 21];
-        $action = new UserDeleteAction($get, Action::NO_RULE_IGNORE);
+        $action = new UserDeleteAction($get);
 
         $slash = '%255C'; // \ coded
         $and = '%3B'; // ; coded

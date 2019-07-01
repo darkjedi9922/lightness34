@@ -6,11 +6,7 @@ class UserDeleteAction extends Action
 {
     protected function initialize()
     {
-        $this->setRule('mandatory', Action::loadRule('base/mandatory'));
-        $this->setRule('emptiness', Action::loadRule('base/emptiness'));
-        
-        // Эта проверка в идеале выделена в другой класс и не имеет доступа к данным
-        // этого.
+        // Это правило в идеале выделено и не имеет доступа к данным этого.
         $this->setRule('userIdExists', function($rule, int $value, $result) {
             // Информация о пользователе берется из базы данных. Результат утрирован.
             if ($value === 1) $userInfo = ['id' => 1, 'login' => 'JustMortalUser'];
@@ -27,7 +23,7 @@ class UserDeleteAction extends Action
             return $result->succeed();
         });
 
-        // Эта проверка тоже в идеале выделена.
+        // Это правило тоже в идеале выделено.
         $this->setRule('canDeleteUserId', function($rule, $value, $result) {
             // Для работы этой проверки требуется промежуточные данные. Если их нет,
             // будет выброшено исключение.

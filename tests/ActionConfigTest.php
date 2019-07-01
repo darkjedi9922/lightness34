@@ -25,7 +25,8 @@ class ActionConfigTest extends TestCase
             "get" => [
                 "user_id" => [
                     "rules" => [
-                        "regexp" => "/007/"
+                        "base/emptiness" => true,
+                        "base/regexp" => "/007/"
                     ],
                     "default" => ["some-user"]
                 ]
@@ -33,19 +34,19 @@ class ActionConfigTest extends TestCase
             "post" => [
                 "username" => [
                     "rules" => [
-                        "mandatory" => true,
-                        "emptiness" => false,
-                        "min-length" => 4,
-                        "max-length" => 4
+                        "base/mandatory" => true,
+                        "base/emptiness" => false,
+                        "base/min-length" => 4,
+                        "base/max-length" => 4
                     ],
                     "errorRules" => [
-                        "max-length"
+                        "base/max-length"
                     ]
                 ],
                 "alter" => [
                     "default" => ["Doctor Who", "TARDIS"],
                     "rules" => [
-                        "mandatory" => true
+                        "base/mandatory" => true
                     ]
                 ],
                 "enemy" => [
@@ -56,7 +57,8 @@ class ActionConfigTest extends TestCase
                 "avatar" => [
                     "default" => ["no-avatar.jpg"],
                     "rules" => [
-                        "max-size" => [1, "MB"]
+                        "file/must-load" => false,
+                        "file/max-size" => [1, "MB"]
                     ]
                 ]
             ]
@@ -66,9 +68,9 @@ class ActionConfigTest extends TestCase
             "post" => [
                 "id" => [
                     "rules" => [
-                        "mandatory" => true,
-                            "emptiness" => false,
-                            "userIdExists" => true
+                        "base/mandatory" => true,
+                        "base/emptiness" => false,
+                        "userIdExists" => true
                     ]
                 ]
             ]
@@ -77,13 +79,8 @@ class ActionConfigTest extends TestCase
 
     public function testCallbackValidate()
     {
-        $action = new JsonValidatedAction([], Action::NO_RULE_IGNORE);
+        $action = new JsonValidatedAction;
         $action->setData(Action::ARGS, Action::TOKEN, $action->getExpectedToken());
-
-        // addValidationRule устанавливает callback-функцию на ключевое слово 
-        // правила, которое можно затем использовать в json-валидации.
-        $action->setRule('mandatory', Action::loadRule('base/mandatory'));
-
         $action->setConfig($this->jsonValidatedActionConfig);
 
         $action->exec();
@@ -95,7 +92,7 @@ class ActionConfigTest extends TestCase
 
     public function testRuleIsNotFoundRaisesError()
     {
-        $action = new JsonValidatedAction([], Action::NO_RULE_ERROR);
+        $action = new JsonValidatedAction;
         $action->setData(Action::ARGS, Action::TOKEN, $action->getExpectedToken());
         $action->setConfig($this->jsonValidatedActionConfig);
 
@@ -108,7 +105,7 @@ class ActionConfigTest extends TestCase
 
     public function testRuleHandlerCanStopRuleHandling()
     {
-        $action = new JsonValidatedAction([], Action::NO_RULE_IGNORE);
+        $action = new JsonValidatedAction;
         $action->setData(Action::ARGS, Action::TOKEN, $action->getExpectedToken());
 
         // По конфигу, поле username не должно быть пустым (правило emptiness).
@@ -117,9 +114,6 @@ class ActionConfigTest extends TestCase
         // Поэтому правило emptiness при своей обработке должно остановить 
         // проверку дальнейших правил для этого поля.
         $action->setConfig($this->jsonValidatedActionConfig);
-        
-        $action->setRule('emptiness', Action::loadRule('base/emptiness'));
-        $action->setRule('min-length', Action::loadRule('base/min-length'));
         
         $action->setData('post', 'username', '');
         $action->exec();
@@ -131,12 +125,9 @@ class ActionConfigTest extends TestCase
 
     public function testRuleHandlerMayNotStopRuleHandling()
     {
-        $action = new JsonValidatedAction([], Action::NO_RULE_IGNORE);
+        $action = new JsonValidatedAction;
         $action->setData(Action::ARGS, Action::TOKEN, $action->getExpectedToken());
         $action->setConfig($this->jsonValidatedActionConfig);
-
-        $action->setRule('emptiness', Action::loadRule('base/emptiness'));
-        $action->setRule('min-length', Action::loadRule('base/min-length'));
 
         $action->setData('post', 'username', 'Jed');
         $action->exec();
@@ -150,7 +141,7 @@ class ActionConfigTest extends TestCase
 
     public function testDefaultValue()
     {
-        $action = new JsonValidatedAction([], Action::NO_RULE_IGNORE);
+        $action = new JsonValidatedAction;
         $action->setConfig($this->jsonValidatedActionConfig);
 
         $this->assertEquals('Doctor Who', $action->getDataDefault('post', 'alter', false));
@@ -190,11 +181,9 @@ class ActionConfigTest extends TestCase
 
     public function testFailedRuleMayThrowException()
     {
-        $action = new JsonValidatedAction([], Action::NO_RULE_IGNORE);
+        $action = new JsonValidatedAction;
         $action->setData(Action::ARGS, Action::TOKEN, $action->getExpectedToken());
         $action->setConfig($this->jsonValidatedActionConfig);
-
-        $action->setRule('max-length', Action::loadRule('base/max-length'));
 
         $this->expectException(RuleCheckFailedException::class);
 
@@ -226,7 +215,7 @@ class ActionConfigTest extends TestCase
 
     public function testGetSetup()
     {
-        $action = new JsonValidatedAction([], Action::NO_RULE_IGNORE);
+        $action = new JsonValidatedAction;
         $action->setDataAll('get', ['arg1' => 1, 'arg2' => 2]);
         $action->setData('get', 'arg3', 3);
 
@@ -238,9 +227,8 @@ class ActionConfigTest extends TestCase
 
     public function testRegexpRuleFindsErrorInWrongValue()
     {
-        $action = new JsonValidatedAction([], Action::NO_RULE_IGNORE);
+        $action = new JsonValidatedAction;
         $action->setData(Action::ARGS, Action::TOKEN, $action->getExpectedToken());
-        $action->setRule('regexp', Action::loadRule('base/regexp'));
         $action->setConfig($this->jsonValidatedActionConfig);
 
         $action->setData('get', 'user_id', '008');
@@ -251,9 +239,8 @@ class ActionConfigTest extends TestCase
 
     public function testRegexpRuleDoesNotFindErrorInCorrectValue()
     {
-        $action = new JsonValidatedAction([], Action::NO_RULE_IGNORE);
+        $action = new JsonValidatedAction;
         $action->setData(Action::ARGS, Action::TOKEN, $action->getExpectedToken());
-        $action->setRule('regexp', Action::loadRule('base/regexp'));
         $action->setConfig($this->jsonValidatedActionConfig);
 
         $action->setData('get', 'user_id', '007');
@@ -264,7 +251,7 @@ class ActionConfigTest extends TestCase
 
     public function testReturnsDefaultGetValue()
     {
-        $action = new JsonValidatedAction([], Action::NO_RULE_IGNORE);
+        $action = new JsonValidatedAction;
         $action->setConfig($this->jsonValidatedActionConfig);
 
         $this->assertEquals('some-user', $action->getDataDefault('get', 'user_id'));
@@ -272,10 +259,9 @@ class ActionConfigTest extends TestCase
 
     public function testFileMaxSizeRuleCanFindOutError()
     {
-        $action = new JsonValidatedAction([], Action::NO_RULE_IGNORE);
+        $action = new JsonValidatedAction;
         $action->setData(Action::ARGS, Action::TOKEN, $action->getExpectedToken());
         $action->setConfig($this->jsonValidatedActionConfig);
-        $action->setRule('max-size', Action::loadRule('file/max-size'));
 
         $file = [
             'name' => 'my-new-avatar.jpg',
@@ -294,10 +280,9 @@ class ActionConfigTest extends TestCase
 
     public function testFileMaxSizeRuleCanFindOutSuccess()
     {
-        $action = new JsonValidatedAction([], Action::NO_RULE_IGNORE);
+        $action = new JsonValidatedAction;
         $action->setData(Action::ARGS, Action::TOKEN, $action->getExpectedToken());
         $action->setConfig($this->jsonValidatedActionConfig);
-        $action->setRule('max-size', Action::loadRule('file/max-size'));
 
         $file = [
             'name' => 'my-new-avatar.jpg',
@@ -316,7 +301,7 @@ class ActionConfigTest extends TestCase
     
     public function testFileDefaultValue()
     {
-        $action = new JsonValidatedAction([], Action::NO_RULE_IGNORE);
+        $action = new JsonValidatedAction;
         $action->setConfig($this->jsonValidatedActionConfig);
 
         $default = $action->getDataDefault('files', 'avatar');

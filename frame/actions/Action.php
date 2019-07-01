@@ -60,9 +60,6 @@ abstract class Action extends LatePropsObject
     const SUCCESS = 1;
     const FAIL = -1;
 
-    const NO_RULE_ERROR = 'error';
-    const NO_RULE_IGNORE = 'ignore';
-
     /**
      * Type of Action data.
      */
@@ -126,11 +123,6 @@ abstract class Action extends LatePropsObject
     private $ruleCallbacks = [];
 
     /**
-     * @var string
-     */
-    private $noRuleMode = self::NO_RULE_ERROR;
-
-    /**
      * @var array [type => [field => [name => [value]]]]
      */
     private $interData = [];
@@ -140,13 +132,12 @@ abstract class Action extends LatePropsObject
      * не установлен механизм обработки правила. Значения: 'error' (выбрасывает
      * исключение типа NoRuleError) или 'ignore' (пропускает правило).
      */
-    public static function fromTriggerUrl(string $actionArg, 
-        $noRuleMode = self::NO_RULE_ERROR): Action
+    public static function fromTriggerUrl(string $actionArgs): Action
     {
-        $args = http_parse_query($actionArg, ';');
+        $args = http_parse_query($actionArgs, ';');
         $class = $args[self::TYPE];
 
-        $action = new $class($args, $noRuleMode);
+        $action = new $class($args);
         $action->setDataAll(Action::ARGS, $args);
         $action->setDataAll(Action::POST, $_POST);
         $action->setDataAll(Action::FILES, array_map(function ($filedata) {
@@ -164,8 +155,7 @@ abstract class Action extends LatePropsObject
         return $action;
     }
 
-    /** @return callable|null */
-    public static function loadRule(string $rule)
+    public static function loadRule(string $rule): ?callable
     {
         $file = ROOT_DIR . '/rules/' . $rule . '.php';
         if (file_exists($file)) return require($file);
@@ -178,13 +168,10 @@ abstract class Action extends LatePropsObject
      * не установлен механизм обработки правила. Значения: 'error' (выбрасывает
      * исключение типа NoRuleError) или 'ignore' (пропускает правило).
      */
-    public function __construct(
-        $get = [],
-        $noRuleMode = self::NO_RULE_ERROR)
+    public function __construct(array $args = [])
     {
         $this->app = Core::$app;
-        $this->noRuleMode = $noRuleMode;
-        $this->setDataAll(self::ARGS, $get);
+        $this->setDataAll(self::ARGS, $args);
         $this->load();
     }
 
@@ -409,20 +396,16 @@ abstract class Action extends LatePropsObject
     }
 
     /**
-     * @param string $rule
-     * @return callable|null
-     * @throws NoRuleException Если обработчик правила не установлен при условии, 
-     * если флаг noRuleMode для экшна задан как error.
+     * Сначала ищет правило среди напрямую установленных в объект экшна правил, а
+     * потом, если не находит, загружает его из директории с правилами.
+     * @throws NoRuleException Если обработчик правила не установлен и не найден.
      */
-    public function getRuleCallback($rule)
+    public function getRuleCallback(string $rule): callable
     {
-        if (!isset($this->ruleCallbacks[$rule])) {
-            if ($this->noRuleMode == self::NO_RULE_ERROR) 
-                throw new NoRuleException($rule);
-            return null;
-        }
-
-        return $this->ruleCallbacks[$rule];
+        if (isset($this->ruleCallbacks[$rule])) return $this->ruleCallbacks[$rule];
+        $callback = Action::loadRule($rule);
+        if (!$callback) throw new NoRuleException($rule);
+        return $callback;
     }
 
     public function getExpectedToken(): string
@@ -560,13 +543,10 @@ abstract class Action extends LatePropsObject
     /**
      * Возвращает массив вида ['field' => ['rule1', 'rule2']] с именами
      * правил валидации данных соответствующего типа из конфига.
-     * 
-     * @param string $type get|post.
-     * @return array
      * @throws NoRuleError|RuleCheckFailedException Подробнее в описании классов 
      * этих исключений.
      */
-    private function ruleValidate($type)
+    private function ruleValidate(string $type): array
     {
         $errors = [];
         if (!isset($this->config[$type])) return $errors;
@@ -575,8 +555,8 @@ abstract class Action extends LatePropsObject
         $this->interData[$type] = [];
 
         // Проходимся по каждому полю
-        foreach ($this->config[$type] as $field => $rules) {
-
+        foreach ($this->config[$type] as $field => $rules) 
+        {
             $this->interData[$type][$field] = [];
 
             // Правил может не быть.
@@ -588,9 +568,6 @@ abstract class Action extends LatePropsObject
             // Проходимся по каждому правилу проверок поля
             foreach ($rules['rules'] as $rule => $ruleValue) {
                 $check = $this->getRuleCallback($rule);
-                // При noRuleMode = ignore, метод вернет null, иначе будет выброшено
-                // исключение еще в getRuleCallback.
-                if (!$check) continue;
 
                 // Т.к. для всей цепочки проверок правила используется один и тот
                 // же экземпляр класса, перед каждой обработкой необходимо

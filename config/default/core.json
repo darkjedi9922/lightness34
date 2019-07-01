@@ -13,6 +13,5 @@
     "database.host": "localhost",
     "database.username": "root",
     "database.password": "",
-    "database.dbname": "lightness",
-    "actions.noRuleMode": "error"
+    "database.dbname": "lightness"
 }
