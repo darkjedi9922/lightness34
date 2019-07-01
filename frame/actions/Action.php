@@ -279,16 +279,14 @@ abstract class Action extends LatePropsObject
     }
 
     /**
-     * @param Router $router Устройство заданного роутера будет использовано для 
-     * построения url.
      * @return string Триггерное url на выполнение экшна
      */
-    public final function getUrl($router)
+    public final function getUrl()
     {
         $queryData = $this->data[Action::ARGS];
         $queryData[self::TOKEN] = $this->getExpectedToken();
         $action = http_build_query($queryData, '', ';');
-        return $router->toUrl(['action' => $action]);
+        return Router::toUrlOf('', ['action' => $action]);
     }
 
     /**

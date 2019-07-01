@@ -18,4 +18,4 @@ Hello <?= $this->app->config->{'site.name'} ?><br>
 <?= $block ?>
 The answer is <?= $answer ?><br>
 Your client id: <?= Client::getId() ?><br>
-<a href="<?= $action->getUrl($this->app->router) ?>">Action link</a><br>
+<a href="<?= $action->getUrl() ?>">Action link</a><br>

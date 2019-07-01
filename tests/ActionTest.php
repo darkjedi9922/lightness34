@@ -24,7 +24,7 @@ class ActionTest extends TestCase
             "_type${equals}tests${slash}engine${slash}UserDeleteAction${and}".
             "_csrf${equals}{$action->getExpectedToken()}";
 
-        $this->assertEquals($url, $action->getUrl(new Router));
+        $this->assertEquals($url, $action->getUrl());
     }
 
     /**
@@ -32,13 +32,12 @@ class ActionTest extends TestCase
      */
     public function testCreatesFromTriggerUrl()
     {
-        $triggerRouter = new Router;
         $triggerAction = new UserDeleteAction(['answer' => 42], 'del');
-        $triggerUrl = $triggerAction->getUrl($triggerRouter);
+        $triggerUrl = $triggerAction->getUrl();
         
         $execRouter = new Router($triggerUrl);
         $execAction = Action::fromTriggerUrl($execRouter->getArg('action'));
-        $execUrl = $execAction->getUrl($execRouter);
+        $execUrl = $execAction->getUrl();
 
         // Если Action правильно создался из триггерного запроса, то их запросы
         // должны совпасть.

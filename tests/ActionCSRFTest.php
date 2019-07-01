@@ -13,12 +13,11 @@ class ActionCSRFTest extends TestCase
      */
     public function testExpectedTokenIsGottenInTheTriggerUrl()
     {
-        $router = new Router;
         $triggerAction = new UserDeleteAction;
         $triggerToken = $triggerAction->getExpectedToken();
-        $url = $triggerAction->getUrl($router);
+        $url = $triggerAction->getUrl();
 
-        $router->setUrl($url);
+        $router = new Router($url);
         $execAction = UserDeleteAction::fromTriggerUrl($router->getArg('action'));
         $execToken = $execAction->getData(Action::ARGS, Action::TOKEN);
 
