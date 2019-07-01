@@ -81,13 +81,6 @@ abstract class Action extends LatePropsObject
     const VALIDATION_CONFIG_FOLDER = 'public/actions';
 
     /**
-     * @var Action|null Текущий активированный экшн.
-     * Определяется при срабатывании ActionMacro.
-     * Используется в служебных целях фреймворка.
-     */
-    public static $_current = null;
-
-    /**
      * @var Core Ссылка на экземпляр приложения для удобства
      */
     public $app;
@@ -139,25 +132,6 @@ abstract class Action extends LatePropsObject
     private $interData = [];
 
     /**
-     * @param array $get Параметры экшна.
-     * @return static
-     */
-    public static function instance($get = [])
-    {
-        if (isset(self::$_current) 
-            && get_class(self::$_current) === static::class 
-            && self::$_current->getData(self::ARGS, self::ID) === 
-                $get[self::ID])
-        { 
-            return self::$_current;
-        }
-
-        $noRuleMode = Core::$app->config->{'actions.noRuleMode'};
-        $action = new static($get, $noRuleMode);
-        return $action;
-    }
-
-    /**
      * @param string $noRuleMode Что делать, если для конфиг-валидации экшна в экшне
      * не установлен механизм обработки правила. Значения: 'error' (выбрасывает
      * исключение типа NoRuleError) или 'ignore' (пропускает правило).
@@ -187,12 +161,6 @@ abstract class Action extends LatePropsObject
     }
 
     /**
-     * Warning: Создание объекта непосредственно через конструктор создает отдельный
-     * независимый экземпляр экшна, независимо от состояния всего приложения. 
-     * Это больше подходит для тестирования. Для получения экземпляра экшна при
-     * работе приложения (с инициализированным Core) требуется использовать
-     * статический метод instance().
-     * 
      * @param array $get Параметры экшна.
      * @param string $noRuleMode Что делать, если для конфиг-валидации экшна в экшне
      * не установлен механизм обработки правила. Значения: 'error' (выбрасывает
