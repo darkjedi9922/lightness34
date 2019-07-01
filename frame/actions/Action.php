@@ -338,17 +338,13 @@ abstract class Action extends LatePropsObject
         if (empty_recursive($this->errors)) {
             $this->succeed();
             $this->status = self::SUCCESS;
-            if ($this->getSuccessRedirect() !== null) {
-                $this->save();
-                Response::setUrl(Router::toUrlOf($this->getSuccessRedirect()));
-            }
+            $this->save();
+            Response::setUrl(Router::toUrlOf($this->getSuccessRedirect()));
         } else {
             $this->fail();
             $this->status = self::FAIL;
-            if ($this->getFailRedirect() !== null) {
-                $this->save();
-                Response::setUrl(Router::toUrlOf($this->getFailRedirect()));
-            }
+            $this->save();
+            Response::setUrl(Router::toUrlOf($this->getFailRedirect()));
         }
     }
 
@@ -512,12 +508,9 @@ abstract class Action extends LatePropsObject
 
     /**
      * Возвращает адрес веб-страницы, на которую нужно перейти после успешного
-     * (без ошибок во время валидации данных) завершения экшна или null, 
-     * если не нужно никуда переходить.
-     * 
-     * @return string|null
+     * (без ошибок во время валидации данных) завершения экшна.
      */
-    protected function getSuccessRedirect()
+    protected function getSuccessRedirect(): string
     {
         if (Request::hasReferer()) return Request::getReferer();
         else return '/';
@@ -525,17 +518,12 @@ abstract class Action extends LatePropsObject
 
     /**
      * Возвращает адрес веб-страницы, на которую нужно перейти после неудачного
-     * (с ошибками во время валидации данных) завершения экшна или null, 
-     * если не нужно никуда переходить.
-     * 
-     * @return string|null
+     * (с ошибками во время валидации данных) завершения экшна.
      */
-    protected function getFailRedirect()
+    protected function getFailRedirect(): string
     {
-        if (Core::$app->config->{'actions.defaultFailRedirectMode'} === 'back') {
-            if (Request::hasReferer()) return Request::getReferer();
-            else return '/';
-        } else return null;
+        if (Request::hasReferer()) return Request::getReferer();
+        else return '/';
     }
 
     private function getIdName(): string

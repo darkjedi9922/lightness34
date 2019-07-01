@@ -13,14 +13,4 @@ class JsonValidatedAction extends Action
 
         // Some actions ...
     }
-
-    protected function getSuccessRedirect()
-    {
-        return null;
-    }
-
-    protected function getFailRedirect()
-    {
-        return null;
-    }
 }

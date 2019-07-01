@@ -49,14 +49,4 @@ class UserDeleteAction extends Action
             // переменная действительно была установлена и ее правда можно получить.
             throw new \Exception('deletedUser должен был быть установлен.');
     }
-
-    protected function getSuccessRedirect()
-    {
-        return null;
-    }
-
-    protected function getFailRedirect()
-    {
-        return null;
-    }
 }

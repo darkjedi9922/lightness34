@@ -14,6 +14,5 @@
     "database.username": "root",
     "database.password": "",
     "database.dbname": "lightness",
-    "actions.defaultFailRedirectMode": null,
     "actions.noRuleMode": "error"
 }
