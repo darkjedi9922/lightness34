@@ -53,7 +53,7 @@ Clone the git project and create a new virtual host like you usually do.
 cd tests
 
 # Run all the tests using PHPUnit.
-phpunit --bootstrap __bootstrap.php .
+phpunit --bootstrap tests/__bootstrap.php tests
 ```
 
 ## Versioning
