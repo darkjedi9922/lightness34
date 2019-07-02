@@ -15,7 +15,6 @@ use frame\actions\UploadedFile;
 
 use function lightlib\encode_specials;
 use function lightlib\empty_recursive;
-use function lightlib\http_parse_query;
 use frame\tools\Client;
 use frame\errors\HttpError;
 
@@ -75,9 +74,8 @@ abstract class Action extends LatePropsObject
      * ID нужен, если на одной странице используется несколько экшнов одного типа 
      * с разными параметрами, чтобы понимать какой из них выполнять.
      */
-    const ID = '_id';
-    const TYPE = '_type';
-    const TOKEN = '_csrf';
+    const ID = 'action';
+    const TOKEN = 'csrf';
 
     const VALIDATION_CONFIG_FOLDER = 'public/actions';
 
@@ -127,26 +125,19 @@ abstract class Action extends LatePropsObject
      */
     private $interData = [];
 
-    /**
-     * @param string $noRuleMode Что делать, если для конфиг-валидации экшна в экшне
-     * не установлен механизм обработки правила. Значения: 'error' (выбрасывает
-     * исключение типа NoRuleError) или 'ignore' (пропускает правило).
-     */
-    public static function fromTriggerUrl(string $actionArgs): Action
+    public static function fromTriggerUrl(string $url): Action
     {
-        $args = http_parse_query($actionArgs, ';');
-        $class = $args[self::TYPE];
+        $router = new Router($url);
+        $type = $router->pagename;
+        $class = '\\' . str_replace('/', '\\', $type);
 
-        $action = new $class($args);
-        $action->setDataAll(Action::ARGS, $args);
+        $action = new $class($router->args);
         $action->setDataAll(Action::POST, $_POST);
         $action->setDataAll(Action::FILES, array_map(function ($filedata) {
             return new UploadedFile($filedata);
         }, $_FILES));
 
-        $class = get_class($action);
-        $classPath = str_replace('\\', '/', $class);
-        $configFile = self::VALIDATION_CONFIG_FOLDER . '/' . $classPath . '.json';
+        $configFile = self::VALIDATION_CONFIG_FOLDER . '/' . $type . '.json';
         if (file_exists($configFile)) {
             $config = new Json($configFile);
             $action->setConfig($config->getData());
@@ -182,12 +173,6 @@ abstract class Action extends LatePropsObject
      */
     public function setDataAll($type, $data)
     {
-        if ($type === self::ARGS) $data = array_merge($data, [
-            self::ID => $data[self::ID] ?? '',
-            self::TYPE => static::class,
-            self::TOKEN => $data[self::TOKEN] ?? ''
-        ]);
-
         $safeValue = ($type === self::FILES ? $data : encode_specials($data));
         $this->data[$type] = $safeValue;
     }
@@ -282,10 +267,10 @@ abstract class Action extends LatePropsObject
      */
     public final function getUrl()
     {
-        $queryData = $this->data[Action::ARGS];
-        $queryData[self::TOKEN] = $this->getExpectedToken();
-        $action = http_build_query($queryData, '', ';');
-        return Router::toUrlOf('', ['action' => $action]);
+        $get = array_merge($this->data[Action::ARGS], [
+            self::TOKEN => $this->getExpectedToken(),
+        ]);
+        return Router::toUrlOf('/' . str_replace('\\', '/', static::class), $get);
     }
 
     /**
@@ -294,7 +279,7 @@ abstract class Action extends LatePropsObject
      */
     public final function exec()
     {
-        $this->assertToken($this->data[self::ARGS][self::TOKEN]);
+        $this->assertToken($this->data[self::ARGS][self::TOKEN] ?? '');
         $this->initialize();
         $this->errors[self::ARGS] = $this->ruleValidate(self::ARGS);
         $this->errors[self::POST] = $this->ruleValidate(self::POST);
@@ -489,9 +474,7 @@ abstract class Action extends LatePropsObject
 
     private function getIdName(): string
     {
-        $id = $this->data[self::ARGS][self::ID];
-        $type = $this->data[self::ARGS][self::TYPE];
-        return $id . '_' . $type;
+        return static::class . '_' . ($this->data[self::ARGS][self::ID] ?? '');
     }
 
     /**
