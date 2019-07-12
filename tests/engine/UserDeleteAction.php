@@ -7,7 +7,9 @@ class UserDeleteAction extends Action
     protected function initialize()
     {
         // Это правило в идеале выделено и не имеет доступа к данным этого.
-        $this->setRule('userIdExists', function($rule, int $value, $result) {
+        $this->getRules()->setRuleCallback('userIdExists', 
+            function($rule, int $value, $result) 
+        {
             // Информация о пользователе берется из базы данных. Результат утрирован.
             if ($value === 1) $userInfo = ['id' => 1, 'login' => 'JustMortalUser'];
             else $userInfo = null;
@@ -24,7 +26,9 @@ class UserDeleteAction extends Action
         });
 
         // Это правило тоже в идеале выделено.
-        $this->setRule('canDeleteUserId', function($rule, $value, $result) {
+        $this->getRules()->setRuleCallback('canDeleteUserId', 
+            function($rule, $value, $result) 
+        {
             // Для работы этой проверки требуется промежуточные данные. Если их нет,
             // будет выброшено исключение.
             $userInfo = $result->requireInterData('user');

@@ -347,16 +347,9 @@ abstract class Action extends LatePropsObject
         return $this->config;
     }
 
-    /** @see Rules::setRuleCallback */
-    public function setRule(string $name, callable $callback)
+    public function getRules(): Rules
     {
-        $this->rules->setRuleCallback($name, $callback);
-    }
-
-    /** @see Rules::getRuleCallback */
-    public function getRuleCallback(string $rule): callable
-    {
-        return $this->rules->getRuleCallback($rule);
+        return $this->rules;
     }
 
     public function getExpectedToken(): string
@@ -516,7 +509,7 @@ abstract class Action extends LatePropsObject
 
             // Проходимся по каждому правилу проверок поля
             foreach ($rules['rules'] as $rule => $ruleValue) {
-                $check = $this->getRuleCallback($rule);
+                $check = $this->rules->getRuleCallback($rule);
 
                 // Т.к. для всей цепочки проверок правила используется один и тот
                 // же экземпляр класса, перед каждой обработкой необходимо

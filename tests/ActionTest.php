@@ -3,12 +3,13 @@
 use PHPUnit\Framework\TestCase;
 use tests\engine\UserDeleteAction;
 use frame\actions\Action;
+use frame\rules\Rules;
 
+/**
+ * @runTestsInSeparateProcesses
+ */
 class ActionTest extends TestCase
 {
-    /**
-     * @runInSeparateProcess
-     */
     public function testUrl()
     {
         $get = [Action::ID => 'del', 'object' => 1, 'subject' => 21];
@@ -20,9 +21,6 @@ class ActionTest extends TestCase
         $this->assertEquals($url, $action->getUrl());
     }
 
-    /**
-     * @runInSeparateProcess
-     */
     public function testCreatesFromTriggerUrl()
     {
         $triggerAction = new UserDeleteAction(['answer' => 42], 'del');
@@ -34,5 +32,11 @@ class ActionTest extends TestCase
         // Если Action правильно создался из триггерного запроса, то их запросы
         // должны совпасть.
         $this->assertEquals($triggerUrl, $execUrl);
+    }
+
+    public function testActionRulesObjectIsAccessibleJustAfterActionCreating()
+    {
+        $action = new UserDeleteAction;
+        $this->assertInstanceOf(Rules::class, $action->getRules());
     }
 }
