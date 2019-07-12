@@ -117,14 +117,11 @@ abstract class Action extends LatePropsObject
     private $config = null;
 
     /**
-     * @var array Ассоциативный массив вида [string => callable]
-     */
-    private $ruleCallbacks = [];
-
-    /**
      * @var array [type => [field => [name => [value]]]]
      */
     private $interData = [];
+
+    private $rules;
 
     public static function fromTriggerUrl(string $url): Action
     {
@@ -158,6 +155,7 @@ abstract class Action extends LatePropsObject
         $this->app = Core::$app;
         $this->setDataAll(self::ARGS, $args);
         $this->load();
+        $this->rules = new Rules;
     }
 
     /**
@@ -349,42 +347,16 @@ abstract class Action extends LatePropsObject
         return $this->config;
     }
 
-    /**
-     * Устанавливает callback-функцию, которая будет вызываться при проверке
-     * поля, заданной в json-настройках валидации.
-     * 
-     * Callback-функция вида (mixed $rule, $mixed $value): bool,
-     * где $rule - значение правила, $value - проверяемое значение. Если проверяемого
-     * значения изначально нет, будет передано null. Callback возвращает true, если
-     * проверка пройдена, иначе false.
-     * 
-     * Если проверка не пройдена, в post errors добавится имя ошибки, равное $name.
-     * Но вместо этого может быть выброшено исключение.
-     * @see RuleCheckFailedException.
-     * 
-     * При этом callback может выбросить исключение StopRuleException с результатом
-     * проверки.
-     * @see StopRuleException.
-     * 
-     * @param string $name Имя проверки
-     * @param callable $callback
-     */
-    public function setRule($name, $callback)
+    /** @see Rules::setRuleCallback */
+    public function setRule(string $name, callable $callback)
     {
-        $this->ruleCallbacks[$name] = $callback;
+        $this->rules->setRuleCallback($name, $callback);
     }
 
-    /**
-     * Сначала ищет правило среди напрямую установленных в объект экшна правил, а
-     * потом, если не находит, загружает его из директории с правилами.
-     * @throws NoRuleException Если обработчик правила не установлен и не найден.
-     */
+    /** @see Rules::getRuleCallback */
     public function getRuleCallback(string $rule): callable
     {
-        if (isset($this->ruleCallbacks[$rule])) return $this->ruleCallbacks[$rule];
-        $callback = Rules::loadRule($rule);
-        if (!$callback) throw new NoRuleException($rule);
-        return $callback;
+        return $this->rules->getRuleCallback($rule);
     }
 
     public function getExpectedToken(): string
