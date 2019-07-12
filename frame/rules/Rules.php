@@ -1,6 +1,7 @@
 <?php namespace frame\rules;
 
-use frame\actions\errors\NoRuleException;
+use frame\rules\errors\NoRuleException;
+use frame\actions\RuleResult;
 
 class Rules
 {

@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 use frame\rules\Rules;
-use frame\actions\errors\NoRuleException;
+use frame\rules\errors\NoRuleException;
 
 class RulesTest extends TestCase
 {

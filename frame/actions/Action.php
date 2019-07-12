@@ -6,9 +6,8 @@ use frame\route\Router;
 use frame\route\Request;
 use frame\route\Response;
 use frame\actions\RuleResult;
-use frame\actions\errors\NoRuleException;
-use frame\actions\errors\RuleRuntimeException;
-use frame\actions\errors\RuleCheckFailedException;
+use frame\rules\errors\RuleRuntimeException;
+use frame\rules\errors\RuleCheckFailedException;
 use frame\tools\transmitters\SessionTransmitter;
 use frame\config\Json;
 use frame\actions\UploadedFile;
@@ -520,7 +519,8 @@ abstract class Action extends LatePropsObject
                 // Каждая проверка должна вернуть результат с одним из двух
                 // состояний: провал и успех.
                 if (!$result || !$result->hasResult()) 
-                    throw new RuleRuntimeException($this, $type, $field, $rule, 
+                    throw new RuleRuntimeException($this->rules, 
+                        "${type}$${field}", $rule, 
                         'Rule result state has not changed.');
 
                 if ($result->isFail()) $this->_setError($type, $errors, $field, $rule);
@@ -540,7 +540,8 @@ abstract class Action extends LatePropsObject
         if (isset($this->config[$type][$field]['errorRules'])
             && in_array($rule, $this->config[$type][$field]['errorRules']))
         {
-            throw new RuleCheckFailedException($this, $type, $field, $rule);
+            throw new RuleCheckFailedException($this->rules, 
+                "${type}$${field}", $rule);
         }
 
         if (!isset($errors[$field])) $errors[$field] = [];

@@ -1,4 +1,6 @@
-<?php namespace frame\actions\errors;
+<?php namespace frame\rules\errors;
+
+use frame\rules\errors\RuleException;
 
 class NoRuleException extends RuleException
 {

@@ -4,9 +4,8 @@ use PHPUnit\Framework\TestCase;
 use tests\engine\JsonValidatedAction;
 use frame\actions\Action;
 use tests\engine\UserDeleteAction;
-use frame\actions\UploadedFile;
-use frame\actions\errors\NoRuleException;
-use frame\actions\errors\RuleCheckFailedException;
+use frame\rules\errors\NoRuleException;
+use frame\rules\errors\RuleCheckFailedException;
 
 /**
  * `Run in separate process` заглушает сообщения вида `headers already sent`, когда
