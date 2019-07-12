@@ -17,6 +17,7 @@ use function lightlib\encode_specials;
 use function lightlib\empty_recursive;
 use frame\tools\Client;
 use frame\errors\HttpError;
+use frame\rules\Rules;
 
 /**
  * Класс служит для обработки форм, но можно использовать для запуска
@@ -144,13 +145,6 @@ abstract class Action extends LatePropsObject
         }
 
         return $action;
-    }
-
-    public static function loadRule(string $rule): ?callable
-    {
-        $file = ROOT_DIR . '/rules/' . $rule . '.php';
-        if (file_exists($file)) return require($file);
-        return null;
     }
 
     /**
@@ -388,7 +382,7 @@ abstract class Action extends LatePropsObject
     public function getRuleCallback(string $rule): callable
     {
         if (isset($this->ruleCallbacks[$rule])) return $this->ruleCallbacks[$rule];
-        $callback = Action::loadRule($rule);
+        $callback = Rules::loadRule($rule);
         if (!$callback) throw new NoRuleException($rule);
         return $callback;
     }
