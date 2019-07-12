@@ -25,8 +25,7 @@ class ActionConfigTest extends TestCase
             "get" => [
                 "user_id" => [
                     "rules" => [
-                        "base/emptiness" => true,
-                        "base/regexp" => "/007/"
+                        "base/emptiness" => true
                     ],
                     "default" => ["some-user"]
                 ]
@@ -57,8 +56,7 @@ class ActionConfigTest extends TestCase
                 "avatar" => [
                     "default" => ["no-avatar.jpg"],
                     "rules" => [
-                        "file/must-load" => false,
-                        "file/max-size" => [1, "MB"]
+                        "file/must-load" => false
                     ]
                 ]
             ]
@@ -225,78 +223,12 @@ class ActionConfigTest extends TestCase
         $this->assertEquals(null, $action->getData('get', 'arg4'));
     }
 
-    public function testRegexpRuleFindsErrorInWrongValue()
-    {
-        $action = new JsonValidatedAction;
-        $action->setData(Action::ARGS, Action::TOKEN, $action->getExpectedToken());
-        $action->setConfig($this->jsonValidatedActionConfig);
-
-        $action->setData('get', 'user_id', '008');
-        $action->exec();
-
-        $this->assertTrue($action->hasDataError('get', 'user_id', 'regexp'));
-    }
-
-    public function testRegexpRuleDoesNotFindErrorInCorrectValue()
-    {
-        $action = new JsonValidatedAction;
-        $action->setData(Action::ARGS, Action::TOKEN, $action->getExpectedToken());
-        $action->setConfig($this->jsonValidatedActionConfig);
-
-        $action->setData('get', 'user_id', '007');
-        $action->exec();
-
-        $this->assertFalse($action->hasDataError('get', 'user_id', 'regexp'));
-    }
-
     public function testReturnsDefaultGetValue()
     {
         $action = new JsonValidatedAction;
         $action->setConfig($this->jsonValidatedActionConfig);
 
         $this->assertEquals('some-user', $action->getDataDefault('get', 'user_id'));
-    }
-
-    public function testFileMaxSizeRuleCanFindOutError()
-    {
-        $action = new JsonValidatedAction;
-        $action->setData(Action::ARGS, Action::TOKEN, $action->getExpectedToken());
-        $action->setConfig($this->jsonValidatedActionConfig);
-
-        $file = [
-            'name' => 'my-new-avatar.jpg',
-            'type' => 'image/gif',
-            'size' => 1024 * 1024 * 1024, // 1 GB
-            'tmp_name' => '',
-            'error' => UploadedFile::UPLOAD_ERR_OK
-        ];
-        $action->setData($action::FILES, 'avatar', new UploadedFile($file));
-
-        $action->exec();
-
-        $hasError = $action->hasDataError($action::FILES, 'avatar', 'max-size');
-        $this->assertTrue($hasError);
-    }
-
-    public function testFileMaxSizeRuleCanFindOutSuccess()
-    {
-        $action = new JsonValidatedAction;
-        $action->setData(Action::ARGS, Action::TOKEN, $action->getExpectedToken());
-        $action->setConfig($this->jsonValidatedActionConfig);
-
-        $file = [
-            'name' => 'my-new-avatar.jpg',
-            'type' => 'image/gif',
-            'size' => 1024 * 1024, // 1 MB
-            'tmp_name' => '',
-            'error' => UploadedFile::UPLOAD_ERR_OK
-        ];
-        $action->setData($action::FILES, 'avatar', new UploadedFile($file));
-
-        $action->exec();
-
-        $hasError = $action->hasDataError($action::FILES, 'avatar', 'max-size');
-        $this->assertFalse($hasError);
     }
     
     public function testFileDefaultValue()

@@ -6,7 +6,7 @@ use frame\actions\RuleResult;
 use frame\rules\Rules;
 use frame\tools\File;
 
-class ActionFileRulesTest extends TestCase
+class FileRulesTest extends TestCase
 {
     public function testMustLoadRuleReturnsSuccessIfRuleIsTrueAndFileIsLoaded()
     {
