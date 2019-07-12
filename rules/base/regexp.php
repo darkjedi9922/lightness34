@@ -1,6 +1,6 @@
 <?php
 
-use frame\actions\RuleResult;
+use frame\rules\RuleResult;
 
 /**
  * Проверяет на совпадение значения с регулярным выражением.

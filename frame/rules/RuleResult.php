@@ -1,4 +1,4 @@
-<?php namespace frame\actions;
+<?php namespace frame\rules;
 
 /**
  * Экземпляр этого класса передается по цепочке обработчиков правил поля экшна. 

@@ -5,7 +5,7 @@ use frame\LatePropsObject;
 use frame\route\Router;
 use frame\route\Request;
 use frame\route\Response;
-use frame\actions\RuleResult;
+use frame\rules\RuleResult;
 use frame\rules\errors\RuleRuntimeException;
 use frame\rules\errors\RuleCheckFailedException;
 use frame\tools\transmitters\SessionTransmitter;

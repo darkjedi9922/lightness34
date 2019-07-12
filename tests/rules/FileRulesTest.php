@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 use frame\actions\UploadedFile;
-use frame\actions\RuleResult;
+use frame\rules\RuleResult;
 use frame\rules\Rules;
 use frame\tools\File;
 

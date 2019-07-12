@@ -1,7 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use frame\actions\RuleResult;
+use frame\rules\RuleResult;
 use frame\rules\Rules;
 
 class BaseRulesTest extends TestCase

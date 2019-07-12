@@ -1,6 +1,6 @@
 <?php
 
-use frame\actions\RuleResult;
+use frame\rules\RuleResult;
 
 /**
  * Обязательно ли поле для передачи (true|false).

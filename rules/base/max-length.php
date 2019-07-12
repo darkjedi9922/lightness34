@@ -1,6 +1,6 @@
 <?php
 
-use frame\actions\RuleResult;
+use frame\rules\RuleResult;
 
 /**
  * Проверяет максимальную длинну поля (с заданным int значением).
