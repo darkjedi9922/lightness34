@@ -5,6 +5,20 @@ use frame\views\Value;
 use frame\tools\Client;
 use engine\HelloAction;
 use frame\actions\Action;
+use frame\rules\RouteRules;
+
+$rules = new RouteRules($this->app->router, [
+    'login' => [
+        'rules' => [
+            // Параметр login может быть не задан.
+            'base/mandatory' => false,
+            // Но если он задан, он не должен быть пустым.
+            'base/emptiness' => false
+        ]
+    ]
+]);
+// Если правила не выполняются, возникнет ошибка 404.
+$rules->assert();
 
 $this->setLayout('page');
 $this->setMetaArray(['name' => $this->file]);

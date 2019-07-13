@@ -6,9 +6,7 @@ class Rules
 {
     const RULE_DIR = ROOT_DIR . '/rules';
 
-    /**
-     * @var array Ассоциативный массив вида [string => callable]
-     */
+    /** @var array Ассоциативный массив вида [string => callable] */
     private $ruleCallbacks = [];
 
     public static function loadRule(string $rule): ?callable
