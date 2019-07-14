@@ -145,6 +145,12 @@ class Rules
         }
     }
 
+    public function hasError(string $field, string $rule): bool
+    {
+        return isset($this->errors[$field])
+            && in_array($rule, $this->errors[$field]);
+    }
+
     /** @return mixed|null */
     public function getInterData(string $field, string $data)
     {

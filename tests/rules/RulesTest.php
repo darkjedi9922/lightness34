@@ -49,4 +49,25 @@ class RulesTest extends TestCase
         $rules = new Rules;
         $rules->getRuleCallback('non/existence/rule');
     }
+
+    public function testValidatesAndSavesTheErrors()
+    {
+        $rules = new Rules(['login' => 'mortal'], [
+            'login' => [
+                'rules' => [
+                    'base/equals' => 'admin'
+                ]
+            ]
+        ]);
+
+        $rules->validate();
+
+        $this->assertTrue($rules->hasError('login', 'base/equals'));
+    }
+
+    public function testHasNoInterDataBeforeValidation()
+    {
+        $rules = new Rules;
+        $this->assertNull($rules->getInterData('login', 'user'));
+    }
 }
