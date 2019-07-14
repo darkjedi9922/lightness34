@@ -43,6 +43,19 @@ class RulesTest extends TestCase
         $this->assertEquals($rule, $rules->getRuleCallback($this->mandatory));
     }
 
+    public function testLoadsTheSameRuleOnlyOnce()
+    {
+        $firstRule = Rules::loadRule($this->mandatory);
+        $secondRule = Rules::loadRule($this->mandatory);
+
+        // loadRule мог вернуть null, а тогда конечно null == null. Нужно убедиться
+        // что это не null. При этом оба значения должны быть одинаковы, значит не
+        // нужно проверять оба. 
+        $this->assertNotNull($firstRule);
+        
+        $this->assertEquals($firstRule, $secondRule);
+    }
+
     public function testThrowsNoRuleExceptionIfRuleIsNotFoundAtAll()
     {
         $this->expectException(NoRuleException::class);

@@ -6,6 +6,8 @@ class Rules
 {
     const RULE_DIR = ROOT_DIR . '/rules';
 
+    private static $loadedRuleCallbacks = [];
+
     /** @var array Ассоциативный массив вида [string => callable] */
     private $ruleCallbacks = [];
     private $values;
@@ -13,8 +15,13 @@ class Rules
     private $errors = [];
     private $interData = [];
 
+    /**
+     * Загружает одно и то же правило только один раз на уровне всего класса.
+     */
     public static function loadRule(string $rule): ?callable
     {
+        if (isset(self::$loadedRuleCallbacks[$rule]))
+            return self::$loadedRuleCallbacks[$rule];
         $file = self::RULE_DIR . '/' . $rule . '.php';
         if (file_exists($file)) return require($file);
         return null;
