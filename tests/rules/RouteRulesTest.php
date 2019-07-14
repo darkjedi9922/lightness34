@@ -7,6 +7,14 @@ use frame\route\Router;
 
 class RouteRulesTest extends TestCase
 {
+    public function testValuesAreRecievedFromRouteArgs()
+    {
+        $router = new Router('?arg1=one&arg2=two');
+        $rules = new RouteRules($router, []);
+        $values = $rules->getValues();
+        $this->assertEquals(['arg1' => 'one', 'arg2' => 'two'], $values);
+    }
+
     public function testThrowsError404IfRulesAreNotMatched()
     {
         // Параметр login задан и он пуст.
