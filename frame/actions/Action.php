@@ -5,9 +5,6 @@ use frame\LatePropsObject;
 use frame\route\Router;
 use frame\route\Request;
 use frame\route\Response;
-use frame\rules\RuleResult;
-use frame\rules\errors\RuleRuntimeException;
-use frame\rules\errors\RuleCheckFailedException;
 use frame\tools\transmitters\SessionTransmitter;
 use frame\config\Json;
 use frame\actions\UploadedFile;
@@ -16,7 +13,7 @@ use function lightlib\encode_specials;
 use function lightlib\empty_recursive;
 use frame\tools\Client;
 use frame\errors\HttpError;
-use frame\rules\Rules;
+use frame\rules\ActionRules;
 
 /**
  * Класс служит для обработки форм, но можно использовать для запуска
@@ -120,7 +117,8 @@ abstract class Action extends LatePropsObject
      */
     private $interData = [];
 
-    private $rules;
+    /** @var array Ассоциативный массив вида [string => callable] */
+    private $ruleCallbacks = [];
 
     public static function fromTriggerUrl(string $url): Action
     {
@@ -154,7 +152,6 @@ abstract class Action extends LatePropsObject
         $this->app = Core::$app;
         $this->setDataAll(self::ARGS, $args);
         $this->load();
-        $this->rules = new Rules;
     }
 
     /**
@@ -346,9 +343,9 @@ abstract class Action extends LatePropsObject
         return $this->config;
     }
 
-    public function getRules(): Rules
+    public function setRuleCallback(string $rule, callable $callback)
     {
-        return $this->rules;
+        $this->ruleCallbacks[$rule] = $callback;
     }
 
     public function getExpectedToken(): string
@@ -484,71 +481,14 @@ abstract class Action extends LatePropsObject
     /**
      * Возвращает массив вида ['field' => ['rule1', 'rule2']] с именами
      * правил валидации данных соответствующего типа из конфига.
-     * @throws NoRuleError|RuleCheckFailedException Подробнее в описании классов 
-     * этих исключений.
+     * @see ActionRules
      */
-    private function ruleValidate(string $type): array
+    private function ruleValidate(string $type)
     {
-        $errors = [];
-        if (!isset($this->config[$type])) return $errors;
-
-        $data = $this->data[$type];
-        $this->interData[$type] = [];
-
-        // Проходимся по каждому полю
-        foreach ($this->config[$type] as $field => $rules) 
-        {
-            $this->interData[$type][$field] = [];
-
-            // Правил может не быть.
-            if (!isset($rules['rules'])) continue;
-
-            $fieldValue = isset($data[$field]) ? $data[$field] : null;
-            $result = new RuleResult;
-
-            // Проходимся по каждому правилу проверок поля
-            foreach ($rules['rules'] as $rule => $ruleValue) {
-                $check = $this->rules->getRuleCallback($rule);
-
-                // Т.к. для всей цепочки проверок правила используется один и тот
-                // же экземпляр класса, перед каждой обработкой необходимо
-                // восстанавливать результат после предыдущей обработки.
-                $result->restoreResult();
-                $result = $check($ruleValue, $fieldValue, $result);
-
-                // Каждая проверка должна вернуть результат с одним из двух
-                // состояний: провал и успех.
-                if (!$result || !$result->hasResult()) 
-                    throw new RuleRuntimeException($this->rules, 
-                        "${type}$${field}", $rule, 
-                        'Rule result state has not changed.');
-
-                if ($result->isFail()) $this->_setError($type, $errors, $field, $rule);
-                if ($result->isStopped()) break;
-            }
-
-            $this->interData[$type][$field] = $result->getInterDataAll();
-        }
-
-        return $errors;
-    }
-
-    private function _setError($type, &$errors, $field, $rule)
-    {
-        // Не проверяем config и post и $field на наличие, т.к. эта функция 
-        // вызывается только там, где это уже проверено и используется.
-        if (isset($this->config[$type][$field]['errorRules'])
-            && in_array($rule, $this->config[$type][$field]['errorRules']))
-        {
-            throw new RuleCheckFailedException($this->rules, 
-                "${type}$${field}", $rule);
-        }
-
-        if (!isset($errors[$field])) $errors[$field] = [];
-        
-        // Вместо int-кода ошибки, добавляем имя правила. Это лучше для читаемости
-        // и в целом красиво. Пока что нет необходимости оптимизировать это, чтобы
-        // хранить числа вместо строк.
-        $errors[$field][] = $rule;
+        $rules = new ActionRules($this->data[$type], $this->config[$type] ?? []);
+        $rules->setRuleCallbacks($this->ruleCallbacks);
+        $rules->validate();
+        $this->errors[$type] = $rules->getErrors();
+        $this->interData[$type] = $rules->getInterDataArray();
     }
 }

@@ -33,10 +33,4 @@ class ActionTest extends TestCase
         // должны совпасть.
         $this->assertEquals($triggerUrl, $execUrl);
     }
-
-    public function testActionRulesObjectIsAccessibleJustAfterActionCreating()
-    {
-        $action = new UserDeleteAction;
-        $this->assertInstanceOf(Rules::class, $action->getRules());
-    }
 }

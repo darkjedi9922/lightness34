@@ -70,6 +70,15 @@ class Rules
     }
 
     /**
+     * Принимает асоциативный массив вида [string => callable].
+     * Все установленные ранее обработчики будут затерты.
+     */
+    public function setRuleCallbacks(array $callbacks)
+    {
+        $this->ruleCallbacks = $callbacks;
+    }
+
+    /**
      * Сначала ищет правило среди напрямую установленных в объект экшна правил, а
      * потом, если не находит, загружает его из директории с правилами.
      * @throws NoRuleException Если обработчик правила не установлен и не найден.
@@ -82,6 +91,10 @@ class Rules
         return $callback;
     }
 
+    /**
+     * Реализацию можно переопределить в классах-наследниках.
+     * @see getValidation()
+     */
     public function validate()
     {
         foreach ($this->getValidation() as $rule);
@@ -92,6 +105,9 @@ class Rules
      * Значением генератора является RuleResult после каждой проверки каждого
      * правила. Это можно использовать для "декорирования" валидации в специфических
      * случаях.
+     * 
+     * @throws RuleRuntimeException если в обработчке валидации значение результата 
+     * не установлено.
      */
     public function getValidation(): \Generator
     {
@@ -115,7 +131,7 @@ class Rules
                 // Т.к. для всей цепочки проверок правила используется один и тот
                 // же экземпляр класса, перед каждой обработкой необходимо
                 // восстанавливать результат после предыдущей обработки.
-                $result->restoreResult();
+                $result->restore($field, $value, $rule, $ruleValue);
                 /** @var RuleResult|null $result */
                 $result = $check($ruleValue, $value, $result);
 
@@ -151,9 +167,19 @@ class Rules
             && in_array($rule, $this->errors[$field]);
     }
 
+    public function getErrors(): array
+    {
+        return $this->errors;
+    }
+
     /** @return mixed|null */
     public function getInterData(string $field, string $data)
     {
         return $this->interData[$field][$data] ?? null;
+    }
+
+    public function getInterDataArray(): array
+    {
+        return $this->interData;
     }
 }

@@ -8,6 +8,49 @@
  */
 class RuleResult
 {
+    private $fieldName = '';
+    /** @var mixed $fieldValue */
+    private $fieldValue = null;
+    private $ruleName = '';
+    /** @var mixed $ruleValue */
+    private $ruleValue = null;
+    /** @var bool|null */
+    private $result;
+    private $isStopped = false;
+    /** @var array [name => data] */
+    private $interData = [];
+
+    public function restore(
+        string $fieldName, $fieldValue, 
+        string $ruleName, $ruleValue)
+    {
+        $this->fieldName = $fieldName;
+        $this->fieldValue = $fieldValue;
+        $this->ruleName = $ruleName;
+        $this->ruleValue = $ruleValue;
+        $this->result = null;
+    }
+
+    public function getFieldName(): string
+    {
+        return $this->fieldName;
+    }
+
+    public function getFieldValue()
+    {
+        return $this->fieldValue;
+    }
+
+    public function getRuleName(): string
+    {
+        return $this->ruleName;
+    }
+
+    public function getRuleValue()
+    {
+        return $this->ruleValue;
+    }
+
     public function result(bool $result) : self
     {
         $this->result = $result;
@@ -46,11 +89,6 @@ class RuleResult
     public function isFail() : bool
     {
         return $this->result === false;
-    }
-
-    public function restoreResult()
-    {
-        $this->result = null;
     }
 
     public function stop(): self
@@ -98,19 +136,4 @@ class RuleResult
     {
         return $this->interData;
     }
-
-    /**
-     * @var bool|null
-     */
-    private $result;
-
-    /**
-     * @var bool
-     */
-    private $isStopped = false;
-
-    /**
-     * @var array [name => data]
-     */
-    private $interData = [];
 }
