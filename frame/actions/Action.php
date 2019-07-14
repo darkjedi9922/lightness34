@@ -76,14 +76,10 @@ abstract class Action extends LatePropsObject
 
     const VALIDATION_CONFIG_FOLDER = 'public/actions';
 
-    /**
-     * @var Core Ссылка на экземпляр приложения для удобства
-     */
+    /** @var Core Ссылка на экземпляр приложения для удобства */
     public $app;
 
-    /**
-     * @var int $status Статус: NONE, SUCCESS или FAIL.
-     */
+    /** @var int $status Статус: NONE, SUCCESS или FAIL. */
     public $status = self::NONE;
 
     /**
@@ -98,23 +94,17 @@ abstract class Action extends LatePropsObject
         self::FILES => []
     ];
 
-    /**
-     * @var array [get => [name => value], post => [name => value]]
-     */
+    /** @var array [get => [name => value], post => [name => value]] */
     public $data = [
         self::ARGS => [], 
         self::POST => [], 
         self::FILES => []
     ];
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $config = null;
 
-    /**
-     * @var array [type => [field => [name => [value]]]]
-     */
+    /** @var array [type => [field => [name => [value]]]] */
     private $interData = [];
 
     /** @var array Ассоциативный массив вида [string => callable] */
@@ -141,12 +131,6 @@ abstract class Action extends LatePropsObject
         return $action;
     }
 
-    /**
-     * @param array $get Параметры экшна.
-     * @param string $noRuleMode Что делать, если для конфиг-валидации экшна в экшне
-     * не установлен механизм обработки правила. Значения: 'error' (выбрасывает
-     * исключение типа NoRuleError) или 'ignore' (пропускает правило).
-     */
     public function __construct(array $args = [])
     {
         $this->app = Core::$app;
@@ -159,7 +143,7 @@ abstract class Action extends LatePropsObject
      * быть UploadedFile типа.
      * @param array $data [name => value]
      */
-    public function setDataAll($type, $data)
+    public function setDataAll(string $type, array $data)
     {
         $safeValue = ($type === self::FILES ? $data : encode_specials($data));
         $this->data[$type] = $safeValue;
@@ -167,11 +151,10 @@ abstract class Action extends LatePropsObject
 
     /**
      * @param string $type post|get.
-     * @param string $name
      * @param string|UploadedFile|null $value Если передано null, считается что 
      * значения нет совсем.
      */
-    public function setData($type, $name, $value)
+    public function setData(string $type, string $name, $value)
     {
         $safeValue = ($type === self::FILES ? $value : encode_specials($value));
         $this->data[$type][$name] = $safeValue;
@@ -182,10 +165,9 @@ abstract class Action extends LatePropsObject
      * его нет.
      * 
      * @param string $type post|get|files.
-     * @param string $name
      * @return string|UploadedFile|null
      */
-    public function getData($type, $name)
+    public function getData(string $type, string $name)
     {
         if (isset($this->data[$type][$name])) {
             $value = $this->data[$type][$name];
@@ -206,13 +188,12 @@ abstract class Action extends LatePropsObject
      * или пустую строку при $existing = true.
      * 
      * @param string $type post|get|files.
-     * @param string $name.
      * @param bool $existing Если false, возвращает значение, когда поле не было
      * передано совсем, а если true, то когда оно было передано, но равняется пустой
      * строке.
-     * @return string|null
      */
-    public function getDataDefault($type, $name, $existing = false)
+    public function getDataDefault(string $type,
+        string $name, bool $existing = false): ?string
     {
         if (isset($this->config[$type][$name]['default'])) {
             $defaultRule = $this->config[$type][$name]['default'];
@@ -232,8 +213,7 @@ abstract class Action extends LatePropsObject
      */
     public function getInterData(string $type, string $field, string $name)
     {
-        if (!isset($this->interData[$type][$field][$name])) return null;
-        return $this->interData[$type][$field][$name];
+        return $this->interData[$type][$field][$name] ?? null;
     }
 
     /**
@@ -251,9 +231,9 @@ abstract class Action extends LatePropsObject
     }
 
     /**
-     * @return string Триггерное url на выполнение экшна
+     * Триггерное url на выполнение экшна
      */
-    public final function getUrl()
+    public final function getUrl(): string
     {
         $get = array_merge($this->data[Action::ARGS], [
             self::TOKEN => $this->getExpectedToken(),
@@ -286,59 +266,41 @@ abstract class Action extends LatePropsObject
         }
     }
 
-    /**
-     * @return bool
-     */
-    public function isSuccess()
+    public function isSuccess(): bool
     {
         return $this->status === self::SUCCESS;
     }
 
-    /**
-     * @return bool
-     */
-    public function isFail()
+    public function isFail(): bool
     {
         return $this->status === self::FAIL;
     }
 
     /**
-     * Возвращает есть ли ошибка типа OWN (после validate()).
-     * 
+     * Возвращает есть ли ошибка типа OWN (после валидации).
      * @param int $error Код ошибки.
-     * @return bool
      */
-    public function hasError($error)
+    public function hasError(int $error): bool
     {
         return in_array($error, $this->errors[self::OWN]);
     }
 
     /**
      * Возвращает есть ли у заданного значения ошибка rule.
-     * 
-     * @param string $type get|post.
-     * @param string $data Имя значения.
      * @param string|int $error Имя провалившегося rule правила.
-     * @return bool
      */
-    public function hasDataError($type, $data, $error)
+    public function hasDataError(string $type, string $data, $error): bool
     {
         return isset($this->errors[$type][$data])
             && in_array($error, $this->errors[$type][$data]);
     }
 
-    /**
-     * @param array|null $config
-     */
-    public function setConfig($config)
+    public function setConfig(?array $config)
     {
         $this->config = $config;
     }
 
-    /**
-     * @return array|null
-     */
-    public function getConfig()
+    public function getConfig(): ?array
     {
         return $this->config;
     }

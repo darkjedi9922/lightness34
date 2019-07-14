@@ -17,6 +17,7 @@ class RouteRules extends Rules
         $this->setValues($router->args);
     }
 
+    /** @throws HttpError NOT_FOUND при любой ошибке. */
     public function assert()
     {
         foreach ($this->getValidation() as $result) {
