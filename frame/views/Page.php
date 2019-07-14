@@ -4,7 +4,7 @@ use frame\Core;
 
 class Page extends Layouted
 {
-    const FOLDER = 'view/pages';
+    const FOLDER = 'views/pages';
 
     /**
      * Ищет сам view файл страницы

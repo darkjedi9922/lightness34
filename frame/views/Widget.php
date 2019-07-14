@@ -4,7 +4,7 @@ use frame\Core;
 
 class Widget extends Layouted
 {
-    const FOLDER = 'view/widgets';
+    const FOLDER = 'views/widgets';
 
     /**
      * Ищет сам view файл виджета

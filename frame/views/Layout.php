@@ -1,13 +1,11 @@
 <?php namespace frame\views;
 
-use frame\Core;
-
 /**
  * Внутри вида Layout для вывода дочернего вида нужно использовать $layout->child->content.
  */
 class Layout extends Layouted
 {
-    const FOLDER = 'view/layouts';
+    const FOLDER = 'views/layouts';
 
     /**
      * @var View $child Вид-содержимое

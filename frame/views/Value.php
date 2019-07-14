@@ -1,10 +1,8 @@
 <?php namespace frame\views;
 
-use frame\Core;
-
 class Value extends View
 {
-    const FOLDER = 'view/values';
+    const FOLDER = 'views/values';
 
     /**
      * Ищет сам view файл виджета

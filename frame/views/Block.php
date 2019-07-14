@@ -4,7 +4,7 @@ use frame\Core;
 
 class Block extends Layouted
 {
-    const FOLDER = 'view/blocks';
+    const FOLDER = 'views/blocks';
 
     /**
      * Ищет сам view файл блока
