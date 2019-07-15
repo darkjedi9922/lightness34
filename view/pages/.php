@@ -2,7 +2,9 @@
 
 use frame\views\Block;
 use frame\views\Value;
-use frame\route\Router;
+use globals\client_id;
+use globals\pagenumber;
+use globals\prev_router;
 
 $this->setLayout('page');
 $this->setMetaArray(['name' => $this->file]);
@@ -10,13 +12,9 @@ $message = 'This is an action message to log in';
 $block = new Block('block');
 $answer = new Value('answer');
 
-/** @var int $cid */
-$cid = $this->global('client-id');
-/** @var Router $prevRouter */
-$prevRouter = $this->global('prev-router');
-/** @var int $pagenumber */
-$pagenumber = $this->global('pagenumber');
-
+$cid = client_id::get();
+$prevRouter = prev_router::get();
+$pagenumber = pagenumber::get();
 ?>
 
 Hello <?= $this->app->config->{'site.name'} ?><br>

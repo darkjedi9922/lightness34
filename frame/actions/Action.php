@@ -1,7 +1,6 @@
 <?php namespace frame\actions;
 
 use frame\Core;
-use frame\GlobalAccess;
 use frame\route\Router;
 use frame\route\Request;
 use frame\route\Response;
@@ -13,6 +12,7 @@ use frame\tools\transmitters\SessionTransmitter;
 
 use function lightlib\encode_specials;
 use function lightlib\empty_recursive;
+use frame\LatePropsObject;
 
 /**
  * Класс служит для обработки форм, но можно использовать для запуска
@@ -40,7 +40,7 @@ use function lightlib\empty_recursive;
  * <input type="hidden" name="property" value="0">
  * <input type="checkbox" name="property" value="1">
  */
-abstract class Action extends GlobalAccess
+abstract class Action extends LatePropsObject
 {
     const NONE = 0;
     const SUCCESS = 1;

@@ -1,9 +1,8 @@
 <?php namespace frame\views;
 
 use frame\Core;
-use frame\GlobalAccess;
 
-class View extends GlobalAccess
+class View
 {
     /**
      * @var Core Ссылка на экземпляр приложения для удобства
