@@ -1,7 +1,6 @@
 <?php namespace frame;
 
 use frame\route\Router;
-use frame\LatePropsObject;
 use frame\route\Request;
 use frame\views\Page;
 use frame\database\Database;
@@ -11,12 +10,7 @@ use frame\tools\Logger;
 use frame\errors\ErrorException;
 use frame\errors\HttpError;
 
-/**
- * @todo ?Behaviour
- * 
- * @property-read Database $db База данных
- */
-class Core extends LatePropsObject
+class Core
 {
     /**
      * @var Core $app Экземпляр приложения. Инициализуется
@@ -131,15 +125,6 @@ class Core extends LatePropsObject
                 (new $this->macros[$key])->exec($value);
             }
         }
-    }
-
-    protected function __create__db()
-    {
-        $host = $this->config->{'database.host'};
-        $username = $this->config->{'database.username'};
-        $password = $this->config->{'database.password'};
-        $dbname = $this->config->{'database.dbname'};
-        return new Database($host, $username, $password, $dbname);
     }
 
     /**
