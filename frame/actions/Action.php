@@ -1,7 +1,6 @@
 <?php namespace frame\actions;
 
 use frame\Core;
-use frame\LatePropsObject;
 use frame\route\Router;
 use frame\route\Request;
 use frame\route\Response;
@@ -13,6 +12,7 @@ use function lightlib\encode_specials;
 use frame\tools\Client;
 use frame\errors\HttpError;
 use frame\rules\ActionRules;
+use frame\LatePropsObject;
 
 /**
  * Класс служит для обработки форм, но можно использовать для запуска
@@ -44,10 +44,6 @@ use frame\rules\ActionRules;
  * в дочерних экшнах. С помощью него можно определять используемые в экшне данные,
  * которые потом можно брать из него на обычных страницах, вместо того, чтобы повторно
  * создавать их.
- * 
- * Замечание: аргументы (get-параметры) с именами, начинающимися со знака
- * подчеркивания (_) являются приватными, поэтому в пользовательских экшнах такие
- * использовать не стоит.
  */
 abstract class Action extends LatePropsObject
 {

@@ -1,13 +1,8 @@
 <?php namespace frame\views;
 
-use frame\LatePropsObject;
 use frame\Core;
 
-/**
- * @property-read string $content Внутреннее полностью сгенерированное содержимое вида.
- * Предупреждение: вызов в самом себе может привести к бесконечной рекурсии и/или ошибкам.
- */
-class View extends LatePropsObject
+class View
 {
     /**
      * @var Core Ссылка на экземпляр приложения для удобства
@@ -63,7 +58,7 @@ class View extends LatePropsObject
      * Это нужно, чтобы перед показом, загрузить само содержимое, внутри которого могли
      * изменится настройки вида, чтобы успеть подстроиться под новые настройки.
      */
-    protected function __create__content()
+    public function getContent()
     {
         ob_start();
         require $this->file;
@@ -76,7 +71,7 @@ class View extends LatePropsObject
      */
     public function __toString()
     {
-        return $this->content;
+        return $this->getContent();
     }
 
     /**

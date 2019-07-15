@@ -1,8 +1,6 @@
 <?php namespace frame\tools;
 
-use frame\LatePropsObject;
-
-class File extends LatePropsObject
+class File
 {
     /**
      * @param string $path
@@ -48,10 +46,10 @@ class File extends LatePropsObject
      */
     public function getMime()
     {
-        return $this->finfo->file($this->path);
+        return $this->getInfo()->file($this->path);
     }
 
-    protected function __create__finfo()
+    public function getInfo()
     {
         return new \finfo(FILEINFO_MIME_TYPE);
     }

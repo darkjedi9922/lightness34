@@ -7,6 +7,7 @@ use function lightlib\substring;
 use function lightlib\shorten;
 use function lightlib\empty_recursive;
 use function lightlib\bytes;
+use function lightlib\stored;
 
 /**
  * @testdox lightness.lib
@@ -131,5 +132,20 @@ final class LightnessLibTest extends TestCase
         $this->assertEquals(1024 * 1024, bytes(1, 'MB'));
         $this->assertEquals(1024 * 1024 * 1024, bytes(1, 'GB'));
         $this->assertEquals(1024 * 1024 * 500, bytes(500, 'MB'));
+    }
+
+    public function testStored()
+    {
+        $storage = [
+            'size' => 'px'
+        ];
+
+        $this->assertEquals(42, stored($storage, 'answer', function() {
+            return 42;
+        }));
+
+        $this->assertEquals('px', stored($storage, 'size', function() {
+            throw new Exception('This exception must not be raised');
+        }));
     }
 }

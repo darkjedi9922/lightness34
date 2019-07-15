@@ -6,6 +6,9 @@ use frame\tools\Client;
 use engine\HelloAction;
 use frame\actions\Action;
 use frame\rules\RouteRules;
+use globals\client_id;
+use globals\pagenumber;
+use globals\prev_router;
 
 $rules = new RouteRules($this->app->router, [
     'login' => [
@@ -26,6 +29,10 @@ $message = 'This is an action message to log in';
 $block = new Block('block');
 $answer = new Value('answer');
 $action = new HelloAction([Action::ID => 'the_id', 'answer' => $answer]);
+
+$cid = client_id::get();
+$prevRouter = prev_router::get();
+$pagenumber = pagenumber::get();
 ?>
 
 Hello <?= $this->app->config->{'site.name'} ?><br>
@@ -33,3 +40,5 @@ Hello <?= $this->app->config->{'site.name'} ?><br>
 The answer is <?= $answer ?><br>
 Your client id: <?= Client::getId() ?><br>
 <a href="<?= $action->getUrl() ?>">Action link</a><br>
+<?php if ($prevRouter): ?><?= $prevRouter->toUrl() ?><br><?php endif?>
+Pagenumber: <?= $pagenumber ?><br>

@@ -6,6 +6,6 @@
 
 Hello Page Layout for <?= $this->child->getMeta('name') ?><br>
 
-<?= $this->child->content ?>
+<?= $this->child->getContent() ?>
 
 Bye Page Layout<br>
