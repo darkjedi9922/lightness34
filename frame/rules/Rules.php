@@ -43,6 +43,21 @@ class Rules
         return $this->values;
     }
 
+    public function setValue(string $name, $value)
+    {
+        $this->values[$name] = $value;
+    }
+
+    public function getValue(string $name)
+    {
+        if (isset($this->values[$name])) {
+            $value = $this->values[$name];
+            if ($value !== '') return $value;
+            return $this->getDefault($name, true);
+        }
+        return $this->getDefault($name, false);
+    }
+
     public function setRules(array $rules)
     {
         $this->rules = $rules;
@@ -193,5 +208,31 @@ class Rules
     public function getInterDataArray(): array
     {
         return $this->interData;
+    }
+
+    /**
+     * Возвращает установленное значение default поля в конфиге экшна.
+     * Значение по умолчанию устанавливается в виде [значение1, значение2] или
+     * [значение]. Значение 1 используется когда поле не было передано вообще,
+     * значение 2 - когда поле было передано, но оно равно пустой строке. В последнем
+     * случае будет использоваться одно значение на оба случая.
+     * 
+     * Если значение по умолчанию не установлено, вернет null при $existing = false,
+     * или пустую строку при $existing = true.
+     * 
+     * @param bool $existing Если false, возвращает значение, когда поле не было
+     * передано совсем, а если true, то когда оно было передано, но равняется пустой
+     * строке.
+     * @return mixed|null
+     */
+    public function getDefault(string $field, bool $existing = false)
+    {
+        if (isset($this->rules[$field]['default'])) {
+            $defaultRule = $this->rules[$field]['default'];
+            if (count($defaultRule) == 1) return $defaultRule[0];
+        } else $defaultRule = [null, ''];
+
+        if ($existing) return $defaultRule[1];
+        else return $defaultRule[0];
     }
 }

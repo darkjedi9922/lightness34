@@ -166,19 +166,6 @@ class ActionConfigTest extends TestCase
         $this->assertTrue(!$emptyError && $minLengthError);
     }
 
-    public function testDefaultValue()
-    {
-        $action = new JsonValidatedAction;
-        $action->setConfig($this->jsonValidatedActionConfig);
-
-        $this->assertEquals('Doctor Who', $action->getDataDefault('post', 'alter', false));
-        $this->assertEquals('TARDIS', $action->getDataDefault('post', 'alter', true));
-        $this->assertEquals('Dalek', $action->getDataDefault('post', 'enemy', false));
-        $this->assertEquals('Dalek', $action->getDataDefault('post', 'enemy', true));
-        $this->assertEquals(null, $action->getDataDefault('post', 'true-name', false));
-        $this->assertEquals('', $action->getDataDefault('post', 'true-name', true));
-    }
-
     public function testGetField()
     {
         $config = [

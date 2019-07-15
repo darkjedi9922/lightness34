@@ -85,19 +85,6 @@ abstract class Action extends LatePropsObject
     /** @var array Ошибки типа OWN, возникшие после validate(). */
     public $errors = [];
 
-    /** @var array [get => [name => value], post => [name => value]] */
-    public $data = [
-        self::ARGS => [], 
-        self::POST => [], 
-        self::FILES => []
-    ];
-
-    /** @var array */
-    private $config = null;
-
-    /** @var array Ассоциативный массив вида [string => callable] */
-    private $ruleCallbacks = [];
-
     /** @var array [string => ActionRules] */
     private $rules = [
         self::ARGS => null,
@@ -129,6 +116,9 @@ abstract class Action extends LatePropsObject
     public function __construct(array $args = [])
     {
         $this->app = Core::$app;
+        $this->rules[self::ARGS] = new ActionRules;
+        $this->rules[self::POST] = new ActionRules;
+        $this->rules[self::FILES] = new ActionRules;
         $this->setDataAll(self::ARGS, $args);
         $this->load();
     }
@@ -141,7 +131,7 @@ abstract class Action extends LatePropsObject
     public function setDataAll(string $type, array $data)
     {
         $safeValue = ($type === self::FILES ? $data : encode_specials($data));
-        $this->data[$type] = $safeValue;
+        $this->rules[$type]->setValues($safeValue);
     }
 
     /**
@@ -152,7 +142,7 @@ abstract class Action extends LatePropsObject
     public function setData(string $type, string $name, $value)
     {
         $safeValue = ($type === self::FILES ? $value : encode_specials($value));
-        $this->data[$type][$name] = $safeValue;
+        $this->rules[$type]->setValue($name, $safeValue);
     }
 
     /**
@@ -161,42 +151,34 @@ abstract class Action extends LatePropsObject
      * 
      * @param string $type post|get|files.
      * @return string|UploadedFile|null
+     * @see Rules::getValue()
      */
     public function getData(string $type, string $name)
     {
-        if (isset($this->data[$type][$name])) {
-            $value = $this->data[$type][$name];
-            if ($value !== '') return $value;
-            return $this->getDataDefault($type, $name, true);
-        }
-        return $this->getDataDefault($type, $name, false);
+        return $this->rules[$type]->getValue($name);
     }
 
     /**
-     * Возвращает установленное значение default поля в конфиге экшна.
-     * Значение по умолчанию устанавливается в виде [значение1, значение2] или
-     * [значение]. Значение 1 используется когда поле не было передано вообще,
-     * значение 2 - когда поле было передано, но оно равно пустой строке. В последнем
-     * случае будет использоваться одно значение на оба случая.
-     * 
-     * Если значение по умолчанию не установлено, вернет null при $existing = false,
-     * или пустую строку при $existing = true.
-     * 
-     * @param string $type post|get|files.
-     * @param bool $existing Если false, возвращает значение, когда поле не было
-     * передано совсем, а если true, то когда оно было передано, но равняется пустой
-     * строке.
+     * @see Rules::getDefault()
      */
     public function getDataDefault(string $type,
-        string $name, bool $existing = false): ?string
+        string $name, bool $existing = false)
     {
-        if (isset($this->config[$type][$name]['default'])) {
-            $defaultRule = $this->config[$type][$name]['default'];
-            if (count($defaultRule) == 1) return $defaultRule[0];
-        } else $defaultRule = [null, ''];
+        return $this->rules[$type]->getDefault($name, $existing);
+    }
 
-        if ($existing) return $defaultRule[1];
-        else return $defaultRule[0];
+    public function getDataArray()
+    {
+        $result = [];
+        foreach ($this->rules as $type => $rules)
+            $result[$type] = $rules->getValues();
+        return $result;
+    }
+
+    public function setDataArray(array $data)
+    {
+        foreach ($this->rules as $type => $rules)
+            $rules->setValues($data[$type] ?? []);
     }
 
     /**
@@ -208,8 +190,7 @@ abstract class Action extends LatePropsObject
      */
     public function getInterData(string $type, string $field, string $name)
     {
-        return $this->rules[$type] ? 
-            $this->rules[$type]->getInterData($field, $name) : null;
+        return $this->rules[$type]->getInterData($field, $name);
     }
 
     /**
@@ -231,7 +212,7 @@ abstract class Action extends LatePropsObject
      */
     public final function getUrl(): string
     {
-        $get = array_merge($this->data[Action::ARGS], [
+        $get = array_merge($this->rules[Action::ARGS]->getValues(), [
             self::TOKEN => $this->getExpectedToken(),
         ]);
         return Router::toUrlOf('/' . str_replace('\\', '/', static::class), $get);
@@ -243,7 +224,7 @@ abstract class Action extends LatePropsObject
      */
     public final function exec()
     {
-        $this->assertToken($this->data[self::ARGS][self::TOKEN] ?? '');
+        $this->assertToken($this->rules[self::ARGS]->getValue(self::TOKEN) ?? '');
         $this->initialize();
         $this->ruleValidate(self::ARGS);
         $this->ruleValidate(self::POST);
@@ -300,17 +281,23 @@ abstract class Action extends LatePropsObject
 
     public function setConfig(?array $config)
     {
-        $this->config = $config;
+        foreach ($this->rules as $type => $rules)
+            $rules->setRules($config[$type] ?? []);
     }
 
-    public function getConfig(): ?array
+    public function getConfig(): array
     {
-        return $this->config;
+        $result = [];
+        foreach ($this->rules as $type => $rules)
+            $result[$type] = $rules->getRules();
+        return $result;
     }
 
     public function setRuleCallback(string $rule, callable $callback)
     {
-        $this->ruleCallbacks[$rule] = $callback;
+        foreach ($this->rules as $rules)
+            $rules->setRuleCallback($rule, $callback);
+        
     }
 
     public function getExpectedToken(): string
@@ -394,7 +381,8 @@ abstract class Action extends LatePropsObject
 
     private function getIdName(): string
     {
-        return static::class . '_' . ($this->data[self::ARGS][self::ID] ?? '');
+        return static::class . '_' . 
+            ($this->rules[self::ARGS]->getValue(self::ID) ?? '');
     }
 
     /**
@@ -410,7 +398,7 @@ abstract class Action extends LatePropsObject
         $sessions->setData($idName . '_status', $this->status);
         if ($this->isFail()) {
             $sessions->setData($idName . '_errors', serialize($this->errors));
-            $sessions->setData($idName . '_data', serialize($this->data));
+            $sessions->setData($idName . '_data', serialize($this->getDataArray()));
         }
     }
 
@@ -429,7 +417,9 @@ abstract class Action extends LatePropsObject
                 $sessions->removeData($idName . '_errors');
             }
             if ($sessions->isSetData($idName . '_data')) {
-                $this->data = unserialize($sessions->getData($idName . '_data'));
+                $data = unserialize($sessions->getData($idName . '_data'));
+                foreach ($this->rules as $type => $rules)
+                    $rules->setValues($data[$type] ?? []);
                 $sessions->removeData($idName . '_data');
             }
             $this->doAfterLoad();
@@ -443,16 +433,8 @@ abstract class Action extends LatePropsObject
                 'Recieved TOKEN token does not match expected token.');
     }
 
-    /**
-     * Возвращает массив вида ['field' => ['rule1', 'rule2']] с именами
-     * правил валидации данных соответствующего типа из конфига.
-     * @see ActionRules
-     */
     private function ruleValidate(string $type)
     {
-        $rules = new ActionRules($this->data[$type], $this->config[$type] ?? []);
-        $rules->setRuleCallbacks($this->ruleCallbacks);
-        $rules->validate();
-        $this->rules[$type] = $rules;
+        $this->rules[$type]->validate();
     }
 }

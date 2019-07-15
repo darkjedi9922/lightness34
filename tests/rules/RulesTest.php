@@ -83,4 +83,45 @@ class RulesTest extends TestCase
         $rules = new Rules;
         $this->assertNull($rules->getInterData('login', 'user'));
     }
+
+    public function testDefaultValue()
+    {
+        $rules = new Rules([], [
+            "alter" => [
+                "default" => ["Doctor Who", "TARDIS"],
+            ],
+            "enemy" => [
+                "default" => ["Dalek"]
+            ]
+        ]);
+
+        $this->assertEquals('Doctor Who', $rules->getDefault('alter', false));
+        $this->assertEquals('TARDIS', $rules->getDefault('alter', true));
+        $this->assertEquals('Dalek', $rules->getDefault('enemy', false));
+        $this->assertEquals('Dalek', $rules->getDefault('enemy', true));
+        $this->assertEquals(null, $rules->getDefault('true-name', false));
+        $this->assertEquals('', $rules->getDefault('true-name', true));
+    }
+
+    public function testGetValueInCombinationWithDefaultRules()
+    {
+        $rules = new Rules([
+            'username' => 'BadUser',
+            'empty-field' => '',
+            'question' => ''
+        ], [
+            'answer' => [
+                'default' => [42]
+            ],
+            'question' => [
+                'default' => ['...']
+            ]
+        ]);
+
+        $this->assertEquals('BadUser', $rules->getValue('username'));
+        $this->assertEquals('', $rules->getValue('empty-field'));
+        $this->assertEquals(null, $rules->getValue('non-existence-field'));
+        $this->assertEquals(42, $rules->getValue('answer'));
+        $this->assertEquals('...', $rules->getValue('question'));
+    }
 }
