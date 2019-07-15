@@ -10,7 +10,6 @@ use frame\config\Json;
 use frame\actions\UploadedFile;
 
 use function lightlib\encode_specials;
-use function lightlib\empty_recursive;
 use frame\tools\Client;
 use frame\errors\HttpError;
 use frame\rules\ActionRules;
@@ -175,12 +174,6 @@ abstract class Action extends LatePropsObject
         return $result;
     }
 
-    public function setDataArray(array $data)
-    {
-        foreach ($this->rules as $type => $rules)
-            $rules->setValues($data[$type] ?? []);
-    }
-
     /**
      * Если заданного значения нет, вернет null.
      * 
@@ -226,9 +219,9 @@ abstract class Action extends LatePropsObject
     {
         $this->assertToken($this->rules[self::ARGS]->getValue(self::TOKEN) ?? '');
         $this->initialize();
-        $this->ruleValidate(self::ARGS);
-        $this->ruleValidate(self::POST);
-        $this->ruleValidate(self::FILES);
+        $this->rules[self::ARGS]->validate();
+        $this->rules[self::POST]->validate();
+        $this->rules[self::FILES]->validate();
         $this->errors = $this->validate();
         if ($this->hasErrors()) {
             $this->succeed();
@@ -431,10 +424,5 @@ abstract class Action extends LatePropsObject
         if ($token != $this->getExpectedToken()) 
             throw new HttpError(HttpError::BAD_REQUEST,
                 'Recieved TOKEN token does not match expected token.');
-    }
-
-    private function ruleValidate(string $type)
-    {
-        $this->rules[$type]->validate();
     }
 }
