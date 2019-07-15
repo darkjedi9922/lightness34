@@ -95,9 +95,6 @@ abstract class Action extends LatePropsObject
     /** @var array */
     private $config = null;
 
-    /** @var array [type => [field => [name => [value]]]] */
-    private $interData = [];
-
     /** @var array Ассоциативный массив вида [string => callable] */
     private $ruleCallbacks = [];
 
@@ -211,7 +208,8 @@ abstract class Action extends LatePropsObject
      */
     public function getInterData(string $type, string $field, string $name)
     {
-        return $this->interData[$type][$field][$name] ?? null;
+        return $this->rules[$type] ? 
+            $this->rules[$type]->getInterData($field, $name) : null;
     }
 
     /**
@@ -455,7 +453,6 @@ abstract class Action extends LatePropsObject
         $rules = new ActionRules($this->data[$type], $this->config[$type] ?? []);
         $rules->setRuleCallbacks($this->ruleCallbacks);
         $rules->validate();
-        $this->interData[$type] = $rules->getInterDataArray();
         $this->rules[$type] = $rules;
     }
 }
