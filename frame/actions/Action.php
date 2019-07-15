@@ -249,9 +249,9 @@ abstract class Action extends LatePropsObject
     {
         $this->assertToken($this->data[self::ARGS][self::TOKEN] ?? '');
         $this->initialize();
-        $this->errors[self::ARGS] = $this->ruleValidate(self::ARGS);
-        $this->errors[self::POST] = $this->ruleValidate(self::POST);
-        $this->errors[self::FILES] = $this->ruleValidate(self::FILES);
+        $this->ruleValidate(self::ARGS);
+        $this->ruleValidate(self::POST);
+        $this->ruleValidate(self::FILES);
         $this->errors[self::OWN] = $this->validate();
         if (empty_recursive($this->errors)) {
             $this->succeed();
