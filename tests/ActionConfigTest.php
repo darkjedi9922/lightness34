@@ -17,6 +17,8 @@ class ActionConfigTest extends TestCase
 {
     protected $jsonValidatedActionConfig;
     protected $userDeleteActionConfig;
+    /** @var JsonValidatedAction $jsonValidatedAction */
+    protected $jsonValidatedAction;
 
     protected function setUp(): void
     {
@@ -72,6 +74,10 @@ class ActionConfigTest extends TestCase
                 ]
             ]
         ];
+
+        $this->jsonValidatedAction = new JsonValidatedAction;
+        $this->jsonValidatedAction->setData(Action::ARGS, Action::TOKEN, 
+            $this->jsonValidatedAction->getExpectedToken());
     }
 
     public function testCallbackValidate()
@@ -84,6 +90,30 @@ class ActionConfigTest extends TestCase
 
         // В экшн не было передано post значения `username`.
         $this->assertTrue($action->hasDataError('post', 'username', 'mandatory'));
+        $this->assertTrue($action->isFail());
+    }
+
+    public function testIfThereAreNoErrorsThenActionIsSuccess()
+    {
+        // Никакие правила не устанавлены, поэтому экшн всегда будет без ошибок.
+        $action = $this->jsonValidatedAction;
+        $action->exec();
+        $this->assertTrue($action->isSuccess());
+    }
+
+    public function testIfThereAreErrorsThenActionIsFailed()
+    {
+        $action = $this->jsonValidatedAction;
+        $action->setConfig([
+            'get' => [
+                'login' => [
+                    'rules' => [
+                        'base/mandatory' => true
+                    ]
+                ]
+            ]
+        ]);
+        $action->exec();
         $this->assertTrue($action->isFail());
     }
 

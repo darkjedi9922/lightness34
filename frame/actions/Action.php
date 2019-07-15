@@ -82,17 +82,8 @@ abstract class Action extends LatePropsObject
     /** @var int $status Статус: NONE, SUCCESS или FAIL. */
     public $status = self::NONE;
 
-    /**
-     * @var array Ошибки, возникшие во время валидации. OWN хранит коды ошибок после
-     * validate(), остальные - массивы вида ['field' => ['rule1', 'rule2']] с именами
-     * правил валидации данных соответствующего типа из конфига.
-     */
-    public $errors = [
-        self::OWN => [], 
-        self::ARGS => [], 
-        self::POST => [],
-        self::FILES => []
-    ];
+    /** @var array Ошибки типа OWN, возникшие после validate(). */
+    public $errors = [];
 
     /** @var array [get => [name => value], post => [name => value]] */
     public $data = [
@@ -109,6 +100,13 @@ abstract class Action extends LatePropsObject
 
     /** @var array Ассоциативный массив вида [string => callable] */
     private $ruleCallbacks = [];
+
+    /** @var array [string => ActionRules] */
+    private $rules = [
+        self::ARGS => null,
+        self::POST => null,
+        self::FILES => null
+    ];
 
     public static function fromTriggerUrl(string $url): Action
     {
@@ -252,8 +250,8 @@ abstract class Action extends LatePropsObject
         $this->ruleValidate(self::ARGS);
         $this->ruleValidate(self::POST);
         $this->ruleValidate(self::FILES);
-        $this->errors[self::OWN] = $this->validate();
-        if (empty_recursive($this->errors)) {
+        $this->errors = $this->validate();
+        if ($this->hasErrors()) {
             $this->succeed();
             $this->status = self::SUCCESS;
             $this->save();
@@ -285,14 +283,21 @@ abstract class Action extends LatePropsObject
         return in_array($error, $this->errors[self::OWN]);
     }
 
+    public function hasErrors(): bool
+    {
+        return !empty($this->errors) 
+            || $this->rules[self::ARGS] && $this->rules[self::ARGS]->hasErrors()
+            || $this->rules[self::POST] && $this->rules[self::POST]->hasErrors()
+            || $this->rules[self::FILES] && $this->rules[self::FILES]->hasErrors();
+    }
+
     /**
      * Возвращает есть ли у заданного значения ошибка rule.
      * @param string|int $error Имя провалившегося rule правила.
      */
     public function hasDataError(string $type, string $data, $error): bool
     {
-        return isset($this->errors[$type][$data])
-            && in_array($error, $this->errors[$type][$data]);
+        return $this->rules[$type] && $this->rules[$type]->hasError($data, $error);
     }
 
     public function setConfig(?array $config)
@@ -450,7 +455,7 @@ abstract class Action extends LatePropsObject
         $rules = new ActionRules($this->data[$type], $this->config[$type] ?? []);
         $rules->setRuleCallbacks($this->ruleCallbacks);
         $rules->validate();
-        $this->errors[$type] = $rules->getErrors();
         $this->interData[$type] = $rules->getInterDataArray();
+        $this->rules[$type] = $rules;
     }
 }

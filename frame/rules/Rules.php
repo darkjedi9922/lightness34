@@ -174,6 +174,11 @@ class Rules
             && in_array($rule, $this->errors[$field]);
     }
 
+    public function hasErrors(): bool
+    {
+        return !empty($this->errors);
+    }
+
     public function getErrors(): array
     {
         return $this->errors;
