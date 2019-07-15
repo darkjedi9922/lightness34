@@ -4,7 +4,7 @@ This project is a PHP framework for site building.
 
 The framework aims on strong component and code structuring.
 
-## Implemented Features
+## Implemented Mechanisms
 
 1. **Routing.** It automatically finds out the page to view.
 2. **Views.** Views are used to show visible parts of a site. One view is only one markup file. It can be HTML or PHP files.
@@ -12,6 +12,7 @@ The framework aims on strong component and code structuring.
 4. **Actions**. Handle forms and validate them.
 5. **Error Handlers**. Handle errors of any type from notices to fatal in one way that can be different to different error types.
 6. **Macroses**. Do something when you recieve trigger GET parameters.
+7. **Global values**. Global (singelton) values for using them in views, actions and for creating other global values. They play a **facade** role to make pre-setup of view and action code more simple and optimized.
 
 ## Getting Started
 
