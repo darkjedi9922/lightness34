@@ -154,5 +154,6 @@ class Core
 
         if (isset($this->hanlders[get_class($e)])) (new $this->hanlders[get_class($e)])->handle($e);
         else if ($this->defaultHandler) (new $this->defaultHandler)->handle($e);
+        else throw $e;
     }
 }
