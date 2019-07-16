@@ -2,15 +2,9 @@
 
 class QueryResult
 {
-    /**
-     * @var \mysqli_result
-     */
     private $result;
 
-    /**
-     * @param \mysqli_result $result
-     */
-    public function __construct($result)
+    public function __construct(\mysqli_result $result)
     {
         $this->result = $result;
     }
@@ -18,9 +12,8 @@ class QueryResult
     /**
      * Возвращает Двумерный массив со всеми массивами-строками из результата.
      * Если в результате нет строк, вернет одномерный пустой массив.
-     * @return array
      */
-    public function readAll()
+    public function readAll(): array
     {
         return $this->result->fetch_all(MYSQLI_ASSOC);
     }
@@ -28,9 +21,8 @@ class QueryResult
     /**
      * Считывает строку и возвращает ее в виде массива.
      * Если строк больше не осталось, вернет null.
-     * @return array|null
      */
-    public function readLine()
+    public function readLine(): ?array
     {
         return $this->result->fetch_array(MYSQLI_ASSOC);
     }
@@ -38,28 +30,19 @@ class QueryResult
     /**
      * Считывает колонку по ее индексу и возвращает в виде одномерного
      * индексного массива.
-     * @return array
      */
-    public function readColumn($index)
+    public function readColumn(int $index): array
     {
         $all = $this->result->fetch_all(MYSQLI_NUM);
-		
-		// Нужно превратить ассоциативный массив в обычный
-        $result = [];
-        for ($i = 0, $c = count($all); $i < $c; ++$i) { // проходимся по строкам
-            $result[] = $all[$i][$index]; // записываем значения нужной колонки в массив
-        }
-
-        return $result; // а затем возвращаем его
+		return array_column($all, $index);
     }
 
     /**
      * Считывает и возвращает первое значение в текущей строке. 
      * Значениями могут быть строки и null. Также вернет null, если
      * непрочитанных строк в результате больше не осталось.
-     * @return string|null
      */
-    public function readScalar()
+    public function readScalar(): ?string
     {
         $line = $this->readLine();
         if ($line) return current($line);

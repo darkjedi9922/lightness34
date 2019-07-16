@@ -1,7 +1,6 @@
 <?php namespace frame\database;
 
 use frame\database\Database;
-use frame\Core;
 
 use function lightlib\array_assemble;
 
@@ -28,16 +27,16 @@ class Records
     /**
      * Создает экземпляр класса
      * 
-     * @param string $table Имя таблицы в БД
-     * @param array $where Ассоциативный массив, где ключи - имена полей, а значения - значения этих полей
-     * @return Records
+     * @param array $where Ассоциативный массив, где ключи - имена полей, а значения 
+     * - значения этих полей
      */
-    public static function select($table, $where = [])
+    public static function select(Database $db, 
+        string $table, array $where = []): Records
     {
         $records = new static;
         $records->table = $table;
         $records->where = $where;
-        $records->db = Core::$app->db;
+        $records->db = $db;
         return $records;
     }
 
@@ -54,7 +53,8 @@ class Records
      */
     public function count($field)
     {
-        return (int) $this->db->query('SELECT COUNT(' . $field . ')' . ' FROM ' . $this->table . $this->getWhere())->readScalar();
+        return (int) $this->db->query('SELECT COUNT(' . $field . ')' . ' FROM ' . 
+            $this->table . $this->getWhere())->readScalar();
     }
 
     /**
@@ -65,7 +65,8 @@ class Records
     public function load($fields = [])
     {
         $fields = empty($fields) ? '*' : implode(', ', $fields);
-        return $this->db->query('SELECT '.$fields.' FROM ' . $this->table . $this->getWhere());
+        return $this->db->query(
+            'SELECT '.$fields.' FROM ' . $this->table . $this->getWhere());
     }
 
     /**
@@ -77,7 +78,8 @@ class Records
     {
         if (!empty($data)) {
             $set = array_assemble($this->addAssocQuotes($data), ', ', ' = ');
-            $this->db->query('UPDATE ' . $this->table . ' SET ' . $set . $this->getWhere());
+            $this->db->query(
+                'UPDATE ' . $this->table . ' SET ' . $set . $this->getWhere());
         }
     }
 
@@ -88,9 +90,10 @@ class Records
      */
     public function insert()
     {
-        $keys = implode(array_keys($this->where), ', ');
-        $values = implode($this->addIndexQuotes(array_values($this->where)), ', ');
-        $this->db->query('INSERT INTO ' . $this->table . ' (' . $keys . ') VALUES (' . $values . ')');
+        $keys = implode(', ', array_keys($this->where));
+        $values = implode(', ', $this->addIndexQuotes(array_values($this->where)));
+        $this->db->query('INSERT INTO ' . $this->table .
+            ' (' . $keys . ') VALUES (' . $values . ')');
         return $this->db->getLastInsertedId();
     }
 
@@ -121,7 +124,8 @@ class Records
      */
     private function addIndexQuotes($array)
     {
-        for ($i = 0, $c = count($array); $i < $c; ++$i) $array[$i] = '"' . $array[$i] . '"';
+        for ($i = 0, $c = count($array); $i < $c; ++$i) 
+            $array[$i] = '"' . $array[$i] . '"';
         return $array;
     }
 
@@ -133,7 +137,8 @@ class Records
      */
     private function addAssocQuotes($array)
     {
-        foreach ($array as $key => $value) $array[$key] = '"' . $value . '"';
+        foreach ($array as $key => $value) 
+            $array[$key] = '"' . $value . '"';
         return $array;
     }
 }

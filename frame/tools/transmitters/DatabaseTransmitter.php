@@ -1,6 +1,7 @@
 <?php namespace frame\tools\transmitters;
 
 use frame\database\Records;
+use frame\database\Database;
 
 /**
  * Так как этот класс использует базу данных, следует использовать его только 
@@ -15,36 +16,19 @@ class DatabaseTransmitter extends DataTransmitter
      */
     const TABLE = 'transmitting';
 
-    /**
-     * @var array Сами данные
-     */
     private $data = [];
-
-    /**
-     * @var bool Были ли изменены данные с помощью этого объекта
-     */
     private $changed = false;
-
-    /**
-     * @var Records Записи из таблицы
-     */
     private $records;
 
-    /**
-     * О конструкторе сказать нечего
-     */
-    public function __construct()
+    public function __construct(Database $db)
     {
-        $this->records = Records::select(self::TABLE);
+        $this->records = Records::select($db, self::TABLE);
         $data = $this->records->load()->readAll();
         for ($i = 0, $c = count($data); $i < $c; ++$i) {
             $this->data[$data[$i]['name']] = $data[$i]['value'];
         }
     }
 
-    /**
-     * О деструкторе тоже
-     */
     public function __destruct()
     {
         $this->save();  
