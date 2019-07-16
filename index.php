@@ -17,7 +17,9 @@ use frame\macros\ValueMacro;
 use frame\macros\BlockMacro;
 use frame\macros\WidgetMacro;
 
-$app = new Core;
+use globals\config_core;
+
+$app = new Core(config_core::get());
 $app->setDefaultHandler(DefaultErrorHandler::class);
 $app->setHandler(HttpError::class, HttpErrorHandler::class);
 $app->setHandler(StrictException::class, StrictExceptionHandler::class);

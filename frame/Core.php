@@ -3,12 +3,10 @@
 use frame\route\Router;
 use frame\route\Request;
 use frame\views\Page;
-use frame\database\Database;
-use frame\config\Json;
-use frame\config\DefaultedConfig;
 use frame\tools\Logger;
 use frame\errors\ErrorException;
 use frame\errors\HttpError;
+use frame\config\Config;
 
 class Core
 {
@@ -24,7 +22,7 @@ class Core
     public $router;
 
     /**
-     * @var DefaultedConfig Конфиг core.json
+     * @var Config Конфиг core.json
      */
     public $config;
 
@@ -49,7 +47,7 @@ class Core
     /**
      * Конструктор
      */
-    public function __construct()
+    public function __construct(Config $config)
     {
         ob_start(); // Чтобы можно было стереть весь предыдущий вывод видов и вывести что-то вместо него
 
@@ -60,13 +58,8 @@ class Core
         date_default_timezone_set('Europe/Kiev');
 
         $this->enableErrorHundlers();
-
-        $mainConfig = new Json('config/core.json');
-        $defaultConfig = new Json('config/default/core.json');
-        $this->config = new DefaultedConfig($mainConfig, $defaultConfig);
-
+        $this->config = $config;
         $this->router = new Router(Request::getRequest());
-
         static::$app = $this;
     }
 

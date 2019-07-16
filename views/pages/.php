@@ -9,6 +9,7 @@ use frame\rules\RouteRules;
 use globals\client_id;
 use globals\pagenumber;
 use globals\prev_router;
+use globals\config_core;
 
 $rules = new RouteRules($this->app->router, [
     'login' => [
@@ -30,12 +31,13 @@ $block = new Block('block');
 $answer = new Value('answer');
 $action = new HelloAction([Action::ID => 'the_id', 'answer' => $answer]);
 
+$config = config_core::get();
 $cid = client_id::get();
 $prevRouter = prev_router::get();
 $pagenumber = pagenumber::get();
 ?>
 
-Hello <?= $this->app->config->{'site.name'} ?><br>
+Hello <?= $config->{'site.name'} ?><br>
 <?= $block ?>
 The answer is <?= $answer ?><br>
 Your client id: <?= Client::getId() ?><br>
