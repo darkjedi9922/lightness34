@@ -4,7 +4,7 @@ interface Data
 {
     /**
      * @param mixed|array $name
-     * @return mixed
+     * @return mixed|null
      */
     public function get($name);
 
@@ -22,7 +22,7 @@ interface Data
 
     /**
      * @param mixed $name
-     * @return mixed
+     * @return mixed|null
      */
     public function __get($name);
 

@@ -13,15 +13,17 @@ class DefaultErrorHandler implements ErrorHandler
      */
     public function handle($error)
     {
-        $errorsMode = Core::$app->config->{"errors.showMode"};
-        if ($errorsMode == "errorPage" || $errorsMode == "errorDevPage") {
-            $page = Core::$app->config->{"errors." . $errorsMode};
+        $page = Core::$app->config->{'errors.errorPage'};
+        if ($page !== null) {
             try {
                 (new Page($page))->show();
             } catch (\Exception $pe) {
-                (new StrictExceptionHandler)->handle(new StrictException('Error page or error development page does not exist', 0, $error));
+                (new StrictExceptionHandler)->handle(new StrictException(
+                    'Error page or error development page does not exist',
+                    0, $error
+                ));
             }
-        } else if ($errorsMode == "display") {
+        } else {
             /**
              * Все виды при своей загрузке входят в новый вложенный уровень буфера.
              * Благодаря этому при ошибке, стираем все что должно было быть выведено
