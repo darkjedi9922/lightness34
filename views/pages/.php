@@ -6,12 +6,11 @@ use frame\tools\Client;
 use engine\HelloAction;
 use frame\actions\Action;
 use frame\rules\RouteRules;
-use globals\client_id;
 use globals\pagenumber;
 use globals\prev_router;
 use globals\config_core;
 
-$rules = new RouteRules($this->app->router, [
+(new RouteRules($this->app->router, [
     'login' => [
         'rules' => [
             // Параметр login может быть не задан.
@@ -20,9 +19,8 @@ $rules = new RouteRules($this->app->router, [
             'base/emptiness' => false
         ]
     ]
-]);
 // Если правила не выполняются, возникнет ошибка 404.
-$rules->assert();
+]))->assert();
 
 $this->setLayout('page');
 $this->setMetaArray(['name' => $this->file]);
@@ -32,7 +30,6 @@ $answer = new Value('answer');
 $action = new HelloAction([Action::ID => 'the_id', 'answer' => $answer]);
 
 $config = config_core::get();
-$cid = client_id::get();
 $prevRouter = prev_router::get();
 $pagenumber = pagenumber::get();
 ?>
