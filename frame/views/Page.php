@@ -32,6 +32,5 @@ class Page extends Layouted
     {
         ob_clean();
         parent::show();
-        exit;
     }
 }
