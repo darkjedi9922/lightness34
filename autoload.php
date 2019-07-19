@@ -5,7 +5,6 @@
  * начиная от корня сайта.
  */
 spl_autoload_register(function ($class) {
-    $class = explode('\\', $class);
-    $class = __DIR__.'/'.implode('/', $class).'.php';
+    $class = __DIR__.'/'.str_replace('\\', '/', $class).'.php';
     if (file_exists($class)) require $class;
 });
