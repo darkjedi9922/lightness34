@@ -7,6 +7,7 @@ use frame\tools\Logger;
 use frame\errors\ErrorException;
 use frame\errors\HttpError;
 use frame\config\Config;
+use frame\views\DynamicPage;
 
 class Core
 {
@@ -106,9 +107,10 @@ class Core
     public function exec()
     {
         $this->execMacros();
-        $page = $this->router->pagename;
-        if (Page::find($page)) (new Page($page))->show();
-        else throw new HttpError(404, 'Page ' . $page . ' does not exist.');
+        $pagename = $this->router->pagename;
+        $page = $this->findPage($pagename);
+        if ($page) $page->show();
+        else throw new HttpError(404, 'Page ' . $pagename . ' does not exist.');
     }
 
     private function execMacros()
@@ -155,5 +157,28 @@ class Core
         if (isset($this->hanlders[get_class($e)])) (new $this->hanlders[get_class($e)])->handle($e);
         else if ($this->defaultHandler) (new $this->defaultHandler)->handle($e);
         else throw $e;
+    }
+
+    private function findPage(string $pagename): ?Page
+    {
+        $parts = explode('/', $pagename);
+        
+        // Если в url вообще не будет задано частей страницы, то она точно не
+        // динамическая т.к. для нее должно быть хотя бы одна часть url,
+        // после имени динамической страницы.
+        if ($pagename !== '' && DynamicPage::find('')) 
+            return new DynamicPage('', $parts);
+
+        $page = '';
+        $pathCount = count($parts);
+        for ($i = 0; $i < $pathCount - 1; ++$i) {
+            $newPath = $page . $parts[$i];
+            if (DynamicPage::find($newPath)) 
+                return new DynamicPage($newPath, array_slice($parts, $i + 1));
+            $page .= $parts[$i] . '/';
+        }
+        
+        if (Page::find($pagename)) return new Page($pagename);
+        return null;
     }
 }
