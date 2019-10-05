@@ -31,9 +31,8 @@ class View
      * 
      * @param string $name Имя вида - путь к файлу без расширения. 
      * Например: view/blocks/header
-     * @return string|null
      */
-    public static function find($name)
+    public static function find(string $name): ?string
     {
         if (file_exists(ROOT_DIR . '/' . $name . '.php')) return $name . '.php';
         else if (file_exists(ROOT_DIR . '/' . $name . '.html')) return $name . '.html';

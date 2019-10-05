@@ -11,7 +11,7 @@ class Page extends Layouted
      * 
      * @see parent::find()
      */
-    public static function find($name)
+    public static function find(string $name): ?string
     {
         return parent::find(self::FOLDER . '/' . $name);
     }
