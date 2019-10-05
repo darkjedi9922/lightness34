@@ -14,7 +14,7 @@ The framework aims on strong component and code structuring.
 6. **Macroses**. Do something when you recieve trigger GET parameters.
 7. **Rules**. Validates action, route and other data using chains of rule validators.
 8. **Cash**. Should not use cash values in the frame classes because these values make testing and architecture of that classes more difficult.
-9. **Dynamic pages**. It allows to form dynamic routes sort of `page/non-existence-page/another-non-existence=page`. In this example `page` is a existing page that is really present as viewfile, and next parts of the url are *virtual* pages. Their names can be accessed from viewfile of dynamic page. That feature can be used, for example, to form routes like `article/my-first-article` where `my-first-article` is a name of the article that will be loaded from database in `article` viewfile.
+9. **Dynamic pages**. It allows to form dynamic routes sort of `page/non-existence-page/another-non-existence-page`. In this example `page` is a existing page that is really present as viewfile, and next parts of the url are *virtual* pages. Their names can be accessed from viewfile of dynamic page. That feature can be used, for example, to form routes like `article/my-first-article` where `my-first-article` is a name of the article that will be loaded from database in `article` viewfile.
 
 ## Getting Started
 
