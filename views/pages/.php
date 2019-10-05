@@ -6,9 +6,6 @@ use frame\tools\Client;
 use engine\HelloAction;
 use frame\actions\Action;
 use frame\rules\RouteRules;
-use globals\pagenumber;
-use globals\prev_router;
-use globals\config_core;
 
 (new RouteRules($this->app->router, [
     'login' => [
@@ -29,9 +26,9 @@ $block = new Block('block');
 $answer = new Value('answer');
 $action = new HelloAction([Action::ID => 'the_id', 'answer' => $answer]);
 
-$config = config_core::get();
-$prevRouter = prev_router::get();
-$pagenumber = pagenumber::get();
+$config = cash\config_core::get();
+$prevRouter = cash\prev_router::get();
+$pagenumber = cash\pagenumber::get();
 ?>
 
 Hello <?= $config->{'site.name'} ?><br>

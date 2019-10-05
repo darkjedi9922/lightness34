@@ -1,6 +1,6 @@
-<?php namespace globals;
+<?php namespace cash;
 
-use frame\tools\GlobalValue;
+use frame\tools\Cash;
 use frame\route\Request;
 use frame\route\Router;
 
@@ -9,16 +9,13 @@ use frame\route\Router;
  * для всех роутеров (на предпредыдущий через предыдущий не попадешь). Если 
  * предыдущего запроса нет - вернет null.
  */
-class prev_router extends GlobalValue
+class prev_router extends Cash
 {
     public static function get(): ?Router
     {
-        return parent::get();
-    }
-
-    public static function create(): ?Router
-    {
-        if (Request::hasReferer()) return new Router(Request::getReferer());
-        else return null;
+        return self::cash(function() {
+            if (Request::hasReferer()) return new Router(Request::getReferer());
+            else return null;
+        });
     }
 }

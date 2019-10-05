@@ -4,15 +4,15 @@
  * Не используй этот механизм во frame и engine классах и тогда классы будет проще 
  * тестировать, и их архитектура будет лучше.
  */
-abstract class GlobalValue
+abstract class Cash
 {
-    private static $storage = [];
+    public abstract static function get();
 
-    public static function get()
+    protected static function cash(callable $creator)
     {
         return self::$storage[static::class] ?? 
-            self::$storage[static::class] = static::create();
+            self::$storage[static::class] = $creator();
     }
-
-    public abstract static function create();
+    
+    private static $storage = [];
 }

@@ -13,7 +13,7 @@ The framework aims on strong component and code structuring.
 5. **Error Handlers**. Handle errors of any type from notices to fatal in one way that can be different to different error types.
 6. **Macroses**. Do something when you recieve trigger GET parameters.
 7. **Rules**. Validates action, route and other data using chains of rule validators.
-8. **Global values**. Global (singelton) values for using them as global values. Should not use them in the frame classes because these values make testing and architecture of that classes more difficult.
+8. **Cash**. Should not use cash values in the frame classes because these values make testing and architecture of that classes more difficult.
 
 ## Getting Started
 
