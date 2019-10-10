@@ -3,6 +3,13 @@
 class CookieTransmitter extends DataTransmitter
 {
     /**
+     * Чтобы cookie подействовали, нужно перезагрузить страницу.
+     * Чтобы можно было использовать cookie сразу без перезагрузки, 
+     * сделаем статический кеш.
+     */
+    private static $cash;
+
+    /**
      * @var int Продолжительность жизни печенек в секундах
      */
     private $expire = 0;
@@ -13,6 +20,7 @@ class CookieTransmitter extends DataTransmitter
     public function __construct($seconds_expire = 0)
     {
         $this->setExpire($seconds_expire);
+        if (!self::$cash) self::$cash = new StaticTransmitter;
     }
 
     /**
@@ -30,6 +38,7 @@ class CookieTransmitter extends DataTransmitter
     public function setData($name, $value)
     {
         setcookie($name, $value, $this->expire, '/');
+        self::$cash->setData($name, $value);
     }
 
     /**
@@ -37,8 +46,7 @@ class CookieTransmitter extends DataTransmitter
      */
     public function getData($name)
     {
-        if (!$this->isSetData($name)) throw new \Exception('The '.$name.' is not set.');
-        return $_COOKIE[$name];
+        return $_COOKIE[$name] ?? self::$cash->getData($name);
     }
 
     /**
@@ -46,7 +54,7 @@ class CookieTransmitter extends DataTransmitter
      */
     public function isSetData($name)
     {
-        return isset($_COOKIE[$name]);
+        return isset($_COOKIE[$name]) || self::$cash->isSetData($name);
     }
 
     /**
@@ -55,6 +63,7 @@ class CookieTransmitter extends DataTransmitter
     public function removeData($name)
     {
         setcookie($name, '', time() - 3600, '/');
+        self::$cash->removeData($name);
     }
 
     /**
@@ -62,6 +71,6 @@ class CookieTransmitter extends DataTransmitter
      */
     public function toArray()
     {
-        return $_COOKIE;
+        return array_merge($_COOKIE, self::$cash->toArray());
     }
 }
