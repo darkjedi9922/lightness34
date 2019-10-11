@@ -11,18 +11,23 @@ class Auth
         $this->transmitter = new CookieTransmitter;
     }
 
-    public function login()
+    public function login(string $key)
     {
-        $this->transmitter->setData('sid', 1);
+        $this->transmitter->setData('sid', $key);
     }
 
     public function logout()
     {
-        $this->transmitter->removeData('sid', 1);
+        $this->transmitter->removeData('sid');
     }
 
     public function isLogged(): bool
     {
         return $this->transmitter->isSetData('sid');
+    }
+
+    public function getKey(): ?string
+    {
+        return $this->isLogged() ? $this->transmitter->getData('sid') : null;
     }
 }

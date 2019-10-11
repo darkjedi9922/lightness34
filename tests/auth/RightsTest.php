@@ -22,7 +22,7 @@ class RightsTest extends TestCase
     public function testCanNotLoginIfLogout()
     {
         $auth = new Auth;
-        $auth->login();
+        $auth->login('some-secret-key');
 
         $rights = new Rights;
         $canLogin = $rights->can('login');
