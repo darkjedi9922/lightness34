@@ -30,13 +30,12 @@ class Records
      * @param array $where Ассоциативный массив, где ключи - имена полей, а значения 
      * - значения этих полей
      */
-    public static function select(Database $db, 
-        string $table, array $where = []): Records
+    public static function select(string $table, array $where = []): Records
     {
         $records = new static;
         $records->table = $table;
         $records->where = $where;
-        $records->db = $db;
+        $records->db = \cash\database::get();
         return $records;
     }
 
