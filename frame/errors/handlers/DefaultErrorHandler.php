@@ -19,7 +19,7 @@ class DefaultErrorHandler implements ErrorHandler
                 (new Page($page))->show();
             } catch (\Exception $pe) {
                 (new StrictExceptionHandler)->handle(new StrictException(
-                    'Error page or error development page does not exist',
+                    'Error page does not exist',
                     0, $error
                 ));
             }
