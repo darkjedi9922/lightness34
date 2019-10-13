@@ -11,8 +11,9 @@ class Auth
         $this->transmitter = new CookieTransmitter;
     }
 
-    public function login(string $key)
+    public function login(string $key, bool $remember = false)
     {
+        $key = $remember ? '1'.$key : '0'.$key;
         $this->transmitter->setData('sid', $key);
     }
 
@@ -28,6 +29,13 @@ class Auth
 
     public function getKey(): ?string
     {
-        return $this->isLogged() ? $this->transmitter->getData('sid') : null;
+        if (!$this->isLogged()) return null;
+        return substr($this->transmitter->getData('sid'), 1);
+    }
+
+    public function isRemembered(): bool
+    {
+        if (!$this->isLogged()) return false;
+        return $this->transmitter->getData('sid')[0];
     }
 }
