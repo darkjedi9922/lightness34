@@ -2,15 +2,8 @@
 
 class Value extends View
 {
-    const FOLDER = 'views/values';
-
-    /**
-     * Ищет сам view файл виджета
-     * 
-     * @see parent::find()
-     */
-    public static function find(string $name): ?string
+    public static function getFolder(): string
     {
-        return parent::find(self::FOLDER . '/' . $name);
+        return View::getFolder() . '/values';
     }
 }

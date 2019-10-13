@@ -31,17 +31,40 @@ class View
     private $cachedContent = null;
 
     /**
-     * Ищет сам view файл. Он может быть таких типов (в порядке приоритета): php, html. 
-     * Приоритетность - если есть два файла: один - php, а другой - html, - будет выбран php.
+     * Директория, в которой нужно искать вид. Значение НЕ должно заканчиваться на /.
      * 
-     * @param string $name Имя вида - путь к файлу без расширения. 
-     * Например: view/blocks/header
+     * Следует переопределять в потомках.
+     */
+    public static function getFolder(): string
+    {
+        return ROOT_DIR . '/views';
+    }
+
+    /**
+     * Расширения файлов видов, которые поддерживет реализуемый вид.
+     * Задаются в порядке приоритета. Например: ['php', 'html'].
+     * 
+     * Можно переопределить в потомках, чтобы фиксировать доступные расширения вида.
+     */
+    public static function getExtensions(): array
+    {
+        return ['php', 'html'];
+    }
+
+    /**
+     * Ищет сам view файл. По-умолчанию, он может быть таких типов: php, html. 
+     * 
+     * @param string $name Имя вида - путь к файлу без расширения.
+     * Например: blocks/header
      */
     public static function find(string $name): ?string
     {
-        if (file_exists(ROOT_DIR . '/' . $name . '.php')) return $name . '.php';
-        else if (file_exists(ROOT_DIR . '/' . $name . '.html')) return $name . '.html';
-        else return null;
+        $folder = static::getFolder();
+        foreach (static::getExtensions() as $ext) {
+            $file = "$folder/$name.$ext";
+            if (file_exists($file)) return $file;
+        }
+        return null;
     }
 
     /**

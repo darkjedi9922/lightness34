@@ -1,17 +1,21 @@
 <?php namespace frame\views;
 
-use function lightlib\last;
-
 class DynamicPage extends Page
 {
     private $args;
+
+    public static function getExtensions(): array
+    {
+        return ['php'];
+    }
 
     /** {@inheritdoc} */
     public static function find(string $name): ?string
     {
         $parts = explode('/', $name);
-        $file = self::FOLDER . '/$' . last($parts) . '.php';
-        return file_exists($file) ? $file : null;
+        $lastIndex = count($parts) - 1;
+        $parts[$lastIndex] = '$'.$parts[$lastIndex];
+        return parent::find(implode('/', $parts));
     }
 
     public function __construct(string $name, array $args, ?string $layout = null)

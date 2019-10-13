@@ -4,16 +4,9 @@ use frame\Core;
 
 class Widget extends Layouted
 {
-    const FOLDER = 'views/widgets';
-
-    /**
-     * Ищет сам view файл виджета
-     * 
-     * @see parent::find()
-     */
-    public static function find(string $name): ?string
+    public static function getFolder(): string
     {
-        return parent::find(self::FOLDER . '/' . $name);
+        return View::getFolder() . '/widgets';
     }
 
     /**

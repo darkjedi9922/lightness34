@@ -4,16 +4,9 @@ use frame\Core;
 
 class Block extends Layouted
 {
-    const FOLDER = 'views/blocks';
-
-    /**
-     * Ищет сам view файл блока
-     * 
-     * @see parent::find()
-     */
-    public static function find(string $name): ?string
+    public static function getFolder(): string
     {
-        return parent::find(self::FOLDER . '/' . $name);
+        return View::getFolder() . '/blocks';
     }
 
     /**

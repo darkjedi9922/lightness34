@@ -5,19 +5,19 @@
  */
 class Layout extends Layouted
 {
-    const FOLDER = 'views/layouts';
-
     /**
      * @var View $child Вид-содержимое
      */
     public $child;
 
-    /**
-     * @see parent::find()
-     */
-    public static function find(string $name): ?string
+    public static function getExtensions(): array
     {
-        return parent::find(self::FOLDER . '/' . $name);
+        return ['php'];
+    }
+
+    public static function getFolder(): string
+    {
+        return View::getFolder() . '/layouts';
     }
 
     /**
