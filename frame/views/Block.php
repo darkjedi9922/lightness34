@@ -15,6 +15,7 @@ class Block extends Layouted
     public function __construct($name, $layout = null)
     {
         parent::__construct($name, $layout);
-        if ($this->layoutname === null) $this->layoutname = Core::$app->config->{'blocks.defaultLayout'};
+        if ($this->getLayout() === null) 
+            $this->setLayout(Core::$app->config->{'blocks.defaultLayout'});
     }
 }

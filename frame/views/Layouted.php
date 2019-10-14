@@ -13,7 +13,7 @@ class Layouted extends View
     /**
      * @var string|null Имя шаблона
      */
-    public $layoutname = null;
+    private $layoutname = null;
 
     /**
      * @param string $name Имя вида - путь к файлу без расширения. 
