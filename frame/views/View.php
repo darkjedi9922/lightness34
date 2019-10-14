@@ -21,7 +21,9 @@ class View
 
     /**
      * @var array Ассоциативный массив мета-данных вида. 
-     * Это может быть использовано, например, в layout'e для получения данных из дочернего элемента.
+     * Это может быть использовано, например, в layout'e для получения данных из 
+     * дочернего элемента, или из родительского вида, после обработки (показа)
+     * дочернего.
      */
     private $meta = [];
 
@@ -114,35 +116,14 @@ class View
         echo $this->__toString();
     }
 
-    /**
-     * Устанавливает мета-информацию вида.
-     * Это может быть использовано, например, в layout'e для получения данных из дочернего элемента.
-     * @param string $name
-     * @param mixed $value
-     */
-    public function setMetaOne($name, $value)
+    public function setMeta(string $name, $value)
     {
         $this->meta[$name] = $value;
     }
 
-    /**
-     * Устанавливает мета-информацию вида.
-     * Это может быть использовано, например, в layout'e для получения данных из дочернего элемента.
-     * @param array $data Ассоциативный массив мета-данных вида.
-     */
-    public function setMetaArray($data)
+    /** @return mixed|null */
+    public function getMeta(string $name)
     {
-        $this->meta = $data;
-    }
-
-    /**
-     * Возвращает мета-информацию вида.
-     * Это может быть использовано, например, в layout'e для получения данных из дочернего элемента.
-     * @param string $name
-     * @return mixed
-     */
-    public function getMeta($name)
-    {
-        return $this->meta[$name];
+        return $this->meta[$name] ?? null;
     }
 }
