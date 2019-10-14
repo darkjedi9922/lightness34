@@ -93,7 +93,7 @@ class View
      * Это нужно, чтобы перед показом, загрузить само содержимое, внутри которого 
      * могли изменится настройки вида, чтобы успеть подстроиться под новые настройки.
      */
-    public function getContent()
+    protected function getContent()
     {
         if ($this->cachedContent === null) {
             ob_start();
@@ -104,21 +104,12 @@ class View
     }
 
     /**
-     * Возвращает содержимое вида.
-     * Предупреждение: вызов в самом себе может привести к бесконечной рекурсии и/или ошибкам.
-     */
-    public function __toString()
-    {
-        return $this->getContent();
-    }
-
-    /**
      * Выводит содержимое вида.
      * Предупреждение: вызов в самом себе может привести к бесконечной рекурсии и/или ошибкам.
      */
     public function show()
     {
-        echo $this->__toString();
+        echo $this->getContent();
     }
 
     public function setMeta(string $name, $value)
