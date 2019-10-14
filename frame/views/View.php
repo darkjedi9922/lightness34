@@ -2,6 +2,11 @@
 
 use frame\Core;
 
+function __show(View $self) 
+{
+    require $self->file;
+}
+
 class View
 {
     /**
@@ -92,7 +97,7 @@ class View
     {
         if ($this->cachedContent === null) {
             ob_start();
-            require $this->file;
+            __show($this);
             $this->cachedContent = ob_get_clean();
         }
         return $this->cachedContent;

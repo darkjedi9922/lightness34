@@ -1,4 +1,4 @@
-<?php /** @var frame\views\Page $this */
+<?php /** @var frame\views\Page $self */
 
 use frame\views\Block;
 
