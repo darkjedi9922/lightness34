@@ -5,7 +5,7 @@
     "widgets.defaultLayout": "widget",
     "log.enabled": true,
     "log.file": "log.txt",
-    "errors.errorPage": "error",
+    "errors.errorPage": null,
     "errors.403.page": "403",
     "errors.404.page": "404",
     "database.host": "localhost",
