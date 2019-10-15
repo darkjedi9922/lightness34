@@ -2,6 +2,7 @@
 
 use frame\views\Block;
 
+$self->setLayout('base');
 ?>
 
 <div class="header">
