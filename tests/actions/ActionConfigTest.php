@@ -90,7 +90,7 @@ class ActionConfigTest extends TestCase
 
         // В экшн не было передано post значения `username`.
         $this->assertTrue($action->hasDataError('post', 'username', 'mandatory'));
-        $this->assertTrue($action->isFail());
+        $this->assertTrue($action->hasErrors());
     }
 
     public function testIfThereAreNoErrorsThenActionIsSuccess()
@@ -98,7 +98,7 @@ class ActionConfigTest extends TestCase
         // Никакие правила не устанавлены, поэтому экшн всегда будет без ошибок.
         $action = $this->jsonValidatedAction;
         $action->exec();
-        $this->assertTrue($action->isSuccess());
+        $this->assertTrue(!$action->hasErrors());
     }
 
     public function testIfThereAreErrorsThenActionIsFailed()
@@ -114,7 +114,7 @@ class ActionConfigTest extends TestCase
             ]
         ]);
         $action->exec();
-        $this->assertTrue($action->isFail());
+        $this->assertTrue($action->hasErrors());
     }
 
     public function testRuleIsNotFoundRaisesError()
@@ -218,7 +218,7 @@ class ActionConfigTest extends TestCase
         // В теле экшна используются промежуточные данные. Если их нет, будет ошибка.
         $action->exec();
 
-        $this->assertTrue($action->isSuccess());
+        $this->assertTrue(!$action->hasErrors());
     }
 
     public function testInnerInterDataReturnsNullValue()

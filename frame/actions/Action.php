@@ -47,10 +47,6 @@ use frame\LatePropsObject;
  */
 abstract class Action extends LatePropsObject
 {
-    const NONE = 0;
-    const SUCCESS = 1;
-    const FAIL = -1;
-
     /**
      * Type of Action data.
      */
@@ -74,11 +70,10 @@ abstract class Action extends LatePropsObject
     /** @var Core Ссылка на экземпляр приложения для удобства */
     public $app;
 
-    /** @var int $status Статус: NONE, SUCCESS или FAIL. */
-    public $status = self::NONE;
-
     /** @var array Ошибки типа OWN, возникшие после validate(). */
     public $errors = [];
+
+    private $executed = false;
 
     /** @var array [string => ActionRules] */
     private $rules = [
@@ -219,27 +214,21 @@ abstract class Action extends LatePropsObject
         $this->rules[self::POST]->validate();
         $this->rules[self::FILES]->validate();
         $this->errors = $this->validate();
+        $this->executed = true;
         if ($this->hasErrors()) {
             $this->succeed();
-            $this->status = self::SUCCESS;
             $this->save();
             Response::setUrl(Router::toUrlOf($this->getSuccessRedirect()));
         } else {
             $this->fail();
-            $this->status = self::FAIL;
             $this->save();
             Response::setUrl(Router::toUrlOf($this->getFailRedirect()));
         }
     }
 
-    public function isSuccess(): bool
+    public function isExecuted(): bool
     {
-        return $this->status === self::SUCCESS;
-    }
-
-    public function isFail(): bool
-    {
-        return $this->status === self::FAIL;
+        return $this->executed;
     }
 
     /**
@@ -384,8 +373,8 @@ abstract class Action extends LatePropsObject
         $this->doBeforeSave();
         $idName = $this->getIdName();
         $sessions = new SessionTransmitter;
-        $sessions->setData($idName . '_status', $this->status);
-        if ($this->isFail()) {
+        $sessions->setData($idName, 1);
+        if ($this->hasErrors()) {
             $sessions->setData($idName . '_errors', serialize($this->errors));
             $sessions->setData($idName . '_data', serialize($this->getDataArray()));
         }
@@ -398,8 +387,8 @@ abstract class Action extends LatePropsObject
     {
         $idName = $this->getIdName();
         $sessions = new SessionTransmitter;
-        if ($sessions->isSetData($idName . '_status')) {
-            $this->status = $sessions->getData($idName . '_status');
+        if ($sessions->isSetData($idName)) {
+            $this->executed = true;
             $sessions->removeData($idName . '_status');
             if ($sessions->isSetData($idName . '_errors')) {
                 $this->errors = unserialize($sessions->getData($idName . '_errors'));
