@@ -2,7 +2,7 @@
     "site.name": "Lightness 3.4 Framework",
     "pages.defaultLayout": "main",
     "blocks.defaultLayout": null,
-    "widgets.defaultLayout": null,
+    "widgets.defaultLayout": "widget",
     "log.enabled": true,
     "log.file": "log.txt",
     "errors.errorPage": "error",
