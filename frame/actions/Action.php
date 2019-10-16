@@ -5,7 +5,6 @@ use frame\route\Router;
 use frame\route\Request;
 use frame\route\Response;
 use frame\tools\transmitters\SessionTransmitter;
-use frame\config\Json;
 use frame\actions\UploadedFile;
 
 use function lightlib\encode_specials;
@@ -65,8 +64,6 @@ abstract class Action extends LatePropsObject
     const ID = 'action';
     const TOKEN = 'csrf';
 
-    const VALIDATION_CONFIG_FOLDER = 'public/actions';
-
     /** @var Core Ссылка на экземпляр приложения для удобства */
     public $app;
 
@@ -94,12 +91,6 @@ abstract class Action extends LatePropsObject
             return new UploadedFile($filedata);
         }, $_FILES));
 
-        $configFile = self::VALIDATION_CONFIG_FOLDER . '/' . $type . '.json';
-        if (file_exists($configFile)) {
-            $config = new Json($configFile);
-            $action->setConfig($config->getData());
-        }
-
         return $action;
     }
 
@@ -110,6 +101,7 @@ abstract class Action extends LatePropsObject
         $this->rules[self::POST] = new ActionRules;
         $this->rules[self::FILES] = new ActionRules;
         $this->setDataAll(self::ARGS, $args);
+        $this->setupRules();
         $this->load();
     }
 
@@ -261,20 +253,6 @@ abstract class Action extends LatePropsObject
         return $this->rules[$type] && $this->rules[$type]->hasError($data, $error);
     }
 
-    public function setConfig(?array $config)
-    {
-        foreach ($this->rules as $type => $rules)
-            $rules->setRules($config[$type] ?? []);
-    }
-
-    public function getConfig(): array
-    {
-        $result = [];
-        foreach ($this->rules as $type => $rules)
-            $result[$type] = $rules->getRules();
-        return $result;
-    }
-
     public function setRuleCallback(string $rule, callable $callback)
     {
         foreach ($this->rules as $rules)
@@ -286,6 +264,8 @@ abstract class Action extends LatePropsObject
     {
         return md5('tkn_salt' . Client::getId());
     }
+
+    protected function getConfig(): array { return []; }
 
     /**
      * Is run first
@@ -369,6 +349,13 @@ abstract class Action extends LatePropsObject
     {
         return static::class . '_' . 
             ($this->rules[self::ARGS]->getValue(self::ID) ?? '');
+    }
+
+    private function setupRules()
+    {
+        $config = $this->getConfig();
+        foreach ($this->rules as $type => $rules)
+            $rules->setRules($config[$type] ?? []);
     }
 
     /**

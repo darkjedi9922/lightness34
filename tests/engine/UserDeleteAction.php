@@ -4,6 +4,27 @@ use frame\actions\Action;
 
 class UserDeleteAction extends Action
 {
+    protected function getConfig(): array
+    {
+        return [
+            "post" => [
+                "id" => [
+                    "rules" => [
+                        "base/mandatory" => true,
+                        "base/emptiness" => false,
+                        "userIdExists" => true
+                    ]
+                ],
+                'answer' => [
+                    'default' => [42]
+                ],
+                'question' => [
+                    'default' => ['...']
+                ]
+            ]
+        ];
+    }
+
     protected function initialize()
     {
         // Это правило в идеале выделено и не имеет доступа к данным этого.

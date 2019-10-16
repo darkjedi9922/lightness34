@@ -6,6 +6,7 @@ use frame\actions\Action;
 use tests\engine\UserDeleteAction;
 use frame\rules\errors\NoRuleException;
 use frame\rules\errors\RuleCheckFailedException;
+use tests\engine\JsonValidatedConfiguredAction;
 
 /**
  * `Run in separate process` заглушает сообщения вида `headers already sent`, когда
@@ -15,77 +16,31 @@ use frame\rules\errors\RuleCheckFailedException;
  */
 class ActionConfigTest extends TestCase
 {
-    protected $jsonValidatedActionConfig;
-    protected $userDeleteActionConfig;
     /** @var JsonValidatedAction $jsonValidatedAction */
     protected $jsonValidatedAction;
+    /** @var JsonValidatedConfiguredAction $jsonValidatedConfiguredAction */
+    protected $jsonValidatedConfiguredAction;
+    /** @var UserDeleteAction $userDeleteAction */
+    protected $userDeleteAction;
 
     protected function setUp(): void
     {
-        $this->jsonValidatedActionConfig = [
-            "get" => [
-                "user_id" => [
-                    "rules" => [
-                        "base/emptiness" => true
-                    ],
-                    "default" => ["some-user"]
-                ]
-            ],
-            "post" => [
-                "username" => [
-                    "rules" => [
-                        "base/mandatory" => true,
-                        "base/emptiness" => false,
-                        "base/min-length" => 4,
-                        "base/max-length" => 4
-                    ],
-                    "errorRules" => [
-                        "base/max-length"
-                    ]
-                ],
-                "alter" => [
-                    "default" => ["Doctor Who", "TARDIS"],
-                    "rules" => [
-                        "base/mandatory" => true
-                    ]
-                ],
-                "enemy" => [
-                    "default" => ["Dalek"]
-                ]
-            ],
-            "files" => [
-                "avatar" => [
-                    "default" => ["no-avatar.jpg"],
-                    "rules" => [
-                        "file/must-load" => false
-                    ]
-                ]
-            ]
-        ];
-
-        $this->userDeleteActionConfig = [
-            "post" => [
-                "id" => [
-                    "rules" => [
-                        "base/mandatory" => true,
-                        "base/emptiness" => false,
-                        "userIdExists" => true
-                    ]
-                ]
-            ]
-        ];
-
         $this->jsonValidatedAction = new JsonValidatedAction;
         $this->jsonValidatedAction->setData(Action::ARGS, Action::TOKEN, 
             $this->jsonValidatedAction->getExpectedToken());
+        
+        $this->jsonValidatedConfiguredAction = new JsonValidatedConfiguredAction;
+        $this->jsonValidatedConfiguredAction->setData(Action::ARGS, Action::TOKEN,
+            $this->jsonValidatedConfiguredAction->getExpectedToken());
+
+        $this->userDeleteAction = new UserDeleteAction;
+        $this->userDeleteAction->setData(Action::ARGS, Action::TOKEN,
+            $this->userDeleteAction->getExpectedToken());
     }
 
     public function testCallbackValidate()
     {
-        $action = new JsonValidatedAction;
-        $action->setData(Action::ARGS, Action::TOKEN, $action->getExpectedToken());
-        $action->setConfig($this->jsonValidatedActionConfig);
-
+        $action = $this->jsonValidatedConfiguredAction;
         $action->exec();
 
         // В экшн не было передано post значения `username`.
@@ -103,28 +58,16 @@ class ActionConfigTest extends TestCase
 
     public function testIfThereAreErrorsThenActionIsFailed()
     {
-        $action = $this->jsonValidatedAction;
-        $action->setConfig([
-            'get' => [
-                'login' => [
-                    'rules' => [
-                        'base/mandatory' => true
-                    ]
-                ]
-            ]
-        ]);
+        // Как минимум, не передали обязательные поля.
+        $action = $this->jsonValidatedConfiguredAction;
         $action->exec();
         $this->assertTrue($action->hasErrors());
     }
 
     public function testRuleIsNotFoundRaisesError()
     {
-        $action = new JsonValidatedAction;
-        $action->setData(Action::ARGS, Action::TOKEN, $action->getExpectedToken());
-        $action->setConfig($this->jsonValidatedActionConfig);
-
+        $action = $this->jsonValidatedConfiguredAction;
         $this->expectException(NoRuleException::class);
-        
         // В конфиге экшна установлены проверки, механизмы которых не были
         // установлены в экшн.
         $action->exec();
@@ -132,15 +75,12 @@ class ActionConfigTest extends TestCase
 
     public function testRuleHandlerCanStopRuleHandling()
     {
-        $action = new JsonValidatedAction;
-        $action->setData(Action::ARGS, Action::TOKEN, $action->getExpectedToken());
-
         // По конфигу, поле username не должно быть пустым (правило emptiness).
         // Также минимальная длинна этого поля равна 4. Но бессмысленно проверять
         // минимальную длинну поля, (да и другие проверки) если оно пустое. 
         // Поэтому правило emptiness при своей обработке должно остановить 
         // проверку дальнейших правил для этого поля.
-        $action->setConfig($this->jsonValidatedActionConfig);
+        $action = $this->jsonValidatedConfiguredAction;
         
         $action->setData('post', 'username', '');
         $action->exec();
@@ -152,10 +92,7 @@ class ActionConfigTest extends TestCase
 
     public function testRuleHandlerMayNotStopRuleHandling()
     {
-        $action = new JsonValidatedAction;
-        $action->setData(Action::ARGS, Action::TOKEN, $action->getExpectedToken());
-        $action->setConfig($this->jsonValidatedActionConfig);
-
+        $action = $this->jsonValidatedConfiguredAction;
         $action->setData('post', 'username', 'Jed');
         $action->exec();
 
@@ -168,20 +105,7 @@ class ActionConfigTest extends TestCase
 
     public function testGetField()
     {
-        $config = [
-            'post' => [
-                'answer' => [
-                    'default' => [42]
-                ],
-                'question' => [
-                    'default' => ['...']
-                ]
-            ]
-        ];
-
-        $action = new UserDeleteAction;
-        $action->setConfig($config);
-
+        $action = $this->userDeleteAction;
         $action->setData('post', 'username', 'BadUser');
         $action->setData('post', 'empty-field', '');
         $action->setData('post', 'question', '');
@@ -195,9 +119,7 @@ class ActionConfigTest extends TestCase
 
     public function testFailedRuleMayThrowException()
     {
-        $action = new JsonValidatedAction;
-        $action->setData(Action::ARGS, Action::TOKEN, $action->getExpectedToken());
-        $action->setConfig($this->jsonValidatedActionConfig);
+        $action = $this->jsonValidatedConfiguredAction;
 
         $this->expectException(RuleCheckFailedException::class);
 
@@ -207,9 +129,7 @@ class ActionConfigTest extends TestCase
 
     public function testInnerInterDataReturnsNotNullValue()
     {
-        $action = new UserDeleteAction;
-        $action->setData(Action::ARGS, Action::TOKEN, $action->getExpectedToken());
-        $action->setConfig($this->userDeleteActionConfig);
+        $action = $this->userDeleteAction;
 
         // В этом тестовом экшне id = 1 является единственным путем успешно 
         // пройти проверки.
@@ -223,13 +143,13 @@ class ActionConfigTest extends TestCase
 
     public function testInnerInterDataReturnsNullValue()
     {
-        $action = new UserDeleteAction;
+        $action = $this->userDeleteAction;
         $this->assertNull($action->getInterData('post', 'some-field', 'no-value'));
     }
 
     public function testGetSetup()
     {
-        $action = new JsonValidatedAction;
+        $action = $this->jsonValidatedAction;
         $action->setDataAll('get', ['arg1' => 1, 'arg2' => 2]);
         $action->setData('get', 'arg3', 3);
 
@@ -241,17 +161,13 @@ class ActionConfigTest extends TestCase
 
     public function testReturnsDefaultGetValue()
     {
-        $action = new JsonValidatedAction;
-        $action->setConfig($this->jsonValidatedActionConfig);
-
+        $action = $this->jsonValidatedConfiguredAction;
         $this->assertEquals('some-user', $action->getDataDefault('get', 'user_id'));
     }
     
     public function testFileDefaultValue()
     {
-        $action = new JsonValidatedAction;
-        $action->setConfig($this->jsonValidatedActionConfig);
-
+        $action = $this->jsonValidatedConfiguredAction;
         $default = $action->getDataDefault('files', 'avatar');
         $this->assertEquals('no-avatar.jpg', $default);
     }
