@@ -45,6 +45,16 @@ class UserDeleteAction extends Action
         if (!$deletedUser || $deletedUser['id'] !== 1) 
             // Эта проверка лишь для процесса тестирования, убедиться что
             // переменная действительно была установлена и ее правда можно получить.
-            throw new \Exception('deletedUser должен был быть установлен.');
+            throw new \Exception('deletedUser должен был быть установлен (post id user = 1)');
+    }
+
+    protected function getSuccessRedirect(): ?string
+    {
+        return null;
+    }
+
+    protected function getFailRedirect(): ?string
+    {
+        return null;
     }
 }

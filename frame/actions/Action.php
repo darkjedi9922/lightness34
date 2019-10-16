@@ -215,14 +215,18 @@ abstract class Action extends LatePropsObject
         $this->rules[self::FILES]->validate();
         $this->errors = $this->validate();
         $this->executed = true;
+        $redirect = null;
         if (!$this->hasErrors()) {
             $this->succeed();
             $this->save();
-            Response::setUrl(Router::toUrlOf($this->getSuccessRedirect()));
+            $redirect = $this->getSuccessRedirect();
         } else {
             $this->fail();
+            $redirect = $this->getFailRedirect();
+        }
+        if ($redirect !== null) {
             $this->save();
-            Response::setUrl(Router::toUrlOf($this->getFailRedirect()));
+            Response::setUrl(Router::toUrlOf($redirect));
         }
     }
 
@@ -340,8 +344,10 @@ abstract class Action extends LatePropsObject
     /**
      * Возвращает адрес веб-страницы, на которую нужно перейти после успешного
      * (без ошибок во время валидации данных) завершения экшна.
+     * 
+     * Если вернет null, редиректа не будет.
      */
-    protected function getSuccessRedirect(): string
+    protected function getSuccessRedirect(): ?string
     {
         if (Request::hasReferer()) return Request::getReferer();
         else return '/';
@@ -350,8 +356,10 @@ abstract class Action extends LatePropsObject
     /**
      * Возвращает адрес веб-страницы, на которую нужно перейти после неудачного
      * (с ошибками во время валидации данных) завершения экшна.
+     * 
+     * Если вернет null, редиректа не будет.
      */
-    protected function getFailRedirect(): string
+    protected function getFailRedirect(): ?string
     {
         if (Request::hasReferer()) return Request::getReferer();
         else return '/';
