@@ -365,13 +365,15 @@ abstract class Action extends LatePropsObject
      */
     private function save()
     {
-        $this->doBeforeSave();
-        $idName = $this->getIdName();
-        $sessions = new SessionTransmitter;
-        $sessions->setData($idName, 1);
         if ($this->hasErrors()) {
-            $sessions->setData($idName . '_errors', serialize($this->errors));
-            $sessions->setData($idName . '_data', serialize($this->getDataArray()));
+            $this->doBeforeSave();
+            $idName = $this->getIdName();
+            $sessions = new SessionTransmitter;
+            $sessions->setData($idName, serialize([
+                $this->executed,
+                $this->errors,
+                $this->rules
+            ]));
         }
     }
 
@@ -383,18 +385,12 @@ abstract class Action extends LatePropsObject
         $idName = $this->getIdName();
         $sessions = new SessionTransmitter;
         if ($sessions->isSetData($idName)) {
-            $this->executed = true;
-            $sessions->removeData($idName . '_status');
-            if ($sessions->isSetData($idName . '_errors')) {
-                $this->errors = unserialize($sessions->getData($idName . '_errors'));
-                $sessions->removeData($idName . '_errors');
-            }
-            if ($sessions->isSetData($idName . '_data')) {
-                $data = unserialize($sessions->getData($idName . '_data'));
-                foreach ($this->rules as $type => $rules)
-                    $rules->setValues($data[$type] ?? []);
-                $sessions->removeData($idName . '_data');
-            }
+            list(
+                $this->executed, 
+                $this->errors, 
+                $this->rules
+            ) = unserialize($sessions->getData($idName));
+            $sessions->removeData($idName);
             $this->doAfterLoad();
         }
     }
