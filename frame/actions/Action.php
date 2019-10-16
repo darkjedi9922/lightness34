@@ -182,14 +182,20 @@ abstract class Action extends LatePropsObject
         return $data;
     }
 
+    public final function getId(): string
+    {
+        return $this->rules[self::ARGS]->getValue(self::ID) ?? '';
+    }
+
     /**
      * Триггерное url на выполнение экшна
      */
     public final function getUrl(): string
     {
-        $get = array_merge($this->rules[Action::ARGS]->getValues(), [
+        $get = array_merge([
+            self::ID => '',
             self::TOKEN => $this->getExpectedToken(),
-        ]);
+        ], $this->rules[Action::ARGS]->getValues());
         return Router::toUrlOf('/' . str_replace('\\', '/', static::class), $get);
     }
 
@@ -346,8 +352,7 @@ abstract class Action extends LatePropsObject
 
     private function getIdName(): string
     {
-        return static::class . '_' . 
-            ($this->rules[self::ARGS]->getValue(self::ID) ?? '');
+        return static::class . '_' . $this->getId();
     }
 
     private function setupRules()
