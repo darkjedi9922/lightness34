@@ -215,7 +215,7 @@ abstract class Action extends LatePropsObject
         $this->rules[self::FILES]->validate();
         $this->errors = $this->validate();
         $this->executed = true;
-        if ($this->hasErrors()) {
+        if (!$this->hasErrors()) {
             $this->succeed();
             $this->save();
             Response::setUrl(Router::toUrlOf($this->getSuccessRedirect()));
