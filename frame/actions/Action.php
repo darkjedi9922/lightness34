@@ -49,7 +49,6 @@ abstract class Action extends LatePropsObject
     /**
      * Type of Action data.
      */
-    const OWN = 'own';
     const ARGS = 'get';
     const POST = 'post';
     const FILES = 'files';
@@ -67,7 +66,7 @@ abstract class Action extends LatePropsObject
     /** @var Core Ссылка на экземпляр приложения для удобства */
     public $app;
 
-    /** @var array Ошибки типа OWN, возникшие после validate(). */
+    /** @var array Ошибки после validate(). */
     public $errors = [];
 
     private $executed = false;
@@ -228,12 +227,12 @@ abstract class Action extends LatePropsObject
     }
 
     /**
-     * Возвращает есть ли ошибка типа OWN (после валидации).
+     * Возвращает есть ли ошибка после валидации validate().
      * @param int $error Код ошибки.
      */
     public function hasError(int $error): bool
     {
-        return in_array($error, $this->errors[self::OWN]);
+        return in_array($error, $this->errors);
     }
 
     public function hasErrors(): bool
