@@ -10,7 +10,6 @@ use frame\actions\UploadedFile;
 use function lightlib\encode_specials;
 use frame\tools\Client;
 use frame\errors\HttpError;
-use frame\rules\ActionRules;
 use frame\LatePropsObject;
 
 /**
@@ -67,15 +66,14 @@ abstract class Action extends LatePropsObject
     public $app;
 
     /** @var array Ошибки после validate(). */
-    public $errors = [];
+    private $errors = [];
 
     private $executed = false;
 
-    /** @var array [string => ActionRules] */
-    private $rules = [
-        self::ARGS => null,
-        self::POST => null,
-        self::FILES => null
+    private $data = [
+        self::ARGS => [],
+        self::POST => [],
+        self::FILES => []
     ];
 
     public static function fromTriggerUrl(string $url): Action
@@ -96,11 +94,7 @@ abstract class Action extends LatePropsObject
     public function __construct(array $args = [])
     {
         $this->app = Core::$app;
-        $this->rules[self::ARGS] = new ActionRules;
-        $this->rules[self::POST] = new ActionRules;
-        $this->rules[self::FILES] = new ActionRules;
         $this->setDataAll(self::ARGS, $args);
-        $this->setupRules();
         $this->load();
     }
 
@@ -112,7 +106,7 @@ abstract class Action extends LatePropsObject
     public function setDataAll(string $type, array $data)
     {
         $safeValue = ($type === self::FILES ? $data : encode_specials($data));
-        $this->rules[$type]->setValues($safeValue);
+        $this->data[$type] = $safeValue;
     }
 
     /**
@@ -123,68 +117,30 @@ abstract class Action extends LatePropsObject
     public function setData(string $type, string $name, $value)
     {
         $safeValue = ($type === self::FILES ? $value : encode_specials($value));
-        $this->rules[$type]->setValue($name, $safeValue);
+        $this->data[$type][$name] = $safeValue;
     }
 
     /**
      * Возвращает входящее значение, если оно есть, или значение по умолчанию, если 
      * его нет.
      * 
-     * @param string $type post|get|files.
+     * @param string $type post|get|files
+     * @param string|UploadedFile|null $default
      * @return string|UploadedFile|null
-     * @see Rules::getValue()
      */
-    public function getData(string $type, string $name)
+    public function getData(string $type, string $name, $default = null)
     {
-        return $this->rules[$type]->getValue($name);
+        return $this->data[$type][$name] ?? $default;
     }
 
-    /**
-     * @see Rules::getDefault()
-     */
-    public function getDataDefault(string $type,
-        string $name, bool $existing = false)
+    public function getDataArray(): array
     {
-        return $this->rules[$type]->getDefault($name, $existing);
-    }
-
-    public function getDataArray()
-    {
-        $result = [];
-        foreach ($this->rules as $type => $rules)
-            $result[$type] = $rules->getValues();
-        return $result;
-    }
-
-    /**
-     * Если заданного значения нет, вернет null.
-     * 
-     * @param string $field Поле, по которому это значение связано (генерируется
-     * в цепочке правил поля).
-     * @return mixed|null
-     */
-    public function getInterData(string $type, string $field, string $name)
-    {
-        return $this->rules[$type]->getInterData($field, $name);
-    }
-
-    /**
-     * @param string $field Поле, по которому значение связано (генерируется
-     * в цепочке правил поля).
-     * @return mixed
-     * @throws \Exception Если заданного значения нет (или оно null).
-     */
-    public function requireInterData(string $type, string $field, string $name)
-    {
-        $data = $this->getInterData($type, $field, $name);
-        if ($data === null) throw new \Exception('There is no "' . $type .
-            '" inter data "' . $name . '" from "' . $field . '"');
-        return $data;
+        return $this->data;
     }
 
     public final function getId(): string
     {
-        return $this->rules[self::ARGS]->getValue(self::ID) ?? '';
+        return $this->data[self::ARGS][self::ID] ?? '';
     }
 
     /**
@@ -195,7 +151,7 @@ abstract class Action extends LatePropsObject
         $get = array_merge([
             self::ID => '',
             self::TOKEN => $this->getExpectedToken(),
-        ], $this->rules[Action::ARGS]->getValues());
+        ], $this->data[Action::ARGS]);
         return Router::toUrlOf('/' . str_replace('\\', '/', static::class), $get);
     }
 
@@ -205,13 +161,9 @@ abstract class Action extends LatePropsObject
      */
     public final function exec()
     {
-        $this->assertToken($this->rules[self::ARGS]->getValue(self::TOKEN) ?? '');
+        $this->assertToken($this->data[self::ARGS][self::TOKEN] ?? '');
         $this->initialize();
-        $this->rules[self::ARGS]->validate();
-        $this->rules[self::POST]->validate();
-        $this->rules[self::FILES]->validate();
         $this->errors = $this->validate();
-        $this->executed = true;
         $redirect = null;
         if (!$this->hasErrors()) {
             $this->succeed();
@@ -221,6 +173,7 @@ abstract class Action extends LatePropsObject
             $this->fail();
             $redirect = $this->getFailRedirect();
         }
+        $this->executed = true;
         if ($redirect !== null) {
             $this->save();
             Response::setUrl(Router::toUrlOf($redirect));
@@ -243,34 +196,13 @@ abstract class Action extends LatePropsObject
 
     public function hasErrors(): bool
     {
-        return !empty($this->errors) 
-            || $this->rules[self::ARGS] && $this->rules[self::ARGS]->hasErrors()
-            || $this->rules[self::POST] && $this->rules[self::POST]->hasErrors()
-            || $this->rules[self::FILES] && $this->rules[self::FILES]->hasErrors();
-    }
-
-    /**
-     * Возвращает есть ли у заданного значения ошибка rule.
-     * @param string|int $error Имя провалившегося rule правила.
-     */
-    public function hasDataError(string $type, string $data, $error): bool
-    {
-        return $this->rules[$type] && $this->rules[$type]->hasError($data, $error);
-    }
-
-    public function setRuleCallback(string $rule, callable $callback)
-    {
-        foreach ($this->rules as $rules)
-            $rules->setRuleCallback($rule, $callback);
-        
+        return !empty($this->errors);
     }
 
     public function getExpectedToken(): string
     {
         return md5('tkn_salt' . Client::getId());
     }
-
-    protected function getConfig(): array { return []; }
 
     /**
      * Is run first
@@ -355,13 +287,6 @@ abstract class Action extends LatePropsObject
         return static::class . '_' . $this->getId();
     }
 
-    private function setupRules()
-    {
-        $config = $this->getConfig();
-        foreach ($this->rules as $type => $rules)
-            $rules->setRules($config[$type] ?? []);
-    }
-
     /**
      * Сохраняет свое состояние перед редиректом.
      * Сохраняются статус, ошибки и введенные данные.
@@ -375,8 +300,8 @@ abstract class Action extends LatePropsObject
             $sessions = new SessionTransmitter;
             $sessions->setData($idName, serialize([
                 $this->executed,
-                $this->errors,
-                $this->rules
+                $this->data,
+                $this->errors
             ]));
         }
     }
@@ -390,9 +315,9 @@ abstract class Action extends LatePropsObject
         $sessions = new SessionTransmitter;
         if ($sessions->isSetData($idName)) {
             list(
-                $this->executed, 
-                $this->errors, 
-                $this->rules
+                $this->executed,
+                $this->data, 
+                $this->errors
             ) = unserialize($sessions->getData($idName));
             $sessions->removeData($idName);
             $this->doAfterLoad();
