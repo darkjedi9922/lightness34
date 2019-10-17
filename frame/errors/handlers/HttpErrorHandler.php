@@ -11,6 +11,14 @@ class HttpErrorHandler implements ErrorHandler
     public function handle($error)
     {
         $page = Core::$app->config->{'errors.' . $error->getCode() . '.page'};
-        (new Page($error->getCode()))->show();
+        if (Page::find((string) $error->getCode())) {
+            (new Page($error->getCode()))->show();
+        } else {
+            $defaultHandler = new DefaultErrorHandler;
+            $defaultHandler->handle(new \Exception(
+                "Notice: This error can be hidden in {$error->getCode()} page.",
+                0, $error
+            ));
+        }
     }
 }
