@@ -1,4 +1,4 @@
-<?php namespace frame\auth;
+<?php namespace engine\users;
 
 use frame\database\Identity;
 
