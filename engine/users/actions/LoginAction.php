@@ -33,7 +33,6 @@ class LoginAction extends Action
         if (!$password) $errors[] = self::E_NO_PASSWORD;
 
         if (empty($errors)) {
-            if ($login === null || $password === null) return [];
             $password = Encoder::getPassword($password);
             $data = Records::select('users', ['login' => $login])
                 ->load(['password', 'sid'])->readLine();
