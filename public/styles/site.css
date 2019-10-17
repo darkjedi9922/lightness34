@@ -17,11 +17,11 @@ body {
     background: #293133
 }
 
+/* header */
 .header {
     background: url(/public/images/header.png);
     padding: 20px
 }
-
 .header__header {
     display: -webkit-box;
     display: -webkit-flex;
@@ -39,12 +39,10 @@ body {
     -ms-flex-align: center;
     align-items: center
 }
-
 .header__container {
     width: 75%;
     margin: auto
 }
-
 .header__logo {
     text-transform: uppercase;
     color: #fff;
@@ -52,12 +50,10 @@ body {
     font-size: 1.1rem;
     text-decoration: none
 }
-
 .header__menu {
     display: inline-block;
     font-size: .9rem
 }
-
 .header__button {
     color: #fff;
     padding: 8px 14px;
@@ -67,64 +63,65 @@ body {
     font-weight: 700;
     font-size: .8rem
 }
-
 .header__button:hover {
     color: #add8e6;
     -webkit-box-shadow: 0 0 10px 1px #add8e6;
     -moz-box-shadow: 0 0 10px 1px #add8e6;
     box-shadow: 0 0 10px 1px #add8e6
 }
-
 .header__content {
     padding: 150px 0
 }
-
 .header__text {
     color: #fff;
     text-transform: uppercase;
     font-size: 2.5rem;
     font-weight: 700
 }
-
 .header__subtext {
     color: #add8e6;
     display: block;
     margin-top: 20px
 }
 
+/* header-menu */
 .header-menu__item {
     color: #fff;
     text-decoration: none;
     padding: 8px
 }
-
 .header-menu__item:hover {
     color: #ccc
 }
 
+/* slide */
 .slide {
     padding: 40px 0
 }
-
 .slide__container {
     width: 75%;
     margin: auto
 }
-
 .slide:nth-of-type(odd) {
     background: #293133
 }
-
 .slide:nth-of-type(even) {
     background: #f6f7f9
 }
-
 .slide__header {
     display: block;
     text-transform: uppercase;
     font-weight: 700;
     font-size: 1.2rem;
     color: #000
+}
+
+.link {
+    text-decoration: none;
+    color: #7f9faa;
+}
+.link:hover {
+    text-decoration: underline;
 }
 
 .fundamentals {
@@ -212,6 +209,7 @@ body {
     background: rgb(195, 255, 195);
 }
 
+/* widget */
 .widget {
     background: #f6f7f9;
     font-family: 'Lato';
@@ -226,6 +224,7 @@ body {
     text-align: center;
 }
 .widget__content {
+    font-size: 0.9rem;
     padding: 0 1rem 1rem;
 }
 
