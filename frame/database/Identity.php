@@ -10,8 +10,11 @@ abstract class Identity
 
     public abstract static function getTable(): string;
 
-    /** @throws Exception if the record is not an identity. */
-    public static function select(array $fields): ?self
+    /** 
+     * @return static|null
+     * @throws Exception if the record is not an identity. 
+     */
+    public static function select(array $fields)
     {
         $records = Records::select(static::getTable(), $fields);
         $data = $records->load()->readLine();
@@ -25,8 +28,11 @@ abstract class Identity
         return $record;
     }
 
-    /** @throws Exception if the record is not an identity. */
-    public static function selectIdentity(int $id): ?self
+    /** 
+     * @return static|null
+     * @throws Exception if the record is not an identity. 
+     */
+    public static function selectIdentity(int $id)
     {
         return static::select(['id' => $id]);
     }
