@@ -13,3 +13,6 @@ vendor/phpunit
 # User core config. There are settings for access to a database, but mysql settings
 # may be different from one user to another, so we ignore this config file.
 config/core.json
+
+# User avatars folder
+public/images/avatars
