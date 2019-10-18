@@ -4,12 +4,14 @@ use engine\users\cash\user_me;
 use engine\users\cash\my_group;
 use frame\tools\Client;
 use engine\messages\Dialog;
+use engine\users\actions\LogoutAction;
 
 $self->setMeta('title', 'Профиль');
 
 $me = user_me::get();
 $group = my_group::get();
 $newMessagesCount = Dialog::countUnreaded($me->id);
+$logout = new LogoutAction;
 ?>
 
 <div class="mini-profile">
@@ -30,6 +32,6 @@ $newMessagesCount = Dialog::countUnreaded($me->id);
     <p>Ваш IP: <?= Client::getIp() ?></p>
     <hr>
     <div class="mini-profile__exit">
-        <a class="link" href="#">Выход</a>
+        <a class="link" href="<?= $logout->getUrl() ?>">Выход</a>
     </div>
 </div>
