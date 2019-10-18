@@ -27,5 +27,5 @@ $self->setMeta('title', 'Вход');
         <label for="remember-checkbox"><i class="fontello icon-ok"></i></label><span>Запомнить меня</span>
     </div>
     <button class="form__button">Войти</button>
-    <a class="link" style="margin-left:5px;" href="/registration">Регистрация</a>
+    <a style="margin-left:5px;" href="/registration">Регистрация</a>
 </form>

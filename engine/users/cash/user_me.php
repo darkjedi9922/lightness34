@@ -3,6 +3,7 @@
 use frame\tools\Cash;
 use frame\auth\Auth;
 use engine\users\User;
+use engine\users\Group;
 
 class user_me extends Cash
 {
@@ -19,7 +20,7 @@ class user_me extends Cash
             $guest = new User;
             $guest->id = 0;
             $guest->login = 'Гость';
-            $guest->group_id = 1;
+            $guest->group_id = Group::GUEST_ID;
             return $guest;
         });
     }

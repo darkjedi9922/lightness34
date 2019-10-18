@@ -1,7 +1,5 @@
 <?php namespace frame\database;
 
-use function lightlib\dump;
-
 /**
  * Records of Identity type must have `id` field as a primary key.
  */

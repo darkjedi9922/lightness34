@@ -18,6 +18,6 @@ $auth = new Auth;
         <?= $self->showChild() ?>
     </div>
     <div class="container__sidebox">
-        <?= (new Widget('welcome'))->show() ?>
+        <?= (new Widget($auth->isLogged() ? 'mini-profile' : 'welcome'))->show() ?>
     </div>
 </div>

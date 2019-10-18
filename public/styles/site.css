@@ -118,7 +118,7 @@ body {
 
 .link {
     text-decoration: none;
-    color: #7f9faa;
+    color: #5a757e;
 }
 .link:hover {
     text-decoration: underline;
@@ -315,4 +315,22 @@ body {
 }
 .login-form__checkbox input:checked + label + span {
     color: #81d481;
+}
+
+/* mini-profile */
+.mini-profile {
+    font-size: 0.85rem;
+}
+.mini-profile p {
+    margin: 0.2rem 0;
+}
+.mini-profile__title {
+    text-align: center;
+}
+.mini-profile__avatar {
+    display: block;
+    margin: auto;
+}
+.mini-profile__exit {
+    text-align: center;
 }

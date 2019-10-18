@@ -8,4 +8,10 @@ class User extends Identity
     {
         return 'users';
     }
+
+    public function getAvatarUrl(): string
+    {
+        if ($this->avatar) return 'public/images/avatars/' . $this->avatar;
+        else return 'public/images/no-avatar.png';
+    }
 }
