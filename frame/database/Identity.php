@@ -70,11 +70,12 @@ abstract class Identity
         // $records->update($newData);
     }
 
-    public function insert()
+    public function insert(): int
     {
         unset($this->data['id']);
         $records = Records::select(static::getTable(), $this->data);
         $this->data['id'] = $records->insert();
         $this->exists = true;
+        return $this->data['id'];
     }
 }
