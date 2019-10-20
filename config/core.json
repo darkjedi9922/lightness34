@@ -3,6 +3,7 @@
     "pages.defaultLayout": "main",
     "blocks.defaultLayout": null,
     "widgets.defaultLayout": "widget",
+    "pagers.defaultLayout": null,
     "log.enabled": true,
     "log.file": "log.txt",
     "errors.errorPage": null,
