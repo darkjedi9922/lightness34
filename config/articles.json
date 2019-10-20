@@ -1,3 +1,4 @@
 {
-    "list.amount": 10
+    "list.amount": 10,
+    "title.maxLength": 100
 }
