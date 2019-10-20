@@ -5,8 +5,13 @@
  */
 abstract class Identity
 {
+    /** 
+     * @var bool $exists Был загружен БД (true) 
+     * или создан как пустой объект (false). 
+     */
     private $exists = false;
-    private $data = [];
+
+    private $data;
 
     public abstract static function getTable(): string;
 
@@ -35,6 +40,11 @@ abstract class Identity
     public static function selectIdentity(int $id)
     {
         return static::select(['id' => $id]);
+    }
+
+    public function __construct(array $data = [])
+    {
+        $this->data = $data;
     }
 
     /** @return mixed|null */
