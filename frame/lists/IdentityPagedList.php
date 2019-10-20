@@ -2,6 +2,7 @@
 
 use cash\database;
 use frame\database\Records;
+use frame\database\Identity;
 use frame\lists\Pager;
 
 abstract class IdentityPagedList implements IterableList
@@ -45,7 +46,10 @@ abstract class IdentityPagedList implements IterableList
     {
         $info = $this->list->readLine();
         if (!$info) $this->item = null;
-        else $this->item = new ${static::getIdentityClass()}($info);
+        else {
+            $class = static::getIdentityClass();
+            $this->item = new $class($info);
+        }
     }
 
     public function current(): ?Identity

@@ -27,7 +27,7 @@ $articles = new ArticlePagedList($pagenumber);
         <div>
             <span class='article-title'><?= $article->title ?></span><br>
             <p><span class="text"><?= shorten($article->content, 450, '...') ?></span></p>
-            <p><a href='/article?id=<?=$ARTICLE->get('id') ?>'>Читать полностью...</a></p>
+            <p><a href='/article?id=<?= $article->id ?>'>Читать полностью...</a></p>
             <p>
                 <i>
                     Автор: <a href='/profile?login=<?= $author->login ?>'><?= $author->login ?></a> 
