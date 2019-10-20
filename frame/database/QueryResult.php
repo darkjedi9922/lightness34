@@ -48,4 +48,14 @@ class QueryResult
         if ($line) return current($line);
         else return null;
     }
+
+    public function count(): int
+    {
+        return $this->result->num_rows;
+    }
+
+    public function seek(int $offset)
+    {
+        $this->result->data_seek($offset);
+    }
 }
