@@ -8,6 +8,7 @@ use frame\tools\Logger;
 use frame\errors\ErrorException;
 use frame\errors\HttpError;
 use frame\config\Config;
+use frame\modules\Module;
 use frame\views\DynamicPage;
 
 class Core
@@ -45,6 +46,8 @@ class Core
      * значение - имя класса действия макроса.
      */
     private $macros = [];
+
+    private $modules = [];
 
     /**
      * Конструктор
@@ -94,6 +97,26 @@ class Core
     public function setDefaultHandler($handlerClass)
     {
         $this->defaultHandler = $handlerClass;
+    }
+
+    /**
+     * @throws \Exception если модуль с таким именем уже существует.
+     */
+    public function setModule(Module $module)
+    {
+        if (isset($this->modules[$module->getName()])) throw new \Exception(
+            "The module with name {$module->getName()} have already been added.");
+        $this->modules[$module->getName()] = $module;
+    }
+
+    public function getModule(string $name): ?Module
+    {
+        return $this->modules[$name] ?? null;
+    }
+
+    public function getModules(): array
+    {
+        return $this->modules;
     }
 
     /**

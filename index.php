@@ -22,8 +22,14 @@ $app = new Core;
 $app->setDefaultHandler(DefaultErrorHandler::class);
 $app->setHandler(HttpError::class, HttpErrorHandler::class);
 $app->setHandler(StrictException::class, StrictExceptionHandler::class);
+
+$articles = new engine\articles\Module('articles');
+
+$app->setModule($articles);
+
 $app->setMacro('action', ActionMacro::class);
 $app->setMacro('value', ValueMacro::class);
 $app->setMacro('block', BlockMacro::class);
 $app->setMacro('widget', WidgetMacro::class);
+
 $app->exec();
