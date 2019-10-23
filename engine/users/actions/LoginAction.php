@@ -4,7 +4,7 @@ use frame\auth\Auth;
 use frame\database\Records;
 use engine\users\Encoder;
 use frame\actions\Action;
-use frame\errors\HttpError;
+use frame\tools\Init;
 
 class LoginAction extends Action
 {
@@ -13,13 +13,10 @@ class LoginAction extends Action
     const E_WRONG_PASSWORD = 3;
 
     private $sid;
-    /** @var Auth $auth */
-    private $auth;
 
     protected function initialize()
     {
-        $this->auth = new Auth;
-        if ($this->auth->isLogged()) throw new HttpError(HttpError::FORBIDDEN);
+        Init::accessLogged(false);
     }
 
     public function validate(): array
@@ -47,7 +44,7 @@ class LoginAction extends Action
     public function succeed()
     {
         $remember = (bool) $this->getData('post', 'remember');
-        $this->auth->login($this->sid, $remember);
+        (new Auth)->login($this->sid, $remember);
     }
 
     protected function getSuccessRedirect(): ?string

@@ -4,6 +4,7 @@ use engine\articles\Article;
 use engine\users\cash\user_me;
 use frame\actions\Action;
 use frame\config\Json;
+use frame\tools\Init;
 
 /**
  * Права: добавление статей
@@ -22,7 +23,7 @@ class NewArticleAction extends Action
 
     protected function initialization()
     {
-        // InitializationAccess::require(ArticleObjects::getMyRights()->canAdd());
+        Init::accessRight('articles', 'add');
     }
 
     protected function validate(): array

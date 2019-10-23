@@ -1,9 +1,10 @@
 <?php /** @var frame\views\Page $self */
 
 use engine\articles\actions\NewArticleAction;
+use frame\tools\Init;
 
-// $RIGHTS     = new ArticleRights;
-// \modules\core\initialization\InitializationAccess::require($RIGHTS->canAdd());
+Init::accessRight('articles', 'add');
+
 $action = new NewArticleAction;
 ?>
 
