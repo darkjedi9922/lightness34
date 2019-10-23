@@ -27,8 +27,8 @@ abstract class Identity
         if (!isset($data['id']))
             throw new \Exception('The record is not an identity');
         $record = new static;
-        $record->id = $data['id'];
         $record->data = $data;
+        $record->id = (int) $data['id'];
         $record->exists = true;
         return $record;
     }
@@ -67,7 +67,7 @@ abstract class Identity
         $records = Records::select(static::getTable(), ['id' => $this->id]);
         $newData = $this->data;
         unset($newData['id']);
-        // $records->update($newData);
+        $records->update($newData);
     }
 
     public function insert(): int

@@ -10,9 +10,9 @@ use cash\database;
  */
 class LogoutAction extends Action 
 {
-    protected function initialization()
+    protected function initialize()
     {
-        Init::accessLogged(false);
+        Init::accessLogged(true);
     }
 
     protected function succeed()
@@ -23,7 +23,7 @@ class LogoutAction extends Action
             'UPDATE users SET online = 0 WHERE sid = "'.$auth->getKey().'"');
     }
 
-    protected function getSuccessRedirect(): string
+    protected function getSuccessRedirect(): ?string
     {
         return '/';
     }
