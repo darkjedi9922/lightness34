@@ -17,7 +17,8 @@ use frame\macros\ValueMacro;
 use frame\macros\BlockMacro;
 use frame\macros\WidgetMacro;
 
-$app = new Core(cash\config_core::get());
+$app = new Core;
+
 $app->setDefaultHandler(DefaultErrorHandler::class);
 $app->setHandler(HttpError::class, HttpErrorHandler::class);
 $app->setHandler(StrictException::class, StrictExceptionHandler::class);

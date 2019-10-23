@@ -1,5 +1,6 @@
 <?php namespace frame;
 
+use cash\config_core;
 use frame\route\Router;
 use frame\route\Request;
 use frame\views\Page;
@@ -48,7 +49,7 @@ class Core
     /**
      * Конструктор
      */
-    public function __construct(Config $config)
+    public function __construct()
     {
         ob_start(); // Чтобы можно было стереть весь предыдущий вывод видов и вывести что-то вместо него
 
@@ -59,7 +60,7 @@ class Core
         date_default_timezone_set('Europe/Kiev');
 
         $this->enableErrorHundlers();
-        $this->config = $config;
+        $this->config = config_core::get();
         $this->router = new Router(Request::getRequest());
         static::$app = $this;
     }
