@@ -14,14 +14,11 @@ class RightsDesc implements FrameRightsDesc
         ];
     }
 
-    public function additionCheck(
-        string $right, 
-        User $subject = null, 
-        $object = null
-    ): bool {
+    public function additionCheck(string $right, User $user, $object = null): bool
+    {
         switch ($right) {
         case 'edit-own':
-            return $subject->id === $object->author_id;
+            return $user->id === $object->author_id;
         }
         return true;
     }

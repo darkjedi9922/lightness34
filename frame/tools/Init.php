@@ -48,7 +48,7 @@ class Init
         if (!isset(self::$cashedRights[$module])) {
             $moduleInstance = Core::$app->getModule($module);
             if (!$moduleInstance) 
-                throw new \Exception("There is not the module $module.");
+                throw new \Exception("There is no module $module.");
 
             $desc = $moduleInstance->createRightsDescription();
             if (!$desc) throw new \Exception(
