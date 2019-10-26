@@ -1,6 +1,5 @@
 <?php namespace frame\actions;
 
-use frame\Core;
 use frame\route\Router;
 use frame\route\Request;
 use frame\route\Response;
@@ -62,9 +61,6 @@ abstract class Action extends LatePropsObject
     const ID = 'action';
     const TOKEN = 'csrf';
 
-    /** @var Core Ссылка на экземпляр приложения для удобства */
-    public $app;
-
     /** @var array Ошибки после validate(). */
     private $errors = [];
 
@@ -93,7 +89,6 @@ abstract class Action extends LatePropsObject
 
     public function __construct(array $args = [])
     {
-        $this->app = Core::$app;
         $this->setDataAll(self::ARGS, $args);
         $this->load();
     }

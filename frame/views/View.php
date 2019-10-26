@@ -1,7 +1,5 @@
 <?php namespace frame\views;
 
-use frame\Core;
-
 function __show(View $self) 
 {
     require $self->file;
@@ -9,11 +7,6 @@ function __show(View $self)
 
 class View
 {
-    /**
-     * @var Core Ссылка на экземпляр приложения для удобства
-     */
-    public $app;
-
     /**
      * @var string Имя вида
      */
@@ -84,7 +77,6 @@ class View
         $this->file = static::find($name);
         if (!$this->file) throw new \Exception('Viewfile for view "'.$name.'" was not found');
         $this->name = $name;
-        $this->app = Core::$app;
     }
 
     /**

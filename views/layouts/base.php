@@ -1,7 +1,11 @@
-<?php
+<?php /** @var frame\views\Layout $self */
+
+use cash\config_core;
+
 use function lightlib\versionify;
 
-/** @var frame\views\Layout $self */ ?>
+$config = config_core::get();
+?>
 
 <!DOCTYPE html>
 <html lang="ru">
@@ -9,7 +13,7 @@ use function lightlib\versionify;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title><?= $self->app->config->{'site.name'} ?></title>
+    <title><?= $config->{'site.name'} ?></title>
     <link rel="stylesheet" href="<?= versionify('public/styles/normalize.css') ?>">
     <link rel="stylesheet" href="<?= versionify('public/styles/site.css') ?>">
 </head>
