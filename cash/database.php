@@ -7,7 +7,7 @@ class database extends Cash
 {
     public static function get(): DB
     {
-        return self::cash(function() {
+        return self::cash('db', function() {
             $config = config_core::get();
             $host = $config->{'database.host'};
             $username = $config->{'database.username'};

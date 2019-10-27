@@ -9,7 +9,7 @@ class user_me extends Cash
 {
     public static function get(): User
     {
-        return self::cash(function () {
+        return self::cash('me', function () {
             $auth = new Auth;
 
             if ($auth->isLogged()) {

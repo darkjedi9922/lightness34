@@ -8,7 +8,7 @@ class config_core extends Cash
 {
     public static function get(): Config
     {
-        return self::cash(function() {
+        return self::cash('cc', function() {
             return new Json('config/core.json');
         });
     }
