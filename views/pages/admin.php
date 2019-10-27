@@ -3,7 +3,7 @@
 use engine\admin\actions\LoginAction;
 use engine\admin\Auth;
 
-$self->setLayout('admin');
+$self->setLayout('admin-base');
 $self->setMeta('admin-login-page-flag', true);
 
 $action = new LoginAction;

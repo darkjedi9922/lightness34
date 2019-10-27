@@ -1,33 +1,16 @@
 <?php /** @var frame\views\Layout $self */
 
-use cash\config_core;
-use engine\admin\Auth;
-use frame\tools\Init;
-use frame\views\Page;
-use function lightlib\versionify;
+use frame\views\Block;
 
-Init::accessRight('admin', 'enter');
-
-$auth = new Auth;
-
-// Если нет авторзации и при этом не находимся на странице `admin` (там задаем флаг).
-if (!$auth->isLogged() && !$self->getChildMeta('admin-login-page-flag')) {
-    (new Page('admin'))->show();
-    return;
-}
-
-$config = config_core::get();
+$self->setLayout('admin-base');
 ?>
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html" charset="utf-8">
-    <link rel="icon" href="<?= versionify('public/favicon.ico') ?>" type="image/x-icon">
-    <link rel="stylesheet" href="<?= versionify('public/styles/admin.css') ?>" type="text/css">
-    <title><?= $config->{'site.name'} ?></title>
-</head>
-<body>
-    <?php $self->showChild() ?>
-</body>
-</html>
+<table class="container">
+    <tr>
+        <td rowspan="2" class="sidebox"><?php (new Block('admin/left'))->show() ?></td>
+        <td class="head-bar"><?php (new Block('admin/headbar'))->show() ?></td>
+    </tr>
+    <tr>
+        <td class="content"><?php $self->showChild() ?></td>
+    </tr>
+</table>
