@@ -23,8 +23,10 @@ $app->setDefaultHandler(DefaultErrorHandler::class);
 $app->setHandler(HttpError::class, HttpErrorHandler::class);
 $app->setHandler(StrictException::class, StrictExceptionHandler::class);
 
+$admin = new engine\admin\Module('admin');
 $articles = new engine\articles\Module('articles');
 
+$app->setModule($admin);
 $app->setModule($articles);
 
 $app->setMacro('action', ActionMacro::class);
