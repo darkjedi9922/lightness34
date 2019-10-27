@@ -1,6 +1,5 @@
 <?php namespace frame;
 
-use cash\config_core;
 use frame\route\Router;
 use frame\route\Request;
 use frame\views\Page;
@@ -63,7 +62,7 @@ class Core
         date_default_timezone_set('Europe/Kiev');
 
         $this->enableErrorHundlers();
-        $this->config = config_core::get();
+        $this->config = \cash\config::get('core');
         $this->router = new Router(Request::getRequest());
         static::$app = $this;
     }

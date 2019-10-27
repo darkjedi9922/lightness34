@@ -1,10 +1,10 @@
 <?php /** @var frame\views\Layout $self */
 
-use cash\config_core;
+use cash\config;
 
 use function lightlib\versionify;
 
-$config = config_core::get();
+$config = config::get('core');
 ?>
 
 <!DOCTYPE html>
