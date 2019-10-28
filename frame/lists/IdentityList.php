@@ -33,8 +33,7 @@ class IdentityList implements IterableList
         }
     }
 
-    /** @return Identity */
-    public function current()
+    public function current(): ?Identity
     {
         return $this->item;
     }
