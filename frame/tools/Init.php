@@ -3,6 +3,7 @@
 use engine\users\cash\my_rights;
 use frame\errors\HttpError;
 use frame\auth\Auth;
+use frame\Core;
 
 class Init
 {
@@ -15,10 +16,10 @@ class Init
     /** @throws HttpError NOT_FOUND */
     public static function requireGet(string $name): string
     {
-        $router = CoreObjects::getRouter();
-        if (!$router->isSetArgument($name)) throw new HttpError(HttpError::NOT_FOUND, 
+        $router = Core::$app->router;
+        if ($router->getArg($name) === null) throw new HttpError(HttpError::NOT_FOUND, 
             'The '.$name.' url argument does not exist.');
-        return $router->getArgument($name);
+        return $router->getArg($name);
     }
 
     /** @throws HttpError FORBIDDEN */
