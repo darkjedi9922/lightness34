@@ -26,9 +26,7 @@ abstract class Identity
         if (!$data) return null;
         if (!isset($data['id']))
             throw new \Exception('The record is not an identity');
-        $record = new static;
-        $record->data = $data;
-        $record->id = (int) $data['id'];
+        $record = new static($data);
         $record->exists = true;
         return $record;
     }
@@ -44,6 +42,7 @@ abstract class Identity
 
     public function __construct(array $data = [])
     {
+        if (!empty($data)) $data['id'] = (int) $data['id'];
         $this->data = $data;
     }
 
