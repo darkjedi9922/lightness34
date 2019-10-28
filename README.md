@@ -15,6 +15,11 @@ The framework aims on strong component and code structuring.
 7. **Rules**. Validates action, route and other data using chains of rule validators.
 8. **Cash**. Should not use cash values in the frame classes because these values make testing and architecture of that classes more difficult.
 9. **Dynamic pages**. It allows to form dynamic routes sort of `page/non-existence-page/another-non-existence-page`. In this example `page` is a existing page that is really present as viewfile, and next parts of the url are *virtual* pages. Their names can be accessed from viewfile of dynamic page. That feature can be used, for example, to form routes like `article/my-first-article` where `my-first-article` is a name of the article that will be loaded from database in `article` viewfile.
+10. **Lists**. Convenient way to make lists of Identities.
+11. **Pagination.** The lists mechanism includes `Pager`'s that allows to split contents of lists by page numbers.
+12. **Authorization.** The way to authorize users.
+13. **Modules**. They allows to create parts of a site based on the same stuctures. Also modules are an important part of **user rights mechanism** (*see below*).
+14. **User/Group rights.** Gives a convenient way to define group rights. The groups are part of users, so there are also user rights that can have additional checks on the defined user. 
 
 ## Getting Started
 
