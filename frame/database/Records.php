@@ -83,14 +83,17 @@ class Records
     }
 
     /**
-     * Вставляет в таблицу $table запись, с данными, которые были заданы в массиве $where
+     * Вставляет в таблицу $table запись, с данными, которые были заданы в 
+     * массиве $where при создании и значениями $values.
+     * @param array $values Ассоциативный массив, аналогичный $where.
      * @see $table
      * @see $where
      */
-    public function insert()
+    public function insert(array $values = [])
     {
-        $keys = implode(', ', array_keys($this->where));
-        $values = implode(', ', $this->addIndexQuotes(array_values($this->where)));
+        $set = array_merge($this->where, $values);
+        $keys = implode(', ', array_keys($set));
+        $values = implode(', ', $this->addIndexQuotes(array_values($set)));
         $this->db->query('INSERT INTO ' . $this->table .
             ' (' . $keys . ') VALUES (' . $values . ')');
         return $this->db->getLastInsertedId();
