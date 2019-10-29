@@ -49,7 +49,7 @@ class FileReadingTracker
 
     public function setUnreadedForAll()
     {
-        foreach ($this->transmitter->getDataArray() as $name => $value) {
+        foreach ($this->transmitter->toArray() as $name => $value) {
             if (strpos($name, $this->file.'_readed_by_') === 0) {
                 $this->transmitter->removeData($name);
             }
