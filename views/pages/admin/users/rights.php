@@ -32,6 +32,7 @@ $me = user_me::get();
             <?php foreach ($modules as $module):
             /** @var Module $module */
             $rightsDesc = $module->createRightsDescription();
+            if (!$rightsDesc) continue;
             $rightList = $rightsDesc->listRights();
             $rights = new GroupRights($rightsDesc, $module->getId(), $group->id);
             ?>

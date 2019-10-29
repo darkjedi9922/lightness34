@@ -47,8 +47,9 @@ class EditRightsAction extends Action
         foreach ($modules as $moduleName => $module) {
             /** @var Module $module */
             $desc = $module->createRightsDescription();
-            $rightList = $desc->listRights();
+            if (!$desc) continue;
 
+            $rightList = $desc->listRights();
             $groupRights = new GroupRights($desc, $module->getId(), $this->id);
             foreach ($rightList as $rightName => $rightDesc) {
                 $canValue = isset($rights[$moduleName][$rightName]); 
