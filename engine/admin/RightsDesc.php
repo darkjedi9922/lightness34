@@ -9,7 +9,8 @@ class RightsDesc implements FrameRightsDesc
     {
         return [
             'enter' => 'Enter into admin panel',
-            'see-logs' => 'See logs'
+            'see-logs' => 'See logs',
+            'clear-logs' => 'Clear logs'
         ];
     }
 
