@@ -25,9 +25,11 @@ $app->setHandler(StrictException::class, StrictExceptionHandler::class);
 
 $admin = new engine\admin\Module('admin');
 $articles = new engine\articles\Module('articles');
+$articleComments = new engine\comments\Module('article-comments');
 
 $app->setModule($admin);
 $app->setModule($articles);
+$app->setModule($articleComments);
 
 $app->setMacro('action', ActionMacro::class);
 $app->setMacro('value', ValueMacro::class);

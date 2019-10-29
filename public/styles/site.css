@@ -365,3 +365,25 @@ body {
 .mini-profile__exit {
     text-align: center;
 }
+
+/* article */
+.article__title {
+    text-transform: uppercase;
+    font-weight: 700;
+    color: #81d481;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-align: center;
+}
+.article__text {
+    white-space: pre-wrap;
+    font-family: 'Calibri';
+}
+.article__meta {
+    font-size: 0.75rem;
+    opacity: 0.7;
+    transition: 0.2s;
+}
+.article__meta:hover {
+    opacity: 1;
+}
