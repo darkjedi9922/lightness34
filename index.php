@@ -17,15 +17,19 @@ use frame\macros\ValueMacro;
 use frame\macros\BlockMacro;
 use frame\macros\WidgetMacro;
 
+use engine\admin\Module as AdminModule;
+use engine\articles\Module as ArticleModule;
+use engine\comments\Module as CommentModule;
+
 $app = new Core;
 
 $app->setDefaultHandler(DefaultErrorHandler::class);
 $app->setHandler(HttpError::class, HttpErrorHandler::class);
 $app->setHandler(StrictException::class, StrictExceptionHandler::class);
 
-$admin = new engine\admin\Module('admin');
-$articles = new engine\articles\Module('articles');
-$articleComments = new engine\comments\Module('article-comments');
+$admin = new AdminModule('admin');
+$articles = new ArticleModule('articles');
+$articleComments = new CommentModule('article-comments');
 
 $app->setModule($admin);
 $app->setModule($articles);

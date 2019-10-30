@@ -36,11 +36,6 @@ use frame\LatePropsObject;
  * Корректная работа checkbox:
  * <input type="hidden" name="property" value="0">
  * <input type="checkbox" name="property" value="1">
- * 
- * Очень хорошей практикой будет активное использование механизма LatePropsObject
- * в дочерних экшнах. С помощью него можно определять используемые в экшне данные,
- * которые потом можно брать из него на обычных страницах, вместо того, чтобы повторно
- * создавать их.
  */
 abstract class Action extends LatePropsObject
 {

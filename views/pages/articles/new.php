@@ -9,9 +9,9 @@ $action = new NewArticleAction;
 ?>
 
 <div class="content">
-    <?php if ($action->hasError($action::E_NO_TITLE)): ?><span class='error'>Название не указано</span><br/><?php endif ?>
-    <?php if ($action->hasError($action::E_LONG_TITLE)): ?><span class='error'>Название слишком большое</span><br/><?php endif ?>
-    <?php if ($action->hasError($action::E_NO_TEXT)): ?><span class='error'>Текст статьи пуст</span><br/><?php endif ?>
+    <?php if ($action->hasError($action::E_NO_TITLE)): ?><span class='error' style="margin-bottom:10px">Название не указано</span><?php endif ?>
+    <?php if ($action->hasError($action::E_LONG_TITLE)): ?><span class='error' style="margin-bottom:10px">Название слишком большое</span><?php endif ?>
+    <?php if ($action->hasError($action::E_NO_TEXT)): ?><span class='error' style="margin-bottom:10px">Текст статьи пуст</span><?php endif ?>
     <form id="article" action="<?=$action->getUrl()?>" method="post">
         <table cellspacing="10px" width="100%">
             <tr>
