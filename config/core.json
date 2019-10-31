@@ -8,9 +8,5 @@
     "log.file": "log.txt",
     "errors.errorPage": null,
     "errors.403.page": "403",
-    "errors.404.page": "404",
-    "database.host": "localhost",
-    "database.username": "root",
-    "database.password": "",
-    "database.dbname": "lightness"
+    "errors.404.page": "404"
 }

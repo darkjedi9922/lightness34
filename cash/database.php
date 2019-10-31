@@ -8,11 +8,11 @@ class database extends Cash
     public static function get(): DB
     {
         return self::cash('db', function() {
-            $config = config::get('core');
-            $host = $config->{'database.host'};
-            $username = $config->{'database.username'};
-            $password = $config->{'database.password'};
-            $dbname = $config->{'database.dbname'};
+            $config = config::get('db');
+            $host = $config->{'host'};
+            $username = $config->{'username'};
+            $password = $config->{'password'};
+            $dbname = $config->{'dbname'};
             return new DB($host, $username, $password, $dbname);
         });
     }

@@ -52,6 +52,19 @@ Clone the git project and create a new virtual host like you usually do.
 </VirtualHost>
 ```
 
+**If you want to use a database** in the project you need to create a file `config/db.json` like below to configure the database object.
+
+```json
+{
+    "host": "localhost",
+    "username": "root",
+    "password": "",
+    "dbname": "lightness"
+}
+```
+
+*This file is ignored by default because developers can have their own database configurations on their local machines that is different between each other. It is easier to ignore this file at all.*
+
 ### Running the tests
 
 [PHPUnit Framework](https://phpunit.de) is used for testing.
