@@ -1,6 +1,10 @@
 # logs
 log.txt
 
+# umls
+_dev/uml/*.bak*
+_dev/uml/*.png
+
 # other
 *.fuse_*
 
