@@ -274,7 +274,21 @@ body {
     color: #9ac2cf;
     border-color: #9ac2cf;
 }
+.form__input {
+    font-family: 'Calibri';
+    font-size: 0.8rem;
+    outline: none;
+    border: solid 1px #81d481;
+    padding: 0.2rem;
+}
+.form__label {
+    font-family: 'Calibri';
+}
+.form__require {
+    color: red;
+}
 
+/* login-form */
 .login-form__input {
     background: #293133;
     border: none;

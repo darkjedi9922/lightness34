@@ -12,25 +12,25 @@ $action = new NewArticleAction;
     <?php if ($action->hasError($action::E_NO_TITLE)): ?><span class='error' style="margin-bottom:10px">Название не указано</span><?php endif ?>
     <?php if ($action->hasError($action::E_LONG_TITLE)): ?><span class='error' style="margin-bottom:10px">Название слишком большое</span><?php endif ?>
     <?php if ($action->hasError($action::E_NO_TEXT)): ?><span class='error' style="margin-bottom:10px">Текст статьи пуст</span><?php endif ?>
-    <form id="article" action="<?=$action->getUrl()?>" method="post">
+    <form class="form" id="article" action="<?=$action->getUrl()?>" method="post">
         <table cellspacing="10px" width="100%">
             <tr>
-                <td>
-                    Название:<span class="require">*</span>
+                <td class="form__label">
+                    Название:<span class="form__require">*</span>
                 </td>
                 <td width="90%">
-                    <input type="text" name="title" style="width:100%" value="<?= $action->getData('post', 'title', '') ?>">
+                    <input class="form__input" type="text" name="title" style="width:100%" value="<?= $action->getData('post', 'title', '') ?>">
                 </td>
             </tr>
             <tr>
-                <td valign="baseline">
-                    Текст:<span class="require">*</span>
+                <td valign="baseline" class="form__label">
+                    Текст:<span class="form__require">*</span>
                 </td>
                 <td width="90%">
-                    <textarea form="article" name="text" style="width:100%" rows="6" spellcheck="false"><?= $action->getData('post', 'text', '') ?></textarea>
+                    <textarea class="form__input" form="article" name="text" style="width:100%" rows="6" spellcheck="false"><?= $action->getData('post', 'text', '') ?></textarea>
                 </td>
             </tr>
         </table>
-        <button>Создать</button>
+        <button class="form__button">Создать</button>
     </form>
 </div>
