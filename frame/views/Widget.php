@@ -4,16 +4,9 @@ use frame\Core;
 
 class Widget extends Layouted
 {
-    const FOLDER = 'views/widgets';
-
-    /**
-     * Ищет сам view файл виджета
-     * 
-     * @see parent::find()
-     */
-    public static function find(string $name): ?string
+    public static function getFolder(): string
     {
-        return parent::find(self::FOLDER . '/' . $name);
+        return View::getFolder() . '/widgets';
     }
 
     /**
@@ -22,6 +15,7 @@ class Widget extends Layouted
     public function __construct($name, $layout = null)
     {
         parent::__construct($name, $layout);
-        if ($this->layoutname === null) $this->layoutname = Core::$app->config->{'widgets.defaultLayout'};
+        if ($this->getLayout() === null) 
+            $this->setLayout(Core::$app->config->{'widgets.defaultLayout'});
     }
 }

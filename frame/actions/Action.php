@@ -1,17 +1,14 @@
 <?php namespace frame\actions;
 
-use frame\Core;
 use frame\route\Router;
 use frame\route\Request;
 use frame\route\Response;
 use frame\tools\transmitters\SessionTransmitter;
-use frame\config\Json;
 use frame\actions\UploadedFile;
 
 use function lightlib\encode_specials;
 use frame\tools\Client;
 use frame\errors\HttpError;
-use frame\rules\ActionRules;
 use frame\LatePropsObject;
 
 /**
@@ -39,22 +36,12 @@ use frame\LatePropsObject;
  * Корректная работа checkbox:
  * <input type="hidden" name="property" value="0">
  * <input type="checkbox" name="property" value="1">
- * 
- * Очень хорошей практикой будет активное использование механизма LatePropsObject
- * в дочерних экшнах. С помощью него можно определять используемые в экшне данные,
- * которые потом можно брать из него на обычных страницах, вместо того, чтобы повторно
- * создавать их.
  */
 abstract class Action extends LatePropsObject
 {
-    const NONE = 0;
-    const SUCCESS = 1;
-    const FAIL = -1;
-
     /**
      * Type of Action data.
      */
-    const OWN = 'own';
     const ARGS = 'get';
     const POST = 'post';
     const FILES = 'files';
@@ -69,22 +56,15 @@ abstract class Action extends LatePropsObject
     const ID = 'action';
     const TOKEN = 'csrf';
 
-    const VALIDATION_CONFIG_FOLDER = 'public/actions';
+    /** @var array Ошибки после validate(). */
+    private $errors = [];
 
-    /** @var Core Ссылка на экземпляр приложения для удобства */
-    public $app;
+    private $executed = false;
 
-    /** @var int $status Статус: NONE, SUCCESS или FAIL. */
-    public $status = self::NONE;
-
-    /** @var array Ошибки типа OWN, возникшие после validate(). */
-    public $errors = [];
-
-    /** @var array [string => ActionRules] */
-    private $rules = [
-        self::ARGS => null,
-        self::POST => null,
-        self::FILES => null
+    private $data = [
+        self::ARGS => [],
+        self::POST => [],
+        self::FILES => []
     ];
 
     public static function fromTriggerUrl(string $url): Action
@@ -99,21 +79,11 @@ abstract class Action extends LatePropsObject
             return new UploadedFile($filedata);
         }, $_FILES));
 
-        $configFile = self::VALIDATION_CONFIG_FOLDER . '/' . $type . '.json';
-        if (file_exists($configFile)) {
-            $config = new Json($configFile);
-            $action->setConfig($config->getData());
-        }
-
         return $action;
     }
 
     public function __construct(array $args = [])
     {
-        $this->app = Core::$app;
-        $this->rules[self::ARGS] = new ActionRules;
-        $this->rules[self::POST] = new ActionRules;
-        $this->rules[self::FILES] = new ActionRules;
         $this->setDataAll(self::ARGS, $args);
         $this->load();
     }
@@ -126,7 +96,7 @@ abstract class Action extends LatePropsObject
     public function setDataAll(string $type, array $data)
     {
         $safeValue = ($type === self::FILES ? $data : encode_specials($data));
-        $this->rules[$type]->setValues($safeValue);
+        $this->data[$type] = $safeValue;
     }
 
     /**
@@ -137,63 +107,30 @@ abstract class Action extends LatePropsObject
     public function setData(string $type, string $name, $value)
     {
         $safeValue = ($type === self::FILES ? $value : encode_specials($value));
-        $this->rules[$type]->setValue($name, $safeValue);
+        $this->data[$type][$name] = $safeValue;
     }
 
     /**
      * Возвращает входящее значение, если оно есть, или значение по умолчанию, если 
      * его нет.
      * 
-     * @param string $type post|get|files.
+     * @param string $type post|get|files
+     * @param string|UploadedFile|null $default
      * @return string|UploadedFile|null
-     * @see Rules::getValue()
      */
-    public function getData(string $type, string $name)
+    public function getData(string $type, string $name, $default = null)
     {
-        return $this->rules[$type]->getValue($name);
+        return $this->data[$type][$name] ?? $default;
     }
 
-    /**
-     * @see Rules::getDefault()
-     */
-    public function getDataDefault(string $type,
-        string $name, bool $existing = false)
+    public function getDataArray(): array
     {
-        return $this->rules[$type]->getDefault($name, $existing);
+        return $this->data;
     }
 
-    public function getDataArray()
+    public final function getId(): string
     {
-        $result = [];
-        foreach ($this->rules as $type => $rules)
-            $result[$type] = $rules->getValues();
-        return $result;
-    }
-
-    /**
-     * Если заданного значения нет, вернет null.
-     * 
-     * @param string $field Поле, по которому это значение связано (генерируется
-     * в цепочке правил поля).
-     * @return mixed|null
-     */
-    public function getInterData(string $type, string $field, string $name)
-    {
-        return $this->rules[$type]->getInterData($field, $name);
-    }
-
-    /**
-     * @param string $field Поле, по которому значение связано (генерируется
-     * в цепочке правил поля).
-     * @return mixed
-     * @throws \Exception Если заданного значения нет (или оно null).
-     */
-    public function requireInterData(string $type, string $field, string $name)
-    {
-        $data = $this->getInterData($type, $field, $name);
-        if ($data === null) throw new \Exception('There is no "' . $type .
-            '" inter data "' . $name . '" from "' . $field . '"');
-        return $data;
+        return $this->data[self::ARGS][self::ID] ?? '';
     }
 
     /**
@@ -201,9 +138,10 @@ abstract class Action extends LatePropsObject
      */
     public final function getUrl(): string
     {
-        $get = array_merge($this->rules[Action::ARGS]->getValues(), [
+        $get = array_merge([
+            self::ID => '',
             self::TOKEN => $this->getExpectedToken(),
-        ]);
+        ], $this->data[Action::ARGS]);
         return Router::toUrlOf('/' . str_replace('\\', '/', static::class), $get);
     }
 
@@ -213,80 +151,42 @@ abstract class Action extends LatePropsObject
      */
     public final function exec()
     {
-        $this->assertToken($this->rules[self::ARGS]->getValue(self::TOKEN) ?? '');
+        $this->assertToken($this->data[self::ARGS][self::TOKEN] ?? '');
         $this->initialize();
-        $this->rules[self::ARGS]->validate();
-        $this->rules[self::POST]->validate();
-        $this->rules[self::FILES]->validate();
         $this->errors = $this->validate();
-        if ($this->hasErrors()) {
+        $redirect = null;
+        if (!$this->hasErrors()) {
             $this->succeed();
-            $this->status = self::SUCCESS;
             $this->save();
-            Response::setUrl(Router::toUrlOf($this->getSuccessRedirect()));
+            $redirect = $this->getSuccessRedirect();
         } else {
             $this->fail();
-            $this->status = self::FAIL;
+            $redirect = $this->getFailRedirect();
+        }
+        $this->executed = true;
+        if ($redirect !== null) {
             $this->save();
-            Response::setUrl(Router::toUrlOf($this->getFailRedirect()));
+            Response::setUrl(Router::toUrlOf($redirect));
         }
     }
 
-    public function isSuccess(): bool
+    public function isExecuted(): bool
     {
-        return $this->status === self::SUCCESS;
-    }
-
-    public function isFail(): bool
-    {
-        return $this->status === self::FAIL;
+        return $this->executed;
     }
 
     /**
-     * Возвращает есть ли ошибка типа OWN (после валидации).
+     * Возвращает есть ли ошибка после валидации validate().
      * @param int $error Код ошибки.
      */
     public function hasError(int $error): bool
     {
-        return in_array($error, $this->errors[self::OWN]);
+        return in_array($error, $this->errors);
     }
 
     public function hasErrors(): bool
     {
-        return !empty($this->errors) 
-            || $this->rules[self::ARGS] && $this->rules[self::ARGS]->hasErrors()
-            || $this->rules[self::POST] && $this->rules[self::POST]->hasErrors()
-            || $this->rules[self::FILES] && $this->rules[self::FILES]->hasErrors();
-    }
-
-    /**
-     * Возвращает есть ли у заданного значения ошибка rule.
-     * @param string|int $error Имя провалившегося rule правила.
-     */
-    public function hasDataError(string $type, string $data, $error): bool
-    {
-        return $this->rules[$type] && $this->rules[$type]->hasError($data, $error);
-    }
-
-    public function setConfig(?array $config)
-    {
-        foreach ($this->rules as $type => $rules)
-            $rules->setRules($config[$type] ?? []);
-    }
-
-    public function getConfig(): array
-    {
-        $result = [];
-        foreach ($this->rules as $type => $rules)
-            $result[$type] = $rules->getRules();
-        return $result;
-    }
-
-    public function setRuleCallback(string $rule, callable $callback)
-    {
-        foreach ($this->rules as $rules)
-            $rules->setRuleCallback($rule, $callback);
-        
+        return !empty($this->errors);
     }
 
     public function getExpectedToken(): string
@@ -351,8 +251,10 @@ abstract class Action extends LatePropsObject
     /**
      * Возвращает адрес веб-страницы, на которую нужно перейти после успешного
      * (без ошибок во время валидации данных) завершения экшна.
+     * 
+     * Если вернет null, редиректа не будет.
      */
-    protected function getSuccessRedirect(): string
+    protected function getSuccessRedirect(): ?string
     {
         if (Request::hasReferer()) return Request::getReferer();
         else return '/';
@@ -361,8 +263,10 @@ abstract class Action extends LatePropsObject
     /**
      * Возвращает адрес веб-страницы, на которую нужно перейти после неудачного
      * (с ошибками во время валидации данных) завершения экшна.
+     * 
+     * Если вернет null, редиректа не будет.
      */
-    protected function getFailRedirect(): string
+    protected function getFailRedirect(): ?string
     {
         if (Request::hasReferer()) return Request::getReferer();
         else return '/';
@@ -370,8 +274,7 @@ abstract class Action extends LatePropsObject
 
     private function getIdName(): string
     {
-        return static::class . '_' . 
-            ($this->rules[self::ARGS]->getValue(self::ID) ?? '');
+        return static::class . '_' . $this->getId();
     }
 
     /**
@@ -381,13 +284,15 @@ abstract class Action extends LatePropsObject
      */
     private function save()
     {
-        $this->doBeforeSave();
-        $idName = $this->getIdName();
-        $sessions = new SessionTransmitter;
-        $sessions->setData($idName . '_status', $this->status);
-        if ($this->isFail()) {
-            $sessions->setData($idName . '_errors', serialize($this->errors));
-            $sessions->setData($idName . '_data', serialize($this->getDataArray()));
+        if ($this->hasErrors()) {
+            $this->doBeforeSave();
+            $idName = $this->getIdName();
+            $sessions = new SessionTransmitter;
+            $sessions->setData($idName, serialize([
+                $this->executed,
+                $this->data,
+                $this->errors
+            ]));
         }
     }
 
@@ -398,19 +303,13 @@ abstract class Action extends LatePropsObject
     {
         $idName = $this->getIdName();
         $sessions = new SessionTransmitter;
-        if ($sessions->isSetData($idName . '_status')) {
-            $this->status = $sessions->getData($idName . '_status');
-            $sessions->removeData($idName . '_status');
-            if ($sessions->isSetData($idName . '_errors')) {
-                $this->errors = unserialize($sessions->getData($idName . '_errors'));
-                $sessions->removeData($idName . '_errors');
-            }
-            if ($sessions->isSetData($idName . '_data')) {
-                $data = unserialize($sessions->getData($idName . '_data'));
-                foreach ($this->rules as $type => $rules)
-                    $rules->setValues($data[$type] ?? []);
-                $sessions->removeData($idName . '_data');
-            }
+        if ($sessions->isSetData($idName)) {
+            list(
+                $this->executed,
+                $this->data, 
+                $this->errors
+            ) = unserialize($sessions->getData($idName));
+            $sessions->removeData($idName);
             $this->doAfterLoad();
         }
     }

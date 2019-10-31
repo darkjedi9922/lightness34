@@ -1,15 +1,22 @@
 # logs
 log.txt
 
+# umls
+_dev/uml/*.bak*
+_dev/uml/*.png
+
 # other
 *.fuse_*
 
 # cache
 .phpunit.result.cache
 
+# Database configuration that can be different beetween every developer's local
+# machine.
+config/db.json
+
 # vendor
 vendor/phpunit
 
-# User core config. There are settings for access to a database, but mysql settings
-# may be different from one user to another, so we ignore this config file.
-config/core.json
+# User avatars folder
+public/images/avatars

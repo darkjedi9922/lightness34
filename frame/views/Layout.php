@@ -1,33 +1,37 @@
 <?php namespace frame\views;
 
-/**
- * Внутри вида Layout для вывода дочернего вида нужно использовать $layout->child->content.
- */
 class Layout extends Layouted
 {
-    const FOLDER = 'views/layouts';
+    private $child;
 
-    /**
-     * @var View $child Вид-содержимое
-     */
-    public $child;
-
-    /**
-     * @see parent::find()
-     */
-    public static function find(string $name): ?string
+    public static function getExtensions(): array
     {
-        return parent::find(self::FOLDER . '/' . $name);
+        return ['php'];
+    }
+
+    public static function getFolder(): string
+    {
+        return View::getFolder() . '/layouts';
     }
 
     /**
      * @param string $name Имя вида
-     * @param View $child Вид-содержимое
      * @param string $layout Вид компоновщика
      */
-    public function __construct($name, $child, $layout = '')
+    public function __construct(string $name, Layouted $child, string $layout = '')
     {
         $this->child = $child;
         parent::__construct($name, $layout);
+    }
+
+    public function showChild()
+    {
+        echo $this->child->getContent();
+    }
+
+    /** @return mixed|null */
+    public function getChildMeta(string $name)
+    {
+        return $this->child->getMeta($name);
     }
 }

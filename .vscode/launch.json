@@ -17,6 +17,15 @@
             "program": "${file}",
             "cwd": "${fileDirname}",
             "port": 9000
+        },
+        {
+            "name": "PHPUnit",
+            "type": "php",
+            "request": "launch",
+            "port": 9000,
+            "env": {
+                "XDEBUG_CONFIG": "idekey=VSCODE"
+            }
         }
     ]
 }

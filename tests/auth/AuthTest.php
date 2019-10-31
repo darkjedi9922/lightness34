@@ -44,4 +44,20 @@ class AuthTest extends TestCase
         $key = $auth->getKey();
         $this->assertEquals($this->key, $key);
     }
+
+    public function testRememberLogin()
+    {
+        $auth = new Auth;
+        $auth->login($this->key, true);
+
+        $this->assertTrue($auth->isRemembered());
+    }
+
+    public function testNotRememberLogin()
+    {
+        $auth = new Auth;
+        $auth->login($this->key, false);
+
+        $this->assertFalse($auth->isRemembered());
+    }
 }

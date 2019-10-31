@@ -1,0 +1,138 @@
+/* подключение fontello */
+@font-face {font-family: "fontello";src: url("../fonts/fontello.ttf");font-style: normal;font-weight: normal;}
+.fontello{font-family:fontello;font-style:normal}
+.icon-attention:before { content: '\e800'; } /* '' */
+.icon-home:before { content: '\e801'; } /* '' */
+.icon-down-dir:before { content: '\e802'; } /* '' */
+.icon-user:before { content: '\e803'; } /* '' */
+.icon-email:before { content: '\e804'; } /* '' */
+.icon-ok-circle:before { content: '\e805'; } /* '' */
+.icon-cancel-circle:before { content: '\e806'; } /* '' */
+.icon-doc-text-inv:before { content: '\e807'; } /* '' */
+.icon-doc-text:before { content: '\e808'; } /* '' */
+.icon-group:before { content: '\e809'; } /* '' */
+.icon-database:before { content: '\e80a'; } /* '' */
+.icon-ok:before { content: '\e80b'; } /* '' */
+.icon-cog:before { content: '\e80c'; } /* '' */
+.icon-sliders:before { content: '\e80e'; } /* '' */
+.icon-rss:before { content: '\f09e'; } /* '' */
+.icon-list-bullet:before { content: '\f0ca'; } /* '' */
+.icon-rss-squared:before { content: '\f143'; } /* '' */
+.icon-transgender:before { content: '\f224'; } /* '' */
+.icon-television:before { content: '\f26c'; } /* '' */
+.icon-commenting:before { content: '\f27a'; } /* '' */
+.icon-id-card-o:before { content: '\f2c3'; } /* '' */
+
+/* Для Linux Ubuntu */
+@font-face {font-family: "Consolas";src: url("../fonts/consolas.ttf") format("truetype");font-style: normal;font-weight: normal;}
+@font-face {font-family: "Consolas";src: url("../fonts/consolas-bold.ttf") format("truetype");font-style: normal;font-weight: bold;}
+@font-face {font-family: "Consolas";src: url("../fonts/consolas-italic.ttf") format("truetype");font-style: italic;font-weight: normal;}
+@font-face {font-family: "Tahoma";src: url("../fonts/tahoma.ttf") format("truetype");font-style: normal;font-weight: normal;}
+@font-face {font-family: "Arial Narrow";src: url("../fonts/arial-narrow.ttf") format("truetype");font-style: normal;font-weight: normal;}
+@font-face {font-family: "Calibri";src: url("../fonts/calibri.ttf") format("truetype");font-style: normal;font-weight: normal;}
+@font-face {font-family: "Calibri";src: url("../fonts/calibri-bold.ttf") format("truetype");font-style: normal;font-weight: bold;}
+
+/* теги */
+html{height:100%}
+body{height:100%;padding:0;margin:0;background:#0f1828;}
+h1, h2, h3{font-family:Arial;margin:0;font-weight:bold;color:#249dcd;margin-bottom:18px}
+form{font-family:Arial;font-weight:bold;color:#249dcd;font-size:16px}
+input{background: #1e4469;border: 0;border-radius: 10px;-moz-border-radius: 10px;-webkit-border-radius: 10px;box-sizing: border-box;box-shadow: inset 0px 0px 10px 0px #000;color: #c4c5c6;font-family: Arial;font-size: 20px;outline: none;padding: 5px 10px;}
+button, .button, .button-hovered, .pager a{background: #003366;border: 0px;border-radius: 7px;-moz-border-radius: 7px;-webkit-border-radius: 7px;box-shadow: 0px 0px 5px #000;color: #c4c5c6!important;display: inline-block;font-family: Tahoma;font-size: 13px;padding: 8px 20px;text-decoration: none!important;margin:0px;font-weight:normal;cursor:default}
+button:hover, .button:hover, .button-hovered, .pager a:hover, .pager .current, button:disabled {background: none;color: #1d98db!important;box-shadow: inset 0px 0px 30px 0px #1d98db;}
+form button{margin-top:7px}
+
+table.big-inputs{width:100%;}
+table.big-inputs input{width:50%;}
+
+/* текст */
+i.f-icon{font-family:fontello;font-style:normal}
+p.content-text{font-size:12pt;white-space:pre-wrap;word-wrap:break-word;word-break:break-all}
+h3{margin:0}
+
+/* глобальные блоки */
+.sidebox{background:#131313;height:100%;box-shadow:0 0 20px 2px black;-webkit-box-shadow:0 0 20px 2px black;-moz-box-shadow:0 0 20px 2px black;width:261px;vertical-align:top}
+.container{width:100%;min-height:100%;border-spacing:0;height:100%}
+.head-bar{background:#e4e4e4;height:63px;padding:0px 18px;}
+.content{padding:18px 18px 0px;background:url('/public/images/admin/logo.png') no-repeat;background-position:center 50%;vertical-align:top}
+
+/* блоки */
+.box{background:#e4e4e4;border-radius:10px;padding:10px;margin-bottom:18px;font-family:Arial;color:black;font-size:14px;overflow:auto}
+.box.centered{width:30%;margin:auto;position:relative;margin-top:15%;}
+.box a[href]{color:#249dcd;font-family:Arial;text-decoration:underline;}
+.box a[href]:hover{color:#82dcff;text-decoration:none;}
+
+/* head-bar */
+.mini-profile{float:right;height:100%;}
+.mini-profile .login{display:block;margin-top:18px;font-family:Calibri;font-size:25px;color: #249dcd;text-decoration:none;float:right}
+.mini-profile .login:hover{color:#82dcff}
+.mini-profile .avatar{height:45px;margin-top:9px;margin-right:9px;}
+.mini-profile .messages{font-size:35px;color:#0e4054;display:block;float:left;margin-right:10px;margin-top:14px;text-decoration:none}
+.mini-profile .messages .amount{font-family:Calibri;font-weight:bold;font-size:30px;position:relative;bottom:2px;}
+.mini-profile .messages:hover{color:#249dcd}
+.mini-profile .messages.new{color:#e20000}
+.mini-profile .messages.new:hover{color:#ff0000}
+
+.site{font-family:fontello;color: #249dcd;font-size:45px;display:inline-block;margin-top:9px;text-decoration:none}
+.site:hover{color:#82dcff}
+
+.notice-bar{float:right;margin-top:18px;}
+.notice-bar a{font-family:Calibri;font-size:30px;text-decoration:none;color:#b3ab00;font-weight:bold;margin-right:14px;}
+.notice-bar a:hover{color:#ded400;}
+.notice-bar a.fontello{font-size:26px;}
+
+/* меню */
+.menu{padding:0;margin:0;}
+.menu ul{padding:0;overflow:hidden;}
+.menu li{list-style:none;}
+.menu li a{padding:10px 0px 8px 20px;}
+.menu ul li a{padding-left:40px;}
+.menu ul li ul li a{padding-left:60px;}
+.menu a{color:#c5c5c5;text-decoration:none;font-family:Arial;font-weight:bold;font-size:18px;display:block;}
+.menu a:hover{background:#383838;}
+.menu a:not([href]) {cursor:default}
+.menu .fontello{font-weight:normal}
+.menu .icon-down-dir{display:inline-block;}
+
+/* уведомления */
+.error, .notice, .warning {padding: 8px 20px;border-radius: 7px;-moz-border-radius: 7px;-webkit-border-radius: 7px;font-family:Calibri;font-size:14px;font-weight:normal}
+span.error, span.notice, span.warning {display: inline-block}
+.error {color: red;box-shadow: inset 0px 0px 30px 0px red;}
+.notice {color: #0f0;box-shadow: inset 0px 0px 30px 0px #0f0;}
+.warning {color: yellow;box-shadow: inset 0 0 30px 0 yellow}
+
+/* label radio */
+div.radio{display:inline-block;}
+div.radio input{display:none;}
+div.radio label{background: #1e4469;border: 0px;border-radius: 7px;-moz-border-radius: 7px;-webkit-border-radius: 7px;color: #c4c5c6;display: inline-block;font-family: Tahoma;font-size: 13px;padding: 8px 20px;text-decoration: none;margin:0px;font-weight:normal;cursor:default}
+div.radio input:checked + label, div.radio label:hover{background: none;color: #1d98db;box-shadow: inset 0px 0px 30px 0px #1d98db;}
+
+/* radio-classic */
+.radio-classic label{display:inline-block;width:20px;height:20px;background: #1e4469;margin-right:5px;border-radius: 50%;-moz-border-radius: 50%;-webkit-border-radius: 50%;position:relative;top:3px;}
+.radio-classic label i{background:#c4c5c6;display:none;width:70%;height:70%;position:absolute;border-radius: 50%;-moz-border-radius: 50%;-webkit-border-radius: 50%;margin:15%;}
+.radio-classic input:checked + label i{display:inline-block;}
+.radio-classic input{display:none;}
+
+/**
+ * label checkbox.
+ * В одном div'e можно вставлять множество чекбоксов.
+ * i - это сама иконка: вставлять i.fontello.icon-ok
+ * Текст чекбокса вставлять в span сразу после label.
+ */
+div.checkbox{-moz-user-select:none;-webkit-user-select:none}
+div.checkbox input{display:none;}
+div.checkbox label{display:inline-block;width:20px;height:20px;background: #1e4469;color: #c4c5c6;margin-right:5px;border-radius: 7px;-moz-border-radius: 7px;-webkit-border-radius: 7px;position:relative;top:3px;}
+div.checkbox label i{position:absolute;font-family:fontello;padding:1px 0 0 2px;display:none;cursor:default;}
+div.checkbox input:checked + label i{display:inline}
+div.checkbox input:disabled + label{color:#9b9b9b}
+div.checkbox input:disabled + label + span{color:#9b9b9b}
+
+/* input file */
+.input-file {position:relative;}
+.input-file input[type="file"] {position:absolute;left:-150px;top:0;opacity: 0;}
+
+/* счетчик страниц */
+.pager .spacing {
+	font-family: Consolas;
+	font-size:15px;
+}

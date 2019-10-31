@@ -1,0 +1,7 @@
+{
+    "phpunit.phpunit": "D:\\Legion\\Projects\\phpunit.phar",
+    "phpunit.args": [
+        "--bootstrap",
+        "./tests/__bootstrap.php"
+    ],
+}

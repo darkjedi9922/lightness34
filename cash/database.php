@@ -2,22 +2,17 @@
 
 use frame\tools\Cash;
 use frame\database\Database as DB;
-use frame\config\DefaultedConfig;
-use frame\config\Json;
 
 class database extends Cash 
 {
     public static function get(): DB
     {
-        return self::cash(function() {
-            $config = new DefaultedConfig(
-                new Json('config/core.json'),
-                new Json('config/default/core.json')
-            );
-            $host = $config->{'database.host'};
-            $username = $config->{'database.username'};
-            $password = $config->{'database.password'};
-            $dbname = $config->{'database.dbname'};
+        return self::cash('db', function() {
+            $config = config::get('db');
+            $host = $config->{'host'};
+            $username = $config->{'username'};
+            $password = $config->{'password'};
+            $dbname = $config->{'dbname'};
             return new DB($host, $username, $password, $dbname);
         });
     }

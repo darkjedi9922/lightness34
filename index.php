@@ -17,12 +17,27 @@ use frame\macros\ValueMacro;
 use frame\macros\BlockMacro;
 use frame\macros\WidgetMacro;
 
-$app = new Core(cash\config_core::get());
+use engine\admin\Module as AdminModule;
+use engine\articles\Module as ArticleModule;
+use engine\comments\Module as CommentModule;
+
+$app = new Core;
+
 $app->setDefaultHandler(DefaultErrorHandler::class);
 $app->setHandler(HttpError::class, HttpErrorHandler::class);
 $app->setHandler(StrictException::class, StrictExceptionHandler::class);
+
+$admin = new AdminModule('admin');
+$articles = new ArticleModule('articles');
+$articleComments = new CommentModule('article-comments');
+
+$app->setModule($admin);
+$app->setModule($articles);
+$app->setModule($articleComments);
+
 $app->setMacro('action', ActionMacro::class);
 $app->setMacro('value', ValueMacro::class);
 $app->setMacro('block', BlockMacro::class);
 $app->setMacro('widget', WidgetMacro::class);
+
 $app->exec();

@@ -1,14 +1,12 @@
 <?php namespace frame\views;
 
-use frame\Core;
+function __show(View $self) 
+{
+    require $self->file;
+}
 
 class View
 {
-    /**
-     * @var Core Ссылка на экземпляр приложения для удобства
-     */
-    public $app;
-
     /**
      * @var string Имя вида
      */
@@ -21,7 +19,9 @@ class View
 
     /**
      * @var array Ассоциативный массив мета-данных вида. 
-     * Это может быть использовано, например, в layout'e для получения данных из дочернего элемента.
+     * Это может быть использовано, например, в layout'e для получения данных из 
+     * дочернего элемента, или из родительского вида, после обработки (показа)
+     * дочернего.
      */
     private $meta = [];
 
@@ -31,17 +31,40 @@ class View
     private $cachedContent = null;
 
     /**
-     * Ищет сам view файл. Он может быть таких типов (в порядке приоритета): php, html. 
-     * Приоритетность - если есть два файла: один - php, а другой - html, - будет выбран php.
+     * Директория, в которой нужно искать вид. Значение НЕ должно заканчиваться на /.
      * 
-     * @param string $name Имя вида - путь к файлу без расширения. 
-     * Например: view/blocks/header
+     * Следует переопределять в потомках.
+     */
+    public static function getFolder(): string
+    {
+        return ROOT_DIR . '/views';
+    }
+
+    /**
+     * Расширения файлов видов, которые поддерживет реализуемый вид.
+     * Задаются в порядке приоритета. Например: ['php', 'html'].
+     * 
+     * Можно переопределить в потомках, чтобы фиксировать доступные расширения вида.
+     */
+    public static function getExtensions(): array
+    {
+        return ['php', 'html'];
+    }
+
+    /**
+     * Ищет сам view файл. По-умолчанию, он может быть таких типов: php, html. 
+     * 
+     * @param string $name Имя вида - путь к файлу без расширения.
+     * Например: blocks/header
      */
     public static function find(string $name): ?string
     {
-        if (file_exists(ROOT_DIR . '/' . $name . '.php')) return $name . '.php';
-        else if (file_exists(ROOT_DIR . '/' . $name . '.html')) return $name . '.html';
-        else return null;
+        $folder = static::getFolder();
+        foreach (static::getExtensions() as $ext) {
+            $file = "$folder/$name.$ext";
+            if (file_exists($file)) return $file;
+        }
+        return null;
     }
 
     /**
@@ -54,7 +77,6 @@ class View
         $this->file = static::find($name);
         if (!$this->file) throw new \Exception('Viewfile for view "'.$name.'" was not found');
         $this->name = $name;
-        $this->app = Core::$app;
     }
 
     /**
@@ -63,23 +85,14 @@ class View
      * Это нужно, чтобы перед показом, загрузить само содержимое, внутри которого 
      * могли изменится настройки вида, чтобы успеть подстроиться под новые настройки.
      */
-    public function getContent()
+    protected function getContent()
     {
         if ($this->cachedContent === null) {
             ob_start();
-            require $this->file;
+            __show($this);
             $this->cachedContent = ob_get_clean();
         }
         return $this->cachedContent;
-    }
-
-    /**
-     * Возвращает содержимое вида.
-     * Предупреждение: вызов в самом себе может привести к бесконечной рекурсии и/или ошибкам.
-     */
-    public function __toString()
-    {
-        return $this->getContent();
     }
 
     /**
@@ -88,38 +101,17 @@ class View
      */
     public function show()
     {
-        echo $this->__toString();
+        echo $this->getContent();
     }
 
-    /**
-     * Устанавливает мета-информацию вида.
-     * Это может быть использовано, например, в layout'e для получения данных из дочернего элемента.
-     * @param string $name
-     * @param mixed $value
-     */
-    public function setMetaOne($name, $value)
+    public function setMeta(string $name, $value)
     {
         $this->meta[$name] = $value;
     }
 
-    /**
-     * Устанавливает мета-информацию вида.
-     * Это может быть использовано, например, в layout'e для получения данных из дочернего элемента.
-     * @param array $data Ассоциативный массив мета-данных вида.
-     */
-    public function setMetaArray($data)
+    /** @return mixed|null */
+    public function getMeta(string $name)
     {
-        $this->meta = $data;
-    }
-
-    /**
-     * Возвращает мета-информацию вида.
-     * Это может быть использовано, например, в layout'e для получения данных из дочернего элемента.
-     * @param string $name
-     * @return mixed
-     */
-    public function getMeta($name)
-    {
-        return $this->meta[$name];
+        return $this->meta[$name] ?? null;
     }
 }
