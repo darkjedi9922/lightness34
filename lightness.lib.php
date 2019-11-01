@@ -245,13 +245,6 @@ function array_rename_key(array $array, string $key_old_name, string $key_new_na
     return $array;
 }
 
-function ord_sum(string $str): int
-{
-    $sum = 0;
-    for ($i = 0, $c = strlen($str); $i < $c; ++$i) $sum += ord($str[$i]);
-    return $sum;
-}
-
 function ob_restart()
 {
     if (ob_get_length() != 0) ob_clean();
