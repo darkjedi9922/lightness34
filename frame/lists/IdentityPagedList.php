@@ -4,6 +4,7 @@ use cash\database;
 use frame\database\Records;
 use frame\database\Identity;
 use frame\lists\Pager;
+use function lightlib\array_assemble;
 
 abstract class IdentityPagedList implements IterableList
 {
@@ -16,15 +17,26 @@ abstract class IdentityPagedList implements IterableList
     public static abstract function getIdentityClass(): string;
     public static abstract function getPageLimit(): int;
 
+    /**
+     * Массив полей сортировки в виде ['field1' => 'ASC', 'field2' => 'DESC'].
+     * Если сортировать не нужно, вернуть пустой массив.
+     */
+    public static function getOrderFields(): array { return []; }
+
     public function __construct(int $page)
     {
         $table = static::getIdentityClass()::getTable();
         $amount = Records::select($table)->count('id');
         $limit = static::getPageLimit();
         $this->pager = new Pager($page, $amount, $limit);
+
+        $orderFields = static::getOrderFields();
+        $orderBy = !empty($orderFields) ? 
+            'ORDER BY ' . array_assemble($orderFields, ', ', ' ') : '';
+        
         $this->list = database::get()->query(
-            'SELECT * FROM '. $table .' ORDER BY id DESC LIMIT ' . 
-            $this->pager->getStartMaterialIndex() . ', ' . $limit);
+            "SELECT * FROM $table $orderBy 
+            LIMIT {$this->pager->getStartMaterialIndex()}, $limit");
     }
 
     public function getPager(): Pager

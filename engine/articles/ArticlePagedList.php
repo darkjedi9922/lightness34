@@ -14,4 +14,9 @@ class ArticlePagedList extends IdentityPagedList
     {
         return (new Json('config/articles.json'))->{'list.amount'};
     }
+
+    public static function getOrderFields(): array
+    {
+        return ['id' => 'DESC'];
+    }
 }

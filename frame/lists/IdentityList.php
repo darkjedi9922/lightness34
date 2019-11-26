@@ -3,6 +3,8 @@
 use frame\database\Identity;
 use cash\database;
 
+use function lightlib\array_assemble;
+
 class IdentityList implements IterableList
 {
     private $list;
@@ -10,12 +12,22 @@ class IdentityList implements IterableList
     /** @var Identity|null $item */
     private $item = null;
 
-    public function __construct(string $identityClass)
-    {
+    /**
+     * @param $orderFields Массив полей сортировки в виде [
+     *  'field1' => 'ASC', 
+     *  'field2' => 'DESC'
+     * ].
+     * Если сортировать не нужно - указать пустой массив.
+     */
+    public function __construct(
+        string $identityClass, 
+        array $orderFields = ['id' => 'ASC']
+    ) {
         $this->identityClass = $identityClass;
+        $orderBy = !empty($orderFields) ?
+            'ORDER BY ' . array_assemble($orderFields, ', ', ' ') : '';
         $this->list = database::get()->query(
-            'SELECT * FROM ' . $identityClass::getTable() . ' ORDER BY id'
-        );
+            "SELECT * FROM {$identityClass::getTable()} $orderBy");
     }
 
     public function count(): int
