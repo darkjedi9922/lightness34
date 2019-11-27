@@ -14,6 +14,13 @@ class ArticlesRightsDesc extends RightsDesc
         ];
     }
 
+    public function complexRights(): array
+    {
+        return [
+            'edit' => ['edit-all', 'edit-own']
+        ];
+    }
+
     public function additionCheck(string $right, User $user, $object = null): bool
     {
         switch ($right) {
