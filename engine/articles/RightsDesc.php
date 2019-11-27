@@ -3,7 +3,7 @@
 use frame\modules\RightsDesc as FrameRightsDesc;
 use engine\users\User;
 
-class RightsDesc implements FrameRightsDesc
+class RightsDesc extends FrameRightsDesc
 {
     public function listRights(): array
     {

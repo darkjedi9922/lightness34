@@ -2,12 +2,13 @@
 
 use engine\users\User;
 
-interface RightsDesc
+abstract class RightsDesc
 {
     /**
      * Ассоциативный массив ['right' => 'description']
      */
-    public function listRights(): array;
+    public abstract function listRights(): array;
 
-    public function additionCheck(string $right, User $user, $object = null): bool;
+    public function additionCheck(string $right, User $user, $object = null): 
+        bool { return true; }
 }
