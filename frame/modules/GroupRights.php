@@ -7,15 +7,15 @@ use frame\modules\RightsDesc;
 class GroupRights
 {
     private $groupId;
-    private $desc;
+    private $list = [];
     private $rights = 0;
     private $record = null;
 
     public function __construct(RightsDesc $desc, int $moduleId, int $groupId)
     {
         $this->groupId = $groupId;
-        $this->desc = $desc;
         if ($groupId !== Group::ROOT_ID) {
+            $this->list = $desc->listRights();
             $this->record = Records::select('group_rights', [
                 'module_id' => $moduleId,
                 'group_id' => $groupId
@@ -26,23 +26,14 @@ class GroupRights
 
     public function can(string $right): bool
     {
-        if ($this->groupId === Group::ROOT_ID) return true;
-
-        else if ($this->desc->isComplex($right)) {
-            foreach ($this->desc->complexRights()[$right] as $innerRight) {
-                if ($this->can($innerRight)) return true;
-            }
-            return false;
-        }
-
-        return (bool) ($this->rights & $this->calcMask($right));
+        return $this->groupId === Group::ROOT_ID
+            || (bool) ($this->rights & $this->calcMask($right));
     }
 
     /**
-     * Устанавливает только те права, которые перечислены в RightsDesc::listRights().
-     * Чтобы применить изменения, нужно вызвать метод save().
-     * 
      * @throws \Exception if the group is root.
+     * 
+     * Чтобы применить изменения, нужно вызвать метод save().
      */
     public function set(string $right, bool $can)
     {
@@ -76,20 +67,14 @@ class GroupRights
     }
 
     /**
-     * Возвращает степень двойки, соответствующий индексу права в списке прав,
-     * которые перечислены в RightsDesc::listRights().
+     * Возвращает степень двойки, соответствующий индексу права в списке прав.
      * 
      * В побитовом виде у этого числа стоит 1 только в одном месте в позиции,
      * соответствующей индексу права.
-     * 
-     * @throws Exception if there is no such listed right.
      */
     private function calcMask(string $right): int
     {
-        if (!$this->desc->isListed($right)) 
-            throw new \Exception("There is no listed right $right");
-
-        $index = array_search($right, array_keys($this->desc->listRights()));
+        $index = array_search($right, array_keys($this->list));
         return pow(2, $index);
     }
 }
