@@ -1,9 +1,9 @@
 <?php namespace engine\articles;
 
-use frame\modules\RightsDesc as FrameRightsDesc;
+use frame\modules\RightsDesc;
 use engine\users\User;
 
-class RightsDesc extends FrameRightsDesc
+class ArticlesRightsDesc extends RightsDesc
 {
     public function listRights(): array
     {

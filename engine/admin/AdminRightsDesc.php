@@ -1,9 +1,8 @@
 <?php namespace engine\admin;
 
-use frame\modules\RightsDesc as FrameRightsDesc;
-use engine\users\User;
+use frame\modules\RightsDesc;
 
-class RightsDesc extends FrameRightsDesc
+class AdminRightsDesc extends RightsDesc
 {
     public function listRights(): array
     {
@@ -12,10 +11,5 @@ class RightsDesc extends FrameRightsDesc
             'see-logs' => 'See logs',
             'clear-logs' => 'Clear logs'
         ];
-    }
-
-    public function additionCheck(string $right, User $user, $object = null): bool
-    {
-        return true;
     }
 }
