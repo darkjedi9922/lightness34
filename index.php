@@ -18,6 +18,7 @@ use frame\macros\BlockMacro;
 use frame\macros\WidgetMacro;
 
 use engine\admin\AdminModule;
+use engine\users\UsersModule;
 use engine\articles\ArticlesModule;
 use engine\comments\CommentsModule;
 
@@ -27,13 +28,10 @@ $app->setDefaultHandler(DefaultErrorHandler::class);
 $app->setHandler(HttpError::class, HttpErrorHandler::class);
 $app->setHandler(StrictException::class, StrictExceptionHandler::class);
 
-$admin = new AdminModule('admin');
-$articles = new ArticlesModule('articles');
-$articleComments = new CommentsModule('article-comments');
-
-$app->setModule($admin);
-$app->setModule($articles);
-$app->setModule($articleComments);
+$app->setModule(new AdminModule('admin'));
+$app->setModule(new UsersModule('users'));
+$app->setModule(new ArticlesModule('articles'));
+$app->setModule(new CommentsModule('article-comments'));
 
 $app->setMacro('action', ActionMacro::class);
 $app->setMacro('value', ValueMacro::class);
