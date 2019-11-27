@@ -31,4 +31,15 @@ class UserRights
         return $this->rights->can($right) && 
             $this->desc->additionCheck($right, $this->user, $object);
     }
+
+    /**
+     * @param array $rights is an array ['right' => $object, 'right2' => null]
+     * The object like in self::can(). If there is no need in an object, set null.
+     */
+    public function canOneOf(array $rights): bool
+    {
+        foreach ($rights as $right => $object)
+            if ($this->can($right, $object)) return true;
+        return false;
+    }
 }

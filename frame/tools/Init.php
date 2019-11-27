@@ -37,12 +37,23 @@ class Init
 
     /** 
      * @throws HttpError FORBIDDEN
-     * @throws \Exception if there is not such module.
+     * @throws \Exception if there is no such module.
      * @throws \Exception if there is no such module rights.
      */
     public static function accessRight(string $module, string $right, $object = null)
     {
         if (!my_rights::get($module)->can($right, $object)) 
+            throw new HttpError(HttpError::FORBIDDEN);
+    }
+
+    /** 
+     * @throws HttpError FORBIDDEN
+     * @throws \Exception if there is no such module.
+     * @throws \Exception if there is no such module rights.
+     */
+    public static function accessOneRight(string $module, array $rights)
+    {
+        if (!my_rights::get($module)->canOneOf($rights))
             throw new HttpError(HttpError::FORBIDDEN);
     }
 }
