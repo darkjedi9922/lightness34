@@ -9,11 +9,16 @@ use frame\tools\Cash;
  */
 class pagenumber extends Cash
 {
-    public static function get(): int
+    /**
+     * @param bool $previous Возвращает номер предыдущей страницы.
+     */
+    public static function get(bool $previous = false): int
     {
-        return self::cash('p', function() {
-            $p = Core::$app->router->getArg('p');
-            if ($p === null || $p === '' || $p <= 0) return 1;
+        return self::cash('p', function() use ($previous) {
+            $router = $previous ? prev_router::get() : Core::$app->router;
+            if (!$router) return 1;
+            $p = $router->getArg('p');
+            if (!$p || $p <= 0) return 1;
             else return $p;
         });
     }
