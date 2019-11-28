@@ -27,7 +27,7 @@ $users = new UserPagedList($pagenumber);
         <?php $gender = Gender::selectIdentity($user->gender_id) ?>
             <tr>
                 <td><?= $user->id ?></td>
-                <td><a href="/admin/users/profile?login=<?= $user->login ?>"><?= $user->login ?></a></td>
+                <td><a href="/admin/users/profile/<?= $user->login ?>"><?= $user->login ?></a></td>
                 <td><?= "{$user->name} {$user->surname}" ?></td>
                 <td><?= $group->name ?></td>
                 <td><?= $gender->name ?></td>
