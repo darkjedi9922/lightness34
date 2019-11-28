@@ -9,9 +9,15 @@ class User extends Identity
         return 'users';
     }
 
+    public function hasAvatar(): bool
+    {
+        return $this->avatar 
+            && file_exists('public/images/avatars/' . $this->avatar);
+    }
+
     public function getAvatarUrl(): string
     {
-        if ($this->avatar) return 'public/images/avatars/' . $this->avatar;
+        if ($this->hasAvatar()) return 'public/images/avatars/' . $this->avatar;
         else return 'public/images/no-avatar.png';
     }
 }
