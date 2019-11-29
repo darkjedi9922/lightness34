@@ -66,6 +66,14 @@ class UploadedFile extends File
     }
 
     /**
+     * Если файл не был задан (выбран пользователем в форме), вернет true.
+     */
+    public function isEmpty(): bool
+    {
+        return $this->hasError(self::UPLOAD_ERR_NO_FILE);
+    }
+
+    /**
      * Перемещает файл в директорию, добавляя номер к имени,
      * чтобы оно было уникально (если такой файл уже существует).
      * 
