@@ -58,7 +58,7 @@ class UploadedFile extends File
      *  tmp_name => string,
      *  error => int
      */
-    public function __construct($data)
+    public function __construct(array $data)
     {
         parent::__construct($data['tmp_name']);
         $this->file = $data;
@@ -80,52 +80,33 @@ class UploadedFile extends File
      * Если заданная директория не существует, создает ее.
      * 
      * Возвращает имя файла после перемещения.
-     * 
-     * @param string $folder
-     * @return string
      */
-    public function moveUnique($folder)
+    public function moveUnique(string $folder): string
     {
         return move_uploaded_unique_file($this->file, $folder);
     }
 
-    /**
-     * @return string
-     */
-    public function getType()
+    public function getType(): string
     {
         return $this->file['type'];
     }
     
-    /**
-     * @return int размер в байтах
-     */
-    public function getSize()
+    public function getSize(): int
     {
         return $this->file['size'];
     }
 
-    /**
-     * @return string
-     */
-    public function getTempName()
+    public function getTempName(): string
     {
         return $this->file['tmp_name'];
     }
 
-    /**
-     * @return int
-     */
-    public function getError()
+    public function getError(): int
     {
         return $this->file['error'];
     }
 
-    /**
-     * @param int $error
-     * @return bool
-     */
-    public function hasError($error)
+    public function hasError(int $error): bool
     {
         return $this->getError() === $error;
     }
