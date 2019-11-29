@@ -2,6 +2,7 @@
 
 use frame\modules\RightsDesc;
 use engine\users\User;
+use engine\users\Group;
 
 class UsersRightsDesc extends RightsDesc
 {
@@ -13,10 +14,15 @@ class UsersRightsDesc extends RightsDesc
         ];
     }
 
+    /**
+     * @param User $object
+     */
     public function additionCheck(string $right, User $user, $object = null): bool
     {
         switch ($right) {
-            case 'edit-own': return $user->id === $object;
+            case 'edit-own': return $user->id === $object->id;
+            case 'edit-all': return $object->group_id !== Group::ROOT_ID 
+                                 || $user->group_id === Group::ROOT_ID;
             default: return true;
         }
     }

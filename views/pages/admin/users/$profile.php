@@ -31,8 +31,7 @@ $deleteAvatar = new DeleteAvatarAction(['uid' => $profile->id]);
     <h3><a href="/admin/users?p=<?= $prevPagenumber ?>">Пользователи</a></h3><br>
     <div style="float:left;margin-right:1%;max-width:40%">
         <img src="/<?= $profile->getAvatarUrl() ?>" style="max-width:100%">
-        <?php if ($rights->canOneOf(['edit-all' => null, 'edit-own' => $profile->id])
-            && ($group->id !== Group::ROOT_ID || (int) $me->group_id === Group::ROOT_ID)): 
+        <?php if ($rights->canOneOf(['edit-all' => $profile, 'edit-own' => $profile])): 
         ?>
             <?php if ($profile->avatar): ?><br><a href="<?= $deleteAvatar->getUrl() ?>">Удалить аватар</a><?php endif ?>
             <br><a href="/admin/users/profile/edit?id=<?= $profile->id ?>">Редактировать профиль</a>
