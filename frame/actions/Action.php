@@ -238,23 +238,15 @@ abstract class Action extends LatePropsObject
     }
 
     /**
-     * Выполняется перед сохранением состояния экшна. Оно сохраняется при 
-     * успехе/неудаче, только если соответсвующие редиректы не null. Тут можно 
-     * очистить данные, которые не нужно сохранять (например, пароли).
+     * Определяет названия переданных post данных, которые нужно временно сохранять.
+     * Используется, чтобы вывести введенные данные в форме после возвращения на 
+     * страницу, например.
+     * 
+     * Не рекомендуется сохранять пароли и другие секретные данные.
      */
-    protected function doBeforeSave() 
+    protected function getPostToSave(): array 
     { 
-        // Here is nothing to do 
-    }
-
-    /**
-     * Выполняется после загрузки состояния экшна. Оно загружается, только если было 
-     * сохранено. Оно сохраняется при успехе/неудаче, только если соответсвующие 
-     * редиректы не null.
-     */
-    protected function doAfterLoad()
-    {
-        // Here is nothing to do
+        return []; // Here is nothing to save
     }
 
     /**
@@ -288,21 +280,18 @@ abstract class Action extends LatePropsObject
 
     /**
      * Сохраняет свое состояние перед редиректом.
-     * Сохраняются статус, ошибки и введенные данные.
+     * Сохраняются статус, ошибки и введенные post данные.
      * Файлы не сохраняются.
      */
     private function save()
     {
-        if ($this->hasErrors()) {
-            $this->doBeforeSave();
-            $idName = $this->getIdName();
-            $sessions = new SessionTransmitter;
-            $sessions->setData($idName, serialize([
-                $this->executed,
-                $this->data,
-                $this->errors
-            ]));
-        }
+        $idName = $this->getIdName();
+        $sessions = new SessionTransmitter;
+        $sessions->setData($idName, serialize([
+            $this->executed,
+            $this->assemblePostToSave(),
+            $this->errors
+        ]));
     }
 
     /**
@@ -315,11 +304,10 @@ abstract class Action extends LatePropsObject
         if ($sessions->isSetData($idName)) {
             list(
                 $this->executed,
-                $this->data, 
+                $this->data['post'], 
                 $this->errors
             ) = unserialize($sessions->getData($idName));
             $sessions->removeData($idName);
-            $this->doAfterLoad();
         }
     }
 
@@ -328,5 +316,15 @@ abstract class Action extends LatePropsObject
         if ($token != $this->getExpectedToken()) 
             throw new HttpError(HttpError::BAD_REQUEST,
                 'Recieved TOKEN token does not match expected token.');
+    }
+
+    private function assemblePostToSave(): array
+    {
+        $result = [];
+        foreach ($this->getPostToSave() as $name) {
+            if (isset($this->data['post'][$name]))
+                $result[$name] = $this->data['post'][$name];
+        }
+        return $result;
     }
 }
