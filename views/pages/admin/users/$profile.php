@@ -34,7 +34,7 @@ $deleteAvatar = new DeleteAvatarAction(['uid' => $profile->id]);
         <?php if ($rights->canOneOf(['edit-all' => $profile, 'edit-own' => $profile])): 
         ?>
             <?php if ($profile->avatar): ?><br><a href="<?= $deleteAvatar->getUrl() ?>">Удалить аватар</a><?php endif ?>
-            <br><a href="/admin/users/profile/edit?id=<?= $profile->id ?>">Редактировать профиль</a>
+            <br><a href="/admin/users/edit?id=<?= $profile->id ?>">Редактировать профиль</a>
         <?php endif ?>
     </div>
     <div>

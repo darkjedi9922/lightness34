@@ -1,3 +1,6 @@
 {
-    "list.amount": 20
+    "list.amount": 20,
+    "login.max_length": 16,
+    "password.max_length": 16,
+    "avatar.max_byte_size": 2097152
 }
