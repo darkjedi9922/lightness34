@@ -131,9 +131,16 @@ class UploadedFile extends File
     }
 
     /**
-     * @return bool
+     * @return bool Превысил ли файл максимально допустимый размер
      */
-    public function isLoaded()
+    public function hasSizeError(int $maxByteSize): bool
+    {
+        return $this->getSize() > $maxByteSize
+            || $this->hasError(self::UPLOAD_ERR_INI_SIZE)
+            || $this->hasError(self::UPLOAD_ERR_FORM_SIZE);
+    }
+
+    public function isLoaded(): bool
     {
         return $this->hasError(self::UPLOAD_ERR_OK);
     }
