@@ -85,7 +85,7 @@ function move_uploaded_unique_file($file, $path, $translit = true)
     $uniqueFile = generate_unique_filename($path.'/'.$name);
     if (!file_exists($path)) mkdir($path);
 	move_uploaded_file($file['tmp_name'], $uniqueFile);
-    return end(explode('/', $uniqueFile));
+    return last(explode('/', $uniqueFile));
 }
 
 // =============================================================================
