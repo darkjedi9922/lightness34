@@ -21,8 +21,8 @@ abstract class Cash
      */
     protected static function cash(string $key, callable $creator)
     {
-        return self::$storage[$key] ?? 
-            self::$storage[$key] = $creator();
+        return self::$storage[static::class][$key] ?? 
+            self::$storage[static::class][$key] = $creator();
     }
     
     private static $storage = [];
