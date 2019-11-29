@@ -50,7 +50,7 @@ $deleteAvatar = new DeleteAvatarAction(['uid' => $profile->id]);
         <br>Последнее устройство: <?= $profile->last_user_agent ?>
         <br />Группа: <?= $group->name ?>
         <?php if ((int) $me->group_id === Group::ROOT_ID && $group->id !== Group::ROOT_ID): ?>
-            <a href="/admin/users/profile/group/edit?id=<?= $profile->id ?>">[Изменить]</a>
+            <a href="/admin/users/change/group?id=<?= $profile->id ?>">[Изменить]</a>
         <?php endif ?>
         <br />Статус: <?php if ($profile->online === '1'): ?><span style="color:green">Онлайн</span>
         <?php else: ?><span style="color:red">Оффлайн</span><?php endif ?>
