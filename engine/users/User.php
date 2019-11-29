@@ -4,6 +4,8 @@ use frame\database\Identity;
 
 class User extends Identity
 {
+    const AVATAR_FOLDER = 'public/images/avatars';
+    
     public static function getTable(): string
     {
         return 'users';
@@ -12,12 +14,12 @@ class User extends Identity
     public function hasAvatar(): bool
     {
         return $this->avatar 
-            && file_exists('public/images/avatars/' . $this->avatar);
+            && file_exists(self::AVATAR_FOLDER . '/' . $this->avatar);
     }
 
     public function getAvatarUrl(): string
     {
-        if ($this->hasAvatar()) return 'public/images/avatars/' . $this->avatar;
+        if ($this->hasAvatar()) return self::AVATAR_FOLDER . '/' . $this->avatar;
         else return 'public/images/no-avatar.png';
     }
 }
