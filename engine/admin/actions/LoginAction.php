@@ -18,14 +18,14 @@ class LoginAction extends Action
     /** @var Auth $auth */
     private $auth;
 
-    protected function initialize()
+    protected function initialize(array $get)
     {
         Init::accessRight('admin', 'enter');
 
         $this->auth = new Auth;
     }
 
-    protected function validate(): array
+    protected function validate(array $post, array $files): array
     {
         $errors = [];
         $config = new Json('config/admin.json');
@@ -37,12 +37,12 @@ class LoginAction extends Action
         return $errors;
     }
 
-    protected function succeed()
+    protected function succeed(array $post, array $files)
     {
         $this->auth->login($_SERVER['REMOTE_ADDR']);
     }
 
-    protected function fail()
+    protected function fail(array $post, array $files)
     {
         $this->auth->logout();
     }

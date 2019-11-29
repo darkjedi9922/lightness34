@@ -4,7 +4,7 @@ use frame\actions\Action;
 
 class JsonValidatedAction extends Action
 {
-    protected function succeed()
+    protected function succeed(array $post, array $files)
     {
         // Some actions...
 

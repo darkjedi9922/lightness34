@@ -26,7 +26,7 @@ class NewArticleAction extends Action
         Init::accessRight('articles', 'add');
     }
 
-    protected function validate(): array
+    protected function validate(array $post, array $files): array
     {
         $errors = [];
         $config = new Json('config/articles.json');
@@ -42,7 +42,7 @@ class NewArticleAction extends Action
         return $errors;
     }
 
-    protected function succeed()
+    protected function succeed(array $post, array $files)
     {
         $article = new Article;
         $article->title = $this->getData('post', 'title');

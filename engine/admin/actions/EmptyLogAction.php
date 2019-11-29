@@ -14,7 +14,7 @@ class EmptyLogAction extends Action
 {
     private $file = '';
     
-    protected function initialize()
+    protected function initialize(array $get)
     {
         Init::accessRight('admin', 'clear-logs');
         
@@ -23,7 +23,7 @@ class EmptyLogAction extends Action
         Init::require($this->file !== null);
     }
     
-    protected function succeed()
+    protected function succeed(array $post, array $files)
     {
         if (file_exists($this->file)) {
             file_put_contents($this->file, '');

@@ -25,12 +25,12 @@ abstract class ProfileAction extends Action
     /** @var config */
     private $config;
 
-    protected function initialize()
+    protected function initialize(array $get)
     {
         $this->config = config::get('users');
     }
 
-    protected function succeed()
+    protected function succeed(array $post, array $files)
     {
         throw new NotImplementedException("This method have to be overrided.");
     }

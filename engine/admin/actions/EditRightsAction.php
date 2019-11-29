@@ -25,7 +25,7 @@ class EditRightsAction extends Action
     /** @var Group */
     private $group;
 
-    protected function initialize()
+    protected function initialize(array $get)
     {
         $myGroup = my_group::get();
         Init::access($myGroup->id === $myGroup::ROOT_ID);
@@ -38,7 +38,7 @@ class EditRightsAction extends Action
         Init::require((bool) $this->group);
     }
 
-    protected function succeed()
+    protected function succeed(array $post, array $files)
     {
         // Если какой-либо модуль вообще не был передан, добавляем ему все
         // права как off (пустой массив)

@@ -152,15 +152,24 @@ abstract class Action extends LatePropsObject
     public final function exec()
     {
         $this->assertToken($this->data[self::ARGS][self::TOKEN] ?? '');
-        $this->initialize();
-        $this->errors = $this->validate();
+        $this->initialize($this->data[self::ARGS]);
+        $this->errors = $this->validate(
+            $this->data[self::POST],
+            $this->data[self::FILES]
+        );
         $redirect = null;
         if (!$this->hasErrors()) {
-            $this->succeed();
+            $this->succeed(
+                $this->data[self::POST],
+                $this->data[self::FILES]
+            );
             $this->save();
             $redirect = $this->getSuccessRedirect();
         } else {
-            $this->fail();
+            $this->fail(
+                $this->data[self::POST],
+                $this->data[self::FILES]
+            );
             $redirect = $this->getFailRedirect();
         }
         $this->executed = true;
@@ -198,7 +207,7 @@ abstract class Action extends LatePropsObject
      * Is run first
      * Suggests override if it is needed
      */
-    protected function initialize()
+    protected function initialize(array $get)
     {
         // Here is nothing to initialize
     }
@@ -210,7 +219,7 @@ abstract class Action extends LatePropsObject
      * 
      * @return array Коды ошибок
      */
-    protected function validate()
+    protected function validate(array $post, array $files)
     {
         return []; // Here is nothing to validate
     }
@@ -218,12 +227,12 @@ abstract class Action extends LatePropsObject
     /**
      * Is run third in case of the success
      */
-    abstract protected function succeed();
+    abstract protected function succeed(array $post, array $files);
 
     /**
      * Is run third in case of the fail
      */
-    protected function fail()
+    protected function fail(array $post, array $files)
     {
         // Here is nothing to do
     }

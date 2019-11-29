@@ -31,13 +31,13 @@ class ProfileEditAction extends ProfileAction
     /** @var UploadedFile */
     private $avatar = null;
 
-    protected function initialize()
+    protected function initialize(array $get)
     {
-        parent::initialize();
+        parent::initialize($get);
 
-        $id = (int) $this->getData('get', 'id', -1);
+        $id = $get['id'] ?? null;
 
-        Init::require($id !== -1);
+        Init::require($id !== null);
         
         $this->user = User::selectIdentity($id);
         
@@ -51,11 +51,11 @@ class ProfileEditAction extends ProfileAction
         $this->database = database::get();
     }
 
-    protected function validate(): array
+    protected function validate(array $post, array $files): array
     {
         $errors = [];
 
-        foreach ($this->getDataArray()['post'] as $key => $value) {
+        foreach ($post as $key => $value) {
             switch ($key) {
                 case 'login': 
                     array_merge(
@@ -100,7 +100,7 @@ class ProfileEditAction extends ProfileAction
             }
         }
 
-        $this->avatar = $this->getData('files', 'avatar');
+        $this->avatar = $files['avatar'] ?? null;
         if ($this->avatar !== null && !$this->avatar->isEmpty()) array_merge(
             $errors,
             $this->validateAvatar($this->avatar)
@@ -109,9 +109,9 @@ class ProfileEditAction extends ProfileAction
         return $errors;
     }
 
-    protected function succeed()
+    protected function succeed(array $post, array $files)
     {
-        foreach ($this->getDataArray()['post'] as $key => $value) {
+        foreach ($post as $key => $value) {
             switch ($key) {
                 case 'login': 
                     $this->user->login = $value;
@@ -134,7 +134,7 @@ class ProfileEditAction extends ProfileAction
             }
         }
 
-        if ($this->getData('post', 'login') || $this->getData('post', 'password')) {
+        if (isset($post['login']) || isset($post['password'])) {
             $this->user->sid = Encoder::getSid(
                 $this->user->login,
                 $this->user->password);
@@ -145,7 +145,7 @@ class ProfileEditAction extends ProfileAction
             }
         }
 
-        $avatar = $this->getData('files', 'avatar');
+        $avatar = $files['avatar'];
         if ($avatar !== null && !$avatar->isEmpty()) {
             if ($this->user->hasAvatar()) unlink($this->user->getAvatarUrl());
             $this->user->avatar = $avatar->moveUnique(User::AVATAR_FOLDER);

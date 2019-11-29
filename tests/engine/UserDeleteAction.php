@@ -4,7 +4,7 @@ use frame\actions\Action;
 
 class UserDeleteAction extends Action
 {
-    protected function succeed()
+    protected function succeed(array $post, array $files)
     {
         
     }

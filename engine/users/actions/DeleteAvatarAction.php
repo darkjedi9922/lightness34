@@ -14,7 +14,7 @@ class DeleteAvatarAction extends Action
     /** @var User */
     private $user = null;
 
-    protected function initialize()
+    protected function initialize(array $get)
     {
         $uid = $this->getData('get', 'uid');
         Init::require($uid !== null);
@@ -27,7 +27,7 @@ class DeleteAvatarAction extends Action
         ]);
     }
 
-    protected function succeed()
+    protected function succeed(array $post, array $files)
     {
         if ($this->user->hasAvatar()) {
             unlink($this->user->getAvatarUrl());

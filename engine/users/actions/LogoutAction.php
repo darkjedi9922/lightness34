@@ -10,12 +10,12 @@ use cash\database;
  */
 class LogoutAction extends Action 
 {
-    protected function initialize()
+    protected function initialize(array $get)
     {
         Init::accessLogged(true);
     }
 
-    protected function succeed()
+    protected function succeed(array $post, array $files)
     {
         $auth = new Auth;
         $auth->logout();

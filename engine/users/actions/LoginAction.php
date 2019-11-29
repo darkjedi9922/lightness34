@@ -14,12 +14,12 @@ class LoginAction extends Action
 
     private $sid;
 
-    protected function initialize()
+    protected function initialize(array $get)
     {
         Init::accessLogged(false);
     }
 
-    public function validate(): array
+    public function validate(array $post, array $files): array
     {
         $errors = [];
 
@@ -41,7 +41,7 @@ class LoginAction extends Action
         return $errors;
     }
 
-    public function succeed()
+    public function succeed(array $post, array $files)
     {
         $remember = (bool) $this->getData('post', 'remember');
         (new Auth)->login($this->sid, $remember);
