@@ -68,29 +68,6 @@ function generate_unique_filename($file)
 // =============================================================================
 
 /**
- * Перемещает загруженный файл из $_FILES в директорию, добавляя номер к имени,
- * чтобы оно было уникально (если такой файл уже существует).
- * 
- * Если заданная директория не существует, создает ее.
- * 
- * @param array $file Массив из $_FILES
- * @param string $path Директория, куда нужно переместить файл
- * @param bool $translit Нужно ли конвертировать имя файла в транслит
- * @return string Имя файла после перемещения
- */
-function move_uploaded_unique_file($file, $path, $translit = true)
-{
-    $path = rtrim($path, '/');
-    $name = ($translit ? translit($file['name']) : $file['name']);
-    $uniqueFile = generate_unique_filename($path.'/'.$name);
-    if (!file_exists($path)) mkdir($path);
-	move_uploaded_file($file['tmp_name'], $uniqueFile);
-    return last(explode('/', $uniqueFile));
-}
-
-// =============================================================================
-
-/**
  * Выделяет подстроку из строки.
  * Аналогично substr() с кодировкой UTF-8.
  * 

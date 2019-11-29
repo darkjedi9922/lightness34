@@ -1,7 +1,9 @@
 <?php namespace frame\actions;
 
 use frame\tools\File;
-use function lightlib\move_uploaded_unique_file;
+use function lightlib\generate_unique_filename;
+use function lightlib\translit;
+use function lightlib\last;
 
 class UploadedFile extends File
 {
@@ -79,11 +81,17 @@ class UploadedFile extends File
      * 
      * Если заданная директория не существует, создает ее.
      * 
-     * Возвращает имя файла после перемещения.
+     * @param bool $translit Нужно ли конвертировать имя файла в транслит.
+     * @return string Имя файла после перемещения.
      */
-    public function moveUnique(string $folder): string
+    public function moveUnique(string $folder, bool $translit = true): string
     {
-        return move_uploaded_unique_file($this->file, $folder);
+        $path = rtrim($folder, '/');
+        $name = ($translit ? translit($this->file['name']) : $this->file['name']);
+        $uniqueFile = generate_unique_filename($path . '/' . $name);
+        if (!file_exists($path)) mkdir($path);
+        move_uploaded_file($this->file['tmp_name'], $uniqueFile);
+        return last(explode('/', $uniqueFile));
     }
 
     public function getType(): string
