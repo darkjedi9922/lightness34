@@ -44,7 +44,7 @@ abstract class ProfileAction extends Action
     {
         $errors = [];
 
-        if ($current !== null && $value === $current) $errors;
+        if ($current !== null && $value === $current) return $errors;
 
         if (!$value) {
             $errors[] = static::E_NO_LOGIN;

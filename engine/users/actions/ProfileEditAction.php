@@ -5,7 +5,6 @@ use engine\users\Encoder;
 use frame\tools\Init;
 use engine\users\cash\user_me;
 use cash\database;
-use cash\config;
 use frame\auth\Auth;
 
 /**
@@ -58,41 +57,42 @@ class ProfileEditAction extends ProfileAction
         foreach ($post as $key => $value) {
             switch ($key) {
                 case 'login': 
-                    array_merge(
-                        $errors, 
+                    $errors = array_merge(
+                        $errors,
                         $this->validateLogin($value, $this->user->login)
                     );
                     break;
+                
                 case 'password':
-                    if ($value) array_merge(
+                    if ($value) $errors = array_merge(
                         $errors,
                         $this->validatePassword($value)
                     );
                     break;
                 
                 case 'email':
-                    array_merge(
+                    $errors = array_merge(
                         $errors,
                         $this->validateEmail($value, $this->user->email)
                     );
                     break;
 
                 case 'name':
-                    array_merge(
+                    $errors = array_merge(
                         $errors,
                         $this->validateName($value, $this->user->name)   
                     );
                     break;
 
                 case 'surname':
-                    array_merge(
+                    $errors = array_merge(
                         $errors,
                         $this->validateSurname($value, $this->user->surname)
                     );
                     break;
 
                 case 'gender_id':
-                    array_merge(
+                    $errors = array_merge(
                         $errors,
                         $this->validateGender($value, $this->user->gender_id)
                     );
@@ -101,10 +101,12 @@ class ProfileEditAction extends ProfileAction
         }
 
         $this->avatar = $files['avatar'] ?? null;
-        if ($this->avatar !== null && !$this->avatar->isEmpty()) array_merge(
-            $errors,
-            $this->validateAvatar($this->avatar)
-        );
+        if ($this->avatar !== null && !$this->avatar->isEmpty()) {
+            $errors = array_merge(
+                $errors,
+                $this->validateAvatar($this->avatar)
+            );
+        }
 
         return $errors;
     }
