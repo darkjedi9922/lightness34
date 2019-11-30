@@ -21,7 +21,7 @@ $rights = my_rights::get('admin');
     <?php if($group->id === $group::ROOT_ID): ?>
         <li><a><i class="fontello icon-cog"></i> Настройки <i class="fontello icon-down-dir"></i></a>
             <ul>
-                <li><a href="/admin/settings/globals"><i class="fontello icon-sliders"></i> Общие</a></li>
+                <li><a href="/admin/settings/core"><i class="fontello icon-sliders"></i> Общие</a></li>
                 <li><a><i class="fontello icon-user"></i> Пользователи <i class="fontello icon-down-dir"></i></a>
                     <ul>
                         <li><a href="/admin/users/settings"><i class="fontello icon-cog"></i> Общие</a></li>
