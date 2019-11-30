@@ -2,6 +2,10 @@
 
 use cash\database;
 use frame\database\Identity;
+use engine\users\User;
+use engine\users\Group;
+use frame\database\Records;
+use engine\articles\cash\is_article_new;
 
 class Article extends Identity
 {
@@ -19,5 +23,35 @@ class Article extends Identity
                 ON id = article_id
             WHERE article_id IS NULL AND author_id <> $userId"
         )->readScalar();
+    }
+
+    /**
+     * Для гостей не устанавливается.
+     */
+    public function setReaded(User $for)
+    {
+        if (   $for->group_id === Group::GUEST_ID 
+            || $for->id === $this->author_id
+        ) return;
+
+        if (is_article_new::get($this, $for)) Records::select('readed_articles', [
+            'article_id' => $this->id,
+            'user_id' => $for->id
+        ]);
+    }
+
+    /**
+     * Для гостей всегда будет false.
+     */
+    public function loadIsNew(User $for): bool
+    {
+        if (   $for->group_id === Group::GUEST_ID 
+            || $for->id === $this->author_id
+        ) return false;
+        
+        return Records::select('readed_articles', [
+            'article_id' => $this->id,
+            'user_id' => $for->id
+        ])->count('article_id') === 0;
     }
 }
