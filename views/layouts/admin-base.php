@@ -24,7 +24,7 @@ $config = config::get('core');
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="utf-8">
     <link rel="icon" href="<?= versionify('public/favicon.ico') ?>" type="image/x-icon">
-    <link rel="stylesheet" href="<?= versionify('public/styles/admin.css') ?>" type="text/css">
+    <link rel="stylesheet" href="<?= versionify('public/build/admin.css') ?>" type="text/css">
     <title><?= $config->{'site.name'} ?></title>
 </head>
 <body>

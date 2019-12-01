@@ -56,12 +56,6 @@ h3{margin:0}
 .head-bar{background:#e4e4e4;height:63px;padding:0px 18px;}
 .content{padding:18px 18px 0px;background:url('/public/images/admin/logo.png') no-repeat;background-position:center 50%;vertical-align:top}
 
-/* блоки */
-.box{background:#e4e4e4;border-radius:10px;padding:10px;margin-bottom:18px;font-family:Arial;color:black;font-size:14px;overflow:auto}
-.box.centered{width:30%;margin:auto;position:relative;margin-top:15%;}
-.box a[href]{color:#249dcd;font-family:Arial;text-decoration:underline;}
-.box a[href]:hover{color:#82dcff;text-decoration:none;}
-
 /* head-bar */
 .mini-profile{float:right;height:100%;}
 .mini-profile .login{display:block;margin-top:18px;font-family:Calibri;font-size:25px;color: #249dcd;text-decoration:none;float:right}
