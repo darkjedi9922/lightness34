@@ -1,0 +1,26 @@
+{
+  "name": "lightness",
+  "version": "3.4.0",
+  "description": "A framework to build sites",
+  "main": "",
+  "devDependencies": {
+    "css-loader": "^3.0.0",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
+    "node-sass": "^4.12.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.3",
+    "resolve-url-loader": "^3.1.0",
+    "sass-loader": "^7.1.0",
+    "url-loader": "^2.0.1",
+    "webpack": "^4.35.2",
+    "webpack-cli": "^3.3.5"
+  },
+  "scripts": {
+    "webpack": "webpack --config webpack.dev.js --progress=true",
+    "webpack-watch": "webpack --config webpack.dev.js --watch --progress=true",
+    "build": "webpack --config webpack.prod.js --progress=true",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jed Dark",
+  "license": "MIT",
+  "private": true
+}

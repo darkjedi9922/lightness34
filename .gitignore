@@ -20,3 +20,7 @@ vendor/phpunit
 
 # User avatars folder
 public/images/avatars
+
+# npm build
+node_modules
+public/build
