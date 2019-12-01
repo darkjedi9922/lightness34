@@ -356,9 +356,12 @@ function stored(array &$storage, string $key, callable $creator)
  * Example:
  * input:   "public/favicon.ico"
  * output:  "/public/favicon.ico?v=532532557"
+ * 
+ * @throws Exception if there is no such file.
  */
 function versionify(string $filename): string
 {
+    if (!file_exists($filename)) throw new \Exception("There is no file $filename");
     $version = filemtime($filename);
     return "/$filename?v=$version";
 }
