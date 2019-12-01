@@ -1,5 +1,6 @@
 <?php /** @var frame\views\Page $self */
 
+use cash\config;
 use frame\tools\Init;
 use engine\users\User;
 use frame\lists\IdentityList;
@@ -16,6 +17,7 @@ $self->setLayout('admin');
 
 $genders = new IdentityList(Gender::class);
 $action = new ProfileEditAction(['id' => $uid]);
+$config = config::get('users');
 ?>
 
 <div class="box">

@@ -24,7 +24,7 @@ $rights = my_rights::get('admin');
                 <li><a href="/admin/settings/core"><i class="fontello icon-sliders"></i> Общие</a></li>
                 <li><a><i class="fontello icon-user"></i> Пользователи <i class="fontello icon-down-dir"></i></a>
                     <ul>
-                        <li><a href="/admin/users/settings"><i class="fontello icon-cog"></i> Общие</a></li>
+                        <li><a href="/admin/settings/users"><i class="fontello icon-cog"></i> Общие</a></li>
                         <li><a href="/admin/users/groups"><i class="fontello icon-id-card-o"></i> Группы</a></li>
                         <li><a href="/admin/users/genders"><i class="fontello icon-transgender"></i> Пол</a></li>
                         <li><a href="/admin/users/messages/settings"><i class="fontello icon-email"></i> Сообщения</a></li>

@@ -13,7 +13,6 @@ $me = user_me::get();
 Init::access((int) $me->group_id === Group::ROOT_ID);
 
 $config = config::get('core');
-
 $action = new EditConfigAction(['name' => 'core']);
 ?>
 
