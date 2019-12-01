@@ -133,7 +133,9 @@ $action = new ProfileEditAction(['id' => $uid]);
                 </td>
                 <td>
                     <?php if ($action->hasError($action::E_AVATAR_SIZE)) : ?>
-                        <span class='error'>Размер превышает 2 МБ</span>
+                        <span class='error'>Размер превышает
+                            <?= $config->{'avatar.max_size.value'} ?>
+                            <?= $config->{'avatar.max_size.unit'} ?></span>
                     <?php endif ?>
                     <?php if ($action->hasError($action::E_AVATAR_TYPE)) : ?>
                         <span class='error'>Некорректный тип файла</span>

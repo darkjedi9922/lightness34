@@ -8,6 +8,8 @@ use engine\users\User;
 use engine\users\Gender;
 use cash\config;
 
+use function lightlib\bytes;
+
 abstract class ProfileAction extends Action
 {
     const E_NO_LOGIN = 1;
@@ -128,8 +130,14 @@ abstract class ProfileAction extends Action
     {
         $errors = [];
 
-        $maxByteSize = $this->config->{'avatar.max_byte_size'};
-        if ($avatar->hasSizeError($maxByteSize)) $errors[] = static::E_AVATAR_SIZE; 
+        $maxByteSize = bytes(
+            $this->config->{'avatar.max_size.value'},
+            $this->config->{'avatar.max_size.unit'}
+        );
+        if ($avatar->hasSizeError($maxByteSize)) {
+            $errors[] = static::E_AVATAR_SIZE;
+            return $errors;
+        }
         
         if (!in_array($avatar->getMime(), [
             'image/jpg',
