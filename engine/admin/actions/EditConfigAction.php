@@ -36,20 +36,26 @@ class EditConfigAction extends Action
     {
         foreach ($post as $name => $value) {
             $name = str_replace('->', '.', $name);
-            if ($this->isBool($name)) $value = $this->toBool($value);
-            $this->config->set($name, $value);
+            $this->config->set($name, $this->typize($name, $value));
         }
         $this->config->save();
     }
 
-    private function isBool(string $setting): bool
+    /**
+     * Преобразует значение переданной настройки (оно string или массив) в тип,
+     * которая эта настройка имеет в конфиге, чтобы сохранить новое значение
+     * в правильном типе.
+     * 
+     * @param mixed $postValue
+     * @return mixed
+     */
+    private function typize(string $setting, $postValue)
     {
-        return $this->config->$setting === true
-            || $this->config->$setting === false;
-    }
-
-    private function toBool(string $value): bool
-    {
-        return $value === 'true' || $value === '1' ? true : false;
+        if (is_bool($this->config->$setting)) 
+            return $postValue === 'true' || $postValue === '1' ? true : false;
+        else if (is_int($this->config->$setting)) return (int) $postValue;
+        else if (is_float($this->config->$setting)) return (float) $postValue;
+        else if (is_double($this->config->$setting)) return (double) $postValue;
+        return $postValue;
     }
 }
