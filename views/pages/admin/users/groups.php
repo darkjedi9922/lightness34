@@ -2,6 +2,7 @@
 
 use engine\users\cash\my_group;
 use engine\users\Group;
+use engine\admin\actions\NewUserGroupAction;
 use frame\lists\IdentityList;
 use frame\tools\Init;
 
@@ -12,8 +13,8 @@ $myGroup = my_group::get();
 Init::access($myGroup->id === $myGroup::ROOT_ID);
 
 $groups = new IdentityList(Group::class);
+$newGroup  = new NewUserGroupAction;
 
-// $NEW_GROUP  = new NewUserGroupAction;
 // $DEL_GROUP  = new DeleteUserGroupAction;
 ?>
 
@@ -32,8 +33,10 @@ $groups = new IdentityList(Group::class);
 </div>
 <div class="box">
     <h3>Добавить</h3><br>
-    <?php //if ($NEW_GROUP->hasError($NEW_GROUP::E_NO_NAME)): ?><span class="error" style="margin-bottom:7px">Название не указано</span><?php //endif ?>
-    <form action="<?php //$NEW_GROUP->getUrl() ?>" method="post">
+    <?php if ($newGroup->hasError($newGroup::E_NO_NAME)): ?>
+        <span class="error" style="margin-bottom:7px">Название не указано</span>
+    <?php endif ?>
+    <form action="<?= $newGroup->getUrl() ?>" method="post">
         <table>
             <tr><td>Название:</td><td><input name="name" type="text"></td></tr>
         </table>
