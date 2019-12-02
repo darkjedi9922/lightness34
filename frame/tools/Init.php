@@ -4,6 +4,7 @@ use engine\users\cash\my_rights;
 use frame\errors\HttpError;
 use frame\auth\Auth;
 use frame\Core;
+use engine\users\cash\user_me;
 
 class Init
 {
@@ -33,6 +34,12 @@ class Init
     {
         $auth = new Auth;
         static::access($auth->isLogged() === $beLogged);
+    }
+
+    /** @throws HttpError FORBIDDEN */
+    public static function accessGroup(int $groupId)
+    {
+        static::access((int) user_me::get()->group_id === $groupId);
     }
 
     /** 
