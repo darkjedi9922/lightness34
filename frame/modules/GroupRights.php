@@ -6,16 +6,16 @@ use frame\modules\RightsDesc;
 
 class GroupRights
 {
+    private $desc;
     private $groupId;
-    private $list = [];
     private $rights = 0;
     private $record = null;
 
     public function __construct(RightsDesc $desc, int $moduleId, int $groupId)
     {
+        $this->desc = $desc;
         $this->groupId = $groupId;
         if ($groupId !== Group::ROOT_ID) {
-            $this->list = $desc->listRights();
             $this->record = Records::select('group_rights', [
                 'module_id' => $moduleId,
                 'group_id' => $groupId
@@ -27,7 +27,7 @@ class GroupRights
     public function can(string $right): bool
     {
         return $this->groupId === Group::ROOT_ID
-            || (bool) ($this->rights & $this->calcMask($right));
+            || (bool) ($this->rights & $this->desc->calcMask([$right]));
     }
 
     /**
@@ -41,8 +41,8 @@ class GroupRights
             throw new \Exception('The root rights cannot be modified.');
             
         $this->rights = $can ? 
-            $this->rights | $this->calcMask($right) :
-            $this->rights & ~$this->calcMask($right) ;
+            $this->rights | $this->desc->calcMask([$right]) :
+            $this->rights & ~$this->desc->calcMask([$right]) ;
     }
 
     /**
@@ -64,17 +64,5 @@ class GroupRights
             $this->record->insert(['rights' => $this->rights]);
             
         else $this->record->update(['rights' => $this->rights]);
-    }
-
-    /**
-     * Возвращает степень двойки, соответствующий индексу права в списке прав.
-     * 
-     * В побитовом виде у этого числа стоит 1 только в одном месте в позиции,
-     * соответствующей индексу права.
-     */
-    private function calcMask(string $right): int
-    {
-        $index = array_search($right, array_keys($this->list));
-        return pow(2, $index);
     }
 }
