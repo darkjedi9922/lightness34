@@ -5,7 +5,7 @@
 use frame\tools\Init;
 use engine\users\Group;
 use engine\users\cash\user_me;
-use cash\config;
+use frame\cash\config;
 use engine\admin\actions\EditConfigAction;
 
 $self->setLayout('admin');

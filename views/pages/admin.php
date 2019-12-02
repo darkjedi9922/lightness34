@@ -1,6 +1,6 @@
 <?php /** @var frame\views\Page $self */
 
-use cash\prev_router;
+use frame\cash\prev_router;
 use engine\admin\actions\LoginAction;
 use engine\admin\Auth;
 

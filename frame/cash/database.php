@@ -1,4 +1,4 @@
-<?php namespace cash;
+<?php namespace frame\cash;
 
 use frame\tools\Cash;
 use frame\database\Database as DB;

@@ -3,7 +3,7 @@
 use frame\tools\Init;
 use engine\articles\Article;
 use engine\users\User;
-use cash\pagenumber;
+use frame\cash\pagenumber;
 use engine\users\cash\user_me;
 
 $self->setLayout('admin');

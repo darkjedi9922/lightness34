@@ -1,6 +1,6 @@
 <?php /** @var frame\views\Layout $self */
 
-use cash\config;
+use frame\cash\config;
 use engine\admin\Auth;
 use frame\tools\Init;
 use frame\views\Page;

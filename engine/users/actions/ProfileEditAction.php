@@ -4,7 +4,7 @@ use engine\users\User;
 use engine\users\Encoder;
 use frame\tools\Init;
 use engine\users\cash\user_me;
-use cash\database;
+use frame\cash\database;
 use frame\auth\Auth;
 
 /**

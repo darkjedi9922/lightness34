@@ -1,4 +1,4 @@
-<?php namespace cash;
+<?php namespace frame\cash;
 
 use frame\Core;
 use frame\tools\Cash;

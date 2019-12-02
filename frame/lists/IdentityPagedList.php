@@ -1,6 +1,6 @@
 <?php namespace frame\lists;
 
-use cash\database;
+use frame\cash\database;
 use frame\database\Records;
 use frame\database\Identity;
 use frame\lists\Pager;

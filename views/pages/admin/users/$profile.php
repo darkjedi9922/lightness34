@@ -5,7 +5,7 @@ use frame\tools\Init;
 use engine\users\Gender;
 use engine\users\Group;
 use engine\users\cash\my_rights;
-use cash\pagenumber;
+use frame\cash\pagenumber;
 use engine\users\cash\user_me;
 use engine\users\actions\DeleteAvatarAction;
 

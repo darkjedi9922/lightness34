@@ -6,7 +6,7 @@ use frame\errors\NotImplementedException;
 use frame\tools\Init;
 use engine\users\User;
 use engine\users\Gender;
-use cash\config;
+use frame\cash\config;
 
 use function lightlib\bytes;
 

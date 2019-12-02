@@ -1,6 +1,6 @@
 <?php namespace engine\admin\actions;
 
-use cash\prev_router;
+use frame\cash\prev_router;
 use engine\admin\Auth;
 use frame\actions\Action;
 use frame\config\Json;

@@ -1,6 +1,6 @@
 <?php /** @var frame\views\Page $self */
 
-use cash\pagenumber;
+use frame\cash\pagenumber;
 use engine\articles\ArticlePagedList;
 use engine\comments\Comment;
 use engine\users\cash\my_rights;

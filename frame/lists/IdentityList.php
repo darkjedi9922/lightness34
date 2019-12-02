@@ -1,7 +1,7 @@
 <?php namespace frame\lists;
 
 use frame\database\Identity;
-use cash\database;
+use frame\cash\database;
 
 use function lightlib\array_assemble;
 

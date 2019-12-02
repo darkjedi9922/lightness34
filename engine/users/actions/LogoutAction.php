@@ -3,7 +3,7 @@
 use frame\actions\Action;
 use frame\tools\Init;
 use frame\auth\Auth;
-use cash\database;
+use frame\cash\database;
 
 /**
  * Права: нужно быть залогиненым.

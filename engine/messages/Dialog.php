@@ -1,7 +1,7 @@
 <?php namespace engine\messages;
 
 use frame\database\Identity;
-use cash\database;
+use frame\cash\database;
 
 class Dialog extends Identity
 {

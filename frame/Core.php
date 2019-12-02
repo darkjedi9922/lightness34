@@ -62,7 +62,7 @@ class Core
         date_default_timezone_set('Europe/Kiev');
 
         $this->enableErrorHundlers();
-        $this->config = \cash\config::get('core');
+        $this->config = \frame\cash\config::get('core');
         $this->router = new Router(Request::getRequest());
         static::$app = $this;
     }

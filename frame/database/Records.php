@@ -35,7 +35,7 @@ class Records
         $records = new static;
         $records->table = $table;
         $records->where = $where;
-        $records->db = \cash\database::get();
+        $records->db = \frame\cash\database::get();
         return $records;
     }
 
