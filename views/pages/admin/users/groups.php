@@ -1,5 +1,6 @@
 <?php /** @var \frame\views\Page $self */
 
+use engine\admin\actions\DeleteUserGroupAction;
 use engine\users\cash\my_group;
 use engine\users\Group;
 use engine\admin\actions\NewUserGroupAction;
@@ -14,19 +15,19 @@ Init::access($myGroup->id === $myGroup::ROOT_ID);
 
 $groups = new IdentityList(Group::class);
 $newGroup  = new NewUserGroupAction;
-
-// $DEL_GROUP  = new DeleteUserGroupAction;
+$delGroup  = new DeleteUserGroupAction;
 ?>
 
 <div class="box">
     <table width="100%">
         <?php foreach($groups as $group): /** @var Group $group */ ?>
+        <?php $delGroup->setData('get', 'id', $group->id) ?>
             <tr>
                 <td>ID: <?= $group->id ?></td>
                 <td><?= $group->name ?></td>
                 <td><a href="/admin/users/group?id=<?= $group->id ?>" class="button">Редактировать</a></td>
                 <td><a href="/admin/users/rights?id=<?= $group->id ?>" class="button">Права</a></td>
-                <td><?php if (!$group->isSystem()): ?><a href="<?php //$DEL_GROUP->getUrl() ?>" class="button">Удалить</a><?php endif ?></td>
+                <td><?php if (!$group->isSystem()): ?><a href="<?= $delGroup->getUrl() ?>" class="button">Удалить</a><?php endif ?></td>
             </tr>
         <?php endforeach ?>
     </table>
