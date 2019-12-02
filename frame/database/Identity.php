@@ -82,4 +82,9 @@ abstract class Identity
         $this->exists = true;
         return $this->data['id'];
     }
+
+    public function delete()
+    {
+        Records::select(static::getTable(), ['id' => $this->id])->delete();
+    }
 }
