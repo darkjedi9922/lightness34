@@ -24,3 +24,4 @@ public/images/avatars
 # npm build
 node_modules
 public/build
+public/package-lock.json
