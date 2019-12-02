@@ -46,10 +46,15 @@ abstract class Identity
         $this->data = $data;
     }
 
-    /** @return mixed|null */
+    /** 
+     * @throws Exception if there is no such value.
+     * @return string|int
+     */
     public function __get(string $name)
     {
-        return $this->data[$name] ?? null;
+        if (!isset($this->data[$name])) 
+            throw new \Exception("There is no '$name' in this identity.");
+        return $this->data[$name];
     }
 
     public function __set(string $name, $value)
