@@ -40,9 +40,16 @@ abstract class Identity
         return static::select(['id' => $id]);
     }
 
+    /**
+     * @throws Exception if the non-empty data do not contains id
+     */
     public function __construct(array $data = [])
     {
-        if (!empty($data)) $data['id'] = (int) $data['id'];
+        if (!empty($data)) {
+            if (!isset($data['id'])) 
+                throw new \Exception('The data do not contain id');
+            $data['id'] = (int) $data['id'];
+        }
         $this->data = $data;
     }
 
