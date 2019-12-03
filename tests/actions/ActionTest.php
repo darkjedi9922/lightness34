@@ -4,6 +4,7 @@ use PHPUnit\Framework\TestCase;
 use tests\engine\UserDeleteAction;
 use frame\actions\Action;
 use tests\examples\ActionExample;
+use frame\errors\HttpError;
 
 /**
  * @runTestsInSeparateProcesses
@@ -65,5 +66,25 @@ class ActionTest extends TestCase
 
         $this->assertEquals($token, $action->getData('get', '_csrf'));
         $this->assertEquals($token, $action->getToken());
+    }
+
+    public function testThrowsNotFoundIfThereIsNotRecievedListedGetData()
+    {
+        $action = new ActionExample;
+        $action->setToken($action->getExpectedToken());
+
+        $this->expectException(HttpError::class);
+        $this->expectExceptionCode(HttpError::NOT_FOUND);
+        $action->exec();
+    }
+
+    public function testDoesNotThrowNotFoundIfThereIsRecievedListedGetData()
+    {
+        $action = new ActionExample(['name' => 'SomeName']);
+        $action->setToken($action->getExpectedToken());
+
+        $action->exec();
+
+        $this->assertFalse($action->hasErrors());
     }
 }

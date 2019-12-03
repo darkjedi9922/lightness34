@@ -4,6 +4,13 @@ use frame\actions\Action;
 
 class ActionExample extends Action
 {
+    public function listGet(): array
+    {
+        return [
+            'name' => [self::GET_STRING, 'This is a description of the get arg']
+        ];
+    }
+
     protected function succeed(array $post, array $files)
     {
         // Here is nothing to do.

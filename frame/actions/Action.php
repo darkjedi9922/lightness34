@@ -39,12 +39,14 @@ use frame\LatePropsObject;
  */
 abstract class Action extends LatePropsObject
 {
-    /**
-     * Type of Action data.
-     */
+    /** Type of Action data. */
     const ARGS = 'get';
     const POST = 'post';
     const FILES = 'files';
+
+    /** Type of a GET parameter. */
+    const GET_INT = 'int';
+    const GET_STRING = 'string';
 
     /** 
      * Имена GET-параметров, используемых для работы самого экшна.
@@ -166,6 +168,7 @@ abstract class Action extends LatePropsObject
     public final function exec()
     {
         $this->assertToken($this->data[self::ARGS][self::TOKEN] ?? '');
+        $this->validateGet($this->data[self::ARGS]);
         $this->initialize($this->data[self::ARGS]);
         $this->errors = $this->validate(
             $this->data[self::POST],
@@ -215,6 +218,20 @@ abstract class Action extends LatePropsObject
     public function getExpectedToken(): string
     {
         return md5('tkn_salt' . Client::getId());
+    }
+
+    /**
+     * Declares the list of get parameters that Action required. If a parameter
+     * listed in this method is not set when executing an action, then an error
+     * HttpError:NOT_FOUND raised.
+     * 
+     * Returns an array of the form ['param_name' => [GET_TYPE, 'description']]
+     * The GET_TYPE is Action constants declaring the type of a parameter such as
+     * GET_INT, GET_TEXT etc.
+     */
+    public function listGet(): array
+    {
+        return [];
     }
 
     /**
@@ -330,6 +347,20 @@ abstract class Action extends LatePropsObject
         if ($token != $this->getExpectedToken()) 
             throw new HttpError(HttpError::BAD_REQUEST,
                 'Recieved TOKEN token does not match expected token.');
+    }
+
+    /**
+     * @throws HttpError NOT_FOUND
+     */
+    private function validateGet(array $get)
+    {
+        $list = $this->listGet();
+        foreach ($list as $field => $desc) {
+            if (!isset($get[$field])) throw new HttpError(
+                HttpError::NOT_FOUND,
+                "Get field '$field' is not set." 
+            );
+        }
     }
 
     private function assemblePostToSave(): array
