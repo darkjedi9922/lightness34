@@ -80,11 +80,22 @@ class ActionTest extends TestCase
 
     public function testDoesNotThrowNotFoundIfThereIsRecievedListedGetData()
     {
-        $action = new ActionExample(['name' => 'SomeName']);
+        $action = new ActionExample([
+            'name' => 'SomeName',
+            'amount' => '12'
+        ]);
         $action->setToken($action->getExpectedToken());
 
         $action->exec();
 
         $this->assertFalse($action->hasErrors());
+    }
+
+    public function testConvertsGetArgsToSpecifiedType()
+    {
+        $action = new ActionExample(['amount' => '42']);
+        $amount = $action->getData('get', 'amount');
+
+        $this->assertIsInt($amount);
     }
 }

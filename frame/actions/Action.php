@@ -111,8 +111,7 @@ abstract class Action extends LatePropsObject
      */
     public function setDataAll(string $type, array $data)
     {
-        $safeValue = ($type === self::FILES ? $data : encode_specials($data));
-        $this->data[$type] = $safeValue;
+        foreach ($data as $key => $value) $this->setData($type, $key, $value);
     }
 
     /**
@@ -123,6 +122,8 @@ abstract class Action extends LatePropsObject
     public function setData(string $type, string $name, $value)
     {
         $safeValue = ($type === self::FILES ? $value : encode_specials($value));
+        if ($type === self::ARGS && isset($this->listGet()[$name]))
+            settype($safeValue, $this->listGet()[$name][0]);
         $this->data[$type][$name] = $safeValue;
     }
 

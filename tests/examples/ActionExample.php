@@ -7,7 +7,8 @@ class ActionExample extends Action
     public function listGet(): array
     {
         return [
-            'name' => [self::GET_STRING, 'This is a description of the get arg']
+            'name' => [self::GET_STRING, 'This is a description of the get arg'],
+            'amount' => [self::GET_INT, 'Some integer arg']
         ];
     }
 
