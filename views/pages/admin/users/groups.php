@@ -1,6 +1,7 @@
 <?php /** @var \frame\views\Page $self */
 
 use engine\admin\actions\DeleteUserGroupAction;
+use frame\actions\ViewAction;
 use engine\users\cash\my_group;
 use engine\users\Group;
 use engine\admin\actions\NewUserGroupAction;
@@ -14,14 +15,14 @@ $myGroup = my_group::get();
 Init::access($myGroup->id === $myGroup::ROOT_ID);
 
 $groups = new IdentityList(Group::class);
-$newGroup  = new NewUserGroupAction;
-$delGroup  = new DeleteUserGroupAction;
+$newGroup  = new ViewAction(NewUserGroupAction::class);
+$delGroup  = new ViewAction(DeleteUserGroupAction::class);
 ?>
 
 <div class="box">
     <table width="100%">
         <?php foreach($groups as $group): /** @var Group $group */ ?>
-        <?php $delGroup->setData('get', 'id', $group->id) ?>
+        <?php $delGroup->setArg('id', $group->id) ?>
             <tr>
                 <td>ID: <?= $group->id ?></td>
                 <td><?= $group->name ?></td>
@@ -34,7 +35,7 @@ $delGroup  = new DeleteUserGroupAction;
 </div>
 <div class="box">
     <h3>Добавить</h3><br>
-    <?php if ($newGroup->hasError($newGroup::E_NO_NAME)): ?>
+    <?php if ($newGroup->hasError(NewUserGroupAction::E_NO_NAME)): ?>
         <span class="error" style="margin-bottom:7px">Название не указано</span>
     <?php endif ?>
     <form action="<?= $newGroup->getUrl() ?>" method="post">

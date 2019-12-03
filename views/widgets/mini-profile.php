@@ -5,13 +5,14 @@ use engine\users\cash\my_group;
 use frame\tools\Client;
 use engine\messages\Dialog;
 use engine\users\actions\LogoutAction;
+use frame\actions\ViewAction;
 
 $self->setMeta('title', 'Профиль');
 
 $me = user_me::get();
 $group = my_group::get();
 $newMessagesCount = Dialog::countUnreaded($me->id);
-$logout = new LogoutAction;
+$logout = new ViewAction(LogoutAction::class);
 ?>
 
 <div class="mini-profile">

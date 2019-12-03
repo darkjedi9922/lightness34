@@ -5,6 +5,7 @@ use engine\users\Group;
 use engine\users\cash\user_me;
 use frame\cash\config;
 use engine\admin\actions\EditConfigAction;
+use frame\actions\ViewAction;
 
 $self->setLayout('admin');
 
@@ -13,7 +14,7 @@ $me = user_me::get();
 Init::access((int) $me->group_id === Group::ROOT_ID);
 
 $config = config::get('core');
-$action = new EditConfigAction(['name' => 'core']);
+$action = new ViewAction(EditConfigAction::class, ['name' => 'core']);
 ?>
 
 <div class="box">
@@ -23,7 +24,7 @@ $action = new EditConfigAction(['name' => 'core']);
                 <td>Название сайта:</td>
                 <td>
                     <input name="site->name" type="text"
-                        value="<?= $action->getData('post', 'site->name', $config->{'site.name'}) ?>">
+                        value="<?= $action->getPost('site->name', $config->{'site.name'}) ?>">
                     </td>
             </tr>
             <tr>

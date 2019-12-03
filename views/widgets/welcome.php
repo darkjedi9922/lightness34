@@ -1,10 +1,11 @@
 <?php /** @var frame\views\Widget $self */
 
 use engine\users\actions\LoginAction;
+use frame\actions\ViewAction;
 use engine\users\cash\user_me;
 
 $me = user_me::get();
-$action = new LoginAction;
+$action = new ViewAction(LoginAction::class);
 
 $self->setMeta('title', 'Вход');
 ?>
@@ -19,11 +20,11 @@ $self->setMeta('title', 'Вход');
     <span class='error' style="margin-bottom:10px">Неверный пароль</span>
 <?php endif ?>
 <form class="login-form" action="<?= $action->getUrl() ?>" method="post">
-    <input class="login-form__input login-form__input--login" name="login" type="text" placeholder="Логин" value="<?= $action->getData('post', 'login') ?>">
+    <input class="login-form__input login-form__input--login" name="login" type="text" placeholder="Логин" value="<?= $action->getPost('login') ?>">
     <input class="login-form__input login-form__input--password" name="password" type="password" placeholder="Пароль">
     <div class="login-form__checkbox" style="margin-bottom:10px">
         <input type="hidden" name="remember" value="0">
-        <input type="checkbox" name="remember" id="remember-checkbox" <?= $action->getData('post', 'remember') === '1' ? 'checked' : '' ?> value="1">
+        <input type="checkbox" name="remember" id="remember-checkbox" <?= $action->getPost('remember') === '1' ? 'checked' : '' ?> value="1">
         <label for="remember-checkbox"><i class="fontello icon-ok"></i></label><span>Запомнить меня</span>
     </div>
     <button class="form__button">Войти</button>

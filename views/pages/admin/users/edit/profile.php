@@ -6,8 +6,9 @@ use engine\users\User;
 use frame\lists\IdentityList;
 use engine\users\Gender;
 use engine\users\actions\ProfileEditAction;
+use frame\actions\ViewAction;
 
-$uid = (int) Init::requireGet('id');
+$uid = (int)Init::requireGet('id');
 $user = User::selectIdentity($uid);
 
 Init::require($user !== null);
@@ -16,7 +17,7 @@ Init::accessOneRight('users', ['edit-all' => $user, 'edit-own' => $user]);
 $self->setLayout('admin');
 
 $genders = new IdentityList(Gender::class);
-$action = new ProfileEditAction(['id' => $uid]);
+$action = new ViewAction(ProfileEditAction::class, ['id' => $uid]);
 $config = config::get('users');
 ?>
 
@@ -33,20 +34,20 @@ $config = config::get('users');
                 <td>Логин:</td>
                 <td>
                     <input name="login" type="text" 
-                        value="<?= $action->getData('post', 'login', $user->login) ?>" 
+                        value="<?= $action->getPost('login', $user->login) ?>" 
                         style="width:100%">
                 </td>
                 <td>
-                    <?php if ($action->hasError($action::E_NO_LOGIN)) : ?>
+                    <?php if ($action->hasError(ProfileEditAction::E_NO_LOGIN)) : ?>
                         <span class='error'>Логин не указан</span>
                     <?php endif ?>
-                    <?php if ($action->hasError($action::E_LONG_LOGIN)) : ?>
+                    <?php if ($action->hasError(ProfileEditAction::E_LONG_LOGIN)) : ?>
                         <span class='error'>Логин слишком большой</span>
                     <?php endif ?>
-                    <?php if ($action->hasError($action::E_LOGIN_EXISTS)) : ?>
+                    <?php if ($action->hasError(ProfileEditAction::E_LOGIN_EXISTS)) : ?>
                         <span class='error'>Такой логин уже занят</span>
                     <?php endif ?>
-                    <?php if ($action->hasError($action::E_INCORRECT_LOGIN)) : ?>
+                    <?php if ($action->hasError(ProfileEditAction::E_INCORRECT_LOGIN)) : ?>
                         <span class='error'>Логин содержит недопустимые символы</span>
                     <?php endif ?>
                 </td>
@@ -55,10 +56,10 @@ $config = config::get('users');
                 <td>Новый пароль:</td>
                 <td><input name="password" type="text" style="width:100%"></td>
                 <td>
-                    <?php if ($action->hasError($action::E_LONG_PASSWORD)) : ?>
+                    <?php if ($action->hasError(ProfileEditAction::E_LONG_PASSWORD)) : ?>
                         <span class='error'>Пароль слишком большой</span>
                     <?php endif ?>
-                    <?php if ($action->hasError($action::E_INCORRECT_PASSWORD)) : ?>
+                    <?php if ($action->hasError(ProfileEditAction::E_INCORRECT_PASSWORD)) : ?>
                         <span class='error'>Пароль содержит недопустимые символы</span>
                     <?php endif ?>
                 </td>
@@ -66,12 +67,10 @@ $config = config::get('users');
             <tr>
                 <td>E-mail:</td>
                 <td>
-                    <input name="email" type="text" 
-                        value="<?= $action->getData('post', 'email', $user->email) ?>" 
-                        style="width:100%">
-                    </td>
+                    <input name="email" type="text" value="<?= $action->getPost('email', $user->email) ?>" style="width:100%">
+                </td>
                 <td>
-                    <?php if ($action->hasError($action::E_INCORRECT_EMAIL)) : ?>
+                    <?php if ($action->hasError(ProfileEditAction::E_INCORRECT_EMAIL)) : ?>
                         <span class='error'>E-mail заполнен некорректно</span>
                     <?php endif ?>
                 </td>
@@ -79,12 +78,10 @@ $config = config::get('users');
             <tr>
                 <td>Имя:</td>
                 <td>
-                    <input name="name" type="text" 
-                        value="<?= $action->getData('post', 'name', $user->name) ?>" 
-                        style="width:100%">
-                    </td>
+                    <input name="name" type="text" value="<?= $action->getPost('name', $user->name) ?>" style="width:100%">
+                </td>
                 <td>
-                    <?php if ($action->hasError($action::E_INCORRECT_NAME)) : ?>
+                    <?php if ($action->hasError(ProfileEditAction::E_INCORRECT_NAME)) : ?>
                         <span class='error'>Имя содержит недопустимые символы</span>
                     <?php endif ?>
                 </td>
@@ -92,12 +89,10 @@ $config = config::get('users');
             <tr>
                 <td>Фамилия:</td>
                 <td>
-                    <input name="surname" type="text" 
-                        value="<?= $action->getData('post', 'surname', $user->surname) ?>"
-                        style="width:100%">
+                    <input name="surname" type="text" value="<?= $action->getPost('surname', $user->surname) ?>" style="width:100%">
                 </td>
                 <td>
-                    <?php if ($action->hasError($action::E_INCORRECT_SURNAME)) : ?>
+                    <?php if ($action->hasError(ProfileEditAction::E_INCORRECT_SURNAME)) : ?>
                         <span class='error'>Фамилия содержит недопустимые символы</span>
                     <?php endif ?>
                 </td>
@@ -107,13 +102,10 @@ $config = config::get('users');
                 <td>
                     <div class="radio">
                         <?php
-                        $saved = (int) $action->getData('post', 'gender_id', $user->gender_id);
+                        $saved = (int)$action->getPost('gender_id', $user->gender_id);
                         foreach ($genders as $gender) : $checked = $saved === $gender->id;
-                        ?>
-                            <input type='radio' name='gender_id' 
-                                id='gender-<?= $gender->id ?>' 
-                                value='<?= $gender->id ?>'
-                                <?php if ($checked) echo 'checked'; ?>>
+                            ?>
+                            <input type='radio' name='gender_id' id='gender-<?= $gender->id ?>' value='<?= $gender->id ?>' <?php if ($checked) echo 'checked'; ?>>
                             <label for="gender-<?= $gender->id ?>"><?= $gender->name ?></label>
                         <?php endforeach ?>
                     </div>
@@ -123,8 +115,7 @@ $config = config::get('users');
                 <td>Аватар:</td>
                 <td>
                     <div class="input-file">
-                        <span class="button" id="profile-edit-avatar-button" 
-                            style="position:relative;bottom:2px">Загрузить...</span>
+                        <span class="button" id="profile-edit-avatar-button" style="position:relative;bottom:2px">Загрузить...</span>
                         <input type="text" id="profile-edit-avatar-text" disabled style="width:9.5em">
                         <input type="file" class="file" id="profile-edit-avatar-file" name="avatar">
                     </div>
@@ -134,12 +125,12 @@ $config = config::get('users');
                     </script>
                 </td>
                 <td>
-                    <?php if ($action->hasError($action::E_AVATAR_SIZE)) : ?>
+                    <?php if ($action->hasError(ProfileEditAction::E_AVATAR_SIZE)) : ?>
                         <span class='error'>Размер превышает
                             <?= $config->{'avatar.max_size.value'} ?>
                             <?= $config->{'avatar.max_size.unit'} ?></span>
                     <?php endif ?>
-                    <?php if ($action->hasError($action::E_AVATAR_TYPE)) : ?>
+                    <?php if ($action->hasError(ProfileEditAction::E_AVATAR_TYPE)) : ?>
                         <span class='error'>Некорректный тип файла</span>
                     <?php endif ?>
                 </td>

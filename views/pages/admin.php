@@ -2,12 +2,13 @@
 
 use frame\cash\prev_router;
 use engine\admin\actions\LoginAction;
+use frame\actions\ViewAction;
 use engine\admin\Auth;
 
 $self->setLayout('admin-base');
 $self->setMeta('admin-login-page-flag', true);
 
-$action = new LoginAction;
+$action = new ViewAction(LoginAction::class);
 $auth = new Auth;
 $prevRoute = prev_router::get();
 $isTimeup = $auth->isTimeup() && $prevRoute && $prevRoute->getPathPart(0) == 'admin'; 
@@ -19,7 +20,7 @@ $isTimeup = $auth->isTimeup() && $prevRoute && $prevRoute->getPathPart(0) == 'ad
         <?php if ($isTimeup): ?>
             <span style="font-weight:bold;color:red">Время сессии вышло</span><br><br>
         <?php endif?>
-        <?php if ($action->hasError($action::E_WRONG_PASSWORD)): ?>
+        <?php if ($action->hasError(LoginAction::E_WRONG_PASSWORD)): ?>
             <span class='error' style="margin-bottom:10px">Неверный пароль</span><br/>
         <?php endif ?>
         <form action="<?= $action->getUrl() ?>" method="post">

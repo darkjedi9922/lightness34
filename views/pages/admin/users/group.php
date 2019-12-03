@@ -4,6 +4,7 @@ use frame\tools\Init;
 use engine\users\Group;
 use engine\users\cash\user_me;
 use engine\admin\actions\EditUserGroupAction;
+use frame\actions\ViewAction;
 
 $self->setLayout('admin');
 
@@ -16,7 +17,7 @@ $group = Group::selectIdentity($id);
 
 Init::require($group !== null);
 
-$action = new EditUserGroupAction(['id' => $id]);
+$action = new ViewAction(EditUserGroupAction::class, ['id' => $id]);
 ?>
 
 <div class="box">
@@ -25,11 +26,11 @@ $action = new EditUserGroupAction(['id' => $id]);
         <table>
             <tr>
                 <td>Название:</td>
-                <td><input name="name" type="text" value="<?= $action->getData('post', 'name', $group->name) ?>"></td>
+                <td><input name="name" type="text" value="<?= $action->getPost('name', $group->name) ?>"></td>
             </tr>
             <tr>
                 <td>Иконка:</td>
-                <td><input name="icon" type="text" value="<?= $action->getData('post', 'icon', $group->icon) ?>"></td>
+                <td><input name="icon" type="text" value="<?= $action->getPost('icon', $group->icon) ?>"></td>
             </tr>
         </table>
         <button>Сохранить</button>

@@ -5,6 +5,7 @@ use frame\lists\IdentityList;
 use engine\users\Group;
 use engine\users\User;
 use engine\users\actions\ChangeUserGroupAction;
+use frame\actions\ViewAction;
 use engine\users\cash\user_me;
 
 $me = user_me::get();
@@ -18,7 +19,7 @@ Init::require($user !== null);
 Init::require((int)$user->group_id !== Group::ROOT_ID);
 
 $groups = new IdentityList(Group::class);
-$action = new ChangeUserGroupAction(['uid' => $id]);
+$action = new ViewAction(ChangeUserGroupAction::class, ['uid' => $id]);
 
 $self->setLayout('admin');
 ?>

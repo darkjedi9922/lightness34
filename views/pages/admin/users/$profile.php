@@ -8,6 +8,7 @@ use engine\users\cash\my_rights;
 use frame\cash\pagenumber;
 use engine\users\cash\user_me;
 use engine\users\actions\DeleteAvatarAction;
+use frame\actions\ViewAction;
 
 $self->setLayout('admin');
 
@@ -24,7 +25,7 @@ $rights = my_rights::get('users');
 $prevPagenumber = pagenumber::get(true);
 $me = user_me::get();
 
-$deleteAvatar = new DeleteAvatarAction(['uid' => $profile->id]);
+$deleteAvatar = new ViewAction(DeleteAvatarAction::class, ['uid' => $profile->id]);
 ?>
 
 <div class="box">

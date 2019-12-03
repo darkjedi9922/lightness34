@@ -1,6 +1,7 @@
 <?php /** @var frame\views\Page $self */
 
 use engine\admin\actions\EditRightsAction;
+use frame\actions\ViewAction;
 use engine\users\cash\my_group;
 use engine\users\cash\user_me;
 use engine\users\Group;
@@ -21,7 +22,7 @@ $group = Group::selectIdentity($id);
 Init::require((bool) $group);
 
 $modules = Core::$app->getModules();
-$action = new EditRightsAction(['id' => $id]);
+$action = new ViewAction(EditRightsAction::class, ['id' => $id]);
 $me = user_me::get();
 ?>
 

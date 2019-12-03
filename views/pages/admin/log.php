@@ -1,6 +1,7 @@
 <?php /** @var frame\views\Page $self */
 
 use engine\admin\actions\EmptyLogAction;
+use frame\actions\ViewAction;
 use engine\users\cash\my_rights;
 use engine\users\cash\user_me;
 use frame\tools\Init;
@@ -23,7 +24,7 @@ $unreadedLineCount = $tracker->countNewLines();
 $readedLineCount = $lineCount - $unreadedLineCount;
 $rights = my_rights::get('admin');
 
-$action = new EmptyLogAction(['file' => 'log.txt']);
+$action = new ViewAction(EmptyLogAction::class, ['file' => 'log.txt']);
 
 $tracker->setReaded();
 ?>
