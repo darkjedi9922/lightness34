@@ -53,27 +53,7 @@ h3{margin:0}
 /* глобальные блоки */
 .sidebox{background:#131313;height:100%;box-shadow:0 0 20px 2px black;-webkit-box-shadow:0 0 20px 2px black;-moz-box-shadow:0 0 20px 2px black;width:261px;vertical-align:top}
 .container{width:100%;min-height:100%;border-spacing:0;height:100%}
-.head-bar{background:#e4e4e4;height:63px;padding:0px 18px;}
 .content{padding:18px 18px 0px;background:url('/public/images/admin/logo.png') no-repeat;background-position:center 50%;vertical-align:top}
-
-/* head-bar */
-.mini-profile{float:right;height:100%;}
-.mini-profile .login{display:block;margin-top:18px;font-family:Calibri;font-size:25px;color: #249dcd;text-decoration:none;float:right}
-.mini-profile .login:hover{color:#82dcff}
-.mini-profile .avatar{height:45px;margin-top:9px;margin-right:9px;}
-.mini-profile .messages{font-size:35px;color:#0e4054;display:block;float:left;margin-right:10px;margin-top:14px;text-decoration:none}
-.mini-profile .messages .amount{font-family:Calibri;font-weight:bold;font-size:30px;position:relative;bottom:2px;}
-.mini-profile .messages:hover{color:#249dcd}
-.mini-profile .messages.new{color:#e20000}
-.mini-profile .messages.new:hover{color:#ff0000}
-
-.site{font-family:fontello;color: #249dcd;font-size:45px;display:inline-block;margin-top:9px;text-decoration:none}
-.site:hover{color:#82dcff}
-
-.notice-bar{float:right;margin-top:18px;}
-.notice-bar a{font-family:Calibri;font-size:30px;text-decoration:none;color:#b3ab00;font-weight:bold;margin-right:14px;}
-.notice-bar a:hover{color:#ded400;}
-.notice-bar a.fontello{font-size:26px;}
 
 /* меню */
 .menu{padding:0;margin:0;}

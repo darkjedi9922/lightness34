@@ -1,0 +1,88 @@
+.head-bar {
+    background:#e4e4e4;
+    height:63px;
+    padding:0px 18px;
+
+    &__left {
+        float: left;
+        display: flex;
+        align-items: center;
+    }
+
+    &__right {
+        float: right;
+        display: flex;
+        align-items: center;
+    }
+}
+
+.mini-profile {
+    display: flex;
+    align-items: center;
+}
+.mini-profile .login {
+    display:block;
+    font-family:Calibri;
+    font-size:25px;
+    color: #249dcd;
+    text-decoration:none;
+}
+.mini-profile .login:hover {
+    color:#82dcff
+}
+.mini-profile .avatar {
+    height:45px;
+    margin-right:9px;
+}
+.mini-profile .messages {
+    font-size:35px;
+    color:#0e4054;
+    display:block;
+    margin-right:10px;
+    text-decoration:none
+}
+.mini-profile .messages .amount {
+    font-family:Calibri;
+    font-weight:bold;
+    font-size:30px;
+    position:relative;
+    bottom:2px;
+}
+.mini-profile .messages:hover {
+    color:#249dcd
+}
+.mini-profile .messages.new {
+    color:#e20000
+}
+.mini-profile .messages.new:hover {
+    color:#ff0000
+}
+
+.site {
+    font-family:fontello;
+    color: #249dcd;
+    font-size:45px;
+    display:inline-block;
+    text-decoration:none;
+}
+.site:hover {
+    color:#82dcff;
+}
+
+.notice-bar {
+    float:right;
+}
+.notice-bar a {
+    font-family:Calibri;
+    font-size:30px;
+    text-decoration:none;
+    color:#b3ab00;
+    font-weight:bold;
+    margin-right:14px;
+}
+.notice-bar a:hover {
+    color:#ded400;
+}
+.notice-bar a.fontello {
+    font-size:26px;
+}
