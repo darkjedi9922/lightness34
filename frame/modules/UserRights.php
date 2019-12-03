@@ -14,7 +14,7 @@ class UserRights
         $this->user = $user;
 
         $this->desc = $desc;
-        $this->rights = new GroupRights($desc, $moduleId, $user->group_id);
+        $this->rights = $this->createGroupRights($desc, $moduleId, $user);
     }
 
     public function can(string $right, $object = null): bool
@@ -32,5 +32,13 @@ class UserRights
         foreach ($rights as $right => $object)
             if ($this->can($right, $object)) return true;
         return false;
+    }
+
+    protected function createGroupRights(
+        RightsDesc $desc, 
+        int $moduleId,
+        User $user
+    ): GroupRights {
+        return new GroupRights($desc, $moduleId, $user->group_id);
     }
 }

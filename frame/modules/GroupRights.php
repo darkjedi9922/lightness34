@@ -20,7 +20,7 @@ class GroupRights
                 'module_id' => $moduleId,
                 'group_id' => $groupId
             ]);
-            $this->rights = (int) $this->record->load(['rights'])->readScalar();
+            $this->rights = $this->loadRights($this->record);
         }
     }
 
@@ -64,5 +64,10 @@ class GroupRights
             $this->record->insert(['rights' => $this->rights]);
             
         else $this->record->update(['rights' => $this->rights]);
+    }
+
+    protected function loadRights(Records $record): int
+    {
+        return (int) $record->load(['rights'])->readScalar();
     }
 }
