@@ -18,38 +18,36 @@ class EditUserGroupAction extends Action
     /** @var Group */
     private $group;
 
-    // protected function listGet(): array
-    // {
-    //     return [
-    //         'id' => [self::GET_INT, 'Id of the group']
-    //     ];
-    // }
+    public function listGet(): array
+    {
+        return [
+            'id' => [self::GET_INT, 'Id of the group']
+        ];
+    }
 
-    // protected function listPost(): array
-    // {
-    //     return [
-    //         'name' => [self::POST_TEXT, 'New name of the group'],
-    //         'icon' => [self::POST_TEXT, 'Path to new icon of the group']
-    //     ];
-    // }
+    public function listPost(): array
+    {
+        return [
+            'name' => [self::POST_TEXT, 'New name of the group'],
+            'icon' => [self::POST_TEXT, 'Path to new icon of the group']
+        ];
+    }
 
     protected function initialize(array $get)
     {
-        $id = (int) ($get['id'] ?? -1);
-        Init::require($id !== -1);
-        $this->group = Group::selectIdentity($id);
+        $this->group = Group::selectIdentity($get['id']);
         Init::require($this->group !== null);
         Init::accessGroup(Group::ROOT_ID);
     }
 
     protected function succeed(array $post, array $files)
     {
-        if (isset($post['name'])) $this->group->name = $post['name'];
-        if (isset($post['icon'])) $this->group->icon = $post['icon'];
+        $this->group->name = $post['name'];
+        $this->group->icon = $post['icon'];
         $this->group->update();
     }
 
-    protected function getDataToSave(): array
+    protected function getPostToSave(): array
     {
         return ['name', 'icon'];
     }
