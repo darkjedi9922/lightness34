@@ -9,7 +9,6 @@ use frame\actions\UploadedFile;
 use function lightlib\encode_specials;
 use frame\tools\Client;
 use frame\errors\HttpError;
-use frame\LatePropsObject;
 
 /**
  * Класс служит для обработки форм, но можно использовать для запуска
@@ -37,7 +36,7 @@ use frame\LatePropsObject;
  * <input type="hidden" name="property" value="0">
  * <input type="checkbox" name="property" value="1">
  */
-abstract class Action extends LatePropsObject
+abstract class Action
 {
     /** Type of Action data. */
     const ARGS = 'get';
