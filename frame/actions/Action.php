@@ -54,7 +54,11 @@ abstract class Action extends LatePropsObject
      * с разными параметрами, чтобы понимать какой из них выполнять.
      */
     const ID = 'action';
-    const TOKEN = 'csrf';
+
+    /**
+     * @deprecated Use setToken() to set token and getToken() to get it.
+     */
+    const TOKEN = '_csrf';
 
     /** @var array Ошибки после validate(). */
     private $errors = [];
@@ -86,6 +90,16 @@ abstract class Action extends LatePropsObject
     {
         $this->setDataAll(self::ARGS, $args);
         $this->load();
+    }
+
+    public function setToken(string $token)
+    {
+        $this->setData('get', self::TOKEN, $token);
+    }
+
+    public function getToken(): ?string
+    {
+        return $this->getData('get', self::TOKEN);
     }
 
     /**

@@ -3,6 +3,7 @@
 use PHPUnit\Framework\TestCase;
 use tests\engine\UserDeleteAction;
 use frame\actions\Action;
+use tests\examples\ActionExample;
 
 /**
  * @runTestsInSeparateProcesses
@@ -14,7 +15,7 @@ class ActionTest extends TestCase
         $get = [Action::ID => 'del', 'object' => 1, 'subject' => 21];
         $action = new UserDeleteAction($get);
 
-        $url = "/tests/engine/UserDeleteAction?action=del&csrf={$action->getExpectedToken()}&object=1&subject=21";
+        $url = "/tests/engine/UserDeleteAction?action=del&_csrf={$action->getExpectedToken()}&object=1&subject=21";
 
         $this->assertEquals($url, $action->getUrl());
     }
@@ -24,7 +25,7 @@ class ActionTest extends TestCase
         $get = ['object' => 1, 'subject' => 21];
         $action = new UserDeleteAction($get);
 
-        $url = "/tests/engine/UserDeleteAction?action=&csrf={$action->getExpectedToken()}&object=1&subject=21";
+        $url = "/tests/engine/UserDeleteAction?action=&_csrf={$action->getExpectedToken()}&object=1&subject=21";
 
         $this->assertEquals($url, $action->getUrl());
     }
@@ -52,5 +53,17 @@ class ActionTest extends TestCase
         // Если Action правильно создался из триггерного запроса, то их запросы
         // должны совпасть.
         $this->assertEquals($triggerUrl, $execUrl);
+    }
+
+    public function testSetsTokenToTheGetAndReturnsIt()
+    {
+        $action = new ActionExample;
+        $this->assertNull($action->getData('get', '_csrf'));
+
+        $token = $action->getExpectedToken();
+        $action->setToken($token);
+
+        $this->assertEquals($token, $action->getData('get', '_csrf'));
+        $this->assertEquals($token, $action->getToken());
     }
 }
