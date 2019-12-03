@@ -3,7 +3,8 @@
 use PHPUnit\Framework\TestCase;
 use tests\engine\UserDeleteAction;
 use frame\actions\Action;
-use tests\examples\ActionExample;
+use tests\examples\actions\EmptyActionExample;
+use tests\examples\actions\GetListActionExample;
 use frame\errors\HttpError;
 
 /**
@@ -58,7 +59,7 @@ class ActionTest extends TestCase
 
     public function testSetsTokenToTheGetAndReturnsIt()
     {
-        $action = new ActionExample;
+        $action = new EmptyActionExample;
         $this->assertNull($action->getData('get', '_csrf'));
 
         $token = $action->getExpectedToken();
@@ -70,7 +71,7 @@ class ActionTest extends TestCase
 
     public function testThrowsNotFoundIfThereIsNotRecievedListedGetData()
     {
-        $action = new ActionExample;
+        $action = new GetListActionExample;
         $action->setToken($action->getExpectedToken());
 
         $this->expectException(HttpError::class);
@@ -80,7 +81,7 @@ class ActionTest extends TestCase
 
     public function testDoesNotThrowNotFoundIfThereIsRecievedListedGetData()
     {
-        $action = new ActionExample([
+        $action = new GetListActionExample([
             'name' => 'SomeName',
             'amount' => '12'
         ]);
@@ -93,7 +94,7 @@ class ActionTest extends TestCase
 
     public function testConvertsGetArgsToSpecifiedType()
     {
-        $action = new ActionExample(['amount' => '42']);
+        $action = new GetListActionExample(['amount' => '42']);
         $amount = $action->getData('get', 'amount');
 
         $this->assertIsInt($amount);
