@@ -44,9 +44,13 @@ abstract class Action extends LatePropsObject
     const POST = 'post';
     const FILES = 'files';
 
-    /** Type of a GET parameter. */
+    /** Type of a GET field. */
     const GET_INT = 'int';
     const GET_STRING = 'string';
+
+    /** Type of a POST field. */
+    const POST_INT = 'int';
+    const POST_TEXT = 'string';
 
     /** 
      * Имена GET-параметров, используемых для работы самого экшна.
@@ -124,6 +128,8 @@ abstract class Action extends LatePropsObject
         $safeValue = ($type === self::FILES ? $value : encode_specials($value));
         if ($type === self::ARGS && isset($this->listGet()[$name]))
             settype($safeValue, $this->listGet()[$name][0]);
+        else if ($type === self::POST && isset($this->listPost()[$name]))
+            settype($safeValue, $this->listPost()[$name][0]);
         $this->data[$type][$name] = $safeValue;
     }
 
@@ -170,6 +176,7 @@ abstract class Action extends LatePropsObject
     {
         $this->assertToken($this->data[self::ARGS][self::TOKEN] ?? '');
         $this->validateGet($this->data[self::ARGS]);
+        $this->validatePost($this->data[self::POST]);
         $this->initialize($this->data[self::ARGS]);
         $this->errors = $this->validate(
             $this->data[self::POST],
@@ -231,6 +238,14 @@ abstract class Action extends LatePropsObject
      * GET_INT, GET_TEXT etc.
      */
     public function listGet(): array
+    {
+        return [];
+    }
+
+    /**
+     * The same as listGet() but for the post data with POST_TYPE field types.
+     */
+    public function listPost(): array
     {
         return [];
     }
@@ -360,6 +375,20 @@ abstract class Action extends LatePropsObject
             if (!isset($get[$field])) throw new HttpError(
                 HttpError::NOT_FOUND,
                 "Get field '$field' is not set." 
+            );
+        }
+    }
+
+    /**
+     * @throws HttpError NOT_FOUND
+     */
+    private function validatePost(array $post)
+    {
+        $list = $this->listPost();
+        foreach ($list as $field => $desc) {
+            if (!isset($post[$field])) throw new HttpError(
+                HttpError::NOT_FOUND,
+                "Get field '$field' is not set."
             );
         }
     }

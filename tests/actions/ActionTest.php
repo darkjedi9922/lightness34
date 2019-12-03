@@ -6,6 +6,7 @@ use frame\actions\Action;
 use tests\examples\actions\EmptyActionExample;
 use tests\examples\actions\GetListActionExample;
 use frame\errors\HttpError;
+use tests\examples\actions\PostListActionExample;
 
 /**
  * @runTestsInSeparateProcesses
@@ -98,5 +99,35 @@ class ActionTest extends TestCase
         $amount = $action->getData('get', 'amount');
 
         $this->assertIsInt($amount);
+    }
+
+    public function testThrowsNotFoundIfThereIsNotRecievedListedPostData()
+    {
+        $action = new PostListActionExample;
+        $action->setToken($action->getExpectedToken());
+
+        $this->expectException(HttpError::class);
+        $this->expectExceptionCode(HttpError::NOT_FOUND);
+        $action->exec();
+    }
+
+    public function testDoesNotThrowNotFoundIfThereIsRecievedListedPostData()
+    {
+        $action = new PostListActionExample;
+        $action->setToken($action->getExpectedToken());
+        $action->setData('post', 'sum', '66');
+
+        $action->exec();
+
+        $this->assertFalse($action->hasErrors());
+    }
+
+    public function testConvertsPostArgsToSpecifiedType()
+    {
+        $action = new PostListActionExample;
+        $action->setData('post', 'sum', '66');
+        
+        $value = $action->getData('post', 'sum');
+        $this->assertIsInt($value);
     }
 }
