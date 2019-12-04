@@ -65,8 +65,6 @@ abstract class Action
     /** @var array Ошибки после validate(). */
     private $errors = [];
 
-    private $executed = false;
-
     private $data = [
         self::ARGS => [],
         self::POST => [],
@@ -76,10 +74,9 @@ abstract class Action
     /**
      * @return static
      */
-    public static function fromState(bool $executed, array $post, array $errors)
+    public static function fromState(array $post, array $errors)
     {
         $action = new static;
-        $action->executed = $executed;
         $action->data[self::POST] = $post;
         $action->errors = $errors;
         return $action;
@@ -173,12 +170,6 @@ abstract class Action
                 $this->data[self::FILES]
             );
         }
-        $this->executed = true;
-    }
-
-    public function isExecuted(): bool
-    {
-        return $this->executed;
     }
 
     public function getErrors(): array

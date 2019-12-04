@@ -5,6 +5,7 @@ class ViewAction
     /** @var Action */
     private $action;
     private $router;
+    private $executed = false;
 
     /**
      * @throws Exception if the class is not a subclass of Action.
@@ -16,8 +17,10 @@ class ViewAction
         
         $transmitter = new ActionTransmitter;
         $this->action = $transmitter->load($class, $args[Action::ID] ?? '');
-        if ($this->action) $this->action->setDataAll(Action::ARGS, $args);
-        else $this->action = new $class($args);
+        if ($this->action) {
+            $this->executed = true;
+            $this->action->setDataAll(Action::ARGS, $args);
+        } else $this->action = new $class($args);
 
         $this->router = new ActionRouter;
     }
@@ -56,6 +59,6 @@ class ViewAction
 
     public function isExecuted(): bool
     {
-        return $this->action->isExecuted();
+        return $this->executed;
     }
 }

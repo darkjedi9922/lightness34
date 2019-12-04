@@ -19,7 +19,6 @@ class ActionTransmitter
     {
         $idName = get_class($action) . '_' . $action->getId();
         $this->sessions->setData($idName, serialize([
-            $action->isExecuted(),
             $this->assemblePostToSave($action),
             $action->getErrors()
         ]));
@@ -34,11 +33,10 @@ class ActionTransmitter
         $idName = $class . '_' . $id;
         if (!$this->sessions->isSetData($idName)) return null;
         list(
-            $executed,
             $post, 
             $errors
         ) = unserialize($this->sessions->getData($idName));
-        $action = $class::fromState($executed, $post, $errors);
+        $action = $class::fromState($post, $errors);
         $this->sessions->removeData($idName);
         return $action;
     }
