@@ -30,7 +30,7 @@ class ProfileEditAction extends ProfileAction
     /** @var UploadedFile */
     private $avatar = null;
 
-    protected function initialize(array $get)
+    public function initialize(array $get)
     {
         parent::initialize($get);
 
@@ -50,7 +50,7 @@ class ProfileEditAction extends ProfileAction
         $this->database = database::get();
     }
 
-    protected function validate(array $post, array $files): array
+    public function validate(array $post, array $files): array
     {
         $errors = [];
 
@@ -111,7 +111,7 @@ class ProfileEditAction extends ProfileAction
         return $errors;
     }
 
-    protected function succeed(array $post, array $files)
+    public function succeed(array $post, array $files)
     {
         foreach ($post as $key => $value) {
             switch ($key) {

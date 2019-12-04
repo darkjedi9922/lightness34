@@ -13,7 +13,7 @@ class ActionRouterTest extends TestCase
     public function testGetsATriggerUrl()
     {
         $get = [Action::ID => 'del', 'object' => 1, 'subject' => 21];
-        $action = new UserDeleteAction($get);
+        $action = new Action(new UserDeleteAction, $get);
 
         $url = "/tests/engine/UserDeleteAction?action=del&_csrf={$action->getExpectedToken()}&object=1&subject=21";
 
@@ -26,7 +26,7 @@ class ActionRouterTest extends TestCase
     public function testGetsATriggerUrlWithoutId()
     {
         $get = ['object' => 1, 'subject' => 21];
-        $action = new UserDeleteAction($get);
+        $action = new Action(new UserDeleteAction, $get);
 
         $url = "/tests/engine/UserDeleteAction?action=&_csrf={$action->getExpectedToken()}&object=1&subject=21";
 
@@ -39,7 +39,7 @@ class ActionRouterTest extends TestCase
     public function testCreatesFromTriggerUrl()
     {
         $router = new ActionRouter;
-        $triggerAction = new UserDeleteAction(['answer' => 42], 'del');
+        $triggerAction = new Action(new UserDeleteAction, ['answer' => 42], 'del');
         $triggerUrl = $router->getTriggerUrl($triggerAction);
 
         $execAction = $router->fromTriggerUrl($triggerUrl);

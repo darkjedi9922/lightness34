@@ -1,6 +1,6 @@
 <?php namespace engine\admin\actions;
 
-use frame\actions\Action;
+use frame\actions\ActionBody;
 use frame\tools\Init;
 use frame\config\Json;
 use engine\users\cash\user_me;
@@ -18,12 +18,12 @@ use engine\users\Group;
  * Потому что при передаче POST запроса все символы . заменяются на _
  * и тогда не понятно как интерпретировать имя настройки.
  */
-class EditConfigAction extends Action
+class EditConfigAction extends ActionBody
 {
     /** @var Json */
     private $config;
 
-    protected function initialize(array $get)
+    public function initialize(array $get)
     {
         $name = $get['name'] ?? null;
         Init::require($name);
@@ -32,7 +32,7 @@ class EditConfigAction extends Action
         Init::access((int) user_me::get()->group_id === Group::ROOT_ID);
     }
     
-    protected function succeed(array $post, array $files)
+    public function succeed(array $post, array $files)
     {
         foreach ($post as $name => $value) {
             $name = str_replace('->', '.', $name);

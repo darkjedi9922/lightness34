@@ -8,19 +8,19 @@ class ViewAction
     private $executed = false;
 
     /**
-     * @throws Exception if the class is not a subclass of Action.
+     * @throws Exception if the class is not a subclass of ActionBody.
      */
     public function __construct(string $class, array $args = [])
     {
-        if (!is_subclass_of($class, Action::class)) 
-            throw new \Exception("Class $class is not a subclass of Action");
+        if (!is_subclass_of($class, ActionBody::class)) 
+            throw new \Exception("Class $class is not a subclass of ActionBody");
         
         $transmitter = new ActionTransmitter;
         $this->action = $transmitter->load($class, $args[Action::ID] ?? '');
         if ($this->action) {
             $this->executed = true;
             $this->action->setDataAll(Action::ARGS, $args);
-        } else $this->action = new $class($args);
+        } else $this->action = new Action(new $class, $args);
 
         $this->router = new ActionRouter;
     }

@@ -1,6 +1,6 @@
 <?php namespace engine\users\actions;
 
-use frame\actions\Action;
+use frame\actions\ActionBody;
 use frame\tools\Init;
 use frame\auth\Auth;
 use frame\cash\database;
@@ -8,14 +8,14 @@ use frame\cash\database;
 /**
  * Права: нужно быть залогиненым.
  */
-class LogoutAction extends Action 
+class LogoutAction extends ActionBody 
 {
-    protected function initialize(array $get)
+    public function initialize(array $get)
     {
         Init::accessLogged(true);
     }
 
-    protected function succeed(array $post, array $files)
+    public function succeed(array $post, array $files)
     {
         $auth = new Auth;
         $auth->logout();

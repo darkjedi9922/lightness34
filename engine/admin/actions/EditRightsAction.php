@@ -1,7 +1,7 @@
 <?php namespace engine\admin\actions;
 
 use engine\users\cash\my_group;
-use frame\actions\Action;
+use frame\actions\ActionBody;
 use frame\tools\Init;
 use engine\users\Group;
 use frame\Core;
@@ -19,30 +19,36 @@ use frame\modules\Module;
  * Если какого-либо права не будет в верстке, оно сочтется за off
  * (Если оно off, в массив post оно вообще не передается)
  */
-class EditRightsAction extends Action
+class EditRightsAction extends ActionBody
 {
     private $id;
     /** @var Group */
     private $group;
 
-    protected function initialize(array $get)
+    public function listGet(): array
+    {
+        return [
+            'id' => [self::GET_INT, 'The id of the user group']
+        ];
+    }
+
+    public function initialize(array $get)
     {
         $myGroup = my_group::get();
         Init::access($myGroup->id === $myGroup::ROOT_ID);
 
-        $this->id = (int) $this->getData('get', 'id', -1);
-        Init::require($this->id !== -1);
+        $this->id = $get['id'];
         Init::require($this->id !== Group::ROOT_ID);
 
         $this->group = Group::selectIdentity($this->id);
         Init::require((bool) $this->group);
     }
 
-    protected function succeed(array $post, array $files)
+    public function succeed(array $post, array $files)
     {
         // Если какой-либо модуль вообще не был передан, добавляем ему все
         // права как off (пустой массив)
-        $rights = $this->getData('post', 'rights', []);
+        $rights = $post['rights'] ?? [];
         $modules = Core::$app->getModules();
         foreach ($modules as $moduleName => $module) {
             /** @var Module $module */

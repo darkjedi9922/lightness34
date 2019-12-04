@@ -7,6 +7,7 @@ use tests\examples\actions\GetListActionExample;
 use frame\errors\HttpError;
 use tests\examples\actions\PostListActionExample;
 use frame\actions\ActionRouter;
+use frame\actions\Action;
 
 /**
  * @runTestsInSeparateProcesses
@@ -15,7 +16,7 @@ class ActionTest extends TestCase
 {
     public function testDefaultIdIsEmptyString()
     {
-        $action = new UserDeleteAction;
+        $action = new Action(new UserDeleteAction);
         $this->assertEquals('', $action->getId());
     }
 
@@ -28,7 +29,7 @@ class ActionTest extends TestCase
 
     public function testSetsTokenToTheGetAndReturnsIt()
     {
-        $action = new EmptyActionExample;
+        $action = new Action(new EmptyActionExample);
         $this->assertNull($action->getData('get', '_csrf'));
 
         $token = $action->getExpectedToken();
@@ -40,7 +41,7 @@ class ActionTest extends TestCase
 
     public function testThrowsNotFoundIfThereIsNotRecievedListedGetData()
     {
-        $action = new GetListActionExample;
+        $action = new Action(new GetListActionExample);
         $action->setToken($action->getExpectedToken());
 
         $this->expectException(HttpError::class);
@@ -50,7 +51,7 @@ class ActionTest extends TestCase
 
     public function testDoesNotThrowNotFoundIfThereIsRecievedListedGetData()
     {
-        $action = new GetListActionExample([
+        $action = new Action(new GetListActionExample, [
             'name' => 'SomeName',
             'amount' => '12'
         ]);
@@ -63,7 +64,7 @@ class ActionTest extends TestCase
 
     public function testConvertsGetArgsToSpecifiedType()
     {
-        $action = new GetListActionExample(['amount' => '42']);
+        $action = new Action(new GetListActionExample, ['amount' => '42']);
         $amount = $action->getData('get', 'amount');
 
         $this->assertIsInt($amount);
@@ -71,7 +72,7 @@ class ActionTest extends TestCase
 
     public function testThrowsNotFoundIfThereIsNotRecievedListedPostData()
     {
-        $action = new PostListActionExample;
+        $action = new Action(new PostListActionExample);
         $action->setToken($action->getExpectedToken());
 
         $this->expectException(HttpError::class);
@@ -81,7 +82,7 @@ class ActionTest extends TestCase
 
     public function testDoesNotThrowNotFoundIfThereIsRecievedListedPostData()
     {
-        $action = new PostListActionExample;
+        $action = new Action(new PostListActionExample);
         $action->setToken($action->getExpectedToken());
         $action->setData('post', 'sum', '66');
 
@@ -92,7 +93,7 @@ class ActionTest extends TestCase
 
     public function testConvertsPostArgsToSpecifiedType()
     {
-        $action = new PostListActionExample;
+        $action = new Action(new PostListActionExample);
         $action->setData('post', 'sum', '66');
         
         $value = $action->getData('post', 'sum');

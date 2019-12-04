@@ -1,6 +1,6 @@
 <?php namespace engine\users\actions;
 
-use frame\actions\Action;
+use frame\actions\ActionBody;
 use frame\tools\Init;
 use engine\users\User;
 
@@ -9,17 +9,24 @@ use engine\users\User;
  * uid: id пользователя, аватар которого нужно удалить. Должен существовать.
  * Права: удаление аватара данного пользователя.
  */
-class DeleteAvatarAction extends Action
+class DeleteAvatarAction extends ActionBody
 {
     /** @var User */
     private $user = null;
 
-    protected function initialize(array $get)
+    public function listGet(): array
     {
-        $uid = $this->getData('get', 'uid');
-        Init::require($uid !== null);
-        $uid = (int) $uid;
-        $this->user = User::selectIdentity($uid);
+        return [
+            'uid' => [
+                self::GET_INT,
+                'The id of the user for which the avatar has being deleted'
+            ]
+        ];
+    }
+
+    public function initialize(array $get)
+    {
+        $this->user = User::selectIdentity($get['uid']);
         Init::require($this->user !== null);
         Init::accessOneRight('users', [
             'edit-all' => $this->user, 
@@ -27,7 +34,7 @@ class DeleteAvatarAction extends Action
         ]);
     }
 
-    protected function succeed(array $post, array $files)
+    public function succeed(array $post, array $files)
     {
         if ($this->user->hasAvatar()) {
             unlink($this->user->getAvatarUrl());

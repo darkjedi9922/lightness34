@@ -12,7 +12,7 @@ class ActionRouter
         $type = $router->pagename;
         $class = '\\' . str_replace('/', '\\', $type);
 
-        $action = new $class($router->args);
+        $action = new Action(new $class, $router->args);
         $action->setDataAll(Action::POST, $_POST);
         $action->setDataAll(Action::FILES, array_map(function ($filedata) {
             return new UploadedFile($filedata);
@@ -24,7 +24,7 @@ class ActionRouter
     public function getTriggerUrl(Action $action)
     {
         return Router::toUrlOf(
-            '/' . str_replace('\\', '/', get_class($action)),
+            '/' . str_replace('\\', '/', get_class($action->getBody())),
             array_merge([
                 Action::ID => '',
                 Action::TOKEN => $action->getExpectedToken(),

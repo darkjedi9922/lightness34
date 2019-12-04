@@ -2,7 +2,7 @@
 
 use frame\cash\prev_router;
 use engine\admin\Auth;
-use frame\actions\Action;
+use frame\actions\ActionBody;
 use frame\config\Json;
 use frame\tools\Init;
 
@@ -11,38 +11,37 @@ use frame\tools\Init;
  * Данные:
  * password: пароль
  */
-class LoginAction extends Action
+class LoginAction extends ActionBody
 {
     const E_WRONG_PASSWORD = 1;
 
     /** @var Auth $auth */
     private $auth;
 
-    protected function initialize(array $get)
+    public function initialize(array $get)
     {
         Init::accessRight('admin', 'enter');
-
         $this->auth = new Auth;
     }
 
-    protected function validate(array $post, array $files): array
+    public function validate(array $post, array $files): array
     {
         $errors = [];
         $config = new Json('config/admin.json');
 
-        $password = $this->getData('post', 'password', '');
+        $password = $post['password'] ?? '';
 
         if ($password !== $config->password) $errors[] = static::E_WRONG_PASSWORD;
 
         return $errors;
     }
 
-    protected function succeed(array $post, array $files)
+    public function succeed(array $post, array $files)
     {
         $this->auth->login($_SERVER['REMOTE_ADDR']);
     }
 
-    protected function fail(array $post, array $files)
+    public function fail(array $post, array $files)
     {
         $this->auth->logout();
     }

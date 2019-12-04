@@ -2,7 +2,7 @@
 
 use engine\articles\Article;
 use engine\users\cash\user_me;
-use frame\actions\Action;
+use frame\actions\ActionBody;
 use frame\config\Json;
 use frame\tools\Init;
 
@@ -13,7 +13,7 @@ use frame\tools\Init;
  * title: название статьи
  * text: текст статьи
  */
-class NewArticleAction extends Action
+class NewArticleAction extends ActionBody
 {
     const E_NO_TITLE = 1;
     const E_NO_TEXT = 2;
@@ -21,17 +21,25 @@ class NewArticleAction extends Action
 
     private $id;
 
-    protected function initialization()
+    public function listPost(): array
+    {
+        return [
+            'title' => [self::POST_TEXT, 'The title of the article'],
+            'text' => [self::POST_TEXT, 'The text of the article']
+        ];
+    }
+
+    public function initialize(array $get)
     {
         Init::accessRight('articles', 'add');
     }
 
-    protected function validate(array $post, array $files): array
+    public function validate(array $post, array $files): array
     {
         $errors = [];
         $config = new Json('config/articles.json');
-        $title = $this->getData('post', 'title');
-        $text = $this->getData('post', 'text');
+        $title = $post['title'];
+        $text = $post['text'];
 
         if (!$title) $errors[] = static::E_NO_TITLE;
         else if (mb_strlen($title) > $config->{'title.maxLength'}) 
@@ -42,11 +50,11 @@ class NewArticleAction extends Action
         return $errors;
     }
 
-    protected function succeed(array $post, array $files)
+    public function succeed(array $post, array $files)
     {
         $article = new Article;
-        $article->title = $this->getData('post', 'title');
-        $article->content = $this->getData('post', 'text');
+        $article->title = $post['title'];
+        $article->content = $post['text'];
         $article->author_id = user_me::get()->id;
         $article->date = time();
         $this->id = $article->insert();

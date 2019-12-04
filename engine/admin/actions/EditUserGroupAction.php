@@ -1,6 +1,6 @@
 <?php namespace engine\admin\actions;
 
-use frame\actions\Action;
+use frame\actions\ActionBody;
 use frame\tools\Init;
 use engine\users\Group;
 
@@ -13,7 +13,7 @@ use engine\users\Group;
  * name (не обязательно): название
  * icon (не обязательно): путь к файлу иконке
  */
-class EditUserGroupAction extends Action
+class EditUserGroupAction extends ActionBody
 {
     /** @var Group */
     private $group;
@@ -33,14 +33,14 @@ class EditUserGroupAction extends Action
         ];
     }
 
-    protected function initialize(array $get)
+    public function initialize(array $get)
     {
         $this->group = Group::selectIdentity($get['id']);
         Init::require($this->group !== null);
         Init::accessGroup(Group::ROOT_ID);
     }
 
-    protected function succeed(array $post, array $files)
+    public function succeed(array $post, array $files)
     {
         $this->group->name = $post['name'];
         $this->group->icon = $post['icon'];

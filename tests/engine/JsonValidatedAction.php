@@ -1,10 +1,10 @@
 <?php namespace tests\engine;
 
-use frame\actions\Action;
+use frame\actions\ActionBody;
 
-class JsonValidatedAction extends Action
+class JsonValidatedAction extends ActionBody
 {
-    protected function succeed(array $post, array $files)
+    public function succeed(array $post, array $files)
     {
         // Some actions...
 

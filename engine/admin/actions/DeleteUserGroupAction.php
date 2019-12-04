@@ -1,7 +1,7 @@
 <?php namespace engine\admin\actions;
 
 use engine\users\cash\user_me;
-use frame\actions\Action;
+use frame\actions\ActionBody;
 use engine\users\Group;
 use frame\database\Records;
 use frame\tools\Init;
@@ -13,12 +13,12 @@ use frame\tools\Init;
  * Не быть системной.
  * Права: root.
  */
-class DeleteUserGroupAction extends Action
+class DeleteUserGroupAction extends ActionBody
 {
     /** @var Group */
     private $group;
 
-    protected function initialize(array $get)
+    public function initialize(array $get)
     {
         $id = $get['id'] ?? null;
         Init::require($id !== null);
@@ -28,7 +28,7 @@ class DeleteUserGroupAction extends Action
         Init::access((int) user_me::get()->group_id === Group::ROOT_ID);
     }
 
-    protected function succeed(array $post, array $files)
+    public function succeed(array $post, array $files)
     {
         Records::select('users', ['group_id' => $this->group->id])->update([
             'group_id' => Group::USER_ID

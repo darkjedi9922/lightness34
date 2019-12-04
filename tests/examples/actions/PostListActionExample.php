@@ -1,8 +1,8 @@
 <?php namespace tests\examples\actions;
 
-use frame\actions\Action;
+use frame\actions\ActionBody;
 
-class PostListActionExample extends Action
+class PostListActionExample extends ActionBody
 {
     public function listPost(): array
     {
@@ -11,7 +11,7 @@ class PostListActionExample extends Action
         ];
     }
 
-    protected function succeed(array $post, array $files)
+    public function succeed(array $post, array $files)
     {
         // Here is nothing to do.
     }

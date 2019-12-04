@@ -3,10 +3,10 @@
 use frame\auth\Auth;
 use frame\database\Records;
 use engine\users\Encoder;
-use frame\actions\Action;
+use frame\actions\ActionBody;
 use frame\tools\Init;
 
-class LoginAction extends Action
+class LoginAction extends ActionBody
 {
     const E_NO_LOGIN = 1;
     const E_NO_PASSWORD = 2;
@@ -14,7 +14,15 @@ class LoginAction extends Action
 
     private $sid;
 
-    protected function initialize(array $get)
+    public function listPost(): array
+    {
+        return [
+            'login' => [self::POST_TEXT, 'The login to enter'],
+            'password' => [self::POST_PASSWORD, 'The password to enter']
+        ];
+    }
+
+    public function initialize(array $get)
     {
         Init::accessLogged(false);
     }
@@ -23,8 +31,8 @@ class LoginAction extends Action
     {
         $errors = [];
 
-        $login = $this->getData('post', 'login');
-        $password = $this->getData('post', 'password');
+        $login = $post['login'];
+        $password = $post['password'];
 
         if (!$login) $errors[] = self::E_NO_LOGIN;
         if (!$password) $errors[] = self::E_NO_PASSWORD;
@@ -43,7 +51,7 @@ class LoginAction extends Action
 
     public function succeed(array $post, array $files)
     {
-        $remember = (bool) $this->getData('post', 'remember');
+        $remember = (bool) ($post['remember'] ?? false);
         (new Auth)->login($this->sid, $remember);
     }
 

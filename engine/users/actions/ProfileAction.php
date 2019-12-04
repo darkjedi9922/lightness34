@@ -1,6 +1,6 @@
 <?php namespace engine\users\actions;
 
-use frame\actions\Action;
+use frame\actions\ActionBody;
 use frame\actions\UploadedFile;
 use frame\errors\NotImplementedException;
 use frame\tools\Init;
@@ -10,7 +10,7 @@ use frame\cash\config;
 
 use function lightlib\bytes;
 
-abstract class ProfileAction extends Action
+abstract class ProfileAction extends ActionBody
 {
     const E_NO_LOGIN = 1;
     const E_LONG_LOGIN = 2;
@@ -27,12 +27,12 @@ abstract class ProfileAction extends Action
     /** @var config */
     private $config;
 
-    protected function initialize(array $get)
+    public function initialize(array $get)
     {
         $this->config = config::get('users');
     }
 
-    protected function succeed(array $post, array $files)
+    public function succeed(array $post, array $files)
     {
         throw new NotImplementedException("This method have to be overrided.");
     }

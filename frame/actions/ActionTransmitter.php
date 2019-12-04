@@ -17,7 +17,7 @@ class ActionTransmitter
      */
     public function save(Action $action)
     {
-        $idName = get_class($action) . '_' . $action->getId();
+        $idName = get_class($action->getBody()) . '_' . $action->getId();
         $this->sessions->setData($idName, serialize([
             $this->assemblePostToSave($action),
             $action->getErrors()
@@ -32,11 +32,8 @@ class ActionTransmitter
     {
         $idName = $class . '_' . $id;
         if (!$this->sessions->isSetData($idName)) return null;
-        list(
-            $post, 
-            $errors
-        ) = unserialize($this->sessions->getData($idName));
-        $action = $class::fromState($post, $errors);
+        list($post, $errors) = unserialize($this->sessions->getData($idName));
+        $action = Action::fromState(new $class, $post, $errors);
         $this->sessions->removeData($idName);
         return $action;
     }
@@ -45,7 +42,7 @@ class ActionTransmitter
     {
         $result = [];
         $post = $action->getDataArray()['post'];
-        foreach ($action->getPostToSave() as $name) {
+        foreach ($action->getBody()->getPostToSave() as $name) {
             if (isset($post[$name]))
                 $result[$name] = $post[$name];
         }

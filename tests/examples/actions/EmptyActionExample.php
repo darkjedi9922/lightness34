@@ -1,10 +1,10 @@
 <?php namespace tests\examples\actions;
 
-use frame\actions\Action;
+use frame\actions\ActionBody;
 
-class EmptyActionExample extends Action
+class EmptyActionExample extends ActionBody
 {
-    protected function succeed(array $post, array $files)
+    public function succeed(array $post, array $files)
     {
         // Here is nothing to do.
     }

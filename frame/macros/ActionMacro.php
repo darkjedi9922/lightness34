@@ -25,7 +25,7 @@ class ActionMacro extends Macro
 
     private function getRedirect(Action $action): ?string
     {
-        if (!$action->hasErrors()) return $action->getSuccessRedirect();
-        else return $action->getFailRedirect();
+        if (!$action->hasErrors()) return $action->getBody()->getSuccessRedirect();
+        else return $action->getBody()->getFailRedirect();
     }
 }

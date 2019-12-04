@@ -13,7 +13,7 @@ class ActionCSRFTest extends TestCase
      */
     public function testExpectedTokenIsGottenInTheTriggerUrl()
     {
-        $triggerAction = new UserDeleteAction;
+        $triggerAction = new Action(new UserDeleteAction);
         $triggerToken = $triggerAction->getExpectedToken();
         $url = (new ActionRouter)->getTriggerUrl($triggerAction);
 
@@ -30,7 +30,7 @@ class ActionCSRFTest extends TestCase
     public function testIncorrectTokenThrowsHttpError()
     {
         $this->expectException(HttpError::class);
-        $action = new UserDeleteAction([Action::TOKEN => 'incorrect-token']);
+        $action = new Action(new UserDeleteAction, ([Action::TOKEN => 'incorrect-token']));
         $action->exec();
     }
 
@@ -41,7 +41,7 @@ class ActionCSRFTest extends TestCase
     {
         $this->expectException(HttpError::class);
         // Никакой токен не передается.
-        $action = new UserDeleteAction;
+        $action = new Action(new UserDeleteAction);
         $action->exec();
     }
 }

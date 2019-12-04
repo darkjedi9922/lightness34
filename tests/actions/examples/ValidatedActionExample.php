@@ -1,8 +1,8 @@
 <?php namespace tests\actions\examples;
 
-use frame\actions\Action;
+use frame\actions\ActionBody;
 
-class ValidatedActionExample extends Action
+class ValidatedActionExample extends ActionBody
 {
     const E_INVALID = 1;
 
@@ -13,13 +13,13 @@ class ValidatedActionExample extends Action
         ];
     }
 
-    protected function validate(array $post, array $files): array
+    public function validate(array $post, array $files): array
     {
         if ($post['name'][0] === '_') return [self::E_INVALID];
         else return [];
     }
 
-    protected function succeed(array $post, array $files)
+    public function succeed(array $post, array $files)
     {
         // No implementaion is here.
     }

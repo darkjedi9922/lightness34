@@ -2,7 +2,7 @@
 
 use engine\users\cash\user_me;
 use engine\users\Group;
-use frame\actions\Action;
+use frame\actions\ActionBody;
 use frame\database\Records;
 use frame\tools\Init;
 
@@ -12,16 +12,16 @@ use frame\tools\Init;
  * name: название группы (обязательно)
  * icon: путь к иконке (необязательно)
  */
-class NewUserGroupAction extends Action
+class NewUserGroupAction extends ActionBody
 {
     const E_NO_NAME = 1;
 
-    protected function initialize(array $get)
+    public function initialize(array $get)
     {
         Init::access((int)user_me::get()->group_id === Group::ROOT_ID);
     }
     
-    protected function validate(array $post, array $files): array
+    public function validate(array $post, array $files): array
     {
         $errors = [];
 
@@ -31,7 +31,7 @@ class NewUserGroupAction extends Action
         return $errors;
     }
 
-    protected function succeed(array $post, array $files)
+    public function succeed(array $post, array $files)
     {
         Records::select('user_groups', [
             'name' => $post['name'],
