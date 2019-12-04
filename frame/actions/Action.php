@@ -114,12 +114,13 @@ class Action
     public function setData(string $type, string $name, $value)
     {
         $safeValue = ($type === self::FILES ? $value : encode_specials($value));
-        if ($type === self::ARGS && isset($this->listGet()[$name]))
-            settype($safeValue, $this->listGet()[$name][0]);
-        else if ($type === self::POST && isset($this->listPost()[$name])) {
-            $type = $this->listPost()[$name][0];
-            if ($type === self::POST_PASSWORD) $type = self::POST_TEXT;
-            settype($safeValue, $type);
+        if ($type === self::ARGS && isset($this->body->listGet()[$name]))
+            settype($safeValue, $this->body->listGet()[$name][0]);
+        else if ($type === self::POST && isset($this->body->listPost()[$name])) {
+            $postType = $this->body->listPost()[$name][0];
+            if ($postType === ActionBody::POST_PASSWORD) 
+                $postType = ActionBody::POST_TEXT;
+            settype($safeValue, $postType);
         }
         $this->data[$type][$name] = $safeValue;
     }
@@ -228,7 +229,7 @@ class Action
         foreach ($list as $field => $desc) {
             if (!isset($post[$field])) throw new HttpError(
                 HttpError::NOT_FOUND,
-                "Get field '$field' is not set."
+                "Post field '$field' is not set."
             );
         }
     }
