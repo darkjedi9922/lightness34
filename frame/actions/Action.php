@@ -47,6 +47,7 @@ abstract class Action
     /** Type of a POST field. */
     const POST_INT = 'int';
     const POST_TEXT = 'string';
+    const POST_PASSWORD = 'password';
 
     /** 
      * Имена GET-параметров, используемых для работы самого экшна.
@@ -117,8 +118,11 @@ abstract class Action
         $safeValue = ($type === self::FILES ? $value : encode_specials($value));
         if ($type === self::ARGS && isset($this->listGet()[$name]))
             settype($safeValue, $this->listGet()[$name][0]);
-        else if ($type === self::POST && isset($this->listPost()[$name]))
-            settype($safeValue, $this->listPost()[$name][0]);
+        else if ($type === self::POST && isset($this->listPost()[$name])) {
+            $type = $this->listPost()[$name][0];
+            if ($type === self::POST_PASSWORD) $type = self::POST_TEXT;
+            settype($safeValue, $type);
+        }
         $this->data[$type][$name] = $safeValue;
     }
 
