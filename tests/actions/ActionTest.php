@@ -7,6 +7,7 @@ use tests\examples\actions\EmptyActionExample;
 use tests\examples\actions\GetListActionExample;
 use frame\errors\HttpError;
 use tests\examples\actions\PostListActionExample;
+use frame\actions\ActionRouter;
 
 /**
  * @runTestsInSeparateProcesses
@@ -41,21 +42,9 @@ class ActionTest extends TestCase
 
     public function testIdIsEmptyStringIfItWasNotRecievedFromUrl()
     {
-        $action = Action::fromTriggerUrl('/tests/engine/UserDeleteAction');
+        $router = new ActionRouter;
+        $action = $router->fromTriggerUrl('/tests/engine/UserDeleteAction');
         $this->assertEquals('', $action->getId());
-    }
-
-    public function testCreatesFromTriggerUrl()
-    {
-        $triggerAction = new UserDeleteAction(['answer' => 42], 'del');
-        $triggerUrl = $triggerAction->getUrl();
-        
-        $execAction = Action::fromTriggerUrl($triggerUrl);
-        $execUrl = $execAction->getUrl();
-
-        // Если Action правильно создался из триггерного запроса, то их запросы
-        // должны совпасть.
-        $this->assertEquals($triggerUrl, $execUrl);
     }
 
     public function testSetsTokenToTheGetAndReturnsIt()

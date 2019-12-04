@@ -4,6 +4,7 @@ use PHPUnit\Framework\TestCase;
 use tests\engine\UserDeleteAction;
 use frame\actions\Action;
 use frame\errors\HttpError;
+use frame\actions\ActionRouter;
 
 class ActionCSRFTest extends TestCase
 {
@@ -16,7 +17,8 @@ class ActionCSRFTest extends TestCase
         $triggerToken = $triggerAction->getExpectedToken();
         $url = $triggerAction->getUrl();
 
-        $execAction = UserDeleteAction::fromTriggerUrl($url);
+        $router = new ActionRouter;
+        $execAction = $router->fromTriggerUrl($url);
         $execToken = $execAction->getData(Action::ARGS, Action::TOKEN);
 
         $this->assertEquals($triggerToken, $execToken);
