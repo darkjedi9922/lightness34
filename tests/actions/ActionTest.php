@@ -9,9 +9,6 @@ use tests\examples\actions\PostListActionExample;
 use frame\actions\ActionRouter;
 use frame\actions\Action;
 
-/**
- * @runTestsInSeparateProcesses
- */
 class ActionTest extends TestCase
 {
     public function testDefaultIdIsEmptyString()
@@ -27,6 +24,9 @@ class ActionTest extends TestCase
         $this->assertEquals('', $action->getId());
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testSetsTokenToTheGetAndReturnsIt()
     {
         $action = new Action(new EmptyActionExample);
@@ -39,6 +39,9 @@ class ActionTest extends TestCase
         $this->assertEquals($token, $action->getToken());
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testThrowsNotFoundIfThereIsNotRecievedListedGetData()
     {
         $action = new Action(new GetListActionExample);
@@ -49,6 +52,9 @@ class ActionTest extends TestCase
         $action->exec();
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testDoesNotThrowNotFoundIfThereIsRecievedListedGetData()
     {
         $action = new Action(new GetListActionExample, [
@@ -62,6 +68,9 @@ class ActionTest extends TestCase
         $this->assertFalse($action->hasErrors());
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testConvertsGetArgsToSpecifiedType()
     {
         $action = new Action(new GetListActionExample, ['amount' => '42']);
@@ -70,6 +79,9 @@ class ActionTest extends TestCase
         $this->assertIsInt($amount);
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testThrowsNotFoundIfThereIsNotRecievedListedPostData()
     {
         $action = new Action(new PostListActionExample);
@@ -80,6 +92,9 @@ class ActionTest extends TestCase
         $action->exec();
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testDoesNotThrowNotFoundIfThereIsRecievedListedPostData()
     {
         $action = new Action(new PostListActionExample);

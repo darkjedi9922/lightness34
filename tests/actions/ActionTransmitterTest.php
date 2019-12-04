@@ -5,11 +5,11 @@ use tests\actions\examples\ValidatedActionExample;
 use frame\actions\ActionTransmitter;
 use frame\actions\Action;
 
+/**
+ * @runTestsInSeparateProcesses
+ */
 class ActionTransmitterTest extends TestCase
 {
-    /**
-     * @runInSeparateProcess
-     */
     public function testSavesAndLoadsErrors()
     {
         $transmitter = new ActionTransmitter;
