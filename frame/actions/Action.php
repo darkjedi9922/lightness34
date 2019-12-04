@@ -1,9 +1,6 @@
 <?php namespace frame\actions;
 
-use frame\route\Router;
 use frame\route\Request;
-use frame\route\Response;
-use frame\tools\transmitters\SessionTransmitter;
 use frame\actions\UploadedFile;
 
 use function lightlib\encode_specials;
@@ -76,10 +73,21 @@ abstract class Action
         self::FILES => []
     ];
 
+    /**
+     * @return static
+     */
+    public static function fromState(bool $executed, array $post, array $errors)
+    {
+        $action = new static;
+        $action->executed = $executed;
+        $action->data[self::POST] = $post;
+        $action->errors = $errors;
+        return $action;
+    }
+
     public function __construct(array $args = [])
     {
         $this->setDataAll(self::ARGS, $args);
-        $this->load();
     }
 
     public function setToken(string $token)
@@ -138,11 +146,6 @@ abstract class Action
     public final function getId(): string
     {
         return $this->data[self::ARGS][self::ID] ?? '';
-    }
-
-    public final function getIdName(): string
-    {
-        return static::class . '_' . $this->getId();
     }
 
     /**
@@ -292,23 +295,6 @@ abstract class Action
     {
         if (Request::hasReferer()) return Request::getReferer();
         else return '/';
-    }
-
-    /**
-     * Загружает свое сохраненное состояние после редиректа.
-     */
-    private function load()
-    {
-        $idName = $this->getIdName();
-        $sessions = new SessionTransmitter;
-        if ($sessions->isSetData($idName)) {
-            list(
-                $this->executed,
-                $this->data['post'], 
-                $this->errors
-            ) = unserialize($sessions->getData($idName));
-            $sessions->removeData($idName);
-        }
     }
 
     private function assertToken(string $token): void

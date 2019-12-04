@@ -13,7 +13,12 @@ class ViewAction
     {
         if (!is_subclass_of($class, Action::class)) 
             throw new \Exception("Class $class is not a subclass of Action");
-        $this->action = new $class($args);
+        
+        $transmitter = new ActionTransmitter;
+        $this->action = $transmitter->load($class, $args[Action::ID] ?? '');
+        if ($this->action) $this->action->setDataAll(Action::ARGS, $args);
+        else $this->action = new $class($args);
+
         $this->router = new ActionRouter;
     }
 

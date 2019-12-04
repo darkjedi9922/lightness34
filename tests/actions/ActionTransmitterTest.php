@@ -9,19 +9,17 @@ class ActionTransmitterTest extends TestCase
     /**
      * @runInSeparateProcess
      */
-    public function testSavesErrors()
+    public function testSavesAndLoadsErrors()
     {
-        $action = new ValidatedActionExample;
-        $action->setToken($action->getExpectedToken());
-        $action->setData('post', 'name', '_some_invalid_value');
-        $action->exec();
-        
         $transmitter = new ActionTransmitter;
-        $transmitter->save($action);
+        $srcAction = new ValidatedActionExample;
+        $srcAction->setToken($srcAction->getExpectedToken());
+        $srcAction->setData('post', 'name', '_some_invalid_value');
+        $srcAction->exec();
+        
+        $transmitter->save($srcAction);
+        $destAction = $transmitter->load(ValidatedActionExample::class);
 
-        // Here action must load itself if it was saved.
-        $loadAction = new ValidatedActionExample;
-
-        $this->assertTrue($loadAction->hasError(ValidatedActionExample::E_INVALID));
+        $this->assertTrue($destAction->hasError(ValidatedActionExample::E_INVALID));
     }
 }
