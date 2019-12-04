@@ -15,7 +15,7 @@ class ActionCSRFTest extends TestCase
     {
         $triggerAction = new UserDeleteAction;
         $triggerToken = $triggerAction->getExpectedToken();
-        $url = $triggerAction->getUrl();
+        $url = (new ActionRouter)->getTriggerUrl($triggerAction);
 
         $router = new ActionRouter;
         $execAction = $router->fromTriggerUrl($url);

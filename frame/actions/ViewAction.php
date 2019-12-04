@@ -4,6 +4,7 @@ class ViewAction
 {
     /** @var Action */
     private $action;
+    private $router;
 
     /**
      * @throws Exception if the class is not a subclass of Action.
@@ -13,6 +14,7 @@ class ViewAction
         if (!is_subclass_of($class, Action::class)) 
             throw new \Exception("Class $class is not a subclass of Action");
         $this->action = new $class($args);
+        $this->router = new ActionRouter;
     }
 
     /**
@@ -34,7 +36,7 @@ class ViewAction
 
     public function getUrl(): string
     {
-        return $this->action->getUrl();
+        return $this->router->getTriggerUrl($this->action);
     }
 
     public function hasErrors(): bool

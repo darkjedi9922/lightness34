@@ -20,4 +20,15 @@ class ActionRouter
 
         return $action;
     }
+
+    public function getTriggerUrl(Action $action)
+    {
+        return Router::toUrlOf(
+            '/' . str_replace('\\', '/', get_class($action)),
+            array_merge([
+                Action::ID => '',
+                Action::TOKEN => $action->getExpectedToken(),
+            ], $action->getDataArray()[Action::ARGS])
+        );
+    }
 }

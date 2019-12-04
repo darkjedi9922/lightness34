@@ -2,7 +2,6 @@
 
 use PHPUnit\Framework\TestCase;
 use tests\engine\UserDeleteAction;
-use frame\actions\Action;
 use tests\examples\actions\EmptyActionExample;
 use tests\examples\actions\GetListActionExample;
 use frame\errors\HttpError;
@@ -14,26 +13,6 @@ use frame\actions\ActionRouter;
  */
 class ActionTest extends TestCase
 {
-    public function testUrl()
-    {
-        $get = [Action::ID => 'del', 'object' => 1, 'subject' => 21];
-        $action = new UserDeleteAction($get);
-
-        $url = "/tests/engine/UserDeleteAction?action=del&_csrf={$action->getExpectedToken()}&object=1&subject=21";
-
-        $this->assertEquals($url, $action->getUrl());
-    }
-
-    public function testUrlWithoutId()
-    {
-        $get = ['object' => 1, 'subject' => 21];
-        $action = new UserDeleteAction($get);
-
-        $url = "/tests/engine/UserDeleteAction?action=&_csrf={$action->getExpectedToken()}&object=1&subject=21";
-
-        $this->assertEquals($url, $action->getUrl());
-    }
-
     public function testDefaultIdIsEmptyString()
     {
         $action = new UserDeleteAction;

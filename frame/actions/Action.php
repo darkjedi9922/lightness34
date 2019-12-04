@@ -141,18 +141,6 @@ abstract class Action
     }
 
     /**
-     * Триггерное url на выполнение экшна
-     */
-    public final function getUrl(): string
-    {
-        $get = array_merge([
-            self::ID => '',
-            self::TOKEN => $this->getExpectedToken(),
-        ], $this->data[Action::ARGS]);
-        return Router::toUrlOf('/' . str_replace('\\', '/', static::class), $get);
-    }
-
-    /**
      * После данного метода скрипт завершает свое выполнение.
      * Кодирует спецсимволы полученных POST данных.
      */
