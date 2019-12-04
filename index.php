@@ -12,7 +12,7 @@ use frame\errors\StrictException;
 use frame\errors\handlers\HttpErrorHandler;
 use frame\errors\handlers\DefaultErrorHandler;
 use frame\errors\handlers\StrictExceptionHandler;
-use frame\macros\ActionMacro;
+use frame\actions\ActionMacro;
 use frame\macros\ValueMacro;
 use frame\macros\BlockMacro;
 use frame\macros\WidgetMacro;

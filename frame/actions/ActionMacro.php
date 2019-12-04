@@ -1,6 +1,7 @@
-<?php namespace frame\macros;
+<?php namespace frame\actions;
 
 use frame\Core;
+use frame\macros\Macro;
 use frame\actions\Action;
 use frame\actions\ActionRouter;
 use frame\actions\ActionTransmitter;
