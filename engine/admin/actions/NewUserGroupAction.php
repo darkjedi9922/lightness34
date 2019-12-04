@@ -39,7 +39,7 @@ class NewUserGroupAction extends Action
         ])->insert();
     }
 
-    protected function getPostToSave(): array
+    public function getPostToSave(): array
     {
         return ['name', 'icon'];
     }

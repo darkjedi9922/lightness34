@@ -58,7 +58,7 @@ class NewArticleAction extends Action
         return '/articles';
     }
 
-    protected function getPostToSave(): array
+    public function getPostToSave(): array
     {
         return ['title', 'text'];
     }

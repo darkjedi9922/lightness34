@@ -47,7 +47,7 @@ class EditUserGroupAction extends Action
         $this->group->update();
     }
 
-    protected function getPostToSave(): array
+    public function getPostToSave(): array
     {
         return ['name', 'icon'];
     }

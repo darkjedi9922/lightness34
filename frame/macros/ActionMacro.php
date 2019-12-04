@@ -3,6 +3,7 @@
 use frame\Core;
 use frame\actions\Action;
 use frame\actions\ActionRouter;
+use frame\actions\ActionTransmitter;
 use frame\route\Response;
 use frame\route\Router;
 
@@ -16,6 +17,8 @@ class ActionMacro extends Macro
 
         $redirect = $this->getRedirect($action);
         if ($redirect !== null) {
+            $transmitter = new ActionTransmitter;
+            $transmitter->save($action);
             Response::setUrl(Router::toUrlOf($redirect));
         }
     }

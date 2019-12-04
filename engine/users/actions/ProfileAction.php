@@ -37,7 +37,7 @@ abstract class ProfileAction extends Action
         throw new NotImplementedException("This method have to be overrided.");
     }
 
-    protected function getPostToSave(): array
+    public function getPostToSave(): array
     {
         return ['login', 'email', 'name', 'surname', 'gender_id'];
     }

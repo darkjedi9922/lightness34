@@ -140,6 +140,11 @@ abstract class Action
         return $this->data[self::ARGS][self::ID] ?? '';
     }
 
+    public final function getIdName(): string
+    {
+        return static::class . '_' . $this->getId();
+    }
+
     /**
      * После данного метода скрипт завершает свое выполнение.
      * Кодирует спецсимволы полученных POST данных.
@@ -154,30 +159,28 @@ abstract class Action
             $this->data[self::POST],
             $this->data[self::FILES]
         );
-        $redirect = null;
         if (!$this->hasErrors()) {
             $this->succeed(
                 $this->data[self::POST],
                 $this->data[self::FILES]
             );
-            $this->save();
-            $redirect = $this->getSuccessRedirect();
         } else {
             $this->fail(
                 $this->data[self::POST],
                 $this->data[self::FILES]
             );
-            $redirect = $this->getFailRedirect();
         }
         $this->executed = true;
-        if ($redirect !== null) {
-            $this->save();
-        }
     }
 
     public function isExecuted(): bool
     {
         return $this->executed;
+    }
+
+    public function getErrors(): array
+    {
+        return $this->errors;
     }
 
     /**
@@ -262,7 +265,7 @@ abstract class Action
      * 
      * Не рекомендуется сохранять пароли и другие секретные данные.
      */
-    protected function getPostToSave(): array 
+    public function getPostToSave(): array 
     { 
         return []; // Here is nothing to save
     }
@@ -289,27 +292,6 @@ abstract class Action
     {
         if (Request::hasReferer()) return Request::getReferer();
         else return '/';
-    }
-
-    private function getIdName(): string
-    {
-        return static::class . '_' . $this->getId();
-    }
-
-    /**
-     * Сохраняет свое состояние перед редиректом.
-     * Сохраняются статус, ошибки и введенные post данные.
-     * Файлы не сохраняются.
-     */
-    private function save()
-    {
-        $idName = $this->getIdName();
-        $sessions = new SessionTransmitter;
-        $sessions->setData($idName, serialize([
-            $this->executed,
-            $this->assemblePostToSave(),
-            $this->errors
-        ]));
     }
 
     /**
@@ -362,15 +344,5 @@ abstract class Action
                 "Get field '$field' is not set."
             );
         }
-    }
-
-    private function assemblePostToSave(): array
-    {
-        $result = [];
-        foreach ($this->getPostToSave() as $name) {
-            if (isset($this->data['post'][$name]))
-                $result[$name] = $this->data['post'][$name];
-        }
-        return $result;
     }
 }
