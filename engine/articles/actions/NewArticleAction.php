@@ -52,7 +52,7 @@ class NewArticleAction extends Action
         $this->id = $article->insert();
     }
 
-    protected function getSuccessRedirect(): string
+    public function getSuccessRedirect(): string
     {
         // return '/article?id='.$this->id;
         return '/articles';

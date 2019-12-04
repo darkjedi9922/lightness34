@@ -9,12 +9,12 @@ class UserDeleteAction extends Action
         
     }
 
-    protected function getSuccessRedirect(): ?string
+    public function getSuccessRedirect(): ?string
     {
         return null;
     }
 
-    protected function getFailRedirect(): ?string
+    public function getFailRedirect(): ?string
     {
         return null;
     }

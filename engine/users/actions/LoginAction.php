@@ -47,7 +47,7 @@ class LoginAction extends Action
         (new Auth)->login($this->sid, $remember);
     }
 
-    protected function getSuccessRedirect(): ?string
+    public function getSuccessRedirect(): ?string
     {
         return '/articles';
     }

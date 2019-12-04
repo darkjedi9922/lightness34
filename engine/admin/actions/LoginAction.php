@@ -47,7 +47,7 @@ class LoginAction extends Action
         $this->auth->logout();
     }
 
-    protected function getSuccessRedirect(): ?string
+    public function getSuccessRedirect(): ?string
     {
         // Если "я" пытался перейти на какую-либо страницу в админ-панели,
         // но по каким-то причинам пришлось авторизоваться, нужно перейти 

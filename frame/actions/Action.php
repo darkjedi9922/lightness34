@@ -172,7 +172,6 @@ abstract class Action
         $this->executed = true;
         if ($redirect !== null) {
             $this->save();
-            Response::setUrl(Router::toUrlOf($redirect));
         }
     }
 
@@ -274,7 +273,7 @@ abstract class Action
      * 
      * Если вернет null, редиректа не будет.
      */
-    protected function getSuccessRedirect(): ?string
+    public function getSuccessRedirect(): ?string
     {
         if (Request::hasReferer()) return Request::getReferer();
         else return '/';
@@ -286,7 +285,7 @@ abstract class Action
      * 
      * Если вернет null, редиректа не будет.
      */
-    protected function getFailRedirect(): ?string
+    public function getFailRedirect(): ?string
     {
         if (Request::hasReferer()) return Request::getReferer();
         else return '/';

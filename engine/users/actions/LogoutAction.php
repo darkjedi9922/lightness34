@@ -23,7 +23,7 @@ class LogoutAction extends Action
             'UPDATE users SET online = 0 WHERE sid = "'.$auth->getKey().'"');
     }
 
-    protected function getSuccessRedirect(): ?string
+    public function getSuccessRedirect(): ?string
     {
         return '/';
     }
