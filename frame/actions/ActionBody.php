@@ -2,6 +2,14 @@
 
 use frame\route\Request;
 
+/**
+ * Ошибки, возникшие во время обработки, определены константами
+ * вида E_NAME_OF_ERROR.
+ * 
+ * Корректная работа checkbox:
+ * <input type="hidden" name="property" value="0">
+ * <input type="checkbox" name="property" value="1">
+ */
 abstract class ActionBody
 {
     /** Type of a GET field. */
