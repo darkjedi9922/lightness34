@@ -2,17 +2,14 @@
 
 use frame\cash\database;
 use frame\database\Records;
-use frame\database\Identity;
 use frame\lists\Pager;
 use function lightlib\array_assemble;
+use frame\lists\iterators\IdentityIterator;
 
-abstract class IdentityPagedList implements IterableList
+abstract class IdentityPagedList implements \IteratorAggregate
 {
-    private $list;
     private $pager;
-
-    /** @var frame\database\Identity|null $item */
-    private $item = null;
+    private $iterator;
 
     public static abstract function getIdentityClass(): string;
     public static abstract function getPageLimit(): int;
@@ -34,9 +31,10 @@ abstract class IdentityPagedList implements IterableList
         $orderBy = !empty($orderFields) ? 
             'ORDER BY ' . array_assemble($orderFields, ', ', ' ') : '';
         
-        $this->list = database::get()->query(
+        $this->iterator = new IdentityIterator(database::get()->query(
             "SELECT * FROM $table $orderBy 
-            LIMIT {$this->pager->getStartMaterialIndex()}, $limit");
+            LIMIT {$this->pager->getStartMaterialIndex()}, $limit"
+        ), $this->getIdentityClass());
     }
 
     public function getPager(): Pager
@@ -44,48 +42,8 @@ abstract class IdentityPagedList implements IterableList
         return $this->pager;
     }
 
-    public function count(): int
+    public function getIterator(): \Iterator
     {
-        return $this->list->count();
-    }
-
-    public function coundAll(): int
-    {
-        return $this->pager->countAllMaterials();
-    }
-
-    public function next()
-    {
-        $info = $this->list->readLine();
-        if (!$info) $this->item = null;
-        else {
-            $class = static::getIdentityClass();
-            $this->item = new $class($info);
-        }
-    }
-
-    public function current(): ?Identity
-    {
-        return $this->item;
-    }
-
-    /**
-     * @return int Identity id or -1.
-     */
-    public function key(): int
-    {
-        if ($this->item) return $this->item->id;
-        return -1;
-    }
-
-    public function valid()
-    {
-        return $this->item;
-    }
-
-    public function rewind()
-    {
-        $this->list->seek(0);
-        $this->next();
+        return $this->iterator;
     }
 }

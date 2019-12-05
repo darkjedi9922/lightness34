@@ -1,16 +1,12 @@
 <?php namespace frame\lists;
 
-use frame\database\Identity;
 use frame\cash\database;
-
 use function lightlib\array_assemble;
+use frame\lists\iterators\IdentityIterator;
 
-class IdentityList implements IterableList
+class IdentityList implements \IteratorAggregate
 {
-    private $list;
-    private $identityClass;
-    /** @var Identity|null $item */
-    private $item = null;
+    private $iterator;
 
     /**
      * @param $orderFields Массив полей сортировки в виде [
@@ -23,50 +19,16 @@ class IdentityList implements IterableList
         string $identityClass, 
         array $orderFields = ['id' => 'ASC']
     ) {
-        $this->identityClass = $identityClass;
         $orderBy = !empty($orderFields) ?
             'ORDER BY ' . array_assemble($orderFields, ', ', ' ') : '';
-        $this->list = database::get()->query(
-            "SELECT * FROM {$identityClass::getTable()} $orderBy");
+        
+        $this->iterator = new IdentityIterator(database::get()->query(
+            "SELECT * FROM {$identityClass::getTable()} $orderBy"
+        ), $identityClass);
     }
 
-    public function count(): int
+    public function getIterator(): \Iterator
     {
-        return $this->list->count();
-    }
-
-    public function next()
-    {
-        $info = $this->list->readLine();
-        if (!$info) $this->item = null;
-        else {
-            $class = $this->identityClass;
-            $this->item = new $class($info);
-        }
-    }
-
-    public function current(): ?Identity
-    {
-        return $this->item;
-    }
-
-    /**
-     * @return int Identity id or -1.
-     */
-    public function key(): int
-    {
-        if ($this->item) return $this->item->id;
-        return -1;
-    }
-
-    public function valid()
-    {
-        return $this->item;
-    }
-
-    public function rewind()
-    {
-        $this->list->seek(0);
-        $this->next();
+        return $this->iterator;
     }
 }
