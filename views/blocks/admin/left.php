@@ -30,8 +30,8 @@ $rights = my_rights::get('admin');
                         <li><a href="/admin/settings/messages"><i class="fontello icon-email"></i> Сообщения</a></li>
                     </ul>
                 </li>
-                <li><a href="/admin/articles/settings"><i class="fontello icon-doc-text"></i> Статьи</a></li>
-                <li><a href="/admin/comments/settings"><i class="fontello icon-commenting"></i> Комментарии</a></li>
+                <li><a href="/admin/settings/articles"><i class="fontello icon-doc-text"></i> Статьи</a></li>
+                <li><a href="/admin/settings/comments"><i class="fontello icon-commenting"></i> Комментарии</a></li>
                 <li><a href="/admin/settings/admin"><i class="fontello icon-television"></i> Админ-Панель</a></li>
             </ul>
         </li>
