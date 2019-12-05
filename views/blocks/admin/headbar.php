@@ -34,7 +34,7 @@ $logUnreadedLines = $logTracker->countNewLines();
                 <a class="messages new" href="/profile/dialogs" target="_blank"><i class="fontello icon-email"></i><span class="amount"> <?= $unreadedDialogs ?></span></a>
             <?php endif ?>
             <img class="avatar" src='/<?= $me->getAvatarUrl() ?>'>
-            <a class="login" href='/profile?login=<?= $me->login ?>' target="_blank"><?= $me->login ?></a>
+            <a class="login" href='/admin/users/profile/<?= $me->login ?>'><?= $me->login ?></a>
         </div>
     <?php endif ?>
 </div>
