@@ -87,20 +87,6 @@ div.radio input:checked + label, div.radio label:hover{background: none;color: #
 .radio-classic input:checked + label i{display:inline-block;}
 .radio-classic input{display:none;}
 
-/**
- * label checkbox.
- * В одном div'e можно вставлять множество чекбоксов.
- * i - это сама иконка: вставлять i.fontello.icon-ok
- * Текст чекбокса вставлять в span сразу после label.
- */
-div.checkbox{-moz-user-select:none;-webkit-user-select:none}
-div.checkbox input{display:none;}
-div.checkbox label{display:inline-block;width:20px;height:20px;background: #1e4469;color: #c4c5c6;margin-right:5px;border-radius: 7px;-moz-border-radius: 7px;-webkit-border-radius: 7px;position:relative;top:3px;}
-div.checkbox label i{position:absolute;font-family:fontello;padding:1px 0 0 2px;display:none;cursor:default;}
-div.checkbox input:checked + label i{display:inline}
-div.checkbox input:disabled + label{color:#9b9b9b}
-div.checkbox input:disabled + label + span{color:#9b9b9b}
-
 /* input file */
 .input-file {position:relative;}
 .input-file input[type="file"] {position:absolute;left:-150px;top:0;opacity: 0;}
