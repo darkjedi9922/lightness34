@@ -46,9 +46,4 @@ class EditUserGroupAction extends ActionBody
         $this->group->icon = $post['icon'];
         $this->group->update();
     }
-
-    public function getPostToSave(): array
-    {
-        return ['name', 'icon'];
-    }
 }

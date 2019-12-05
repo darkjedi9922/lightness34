@@ -65,9 +65,4 @@ class NewArticleAction extends ActionBody
         // return '/article?id='.$this->id;
         return '/articles';
     }
-
-    public function getPostToSave(): array
-    {
-        return ['title', 'text'];
-    }
 }

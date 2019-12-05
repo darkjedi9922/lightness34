@@ -39,9 +39,4 @@ class AddGender extends ActionBody
         $gender->name = $post['name'];
         $gender->insert();
     }
-
-    public function getPostToSave(): array
-    {
-        return ['name'];
-    }
 }

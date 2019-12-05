@@ -59,9 +59,4 @@ class LoginAction extends ActionBody
     {
         return '/articles';
     }
-
-    public function getPostToSave(): array
-    {
-        return ['login'];
-    }
 }

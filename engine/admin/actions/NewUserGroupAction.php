@@ -38,9 +38,4 @@ class NewUserGroupAction extends ActionBody
             'icon' => $post['icon'] ?? ''
         ])->insert();
     }
-
-    public function getPostToSave(): array
-    {
-        return ['name', 'icon'];
-    }
 }

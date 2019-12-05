@@ -52,9 +52,4 @@ class EditGender extends ActionBody
         $this->gender->name = $post['name'];
         $this->gender->update();
     }
-
-    public function getPostToSave(): array
-    {
-        return ['name'];
-    }
 }

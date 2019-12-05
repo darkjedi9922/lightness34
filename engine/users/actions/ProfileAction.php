@@ -37,11 +37,6 @@ abstract class ProfileAction extends ActionBody
         throw new NotImplementedException("This method have to be overrided.");
     }
 
-    public function getPostToSave(): array
-    {
-        return ['login', 'email', 'name', 'surname', 'gender_id'];
-    }
-
     protected function validateLogin(string $value, ?string $current = null): array
     {
         $errors = [];
