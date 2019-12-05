@@ -14,6 +14,9 @@ class ActionTransmitter
     /**
      * Сохраняет состояние экшна. Сохраняются статус, ошибки и введенные post данные.
      * Файлы не сохраняются.
+     * 
+     * Среди post данных сохраняются лишь те, что указаны в ActionBody::listPost(),
+     * за исключением полей типа ActionBody::POST_PASSWORD.
      */
     public function save(Action $action)
     {
@@ -42,9 +45,10 @@ class ActionTransmitter
     {
         $result = [];
         $post = $action->getDataArray()['post'];
-        foreach ($action->getBody()->getPostToSave() as $name) {
-            if (isset($post[$name]))
-                $result[$name] = $post[$name];
+        $list = $action->getBody()->listPost();
+        foreach ($list as $field => $desc) {
+            if (isset($post[$field]) && $desc[0] != ActionBody::POST_PASSWORD)
+                $result[$field] = $post[$field];
         }
         return $result;
     }
