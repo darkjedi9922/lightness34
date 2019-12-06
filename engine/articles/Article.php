@@ -37,7 +37,7 @@ class Article extends Identity
         if (is_article_new::get($this, $for)) Records::select('readed_articles', [
             'article_id' => $this->id,
             'user_id' => $for->id
-        ]);
+        ])->insert();
     }
 
     /**
