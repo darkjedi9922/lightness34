@@ -16,29 +16,10 @@ class FileLineList implements BaseList
         if (file_exists($this->file)) $this->lines = file($this->file);
     }
 
-    public function rewind()
+    public function getIterator(): \Generator
     {
-        reset($this->lines);
-    }
-
-    public function current()
-    {
-        return current($this->lines);
-    }
-
-    public function key()
-    {
-        return key($this->lines) + 1;
-    }
-
-    public function next()
-    {
-        next($this->lines);
-    }
-
-    public function valid()
-    {
-        return $this->current() !== false;
+        foreach ($this->lines as $key => $line) 
+            yield $key + 1 => $line; 
     }
 
     public function count()

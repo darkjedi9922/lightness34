@@ -1,6 +1,6 @@
 <?php namespace frame\lists\base;
 
-interface BaseList extends \Iterator
+interface BaseList extends \IteratorAggregate
 {
     public function count();
 }
