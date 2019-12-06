@@ -1,11 +1,11 @@
-<?php namespace frame\lists;
+<?php namespace frame\lists\base;
 
 /**
  * Если файл слишком большой, может выдать ошибку о переполнении памяти.
  * The key is a line number.
  * The value is the line.
  */
-class FileLineList implements IterableList
+class FileLineList implements BaseList
 {
     private $file;
     private $lines = [];

@@ -3,7 +3,7 @@
 use frame\cash\config;
 use frame\tools\Init;
 use engine\users\User;
-use frame\lists\IdentityList;
+use frame\lists\base\IdentityList;
 use engine\users\Gender;
 use engine\users\actions\ProfileEditAction;
 use frame\actions\ViewAction;

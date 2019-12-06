@@ -5,7 +5,7 @@ use frame\actions\ViewAction;
 use engine\users\cash\my_group;
 use engine\users\Group;
 use engine\admin\actions\NewUserGroupAction;
-use frame\lists\IdentityList;
+use frame\lists\base\IdentityList;
 use frame\tools\Init;
 
 $self->setLayout('admin');

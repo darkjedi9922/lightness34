@@ -1,4 +1,4 @@
-<?php namespace frame\lists;
+<?php namespace frame\lists\paged;
 
 use frame\cash\database;
 use frame\database\Records;

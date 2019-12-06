@@ -1,7 +1,7 @@
 <?php namespace engine\articles;
 
 use frame\config\Json;
-use frame\lists\IdentityPagedList;
+use frame\lists\paged\IdentityPagedList;
 
 class ArticlePagedList extends IdentityPagedList
 {

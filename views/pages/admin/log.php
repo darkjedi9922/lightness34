@@ -5,7 +5,7 @@ use frame\actions\ViewAction;
 use engine\users\cash\my_rights;
 use engine\users\cash\user_me;
 use frame\tools\Init;
-use frame\lists\FileLineList;
+use frame\lists\base\FileLineList;
 use frame\tools\FileReadingTracker;
 
 use function lightlib\mkfile;

@@ -2,7 +2,7 @@
 
 use frame\tools\Init;
 use engine\users\Group;
-use frame\lists\IdentityList;
+use frame\lists\base\IdentityList;
 use engine\users\Gender;
 use frame\actions\ViewAction;
 use engine\admin\actions\AddGender;

@@ -1,7 +1,7 @@
 <?php /** @var frame\views\Page $self */
 
 use frame\tools\Init;
-use frame\lists\IdentityList;
+use frame\lists\base\IdentityList;
 use engine\users\Group;
 use engine\users\User;
 use engine\users\actions\ChangeUserGroupAction;

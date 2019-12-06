@@ -1,6 +1,6 @@
 <?php namespace engine\users;
 
-use frame\lists\IdentityPagedList;
+use frame\lists\paged\IdentityPagedList;
 use engine\users\User;
 use frame\cash\config;
 

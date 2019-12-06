@@ -1,4 +1,4 @@
-<?php namespace frame\lists;
+<?php namespace frame\lists\base;
 
 use frame\cash\database;
 use function lightlib\array_assemble;
