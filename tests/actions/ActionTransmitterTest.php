@@ -16,7 +16,6 @@ class ActionTransmitterTest extends TestCase
     {
         $transmitter = new ActionTransmitter;
         $srcAction = new Action(new ValidatedActionExample);
-        $srcAction->setToken($srcAction->getExpectedToken());
         $srcAction->setData('post', 'name', '_some_invalid_value');
         $srcAction->exec();
         

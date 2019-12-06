@@ -5,6 +5,7 @@ class ViewAction
     /** @var Action */
     private $action;
     private $router;
+    private $tokenizer;
     private $executed = false;
 
     /**
@@ -23,6 +24,7 @@ class ViewAction
         } else $this->action = new Action(new $class, $args);
 
         $this->router = new ActionRouter;
+        $this->tokenizer = new ActionToken($this->action);
     }
 
     /**
@@ -44,6 +46,7 @@ class ViewAction
 
     public function getUrl(): string
     {
+        $this->tokenizer->tokenize($this->action);
         return $this->router->getTriggerUrl($this->action);
     }
 

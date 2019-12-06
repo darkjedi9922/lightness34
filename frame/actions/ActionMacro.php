@@ -14,6 +14,8 @@ class ActionMacro extends Macro
     {
         $router = new ActionRouter;
         $action = $router->fromTriggerUrl(Core::$app->router->url);
+        $tokenizer = new ActionToken($action);
+        $tokenizer->validate();
         $action->exec();
 
         $redirect = $this->getRedirect($action);

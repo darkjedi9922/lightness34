@@ -2,7 +2,6 @@
 
 use PHPUnit\Framework\TestCase;
 use tests\engine\UserDeleteAction;
-use tests\examples\actions\EmptyActionExample;
 use tests\examples\actions\GetListActionExample;
 use frame\errors\HttpError;
 use tests\examples\actions\PostListActionExample;
@@ -24,53 +23,25 @@ class ActionTest extends TestCase
         $this->assertEquals('', $action->getId());
     }
 
-    /**
-     * @runInSeparateProcess
-     */
-    public function testSetsTokenToTheGetAndReturnsIt()
-    {
-        $action = new Action(new EmptyActionExample);
-        $this->assertNull($action->getData('get', '_csrf'));
-
-        $token = $action->getExpectedToken();
-        $action->setToken($token);
-
-        $this->assertEquals($token, $action->getData('get', '_csrf'));
-        $this->assertEquals($token, $action->getToken());
-    }
-
-    /**
-     * @runInSeparateProcess
-     */
     public function testThrowsNotFoundIfThereIsNotRecievedListedGetData()
     {
         $action = new Action(new GetListActionExample);
-        $action->setToken($action->getExpectedToken());
 
         $this->expectException(HttpError::class);
         $this->expectExceptionCode(HttpError::NOT_FOUND);
         $action->exec();
     }
 
-    /**
-     * @runInSeparateProcess
-     */
     public function testDoesNotThrowNotFoundIfThereIsRecievedListedGetData()
     {
         $action = new Action(new GetListActionExample, [
             'name' => 'SomeName',
             'amount' => '12'
         ]);
-        $action->setToken($action->getExpectedToken());
-
         $action->exec();
-
         $this->assertFalse($action->hasErrors());
     }
 
-    /**
-     * @runInSeparateProcess
-     */
     public function testConvertsGetArgsToSpecifiedType()
     {
         $action = new Action(new GetListActionExample, ['amount' => '42']);
@@ -79,30 +50,19 @@ class ActionTest extends TestCase
         $this->assertIsInt($amount);
     }
 
-    /**
-     * @runInSeparateProcess
-     */
     public function testThrowsNotFoundIfThereIsNotRecievedListedPostData()
     {
         $action = new Action(new PostListActionExample);
-        $action->setToken($action->getExpectedToken());
-
         $this->expectException(HttpError::class);
         $this->expectExceptionCode(HttpError::NOT_FOUND);
         $action->exec();
     }
 
-    /**
-     * @runInSeparateProcess
-     */
     public function testDoesNotThrowNotFoundIfThereIsRecievedListedPostData()
     {
         $action = new Action(new PostListActionExample);
-        $action->setToken($action->getExpectedToken());
         $action->setData('post', 'sum', '66');
-
         $action->exec();
-
         $this->assertFalse($action->hasErrors());
     }
 

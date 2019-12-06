@@ -7,35 +7,26 @@ use tests\engine\UserDeleteAction;
 
 class ActionRouterTest extends TestCase
 {
-    /**
-     * @runInSeparateProcess
-     */
     public function testGetsATriggerUrl()
     {
         $get = [Action::ID => 'del', 'object' => 1, 'subject' => 21];
         $action = new Action(new UserDeleteAction, $get);
 
-        $url = "/tests/engine/UserDeleteAction?action=del&_csrf={$action->getExpectedToken()}&object=1&subject=21";
+        $url = "/tests/engine/UserDeleteAction?action=del&object=1&subject=21";
 
         $this->assertEquals($url, (new ActionRouter)->getTriggerUrl($action));
     }
 
-    /**
-     * @runInSeparateProcess
-     */
     public function testGetsATriggerUrlWithoutId()
     {
         $get = ['object' => 1, 'subject' => 21];
         $action = new Action(new UserDeleteAction, $get);
 
-        $url = "/tests/engine/UserDeleteAction?action=&_csrf={$action->getExpectedToken()}&object=1&subject=21";
+        $url = "/tests/engine/UserDeleteAction?action=&object=1&subject=21";
 
         $this->assertEquals($url, (new ActionRouter)->getTriggerUrl($action));
     }
 
-    /**
-     * @runInSeparateProcess
-     */
     public function testCreatesFromTriggerUrl()
     {
         $router = new ActionRouter;

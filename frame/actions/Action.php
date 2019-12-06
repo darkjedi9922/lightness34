@@ -29,11 +29,6 @@ class Action
      */
     const ID = 'action';
 
-    /**
-     * @deprecated Use setToken() to set token and getToken() to get it.
-     */
-    const TOKEN = '_csrf';
-
     private $body;
 
     /** @var array Ошибки после validate(). */
@@ -65,16 +60,6 @@ class Action
     public function getBody(): ActionBody
     {
         return $this->body;
-    }
-
-    public function setToken(string $token)
-    {
-        $this->setData('get', self::TOKEN, $token);
-    }
-
-    public function getToken(): ?string
-    {
-        return $this->getData('get', self::TOKEN);
     }
 
     /**
@@ -135,7 +120,6 @@ class Action
      */
     public final function exec()
     {
-        $this->assertToken($this->data[self::ARGS][self::TOKEN] ?? '');
         $this->validateGet($this->data[self::ARGS]);
         $this->validatePost($this->data[self::POST]);
         $this->body->initialize($this->data[self::ARGS]);
@@ -173,18 +157,6 @@ class Action
     public function hasErrors(): bool
     {
         return !empty($this->errors);
-    }
-
-    public function getExpectedToken(): string
-    {
-        return md5('tkn_salt' . Client::getId());
-    }
-
-    private function assertToken(string $token): void
-    {
-        if ($token != $this->getExpectedToken()) 
-            throw new HttpError(HttpError::BAD_REQUEST,
-                'Recieved TOKEN token does not match expected token.');
     }
 
     /**
