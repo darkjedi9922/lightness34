@@ -29,9 +29,9 @@ $logUnreadedLines = $logTracker->countNewLines();
     <?php if ($group->id !== $group::GUEST_ID) : ?>
         <div class="mini-profile">
             <?php if ($unreadedDialogs === 0) : ?>
-                <a class="messages" href="/profile/dialogs" target="_blank"><i class="fontello icon-email"></i></a>
+                <a class="messages" href="/admin/profile/dialogs"><i class="fontello icon-email"></i></a>
             <?php else : ?>
-                <a class="messages new" href="/profile/dialogs" target="_blank"><i class="fontello icon-email"></i><span class="amount"> <?= $unreadedDialogs ?></span></a>
+                <a class="messages new" href="/admin/profile/dialogs"><i class="fontello icon-email"></i><span class="amount"> <?= $unreadedDialogs ?></span></a>
             <?php endif ?>
             <img class="avatar" src='/<?= $me->getAvatarUrl() ?>'>
             <a class="login" href='/admin/users/profile/<?= $me->login ?>'><?= $me->login ?></a>
