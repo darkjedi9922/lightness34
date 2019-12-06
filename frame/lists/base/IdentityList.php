@@ -4,8 +4,9 @@ use frame\cash\database;
 use function lightlib\array_assemble;
 use frame\lists\iterators\IdentityIterator;
 
-class IdentityList implements \IteratorAggregate
+class IdentityList implements BaseList
 {
+    private $query;
     private $iterator;
 
     /**
@@ -22,13 +23,19 @@ class IdentityList implements \IteratorAggregate
         $orderBy = !empty($orderFields) ?
             'ORDER BY ' . array_assemble($orderFields, ', ', ' ') : '';
         
-        $this->iterator = new IdentityIterator(database::get()->query(
+        $this->query = database::get()->query(
             "SELECT * FROM {$identityClass::getTable()} $orderBy"
-        ), $identityClass);
+        );
+        $this->iterator = new IdentityIterator($this->query, $identityClass);
     }
 
     public function getIterator(): \Iterator
     {
         return $this->iterator;
+    }
+
+    public function count()
+    {
+        return $this->query->count();
     }
 }
