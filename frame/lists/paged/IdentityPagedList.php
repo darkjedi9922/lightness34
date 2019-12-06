@@ -2,48 +2,53 @@
 
 use frame\cash\database;
 use frame\database\Records;
-use frame\lists\Pager;
 use function lightlib\array_assemble;
 use frame\lists\iterators\IdentityIterator;
 
-abstract class IdentityPagedList implements \IteratorAggregate
+abstract class IdentityPagedList extends PagedList
 {
-    private $pager;
+    private $result;
     private $iterator;
-
-    public static abstract function getIdentityClass(): string;
-    public static abstract function getPageLimit(): int;
-
-    /**
-     * Массив полей сортировки в виде ['field1' => 'ASC', 'field2' => 'DESC'].
-     * Если сортировать не нужно, вернуть пустой массив.
-     */
-    public static function getOrderFields(): array { return []; }
 
     public function __construct(int $page)
     {
-        $table = static::getIdentityClass()::getTable();
-        $amount = Records::select($table)->count('id');
-        $limit = static::getPageLimit();
-        $this->pager = new Pager($page, $amount, $limit);
+        $table = $this->getIdentityClass()::getTable();
+        $countAll = Records::select($table)->count('id');
+        $pageLimit = $this->loadPageLimit();
+
+        parent::__construct($page, $countAll, $pageLimit);
 
         $orderFields = static::getOrderFields();
         $orderBy = !empty($orderFields) ? 
             'ORDER BY ' . array_assemble($orderFields, ', ', ' ') : '';
         
-        $this->iterator = new IdentityIterator(database::get()->query(
-            "SELECT * FROM $table $orderBy 
-            LIMIT {$this->pager->getStartMaterialIndex()}, $limit"
-        ), $this->getIdentityClass());
+        $from = $this->getPager()->getStartMaterialIndex();
+        $this->result = database::get()->query(
+            "SELECT * FROM $table $orderBy LIMIT $from, $pageLimit"
+        );
+        $this->iterator = new IdentityIterator(
+            $this->result,
+            $this->getIdentityClass()
+        );
     }
 
-    public function getPager(): Pager
+    public abstract function getIdentityClass(): string;
+
+    /**
+     * Массив полей сортировки в виде ['field1' => 'ASC', 'field2' => 'DESC'].
+     * Если сортировать не нужно, вернуть пустой массив.
+     */
+    public function getOrderFields(): array { return []; }
+
+    public function countOnPage(): int
     {
-        return $this->pager;
+        return $this->result->count();
     }
 
     public function getIterator(): \Iterator
     {
         return $this->iterator;
     }
+
+    protected abstract function loadPageLimit(): int;
 }

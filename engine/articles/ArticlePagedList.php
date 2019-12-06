@@ -5,18 +5,18 @@ use frame\lists\paged\IdentityPagedList;
 
 class ArticlePagedList extends IdentityPagedList
 {
-    public static function getIdentityClass(): string
+    public function getIdentityClass(): string
     {
         return Article::class;
     }
 
-    public static function getPageLImit(): int
-    {
-        return (new Json('config/articles.json'))->{'list.amount'};
-    }
-
-    public static function getOrderFields(): array
+    public function getOrderFields(): array
     {
         return ['id' => 'DESC'];
+    }
+
+    protected function loadPageLImit(): int
+    {
+        return (new Json('config/articles.json'))->{'list.amount'};
     }
 }

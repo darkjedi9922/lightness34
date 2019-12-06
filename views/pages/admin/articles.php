@@ -16,7 +16,7 @@ $self->setLayout('admin');
 
 <div class="box">
     <h2>Все статьи</h2>
-    <?php if ($articles->count() == 0) : ?>Статей нет
+    <?php if ($articles->countOnPage() == 0) : ?>Статей нет
     <?php else : ?>
         <table width="100%">
             <tr>

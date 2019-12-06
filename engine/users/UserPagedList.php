@@ -6,17 +6,17 @@ use frame\cash\config;
 
 class UserPagedList extends IdentityPagedList
 {
-    public static function getIdentityClass(): string
+    public function getIdentityClass(): string
     {
         return User::class;
     }
 
-    public static function getPageLimit(): int
+    protected function loadPageLimit(): int
     {
         return config::get('users')->{'list.amount'};
     }
 
-    public static function getOrderFields(): array
+    public function getOrderFields(): array
     {
         return ['id' => 'ASC'];
     }

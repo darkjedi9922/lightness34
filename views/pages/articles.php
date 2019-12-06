@@ -15,7 +15,7 @@ $rights = my_rights::get('articles');
 
 <div class="content">
     <div class="content-header">
-        <b><span class="content-header__info">Всего записей: <?= $articles->coundAll() ?></span></b>
+        <b><span class="content-header__info">Всего записей: <?= $articles->countAll() ?></span></b>
         <?php if ($rights->can('add')): ?>
             <a class="content-header__button" href="/articles/new">Добавить</a>
         <?php endif ?>
