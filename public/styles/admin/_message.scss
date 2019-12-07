@@ -1,0 +1,64 @@
+.message {
+    $active: $clr-color;
+    $new: #ef2626;
+    $spacing: 1rem;
+
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 1.2rem;
+    padding: 0.3rem 0.3rem;
+    border-radius: 10px;
+    cursor: default;
+
+    &__header {
+        display: flex;
+        margin-bottom: $spacing / 3;
+    }
+
+    &__info {
+        display: inline-flex;
+        flex-direction: column;
+        font-size: 1rem;
+        justify-content: center;
+        margin-right: $spacing * 2;
+    }
+
+    &__from-avatar {
+        height: 3rem;
+        margin-right: $spacing;
+    }
+
+    &__from-login {
+        font-weight: bold;
+    }
+
+    &__date {
+        color: $clr-grey;
+    }
+
+    &__text {
+        display: block;
+    }
+
+    &__status {
+        display: inline-flex;
+        align-items: center;
+        color: $clr-grey;
+        font-size: 1rem;
+    }
+
+    &__status-icon {
+        margin-right: $spacing / 3;
+    }
+
+    &__status--active {
+        color: $active;
+    }
+
+    &__status--new {
+        color: $new;
+    }
+
+    &:hover {
+        background: $clr-hoverbox;
+    }
+}

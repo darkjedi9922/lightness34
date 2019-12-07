@@ -1,0 +1,51 @@
+.box-form {
+    font-family: 'Greta Sans Light';
+
+    &__title {
+        color: darken($clr-grey, 20);
+        font-size: 1.2rem;
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+
+    &__textarea {
+        background: transparent;
+        border: none;
+        border-bottom: solid 1px $clr-grey;
+        box-sizing: border-box;
+        color: black;
+        display: block;
+        font-family: $global-font;
+        font-size: 1.1rem;
+        outline: none;
+        padding-bottom: 0.6rem;
+        margin-bottom: 0.25rem;
+        resize: none;
+        width: 100%;
+    }
+
+    &__button {
+        background: $clr-color;
+        border-radius: 5px;
+        box-shadow: none;
+        color: white !important;
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        font-size: 1rem;
+        font-weight: bold;
+        padding: 0.6rem 2rem;
+        outline: none;
+        text-transform: uppercase;
+
+        &:hover {
+            background: darken($clr-color, 10);
+            box-shadow: none;
+            color: white !important;
+            cursor: pointer;
+        }
+    }
+
+    &__button-icon {
+        margin-left: 1rem;
+        font-weight: normal;
+    }
+}
