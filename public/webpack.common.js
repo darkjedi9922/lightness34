@@ -18,7 +18,8 @@ module.exports = {
         'admin.css': globs([
             './styles/admin.css',
             './styles/admin.scss'
-        ])
+        ]),
+        'admin.js': './scripts/admin/main.tsx'
     },
     output: {
         path: path.resolve(__dirname, './build'),
@@ -56,10 +57,17 @@ module.exports = {
                 // Webpack не понимает @font-face в css без этого.
                 test: /\.(png|jpg|jpeg|woff(2)?|eot|ttf|svg)$/,
                 use: ['url-loader']
+            },
+            {
+                test: /\.(ts|tsx)$/,
+                use: ['babel-loader', 'ts-loader']
             }
         ]
     },
     plugins: [
         new ExtractTextPlugin('[name]'),
-    ]
+    ],
+    resolve: {
+        extensions: ['*', '.ts', '.tsx', '.js', '.jsx']
+    }
 }

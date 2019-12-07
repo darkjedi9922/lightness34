@@ -29,5 +29,6 @@ $config = config::get('core');
 </head>
 <body>
     <?php $self->showChild() ?>
+    <script src="<?= versionify('public/build/admin.js') ?>"></script>
 </body>
 </html>

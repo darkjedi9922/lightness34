@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+        "allowSyntheticDefaultImports": true,
+        "jsx": "react",
+        "lib": [
+            "es2015",
+            "es2017",
+            "dom"
+        ],
+        "baseUrl": ".",
+        "paths": {
+            "*": ["*"]
+        },
+        "module": "es6",
+        "moduleResolution": "node",
+        "target": "es6"
+    },
+    "include": [
+        "./scripts/*.ts",
+        "./scripts/*.tsx",
+        "./scripts/**/*.ts",
+        "./scripts/**/*.tsx"
+    ]
+}
