@@ -1,21 +1,45 @@
 <?php namespace engine\messages;
 
-use frame\database\Identity;
 use frame\cash\database;
 
-class Dialog extends Identity
+/**
+ * Диалог идентифицируется двумя id участников диалога.
+ */
+class Dialog
 {
-    public static function getTable(): string
-    {
-        return 'dialogs';
-    }
+    private $last;
 
     public static function countUnreaded(int $userId): int
     {
-        return (int) database::get()->query(
-            "SELECT COUNT(DISTINCT group_id) FROM messages
-            WHERE id IN (SELECT message_id FROM unreaded_messages WHERE member_id = $userId)
-            AND group_id NOT IN (SELECT dialog_id FROM deleted_dialogs WHERE deleted_user_id = $userId)"
+        return (int)database::get()->query(
+            "SELECT COUNT(DISTINCT from_id) FROM messages
+            WHERE to_id = $userId AND readed = 0"
+        )->readScalar();
+    }
+
+    public function __construct(Message $last)
+    {
+        $this->last = $last;
+    }
+
+    public function getLastMessage(): Message
+    {
+        return $this->last;
+    }
+
+    public function getWhoId(int $forUserId): int
+    {
+        if ((int) $this->last->to_id === $forUserId) return $this->last->from_id;
+        else return $this->last->to_id;
+    }
+
+    public function countNewMessages(int $userId): int
+    {
+        return (int)database::get()->query(
+            "SELECT COUNT(id) FROM messages
+            WHERE to_id = $userId 
+                AND from_id = {$this->getWhoId($userId)} 
+                AND readed = 0"
         )->readScalar();
     }
 }
