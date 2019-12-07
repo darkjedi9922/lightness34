@@ -1,0 +1,41 @@
+/* меню */
+.menu {
+    padding: 0;
+    margin: 0;
+}
+.menu ul {
+    padding: 0;
+    overflow: hidden;
+}
+.menu li {
+    list-style: none;
+}
+.menu li a {
+    padding: 10px 0px 8px 20px;
+}
+.menu ul li a {
+    padding-left: 40px;
+}
+.menu ul li ul li a {
+    padding-left: 60px;
+}
+.menu a {
+    color: #c5c5c5;
+    text-decoration: none;
+    font-family: $global-font;
+    font-weight: bold;
+    font-size: 18px;
+    display: block;
+}
+.menu a:hover {
+    background: #383838;
+}
+.menu a:not([href]) {
+    cursor: default;
+}
+.menu .fontello {
+    font-weight: normal;
+}
+.menu .icon-down-dir {
+    display: inline-block;
+}

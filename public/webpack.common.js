@@ -17,7 +17,7 @@ module.exports = {
     entry: {
         'admin.css': globs([
             './styles/admin.css',
-            './styles/admin/*.scss'
+            './styles/admin.scss'
         ])
     },
     output: {
