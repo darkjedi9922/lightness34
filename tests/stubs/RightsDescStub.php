@@ -1,6 +1,7 @@
 <?php namespace tests\stubs;
 
 use frame\modules\RightsDesc;
+use engine\users\User;
 
 class RightsDescStub extends RightsDesc
 {
@@ -9,7 +10,17 @@ class RightsDescStub extends RightsDesc
         return [
             'add' => 'Adding something',
             'make' => 'Making something',
-            'create' => 'Creating something'
+            'create' => 'Creating something',
+            'see-own' => 'See own id'
         ];
+    }
+
+    public function additionCheck(string $right, User $user, $object = null): bool
+    {
+        switch ($right) {
+            case 'see-own': return $user->id === $object;
+        }
+
+        return true;
     }
 }
