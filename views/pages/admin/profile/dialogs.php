@@ -20,10 +20,10 @@ $self->setLayout('admin');
 ?>
 
 <div class="box">
+    <?php if ($messages->countAll() === 0) : ?>
+        <span class="notice">Сообщений пока нет</span>
+    <?php endif ?>
     <div class="dialogs">
-        <?php if ($messages->countAll() === 0) : ?>
-            <span class="notice">Сообщений пока нет</span>
-        <?php endif ?>
         <div class="dialogs__list">
             <?php foreach ($messages as $dialog) : /** @var Dialog $dialog */
                 $last = $dialog->getLastMessage();
@@ -36,26 +36,30 @@ $self->setLayout('admin');
                 }
                 $who = User::selectIdentity($toId !== $me->id ? $toId : (int) $last->from_id);
             ?>
-                <div class="dialogs__item dialog">
-                    <div class="dialog__header">
-                        <span class="dialog__date"><?= date('d.m.Y H:i', $last->date) ?></span>
-                        <span class="dialog__text"><?= shorten($last->loadText(), 80, '...') ?></span>
-                    </div>
-                    <div class="dialog__info">
-                        <div class="dialog__status
-                            <?= $newCount != 0 ? 'dialog__status--new' :
-                                ($activeCount != 0 ? 'dialog__status--active' : '') ?>">
-                            <i class="dialog__status-icon fontello icon-ok"></i>
-                            <span class="dialog__status-text"><?= 
-                                $newCount != 0 ? "Новых: $newCount" :
-                                ($activeCount != 0 ? "Непрочитанных: $activeCount" : 
-                                'Все сообщения прочитаны')
-                            ?></span>
-                        </div>
-                        <span class="dialog__who"><?= $who->login ?></span>
-                    </div>
+            <div class="dialogs__item dialog">
+                <div class="dialog__header">
+                    <span class="dialog__date"><?= date('d.m.Y H:i', $last->date) ?></span>
+                    <a href="/admin/profile/dialog?with=<?= $who->id ?>" 
+                        class="dialog__text"><?= shorten($last->loadText(), 80, '...') ?></a>
                 </div>
+                <div class="dialog__info">
+                    <div class="dialog__status
+                        <?= $newCount != 0 ? 'dialog__status--new' :
+                            ($activeCount != 0 ? 'dialog__status--active' : '') ?>">
+                        <i class="dialog__status-icon fontello icon-ok"></i>
+                        <span class="dialog__status-text"><?= 
+                            $newCount != 0 ? "Новых: $newCount" :
+                            ($activeCount != 0 ? "Непрочитанных: $activeCount" : 
+                            'Все сообщения прочитаны')
+                        ?></span>
+                    </div>
+                    <span class="dialog__who"><?= $who->login ?></span>
+                </div>
+            </div>
             <?php endforeach ?>
         </div>
     </div>
+    <?php if ($messages->getPager()->countPages() > 1): ?>
+    <?php $messages->getPager()->show('admin') ?>
+    <?php endif ?>
 </div>
