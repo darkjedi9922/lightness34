@@ -1,7 +1,4 @@
-@import './colors.scss';
-
 .dialog {
-    $normal: #868686;
     $active: $clr-color;
     $new: #ef2626;
     $spacing: 1rem;
@@ -29,10 +26,21 @@
         margin-right: $spacing;
     }
 
+    &__text {
+        font-size: 1.05rem !important;
+        color: black !important;
+        text-decoration: none !important;
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif !important;
+
+        &:hover {
+            text-decoration: underline !important;
+        }
+    }
+
     &__status {
         display: inline-flex;
         align-items: center;
-        color: lighten($normal, 5);
+        color: $clr-grey;
     }
 
     &__status--active {
@@ -53,10 +61,10 @@
 
     &__who {
         font-weight: bold;
-        color: lighten($normal, 5);
+        color: $clr-grey;
     }
 
     &:hover {
-        background: #dcdcdc;
+        background: $clr-hoverbox;
     }
 }
