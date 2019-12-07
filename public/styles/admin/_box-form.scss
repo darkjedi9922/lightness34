@@ -17,11 +17,17 @@
         display: block;
         font-family: $global-font;
         font-size: 1.1rem;
+        font-weight: normal;
         outline: none;
         padding-bottom: 0.6rem;
         margin-bottom: 0.25rem;
         resize: none;
         width: 100%;
+        word-break: break-all;
+
+        &[data-placeholdered] {
+            color: $clr-grey;
+        }
     }
 
     &__button {
