@@ -1,4 +1,5 @@
 import React from 'react';
+import MessageList from './message-list';
 
 interface Message {
     text: string,
@@ -35,10 +36,11 @@ class DialogList extends React.Component<DialogListProps> {
     }
 
     public render(): React.ReactNode {
-        return (<>
+        return (
+        <div className="content__row">
             <div className="box">
                 {this.props.countAll === 0 &&
-                    <span className="notice">Сообщений пока нет</span>
+                    <span className="warning">Сообщений пока нет</span>
                 }
                 <div className="dialogs">
                     <div className="dialogs__list">
@@ -70,7 +72,8 @@ class DialogList extends React.Component<DialogListProps> {
                 </div>
                 {this.props.pageCount > 1 && <div ref={this.pagerRef}></div>}
             </div>
-        </>);
+            <MessageList/>
+        </div>);
     }
 }
 

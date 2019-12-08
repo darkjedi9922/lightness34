@@ -11,7 +11,8 @@ class MessageList extends React.Component {
     }
 
     public render(): React.ReactNode {
-        return (<>
+        return (
+        <div className="content__column">
             <div className="box">
                 <form action="" className="box-form">
                     <span className="box-form__title">Новое сообщение</span>
@@ -48,7 +49,7 @@ class MessageList extends React.Component {
                     </div>
                 </div>
             </div>
-        </>);
+        </div>);
     }
 
     private handleTextChange(event: React.ChangeEvent<HTMLDivElement>) {

@@ -1,0 +1,23 @@
+.content {
+    padding: 18px 18px 0px;
+    background: url('/public/images/admin/logo.png') no-repeat;
+    background-position: center 50%;
+    vertical-align: top;
+
+    &__row {
+        align-items: flex-start;
+        display: flex;
+        justify-content: space-around;
+        width: 100%;
+    }
+
+    &__column {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    
+        &:not(:first-child) {
+            margin-left: 1rem;
+        }
+    }
+}
