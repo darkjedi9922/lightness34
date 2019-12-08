@@ -23,11 +23,16 @@ interface DialogListProps {
 }
 
 class DialogList extends React.Component<DialogListProps> {
+    private messageListRef: React.RefObject<MessageList>;
     private pagerRef: React.RefObject<HTMLDivElement>;
 
     constructor(props: DialogListProps) {
         super(props);
+
+        this.messageListRef = React.createRef();
         this.pagerRef = React.createRef();
+
+        this.handleDialogClick = this.handleDialogClick.bind(this);
     }
 
     public componentDidMount() {
@@ -45,7 +50,9 @@ class DialogList extends React.Component<DialogListProps> {
                 <div className="dialogs">
                     <div className="dialogs__list">
                         {this.props.list.map((dialog, index) => 
-                        <div key={index} className="dialogs__item dialog">
+                        <div key={index} className="dialogs__item dialog" 
+                            onClick={() => this.handleDialogClick(dialog.whoId)}
+                        >
                             <div className="dialog__header">
                                 <span className="dialog__date">{dialog.lastMessage.date}</span>
                                 <a href={"/admin/profile/dialog?with=" + dialog.whoId}
@@ -72,8 +79,12 @@ class DialogList extends React.Component<DialogListProps> {
                 </div>
                 {this.props.pageCount > 1 && <div ref={this.pagerRef}></div>}
             </div>
-            <MessageList/>
+            <MessageList ref={this.messageListRef}/>
         </div>);
+    }
+
+    private handleDialogClick(withWhoId: number) {
+        this.messageListRef.current.open(withWhoId);
     }
 }
 
