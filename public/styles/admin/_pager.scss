@@ -1,32 +1,51 @@
 .pager {
-    font-size: 1rem;
+    // font-size: 1rem;
     margin-top: 1rem;
     text-align: center;
 
     &__item {
-        background: $global-button-color;
-        border: none;
-        border-radius: 5px;
-        box-shadow: none !important;
-        color: white !important;
+        // background: $global-button-color;
+        // border: none;
+        // border-radius: 5px;
+        // color: white;
+        // display: inline-block;
+        // font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif !important;
+        // font-size: 1rem;
+        // font-weight: bold;
+        // padding: 0.6rem 0.9rem;
+        // outline: none;
+        // text-decoration: none !important;
+        // text-transform: uppercase;
+        
+        background: #1e4469;
+        border: 0px;
+        border-radius: 7px;
+        color: #c4c5c6;
         display: inline-block;
-        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif !important;
-        font-size: 1rem;
-        font-weight: bold;
-        padding: 0.6rem 0.9rem;
-        outline: none;
-        text-decoration: none !important;
-        text-transform: uppercase;
+        font-family: Tahoma;
+        font-size: 13px;
+        padding: 8px 20px;
+        text-decoration: none;
+        margin:0px;
+        font-weight:normal;
+        cursor:default;
     }
 
     &__item:hover, &__item--current {
-        background: lighten($global-button-color, 10) !important;
-        box-shadow: none;
-        color: white !important;
+        // background: lighten($global-button-color, 10) !important;
+        // color: white !important;
+
+        background: none;
+        color: #1d98db;
+        box-shadow: inset 0px 0px 30px 0px #1d98db;
+    }
+
+    &__item:hover {
+        cursor: pointer;
     }
 
     &__item--current {
-        cursor: default;
+        cursor: default !important;
     }
 
     &__spacing {

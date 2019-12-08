@@ -1,6 +1,6 @@
 .box {
     background: $clr-box;
-    border-radius: 5px;
+    border-radius: $global-box-radius;
     padding:10px;
     margin-bottom:18px;
     font-family:Arial;
@@ -15,13 +15,4 @@
         margin: 0;
         flex-grow: 0;
     }
-}
-.box a[href]{
-    color:#249dcd;
-    font-family:Arial;
-    text-decoration:underline;
-}
-.box a[href]:hover{
-    color:#82dcff;
-    text-decoration:none;
 }

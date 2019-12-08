@@ -8,9 +8,10 @@ $clr-color: #249dcd;
 $clr-box: #e4e4e4;
 $clr-hoverbox: #dcdcdc;
 $clr-grey: #939393;
-$global-button-color: #003366;
+$global-button-color: #1e4469;
 $global-warning-color: #b3ab00;
 $global-font: "Greta Sans Light";
+$global-box-radius: 10px;
 
 @import 'admin/box-form';
 @import 'admin/box';
@@ -19,30 +20,52 @@ $global-font: "Greta Sans Light";
 @import 'admin/content';
 @import 'admin/dialog';
 @import 'admin/head-bar';
+@import 'admin/link';
 @import 'admin/menu';
 @import 'admin/message';
 @import 'admin/notice';
 @import 'admin/pager';
 
 button, .button, .button-hovered {
+    // background: $global-button-color;
+    // border: none;
+    // border-radius: $global-box-radius;
+    // box-shadow: none;
+    // color: white !important;
+    // display: inline-block;
+    // font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif !important;
+    // font-size: 1rem;
+    // font-weight: bold;
+    // padding: 0.6rem 2rem;
+    // outline: none;
+    // text-decoration: none !important;
+    // text-transform: uppercase;
+
+    // &:hover {
+    //     background: lighten($global-button-color, 10);
+    //     box-shadow: none;
+    //     color: white !important;
+    //     cursor: pointer;
+    // }
+
     background: $global-button-color;
-    border: none;
-    border-radius: 5px;
-    box-shadow: none;
-    color: white !important;
+    border: 0px;
+    border-radius: 7px;
+    color: #c4c5c6;
     display: inline-block;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif !important;
-    font-size: 1rem;
-    font-weight: bold;
-    padding: 0.6rem 2rem;
+    font-family: Tahoma;
+    font-size: 13px;
+    padding: 8px 20px;
+    text-decoration: none;
+    margin:0px;
+    font-weight:normal;
+    cursor:default;
     outline: none;
-    text-decoration: none !important;
-    text-transform: uppercase;
 
     &:hover {
-        background: lighten($global-button-color, 10);
-        box-shadow: none;
-        color: white !important;
+        background: none;
+        color: $clr-color;
+        box-shadow: inset 0px 0px 30px 0px $clr-color;
         cursor: pointer;
     }
 }

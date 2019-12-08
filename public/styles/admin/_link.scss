@@ -1,0 +1,10 @@
+.link {
+    color:#249dcd;
+    font-family:Arial;
+    text-decoration:underline;
+
+    &:hover {
+        color:#82dcff;
+        text-decoration:none;
+    }
+}
