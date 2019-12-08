@@ -14,52 +14,45 @@ $me = user_me::get();
 Init::access($me->group_id !== Group::GUEST_ID);
 
 $page = pagenumber::get();
-$messages = new DialogPagedList($page);
+$dialogs = new DialogPagedList($page);
+$pageCount = $dialogs->getPager()->countPages();
 
 $self->setLayout('admin');
 ?>
 
-<div class="box">
-    <?php if ($messages->countAll() === 0) : ?>
-        <span class="notice">Сообщений пока нет</span>
-    <?php endif ?>
-    <div class="dialogs">
-        <div class="dialogs__list">
-            <?php foreach ($messages as $dialog) : /** @var Dialog $dialog */
-                $last = $dialog->getLastMessage();
-                $newCount = 0;
-                $activeCount = 0;
-                $toId = (int) $last->to_id;
-                if ($last->readed === '0') {
-                    if ($toId === $me->id) $newCount = $dialog->countNewMessages($toId);
-                    else $activeCount = $dialog->countNewMessages($toId);
-                }
-                $who = User::selectIdentity($toId !== $me->id ? $toId : (int) $last->from_id);
-            ?>
-            <div class="dialogs__item dialog">
-                <div class="dialog__header">
-                    <span class="dialog__date"><?= date('d.m.Y H:i', $last->date) ?></span>
-                    <a href="/admin/profile/dialog?with=<?= $who->id ?>" 
-                        class="dialog__text"><?= shorten($last->loadText(), 80, '...') ?></a>
-                </div>
-                <div class="dialog__info">
-                    <div class="dialog__status
-                        <?= $newCount != 0 ? 'dialog__status--new' :
-                            ($activeCount != 0 ? 'dialog__status--active' : '') ?>">
-                        <i class="dialog__status-icon fontello icon-ok"></i>
-                        <span class="dialog__status-text"><?= 
-                            $newCount != 0 ? "Новых: $newCount" :
-                            ($activeCount != 0 ? "Непрочитанных: $activeCount" : 
-                            'Все сообщения прочитаны')
-                        ?></span>
-                    </div>
-                    <span class="dialog__who"><?= $who->login ?></span>
-                </div>
-            </div>
-            <?php endforeach ?>
-        </div>
-    </div>
-    <?php if ($messages->getPager()->countPages() > 1): ?>
-    <?php $messages->getPager()->show('admin') ?>
-    <?php endif ?>
+<?php if ($pageCount > 1): ?>
+<div id="dialog-pager" style="display:none">
+    <?php $dialogs->getPager()->show('admin') ?>
 </div>
+<?php endif ?>
+
+<script>var _dialogListData = {
+    countAll: <?= $dialogs->countAll() ?>,
+    list: [<?php foreach ($dialogs as $dialog): /** @var Dialog $dialog */
+        $last = $dialog->getLastMessage();
+        $newCount = 0;
+        $activeCount = 0;
+        $toId = (int) $last->to_id;
+        if ($last->readed === '0') 
+            if ($toId === $me->id) $newCount = $dialog->countNewMessages($toId);
+            else $activeCount = $dialog->countNewMessages($toId);
+        
+        $who = User::selectIdentity($toId !== $me->id ? $toId : (int) $last->from_id);
+    ?>{
+        newCount: <?= $newCount ?>,
+        activeCount: <?= $activeCount ?>,
+        whoId: <?= $who->id ?>,
+        whoAvatar: '/<?= $who->getAvatarUrl() ?>',
+        whoLogin: '<?= $who->login ?>',
+        lastMessage: {
+            text: '<?= shorten($last->loadText(), 80, '...') ?>',
+            date: '<?= date('d.m.Y H:i', $last->date) ?>'
+        },
+    }<?php endforeach ?>],
+    pageCount: <?= $pageCount ?>,
+    pagerHtml: 
+        <?php if ($pageCount > 1): ?>document.getElementById('dialog-pager').innerHTML
+        <?php else: ?>''<?php endif ?>
+};</script>
+
+<div id="dialog-list"></div>
