@@ -77,12 +77,12 @@
     font-family:Calibri;
     font-size:30px;
     text-decoration:none;
-    color:#b3ab00;
+    color: $global-warning-color;
     font-weight:bold;
     margin-right:14px;
 }
 .notice-bar a:hover {
-    color:#ded400;
+    color: lighten($global-warning-color, 8);
 }
 .notice-bar a.fontello {
     font-size:26px;

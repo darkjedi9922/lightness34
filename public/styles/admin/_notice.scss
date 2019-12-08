@@ -1,18 +1,26 @@
-.error, .warning {padding: 8px 20px;border-radius: 7px;-moz-border-radius: 7px;-webkit-border-radius: 7px;font-family:Calibri;font-size:14px;font-weight:normal}
-span.error, span.warning {display: inline-block}
-.error {color: red;box-shadow: inset 0px 0px 30px 0px red;}
-.warning {color: yellow;box-shadow: inset 0 0 30px 0 yellow}
-
 .notice {
+    border-radius: 5px;
+    box-sizing: border-box;
+    color: white;
     display: inline-block;
-    background: $clr-color;
     padding: 0.2rem 1rem;
-    color: $clr-box;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     font-size: 1rem;
-    border-radius: 10px;
+    font-weight: normal;
 
     &__strong {
         font-weight: bold;
+    }
+
+    &--warning {
+        background: $global-warning-color;
+    }
+
+    &--error {
+        background: red;
+    }
+
+    &--fulled {
+        width: 100%;
     }
 }

@@ -30,26 +30,6 @@
         }
     }
 
-    &__button {
-        background: $clr-color;
-        border-radius: 5px;
-        box-shadow: none;
-        color: white !important;
-        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-        font-size: 1rem;
-        font-weight: bold;
-        padding: 0.6rem 2rem;
-        outline: none;
-        text-transform: uppercase;
-
-        &:hover {
-            background: darken($clr-color, 10);
-            box-shadow: none;
-            color: white !important;
-            cursor: pointer;
-        }
-    }
-
     &__button-icon {
         margin-left: 1rem;
         font-weight: normal;

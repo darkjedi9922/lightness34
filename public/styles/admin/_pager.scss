@@ -1,0 +1,35 @@
+.pager {
+    font-size: 1rem;
+    margin-top: 1rem;
+    text-align: center;
+
+    &__item {
+        background: $global-button-color;
+        border: none;
+        border-radius: 5px;
+        box-shadow: none !important;
+        color: white !important;
+        display: inline-block;
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif !important;
+        font-size: 1rem;
+        font-weight: bold;
+        padding: 0.6rem 0.9rem;
+        outline: none;
+        text-decoration: none !important;
+        text-transform: uppercase;
+    }
+
+    &__item:hover, &__item--current {
+        background: lighten($global-button-color, 10) !important;
+        box-shadow: none;
+        color: white !important;
+    }
+
+    &__item--current {
+        cursor: default;
+    }
+
+    &__spacing {
+        font-family: Consolas;
+    }
+}

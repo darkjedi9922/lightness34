@@ -8,6 +8,8 @@ $clr-color: #249dcd;
 $clr-box: #e4e4e4;
 $clr-hoverbox: #dcdcdc;
 $clr-grey: #939393;
+$global-button-color: #003366;
+$global-warning-color: #b3ab00;
 $global-font: "Greta Sans Light";
 
 @import 'admin/box-form';
@@ -20,3 +22,27 @@ $global-font: "Greta Sans Light";
 @import 'admin/menu';
 @import 'admin/message';
 @import 'admin/notice';
+@import 'admin/pager';
+
+button, .button, .button-hovered {
+    background: $global-button-color;
+    border: none;
+    border-radius: 5px;
+    box-shadow: none;
+    color: white !important;
+    display: inline-block;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif !important;
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 0.6rem 2rem;
+    outline: none;
+    text-decoration: none !important;
+    text-transform: uppercase;
+
+    &:hover {
+        background: lighten($global-button-color, 10);
+        box-shadow: none;
+        color: white !important;
+        cursor: pointer;
+    }
+}
