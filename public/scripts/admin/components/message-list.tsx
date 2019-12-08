@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import $ from 'jquery'
+import StretchTextarea from './stretch-textarea';
 
 interface Message {
     id: number,
@@ -28,8 +29,8 @@ interface MessageListState {
 }
 
 class MessageList extends React.Component<{}, MessageListState> {
-    private textAreaIsEmpty: boolean = true;
     private withWhoId: number;
+    private textAreaRef = React.createRef<StretchTextarea>();
     
     public constructor(props) {
         super(props);
@@ -40,8 +41,6 @@ class MessageList extends React.Component<{}, MessageListState> {
             loadedPages: 0
         };
 
-        this.handleTextAreaFocus = this.handleTextAreaFocus.bind(this);
-        this.handleTextAreaBlur = this.handleTextAreaBlur.bind(this);
     }
 
     public componentDidMount() {
@@ -76,15 +75,12 @@ class MessageList extends React.Component<{}, MessageListState> {
             <div className="box">
                 <form action="" className="box-form">
                     <span className="box-form__title">Новое сообщение</span>
-                    <div 
-                        contentEditable={true}
-                        className="box-form__textarea" 
-                        onFocus={this.handleTextAreaFocus}
-                        onBlur={this.handleTextAreaBlur}
-                        data-placeholdered
-                    >Текст сообщения</div>
-                    <button className="box-form__button">Отправить
-                        <i className="box-form__button-icon fontello icon-ok"></i></button>
+                    <StretchTextarea 
+                        ref={this.textAreaRef} 
+                        placeholder="Текст сообщения"
+                        className="box-form__textarea"
+                    ></StretchTextarea>
+                    <button className="box-form__button">Отправить</button>
                 </form>
             </div>
             {this.state.loadedPages > 0 && 
@@ -129,22 +125,7 @@ class MessageList extends React.Component<{}, MessageListState> {
         </div>);
     }
 
-    private handleTextAreaFocus(event: React.FocusEvent<HTMLDivElement>) {
-        if (this.textAreaIsEmpty) {
-            event.target.textContent = "";
-            event.target.removeAttribute('data-placeholdered');
-        }
-    }
 
-    private handleTextAreaBlur(event: React.FocusEvent<HTMLDivElement>) {
-        if (event.target.textContent === "") {
-            this.textAreaIsEmpty = true;
-            event.target.textContent = "Текст сообщения";
-            event.target.setAttribute('data-placeholdered', '');
-        } else {
-            this.textAreaIsEmpty = false;
-        }
-    }
 
     private loadDialogMessages(page: number) {
         $.ajax({
