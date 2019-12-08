@@ -19,7 +19,7 @@ module.exports = {
             './styles/admin.css',
             './styles/admin.scss'
         ]),
-        'admin.js': './scripts/admin/main.tsx'
+        'admin.js': './scripts/admin/main.ts'
     },
     output: {
         path: path.resolve(__dirname, './build'),
