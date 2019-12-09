@@ -67,9 +67,3 @@ div.radio input:checked + label, div.radio label:hover{background: none;color: #
 /* input file */
 .input-file {position:relative;}
 .input-file input[type="file"] {position:absolute;left:-150px;top:0;opacity: 0;}
-
-/* счетчик страниц */
-.pager .spacing {
-	font-family: Consolas;
-	font-size:15px;
-}

@@ -27,7 +27,7 @@ $me = user_me::get();
 ?>
 
 <div class="box">
-    <h3><a href="/admin/users/groups">Группы</a>: <?= $group->name ?></h3><br>
+    <h3><a class="link" href="/admin/users/groups">Группы</a>: <?= $group->name ?></h3><br>
     <form action="<?= $action->getUrl() ?>" method="post">
         <div class="checkbox">
             <?php foreach ($modules as $module):

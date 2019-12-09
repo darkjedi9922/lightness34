@@ -31,8 +31,8 @@ $self->setLayout('admin');
             ?>
                 <tr>
                     <td><?= $article->id ?></td>
-                    <td><a href="/admin/article?id=<?= $article->id ?>"><?= shorten($article->title, 80) ?></a></td>
-                    <td><a href="/admin/users/profile/<?= $author->login ?>"><?= $author->login ?></a></td>
+                    <td><a class="link" href="/admin/article?id=<?= $article->id ?>"><?= shorten($article->title, 80) ?></a></td>
+                    <td><a class="link" href="/admin/users/profile/<?= $author->login ?>"><?= $author->login ?></a></td>
                     <td><?= date('d.m.Y H:i', $article->date) ?></td>
                 </tr>
             <?php endforeach ?>
