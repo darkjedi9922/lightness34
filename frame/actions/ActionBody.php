@@ -53,14 +53,22 @@ abstract class ActionBody
     public function validate(array $post, array $files) { return []; }
 
     /**
-     * Is run third in case of the success
+     * Is run third in case of the success.
+     * 
+     * @return array|null Данные, которые могут использоваться как результат экшна
+     * в дальнейшем (например, для передачи его как ответ ajax-запросу при работе
+     * экшна как ajax).
      */
     abstract public function succeed(array $post, array $files);
 
     /**
      * Is run third in case of the fail
+     * 
+     * @return array|null Данные, которые могут использоваться как результат экшна
+     * в дальнейшем (например, для передачи его как ответ ajax-запросу при работе
+     * экшна как ajax).
      */
-    public function fail(array $post, array $files) { }
+    public function fail(array $post, array $files) { return []; }
 
     /**
      * Возвращает адрес веб-страницы, на которую нужно перейти после успешного

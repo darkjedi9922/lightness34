@@ -40,6 +40,8 @@ class Action
         self::FILES => []
     ];
 
+    private $result = [];
+
     public static function fromState(
         ActionBody $body, 
         array $post,
@@ -128,15 +130,15 @@ class Action
             $this->data[self::FILES]
         );
         if (!$this->hasErrors()) {
-            $this->body->succeed(
+            $this->result = $this->body->succeed(
                 $this->data[self::POST],
                 $this->data[self::FILES]
-            );
+            ) ?? [];
         } else {
-            $this->body->fail(
+            $this->result = $this->body->fail(
                 $this->data[self::POST],
                 $this->data[self::FILES]
-            );
+            ) ?? [];
         }
     }
 
@@ -157,6 +159,11 @@ class Action
     public function hasErrors(): bool
     {
         return !empty($this->errors);
+    }
+
+    public function getResult(): array
+    {
+        return $this->result;
     }
 
     /**

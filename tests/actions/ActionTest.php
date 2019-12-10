@@ -3,8 +3,10 @@
 use PHPUnit\Framework\TestCase;
 use tests\engine\UserDeleteAction;
 use tests\examples\actions\GetListActionExample;
-use frame\errors\HttpError;
 use tests\examples\actions\PostListActionExample;
+use tests\actions\examples\AlwaysSucceedActionExample;
+use tests\actions\examples\AlwaysFailActionExample;
+use frame\errors\HttpError;
 use frame\actions\ActionRouter;
 use frame\actions\Action;
 
@@ -73,5 +75,25 @@ class ActionTest extends TestCase
         
         $value = $action->getData('post', 'sum');
         $this->assertIsInt($value);
+    }
+
+    public function testNoExecutedActionHasEmptyResult()
+    {
+        $action = new Action(new AlwaysSucceedActionExample);
+        $this->assertEmpty($action->getResult());
+    }
+
+    public function testResultOfTheSuccessIsSavedInTheActionResult()
+    {
+        $action = new Action(new AlwaysSucceedActionExample);
+        $action->exec();
+        $this->assertEquals(['resultAnswer' => 42], $action->getResult());
+    }
+
+    public function testResultOfFailIsSavedInTheActionResult()
+    {
+        $action = new Action(new AlwaysFailActionExample);
+        $action->exec();
+        $this->assertEquals(['doctor' => 'exterminate!'], $action->getResult());
     }
 }
