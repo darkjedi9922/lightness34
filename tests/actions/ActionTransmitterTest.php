@@ -6,6 +6,7 @@ use frame\actions\ActionTransmitter;
 use frame\actions\Action;
 use tests\examples\actions\PostListActionExample;
 use tests\actions\examples\PasswordActionExample;
+use tests\actions\examples\AlwaysSucceedActionExample;
 
 /**
  * @runTestsInSeparateProcesses
@@ -55,5 +56,17 @@ class ActionTransmitterTest extends TestCase
         $destAction = $transmitter->load(PasswordActionExample::class);
         $this->assertEquals('Admin', $destAction->getData('post', 'login'));
         $this->assertNull($destAction->getData('post', 'password'));
+    }
+
+    public function testSavesAndLoadsTheActionResult()
+    {
+        $srcAction = new Action(new AlwaysSucceedActionExample);
+        $srcAction->exec();
+
+        $transmitter = new ActionTransmitter;
+        $transmitter->save($srcAction);
+
+        $destAction = $transmitter->load(AlwaysSucceedActionExample::class);
+        $this->assertEquals(['resultAnswer' => 42], $destAction->getResult());
     }
 }

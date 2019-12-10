@@ -23,7 +23,8 @@ class ActionTransmitter
         $idName = get_class($action->getBody()) . '_' . $action->getId();
         $this->sessions->setData($idName, serialize([
             $this->assemblePostToSave($action),
-            $action->getErrors()
+            $action->getErrors(),
+            $action->getResult()
         ]));
     }
 
@@ -35,8 +36,8 @@ class ActionTransmitter
     {
         $idName = $class . '_' . $id;
         if (!$this->sessions->isSetData($idName)) return null;
-        list($post, $errors) = unserialize($this->sessions->getData($idName));
-        $action = Action::fromState(new $class, $post, $errors);
+        list($post, $errors, $result) = unserialize($this->sessions->$idName);
+        $action = Action::fromState(new $class, $post, $errors, $result);
         $this->sessions->removeData($idName);
         return $action;
     }

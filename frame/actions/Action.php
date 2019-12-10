@@ -45,11 +45,13 @@ class Action
     public static function fromState(
         ActionBody $body, 
         array $post,
-        array $errors
+        array $errors,
+        array $result
     ): Action {
         $action = new Action($body);
         $action->data[self::POST] = $post;
         $action->errors = $errors;
+        $action->result = $result;
         return $action;
     }
 
