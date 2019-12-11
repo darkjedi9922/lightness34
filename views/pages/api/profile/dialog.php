@@ -7,6 +7,8 @@ use engine\messages\Message;
 use engine\users\cash\user_me;
 use engine\users\Group;
 use engine\users\User;
+use frame\actions\ViewAction;
+use engine\messages\actions\AddMessage;
 
 $me = user_me::get();
 
@@ -18,19 +20,22 @@ $who = User::selectIdentity($withWhoId);
 Init::require($who !== null);
 
 $page = pagenumber::get();
-$result = [];
+$send = new ViewAction(AddMessage::class, ['to_uid' => $withWhoId]);
 
-$result['users'][$me->id] = [
-    'login' => $me->login,
-    'avatarUrl' => '/' . $me->getAvatarUrl()
+$result = [
+    'users' => [
+        $me->id => [
+            'login' => $me->login,
+            'avatarUrl' => '/' . $me->getAvatarUrl()
+        ],
+        $who->id => [
+            'login' => $who->login,
+            'avatarUrl' => '/' . $who->getAvatarUrl()
+        ],
+    ],
+    'list' => [],
+    'addMessageUrl' => $send->getUrl()
 ];
-
-$result['users'][$who->id] = [
-    'login' => $who->login,
-    'avatarUrl' => '/' . $who->getAvatarUrl()
-];
-
-$result['list'] = [];
 
 $list = new MessagePagedList($page, $me->id, $withWhoId);
 foreach ($list as $message) {

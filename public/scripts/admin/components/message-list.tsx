@@ -20,6 +20,15 @@ interface User {
 interface APIListResult {
     users: { [id: number]: User },
     list: Message[],
+    addMessageUrl: string;
+}
+
+interface APINewMessageResult {
+    errors: Array<number>,
+    result: {
+        id: number,
+        date: string
+    }
 }
 
 interface MessageListState {
@@ -31,6 +40,7 @@ interface MessageListState {
 class MessageList extends React.Component<{}, MessageListState> {
     private withWhoId: number;
     private textAreaRef = React.createRef<StretchTextarea>();
+    private addMessageUrl: string;
     
     public constructor(props) {
         super(props);
@@ -41,6 +51,7 @@ class MessageList extends React.Component<{}, MessageListState> {
             loadedPages: 0
         };
 
+        this.handleSendClick = this.handleSendClick.bind(this);
     }
 
     public componentDidMount() {
@@ -73,15 +84,15 @@ class MessageList extends React.Component<{}, MessageListState> {
         return (
         <div className="content__column">
             <div className="box">
-                <form action="" className="box-form">
+                <div className="box-form">
                     <span className="box-form__title">Новое сообщение</span>
                     <StretchTextarea 
                         ref={this.textAreaRef} 
                         placeholder="Текст сообщения"
                         className="box-form__textarea"
                     ></StretchTextarea>
-                    <button className="box-form__button">Отправить</button>
-                </form>
+                    <button className="box-form__button" onClick={this.handleSendClick}>Отправить</button>
+                </div>
             </div>
             {this.state.loadedPages > 0 && 
                 <div className="box">
@@ -127,13 +138,42 @@ class MessageList extends React.Component<{}, MessageListState> {
         </div>);
     }
 
+    private handleSendClick(event: React.MouseEvent) {
+        let text = this.textAreaRef.current.getText();
+        console.log(text);
+        if (text.length === 0) return;
 
+        $.ajax({
+            url: this.addMessageUrl,
+            method: "post",
+            data: { text: text },
+            success: (data) => {
+                console.log(data);
+                const result: APINewMessageResult = JSON.parse(data);
+                this.setState((state) => ({
+                    list: [
+                        {
+                            id: result.result.id,
+                            from_id: this.getMyId(),
+                            to_id: this.withWhoId,
+                            date: result.result.date,
+                            readed: false,
+                            text: text
+                        },
+                        ...state.list
+                    ]
+                }));
+                this.textAreaRef.current.empty();
+            }
+        });
+    }
 
     private loadDialogMessages(page: number) {
         $.ajax({
             url: '/api/profile/dialog?withId=' + this.withWhoId + '&p=' + page,
             success: (data: string) => {
                 const result: APIListResult = JSON.parse(data);
+                this.addMessageUrl = result.addMessageUrl;
                 this.setState((state) => ({
                     users: result.users,
                     list: result.list,
@@ -141,6 +181,15 @@ class MessageList extends React.Component<{}, MessageListState> {
                 }));
            }
         });
+    }
+
+    private getMyId(): number {
+        for (const id in this.state.users) {
+            if (this.state.users.hasOwnProperty(id)) {
+                const idNumber = id as unknown as number;
+                if (idNumber != this.withWhoId) return idNumber;
+            }
+        }
     }
 }
 

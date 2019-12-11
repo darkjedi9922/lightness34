@@ -17,7 +17,13 @@ class StretchTextarea extends React.Component<StretchTextareaProps> {
     }
 
     public getText(): string {
-        return this.rootRef.current.innerText;
+        return this.textAreaIsEmpty ? '' : this.rootRef.current.innerText;
+    }
+
+    public empty(): void {
+        this.rootRef.current.textContent = this.props.placeholder || '';
+        this.rootRef.current.setAttribute('data-placeholdered', '');
+        this.textAreaIsEmpty = true;
     }
 
     public render(): React.ReactNode {
@@ -43,7 +49,7 @@ class StretchTextarea extends React.Component<StretchTextareaProps> {
     private handleTextAreaBlur(event: React.FocusEvent<HTMLDivElement>) {
         if (event.target.textContent === "") {
             this.textAreaIsEmpty = true;
-            event.target.textContent = "Текст сообщения";
+            event.target.textContent = this.props.placeholder || '';
             event.target.setAttribute('data-placeholdered', '');
         } else {
             this.textAreaIsEmpty = false;
