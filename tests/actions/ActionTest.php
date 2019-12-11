@@ -2,8 +2,8 @@
 
 use PHPUnit\Framework\TestCase;
 use tests\engine\UserDeleteAction;
-use tests\examples\actions\GetListActionExample;
-use tests\examples\actions\PostListActionExample;
+use tests\actions\examples\GetListActionExample;
+use tests\actions\examples\PostListActionExample;
 use tests\actions\examples\AlwaysSucceedActionExample;
 use tests\actions\examples\AlwaysFailActionExample;
 use frame\errors\HttpError;

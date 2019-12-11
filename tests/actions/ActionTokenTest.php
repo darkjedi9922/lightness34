@@ -5,7 +5,7 @@ use frame\actions\Action;
 use frame\errors\HttpError;
 use frame\actions\ActionRouter;
 use frame\actions\ActionToken;
-use tests\examples\actions\EmptyActionExample;
+use tests\actions\examples\EmptyActionExample;
 
 /**
  * @runTestsInSeparateProcesses

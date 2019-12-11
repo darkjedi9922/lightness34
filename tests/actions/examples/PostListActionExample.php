@@ -1,9 +1,16 @@
-<?php namespace tests\examples\actions;
+<?php namespace tests\actions\examples;
 
 use frame\actions\ActionBody;
 
-class EmptyActionExample extends ActionBody
+class PostListActionExample extends ActionBody
 {
+    public function listPost(): array
+    {
+        return [
+            'sum' => [self::POST_INT, 'Some integer arg']
+        ];
+    }
+
     public function succeed(array $post, array $files)
     {
         // Here is nothing to do.

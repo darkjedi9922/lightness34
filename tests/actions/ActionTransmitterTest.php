@@ -1,10 +1,10 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use tests\actions\examples\ValidatedActionExample;
 use frame\actions\ActionTransmitter;
 use frame\actions\Action;
-use tests\examples\actions\PostListActionExample;
+use tests\actions\examples\ValidatedActionExample;
+use tests\actions\examples\PostListActionExample;
 use tests\actions\examples\PasswordActionExample;
 use tests\actions\examples\AlwaysSucceedActionExample;
 

@@ -1,13 +1,14 @@
-<?php namespace tests\examples\actions;
+<?php namespace tests\actions\examples;
 
 use frame\actions\ActionBody;
 
-class PostListActionExample extends ActionBody
+class GetListActionExample extends ActionBody
 {
-    public function listPost(): array
+    public function listGet(): array
     {
         return [
-            'sum' => [self::POST_INT, 'Some integer arg']
+            'name' => [self::GET_STRING, 'This is a description of the get arg'],
+            'amount' => [self::GET_INT, 'Some integer arg']
         ];
     }
 
