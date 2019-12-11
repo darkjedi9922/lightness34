@@ -2,13 +2,13 @@
 
 use frame\tools\FileReadingTracker;
 use engine\articles\Article;
-use engine\messages\Dialog;
 use engine\users\cash\my_group;
 use engine\users\cash\user_me;
+use engine\messages\Message;
 
 $me = user_me::get();
 $group = my_group::get();
-$unreadedDialogs = Dialog::countUnreaded($me->id);
+$unreadedMessages = Message::countUnreaded($me->id);
 $unreadedArticles = Article::countUnreaded($me->id);
 $logTracker = new FileReadingTracker('log.txt', $me->id);
 $logUnreadedLines = $logTracker->countNewLines();
@@ -28,10 +28,12 @@ $logUnreadedLines = $logTracker->countNewLines();
     </div>
     <?php if ($group->id !== $group::GUEST_ID) : ?>
         <div class="mini-profile">
-            <?php if ($unreadedDialogs === 0) : ?>
+            <?php if ($unreadedMessages === 0) : ?>
                 <a class="messages" href="/admin/profile/dialogs"><i class="fontello icon-email"></i></a>
             <?php else : ?>
-                <a class="messages new" href="/admin/profile/dialogs"><i class="fontello icon-email"></i><span class="amount"> <?= $unreadedDialogs ?></span></a>
+                <a class="messages new" href="/admin/profile/dialogs"
+                    ><i class="fontello icon-email"></i><span class="amount"
+                    > <?= $unreadedMessages ?></span></a>
             <?php endif ?>
             <img class="avatar" src='/<?= $me->getAvatarUrl() ?>'>
             <a class="login" href='/admin/users/profile/<?= $me->login ?>'><?= $me->login ?></a>
