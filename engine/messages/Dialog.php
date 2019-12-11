@@ -1,6 +1,7 @@
 <?php namespace engine\messages;
 
 use frame\cash\database;
+use frame\database\Records;
 
 /**
  * Диалог идентифицируется двумя id участников диалога.
@@ -41,5 +42,13 @@ class Dialog
                 AND from_id = {$this->getWhoId($userId)} 
                 AND readed = 0"
         )->readScalar();
+    }
+
+    public function setReadedBy(int $userId)
+    {
+        Records::select('messages', [
+            'from_id' => $this->getWhoId($userId),
+            'to_id' => $userId
+        ])->update(['readed' => true]);
     }
 }

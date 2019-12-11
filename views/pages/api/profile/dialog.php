@@ -9,6 +9,7 @@ use engine\users\Group;
 use engine\users\User;
 use frame\actions\ViewAction;
 use engine\messages\actions\AddMessage;
+use engine\messages\Dialog;
 
 $me = user_me::get();
 
@@ -38,6 +39,7 @@ $result = [
 ];
 
 $list = new MessagePagedList($page, $me->id, $withWhoId);
+$anyMessage = null;
 foreach ($list as $message) {
     /** @var Message $message */
     $result['list'][] = [
@@ -48,7 +50,11 @@ foreach ($list as $message) {
         'readed' => (bool) $message->readed,
         'text' => $message->loadText()
     ];
+    $anyMessage = $message;
 }
+
+$dialog = new Dialog($anyMessage);
+$dialog->setReadedBy($me->id);
 
 $self->setLayout(null);
 echo json_encode($result);
