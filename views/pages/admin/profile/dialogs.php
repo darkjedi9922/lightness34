@@ -45,7 +45,7 @@ $self->setLayout('admin');
         whoAvatar: '/<?= $who->getAvatarUrl() ?>',
         whoLogin: '<?= $who->login ?>',
         lastMessage: {
-            text: '<?= shorten($last->loadText(), 80, '...') ?>',
+            text: '<?= str_replace("\n", '\n', shorten($last->loadText(), 80, '...')) ?>',
             date: '<?= date('d.m.Y H:i', $last->date) ?>'
         },
     }<?php endforeach ?>],

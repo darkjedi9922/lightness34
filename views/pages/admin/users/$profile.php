@@ -29,13 +29,13 @@ $deleteAvatar = new ViewAction(DeleteAvatarAction::class, ['uid' => $profile->id
 ?>
 
 <div class="box">
-    <h3><a href="/admin/users?p=<?= $prevPagenumber ?>">Пользователи</a></h3><br>
+    <h3><a class="link" href="/admin/users?p=<?= $prevPagenumber ?>">Пользователи</a></h3><br>
     <div style="float:left;margin-right:1%;max-width:40%">
         <img src="/<?= $profile->getAvatarUrl() ?>" style="max-width:100%">
-        <?php if ($rights->canOneOf(['edit-all' => $profile, 'edit-own' => $profile])): 
-        ?>
-            <?php if ($profile->avatar): ?><br><a href="<?= $deleteAvatar->getUrl() ?>">Удалить аватар</a><?php endif ?>
-            <br><a href="/admin/users/edit/profile?id=<?= $profile->id ?>">Редактировать профиль</a>
+        <?php if ($rights->canOneOf(['edit-all' => $profile, 'edit-own' => $profile])) :
+            ?>
+            <?php if ($profile->avatar) : ?><br><a class="link" href="<?= $deleteAvatar->getUrl() ?>">Удалить аватар</a><?php endif ?>
+            <br><a class="link" href="/admin/users/edit/profile?id=<?= $profile->id ?>">Редактировать профиль</a>
         <?php endif ?>
     </div>
     <div>
@@ -50,8 +50,8 @@ $deleteAvatar = new ViewAction(DeleteAvatarAction::class, ['uid' => $profile->id
         <?php else : ?>Никогда<?php endif ?>
         <br>Последнее устройство: <?= $profile->last_user_agent ?>
         <br />Группа: <?= $group->name ?>
-        <?php if ((int) $me->group_id === Group::ROOT_ID && $group->id !== Group::ROOT_ID): ?>
-            <a href="/admin/users/change/group?id=<?= $profile->id ?>">[Изменить]</a>
+        <?php if ((int)$me->group_id === Group::ROOT_ID && $group->id !== Group::ROOT_ID) : ?>
+            <a class="link" href="/admin/users/change/group?id=<?= $profile->id ?>">[Изменить]</a>
         <?php endif ?>
         <br />Статус: <?php if ($profile->online === '1'): ?><span style="color:green">Онлайн</span>
         <?php else: ?><span style="color:red">Оффлайн</span><?php endif ?>

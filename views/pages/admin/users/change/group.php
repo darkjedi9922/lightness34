@@ -26,7 +26,7 @@ $self->setLayout('admin');
 
 <div class="box">
     <form action="<?= $action->getUrl() ?>" method="post">
-        Группа пользователя <a href="/admin/users/profile/<?= $user->login ?>"><?= $user->login ?></a>
+        Группа пользователя <a class="link" href="/admin/users/profile/<?= $user->login ?>"><?= $user->login ?></a>
         <br><br />
         <div class="radio-classic">
             <?php foreach ($groups as $group) :
