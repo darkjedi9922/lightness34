@@ -55,8 +55,6 @@ class MessageList extends React.Component<{}, MessageListState> {
     }
 
     public componentDidMount() {
-        const rootEl = $(ReactDOM.findDOMNode(this) as HTMLDivElement);
-        rootEl.css({ 'max-width': rootEl.css('width') })
         this.close();
     }
 
@@ -82,7 +80,7 @@ class MessageList extends React.Component<{}, MessageListState> {
 
     public render(): React.ReactNode {
         return (
-        <div className="content__column">
+        <div className="content__column dialog-list__messages">
             <div className="box">
                 <div className="box-form">
                     <span className="box-form__title">Новое сообщение</span>

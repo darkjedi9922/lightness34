@@ -24,17 +24,15 @@
     &__date {
         font-weight: bold;
         margin-right: $spacing;
+        white-space: nowrap;
     }
 
     &__text {
-        font-size: 1.05rem !important;
-        color: black !important;
-        text-decoration: none !important;
-        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif !important;
-
-        &:hover {
-            text-decoration: underline !important;
-        }
+        font-size: 1.05rem;
+        color: black;
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        white-space: nowrap;
+        overflow: hidden;
     }
 
     &__status {

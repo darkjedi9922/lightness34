@@ -55,4 +55,4 @@ $self->setLayout('admin');
         <?php else: ?>''<?php endif ?>
 };</script>
 
-<div id="dialog-list"></div>
+<div id="dialog-list" class="dialog-list"></div>

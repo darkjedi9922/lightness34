@@ -43,7 +43,7 @@ class DialogList extends React.Component<DialogListProps> {
     public render(): React.ReactNode {
         return (
         <div className="content__row">
-            <div className="box">
+            <div className="box dialog-list__dialogs">
                 {this.props.countAll === 0 &&
                     <span className="warning">Сообщений пока нет</span>
                 }
@@ -55,8 +55,7 @@ class DialogList extends React.Component<DialogListProps> {
                         >
                             <div className="dialog__header">
                                 <span className="dialog__date">{dialog.lastMessage.date}</span>
-                                <a href={"/admin/profile/dialog?with=" + dialog.whoId}
-                                    className="dialog__text">{dialog.lastMessage.text}</a>
+                                <span className="dialog__text">{dialog.lastMessage.text}</span>
                             </div>
                             <div className="dialog__info">
                                 <div className={"dialog__status" + 
