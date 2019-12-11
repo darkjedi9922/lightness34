@@ -7,28 +7,51 @@ use frame\actions\ActionRouter;
 use frame\actions\ActionTransmitter;
 use frame\route\Response;
 use frame\route\Router;
+use frame\route\Request;
 
 class ActionMacro extends Macro
 {
+    /** @var Action */
+    private $action;
+
     public function exec($action)
     {
         $router = new ActionRouter;
-        $action = $router->fromTriggerUrl(Core::$app->router->url);
-        $tokenizer = new ActionToken($action);
+        $this->action = $router->fromTriggerUrl(Core::$app->router->url);
+        $tokenizer = new ActionToken($this->action);
         $tokenizer->validate();
-        $action->exec();
+        $this->action->exec();
+        $this->result();
+    }
+    
+    private function result()
+    {
+        if (Request::isAjax()) $this->jsonify();
+        else $this->redirect();
+    }
 
-        $redirect = $this->getRedirect($action);
+    private function jsonify()
+    {
+        Response::setText(json_encode([
+            'errors' => $this->action->getErrors(),
+            'result' => $this->action->getResult()
+        ]));
+    }
+
+    private function redirect()
+    {
+        $redirect = $this->getRedirect();
         if ($redirect !== null) {
             $transmitter = new ActionTransmitter;
-            $transmitter->save($action);
+            $transmitter->save($this->action);
             Response::setUrl(Router::toUrlOf($redirect));
         }
     }
 
-    private function getRedirect(Action $action): ?string
+    private function getRedirect(): ?string
     {
-        if (!$action->hasErrors()) return $action->getBody()->getSuccessRedirect();
-        else return $action->getBody()->getFailRedirect();
+        $body = $this->action->getBody();
+        if (!$this->action->hasErrors()) return $body->getSuccessRedirect();
+        else return $body->getFailRedirect();
     }
 }
