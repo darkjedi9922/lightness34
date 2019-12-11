@@ -36,4 +36,9 @@ class Request
     {
         return isset($_SERVER['HTTP_REFERER']);
     }
+
+    public static function isAjax(): bool
+    {
+        return ($_SERVER['HTTP_X_REQUESTED_WITH'] ?? null) == 'XMLHttpRequest';
+    }
 }
