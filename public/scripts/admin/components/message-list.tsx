@@ -108,7 +108,9 @@ class MessageList extends React.Component<{}, MessageListState> {
                                                 <div className={"message__status" + (message.to_id === this.withWhoId ?
                                                     " message__status--active" : " message__status--new"
                                                 )}>
-                                                    <i className="message__status-icon fontello icon-ok"></i>
+                                                    <i className={"message__status-icon fontello " + (message.to_id === this.withWhoId ?
+                                                        " icon-ok" : " icon-email"
+                                                    )}></i>
                                                     <span className="message__status-text">{
                                                         message.to_id === this.withWhoId ? "Отправлено" : "Новое"
                                                     }</span>

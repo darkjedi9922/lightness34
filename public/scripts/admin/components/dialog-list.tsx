@@ -64,7 +64,11 @@ class DialogList extends React.Component<DialogListProps> {
                                     (dialog.activeCount != 0 ? " dialog__status--active" :
                                     ""))}
                                 >
-                                    <i className="dialog__status-icon fontello icon-ok"></i>
+                                    <i className={"dialog__status-icon fontello" + 
+                                        (dialog.newCount !== 0 ? " icon-email" : 
+                                        (dialog.activeCount != 0 ? " icon-ok" :
+                                        ""))}
+                                    ></i>
                                     <span className="dialog__status-text">
                                         {dialog.newCount !== 0 ? "Новых: " + dialog.newCount : 
                                             (dialog.activeCount != 0 ? "Непрочитанных: " + dialog.activeCount :
