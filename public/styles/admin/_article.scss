@@ -1,0 +1,79 @@
+.article {
+    $info-font-size: 1.1rem;
+    
+    padding: 2rem 1rem !important;
+
+    &__title {
+        color: black;
+        display: block;
+        font-family: $global-font;
+        font-size: 2rem;
+        font-weight: bold;
+        margin: auto;
+        margin-bottom: 2rem;
+        max-width: 50rem;
+        text-align: center;
+    }
+
+    &__container {
+        display: flex;
+        justify-content: space-around;
+    }
+
+    &__info {
+        display: inline-block;
+        margin: 0 1rem;
+    }
+
+    &__author {
+        align-items: center;
+        border-bottom: solid 1px $clr-grey;
+        display: flex;
+        padding-bottom: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    &__author-avatar {
+        margin-right: 0.5rem;
+        height: 3rem;
+    }
+
+    &__author-info {
+        align-items: flex-start;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+    }
+
+    &__author-login {
+        color: $clr-color;
+        font-family: $global-font;
+        font-size: $info-font-size;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    &__author-group {
+        color: black;
+        font-family: $global-font;
+        font-size: $info-font-size;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    &__date {
+        color: $clr-grey;
+        font-family: $global-font;
+        font-size: $info-font-size;
+        font-weight: bold;
+    }
+
+    &__content {
+        font-family: $global-font;
+        font-size: 1.3rem;
+        margin: 0 1rem;
+        min-width: 45rem;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
+}

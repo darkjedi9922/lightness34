@@ -14,6 +14,7 @@ $global-warning-color: #b3ab00;
 $global-font: "Greta Sans Light";
 $global-box-radius: 10px;
 
+@import 'admin/article';
 @import 'admin/box-form';
 @import 'admin/box';
 @import 'admin/breadcrumbs';
