@@ -8,6 +8,7 @@ $clr-color: #249dcd;
 $clr-box: #e4e4e4;
 $clr-hoverbox: #dcdcdc;
 $clr-grey: #939393;
+$global-background-color: #060517;
 $global-button-color: #1e4469;
 $global-warning-color: #b3ab00;
 $global-font: "Greta Sans Light";
@@ -26,6 +27,17 @@ $global-box-radius: 10px;
 @import 'admin/message';
 @import 'admin/notice';
 @import 'admin/pager';
+
+html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    background: $global-background-color;
+}
 
 button, .button, .button-hovered {
     // background: $global-button-color;
