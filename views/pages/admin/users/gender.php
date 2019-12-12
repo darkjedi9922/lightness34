@@ -18,8 +18,12 @@ $edit = new ViewAction(EditGender::class, ['id' => $id]);
 $self->setLayout('admin');
 ?>
 
+<div class="breadcrumbs">
+    <a href="/admin/users/genders" class="breadcrumbs__item breadcrumbs__item--link">Пол</a>
+    <span class="breadcrumbs__divisor"></span>
+    <span class="breadcrumbs__item breadcrumbs__item--current">ID <?= $gender->id ?></span>
+</div>
 <div class="box">
-    <h3><a href="/admin/users/genders">Пол</a> - ID: <?= $gender->id ?></h3><br>
     <form action="<?= $edit->getUrl() ?>" method="post">
         <table>
             <tr>

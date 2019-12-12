@@ -20,8 +20,12 @@ Init::require($group !== null);
 $action = new ViewAction(EditUserGroupAction::class, ['id' => $id]);
 ?>
 
+<div class="breadcrumbs">
+    <a href="/admin/users/groups" class="breadcrumbs__item breadcrumbs__item--link">Группы</a>
+    <span class="breadcrumbs__divisor"></span>
+    <span class="breadcrumbs__item breadcrumbs__item--current">ID <?= $group->id ?></span>
+</div>
 <div class="box">
-    <h3><a href="/admin/users/groups">Группы</a> - ID: <?= $group->id ?></h3><br>
     <form action="<?= $action->getUrl() ?>" method="post">
         <table>
             <tr>

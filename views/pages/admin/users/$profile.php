@@ -28,8 +28,13 @@ $me = user_me::get();
 $deleteAvatar = new ViewAction(DeleteAvatarAction::class, ['uid' => $profile->id]);
 ?>
 
+<div class="breadcrumbs">
+    <a href="/admin/users?p=<?= $prevPagenumber ?>" 
+        class="breadcrumbs__item breadcrumbs__item--link">Пользователи</a>
+    <span class="breadcrumbs__divisor"></span>
+    <span class="breadcrumbs__item breadcrumbs__item--current">ID <?= $profile->id ?></span>
+</div>
 <div class="box">
-    <h3><a class="link" href="/admin/users?p=<?= $prevPagenumber ?>">Пользователи</a></h3><br>
     <div style="float:left;margin-right:1%;max-width:40%">
         <img src="/<?= $profile->getAvatarUrl() ?>" style="max-width:100%">
         <?php if ($rights->canOneOf(['edit-all' => $profile, 'edit-own' => $profile])) :

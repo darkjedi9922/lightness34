@@ -26,8 +26,12 @@ $action = new ViewAction(EditRightsAction::class, ['id' => $id]);
 $me = user_me::get();
 ?>
 
+<div class="breadcrumbs">
+    <a href="/admin/users/groups" class="breadcrumbs__item breadcrumbs__item--link">Группы</a>
+    <span class="breadcrumbs__divisor"></span>
+    <span class="breadcrumbs__item breadcrumbs__item--current"><?= $group->name ?></span>
+</div>
 <div class="box">
-    <h3><a class="link" href="/admin/users/groups">Группы</a>: <?= $group->name ?></h3><br>
     <form action="<?= $action->getUrl() ?>" method="post">
         <div class="checkbox">
             <?php foreach ($modules as $module):

@@ -24,10 +24,16 @@ $action = new ViewAction(ChangeUserGroupAction::class, ['uid' => $id]);
 $self->setLayout('admin');
 ?>
 
+<div class="breadcrumbs">
+    <a href="/admin/users" class="breadcrumbs__item breadcrumbs__item--link">Пользователи</a>
+    <span class="breadcrumbs__divisor"></span>
+    <a href="/admin/users/profile/<?= $user->login ?>" 
+        class="breadcrumbs__item breadcrumbs__item--link"><?= $user->login ?></a>
+    <span class="breadcrumbs__divisor"></span>
+    <span class="breadcrumbs__item breadcrumbs__item--current">Изменить группу</span>
+</div>
 <div class="box">
     <form action="<?= $action->getUrl() ?>" method="post">
-        Группа пользователя <a class="link" href="/admin/users/profile/<?= $user->login ?>"><?= $user->login ?></a>
-        <br><br />
         <div class="radio-classic">
             <?php foreach ($groups as $group) :
                 if (

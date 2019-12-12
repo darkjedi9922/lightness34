@@ -1,0 +1,22 @@
+.breadcrumbs {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    font-family: $global-font;
+
+    &__item {
+        text-decoration: none;
+
+        &--link {
+            color: $clr-color;
+        }
+        &--current {
+            color: #fffffa;
+        }
+    }
+
+    &__divisor::after {
+        content: '/';
+        color: $clr-grey;
+        font-size: 1.25rem;
+    }
+}

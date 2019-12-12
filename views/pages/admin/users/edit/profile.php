@@ -21,13 +21,15 @@ $action = new ViewAction(ProfileEditAction::class, ['id' => $uid]);
 $config = config::get('users');
 ?>
 
+<div class="breadcrumbs">
+    <a href="/admin/users" class="breadcrumbs__item breadcrumbs__item--link">Пользователи</a>
+    <span class="breadcrumbs__divisor"></span>
+    <a href="/admin/users/profile/<?= $user->login ?>" 
+        class="breadcrumbs__item breadcrumbs__item--link"><?= $user->login ?></a>
+    <span class="breadcrumbs__divisor"></span>
+    <span class="breadcrumbs__item breadcrumbs__item--current">Редактировать профиль</span>
+</div>
 <div class="box">
-    <h3>
-        <a href="/admin/users">Пользователи</a>
-        -
-        <a href="/admin/users/profile/<?= $user->login ?>"><?= $user->login ?></a>
-    </h3>
-    <br>
     <form action="<?= $action->getUrl() ?>" class="registration" method="post" enctype="multipart/form-data">
         <table>
             <tr>
