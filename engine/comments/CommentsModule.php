@@ -7,6 +7,6 @@ class CommentsModule extends Module
 {
     public function createRightsDescription(): ?RightsDesc
     {
-        return null;   
+        return new CommentsRightsDesc;
     }
 }

@@ -1,0 +1,10 @@
+.comment {
+    &__content {
+        font-family: $global-font;
+        font-size: 1.2rem;
+    }
+
+    &:not(:last-child) {
+        margin-bottom: 1rem;
+    }
+}

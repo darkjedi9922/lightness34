@@ -20,4 +20,12 @@
             margin-left: 1rem;
         }
     }
+
+    &__title {
+        color: white;
+        display: block;
+        font-family: $global-font;
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
 }
