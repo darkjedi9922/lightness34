@@ -107,7 +107,7 @@ class View
     /**
      * Аналогично show(), только вывод в строку.
      */
-    public function getHtml(): string
+    public final function getHtml(): string
     {
         ob_start();
         $this->show();
