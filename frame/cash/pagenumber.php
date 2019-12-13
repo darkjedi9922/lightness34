@@ -14,7 +14,7 @@ class pagenumber extends Cash
      */
     public static function get(bool $previous = false): int
     {
-        return self::cash('p', function() use ($previous) {
+        return self::cash("p$previous", function() use ($previous) {
             $router = $previous ? prev_router::get() : Core::$app->router;
             if (!$router) return 1;
             $p = $router->getArg('p');
