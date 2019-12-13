@@ -118,6 +118,15 @@ class Core
         return $this->modules;
     }
 
+    public function findModule(int $id): ?Module
+    {
+        foreach ($this->modules as $module) {
+            /** @var Module $module */
+            if ($module->getId() === $id) return $module;
+        }
+        return null;
+    }
+
     /**
      * @param string $name Ключ - команда (GET-параметр) макроса
      * @param string $macro Имя класса действия макроса
