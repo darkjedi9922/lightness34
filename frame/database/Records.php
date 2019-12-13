@@ -9,20 +9,21 @@ use function lightlib\array_assemble;
  */
 class Records
 {
-    /**
-     * @var string Имя таблицы
-     */
-    public $table;
+    /** @var string Имя таблицы */
+    private $table;
 
     /**
-     * @var array Ассоциативный массив, где ключи - имена полей, а значения - значения этих полей
+     * @var array Ассоциативный массив, где ключи - имена полей, 
+     * а значения - значения этих полей
      */
-    public $where;
+    private $where = [];
 
-    /**
-     * @var Database
-     */
-    public $db;
+    private $orderBy = [];
+
+    private $limit = [null, null];
+
+    /** @var Database */
+    private $db;
 
     /**
      * Создает экземпляр класса
@@ -46,39 +47,62 @@ class Records
     private function __construct() {}
 
     /**
-     * Возвращает количество записей заданного поля
-     * @param string $field Имя поля
-     * @return int
+     * @param array $fields ['field' => 'ASC'|'DESC']
      */
-    public function count($field)
+    public function order(array $fields): self
     {
-        return (int) $this->db->query('SELECT COUNT(' . $field . ')' . ' FROM ' . 
-            $this->table . $this->getWhere())->readScalar();
+        $this->orderBy = $fields;
+        return $this;
+    }
+
+    public function limit(int $limit): self
+    {
+        $this->limit = [null, $limit];
+        return $this;
+    }
+
+    public function range(int $from, int $limit): self
+    {
+        $this->limit = [$from, $limit];
+        return $this;
+    }
+
+    /**
+     * Возвращает количество записей заданного поля
+     */
+    public function count(string $field): int
+    {
+        $from = $this->table;
+        $where = $this->assembleWhere();
+        return (int) $this->db->query("SELECT COUNT($field) FROM $from $where")
+            ->readScalar();
     }
 
     /**
      * Загружает заданные поля из записей. Если поля не указаны, будут загружены все.
-     * @param array $fields Поля
-     * @return QueryResult
      */
-    public function load($fields = [])
+    public function load(array $fields = []): QueryResult
     {
         $fields = empty($fields) ? '*' : implode(', ', $fields);
-        return $this->db->query(
-            'SELECT '.$fields.' FROM ' . $this->table . $this->getWhere());
+        $from = $this->table;
+        $where = $this->assembleWhere();
+        $orderBy = $this->assembleOrderBy();
+        $limit = $this->assembleLimit();
+        return $this->db->query("SELECT $fields FROM $from $where $orderBy $limit");
     }
 
     /**
      * Изменяет заданные данные в записях
-     * @param array $data Ассоциативный массив, где ключи - имена полей, которые нужно изменить,
-     * а значения - новые значения этих полей
+     * @param array $data Ассоциативный массив, где ключи - имена полей, которые 
+     * нужно изменить, а значения - новые значения этих полей
      */
-    public function update($data)
+    public function update(array $data)
     {
         if (!empty($data)) {
+            $what = $this->table;
             $set = array_assemble($this->addAssocQuotes($data), ', ', ' = ');
-            $this->db->query(
-                'UPDATE ' . $this->table . ' SET ' . $set . $this->getWhere());
+            $where = $this->assembleWhere();
+            $this->db->query("UPDATE $what SET $set $where");
         }
     }
 
@@ -89,13 +113,13 @@ class Records
      * @see $table
      * @see $where
      */
-    public function insert(array $values = [])
+    public function insert(array $values = []): int
     {
+        $into = $this->table;
         $set = array_merge($this->where, $values);
         $keys = implode(', ', array_keys($set));
         $values = implode(', ', $this->addIndexQuotes(array_values($set)));
-        $this->db->query('INSERT INTO ' . $this->table .
-            ' (' . $keys . ') VALUES (' . $values . ')');
+        $this->db->query("INSERT INTO $into ($keys) VALUES ($values)");
         return $this->db->getLastInsertedId();
     }
 
@@ -104,27 +128,44 @@ class Records
      */
     public function delete()
     {
-        $this->db->query('DELETE FROM ' . $this->table . $this->getWhere());
+        $from = $this->table;
+        $where = $this->assembleWhere();
+        $this->db->query("DELETE FROM $from $where");
     }
 
     /**
      * Формирует часть WHERE в SQL запросе
-     * @return string
      */
-    private function getWhere()
+    private function assembleWhere(): string
     {
         if (empty($this->where)) return '';
         $where = $this->addAssocQuotes($this->where);
-        return ' WHERE ' . array_assemble($where, ' AND ', ' = ');
+        return 'WHERE ' . array_assemble($where, ' AND ', ' = ');
+    }
+
+    private function assembleOrderBy(): string
+    {
+        if (empty($this->orderBy)) return '';
+        return 'ORDER BY ' . array_assemble($this->orderBy, ', ', ' ');
+    }
+
+    /**
+     * Формирует часть LIMIT в SQL запросе
+     */
+    private function assembleLimit(): string
+    {
+        list($from, $limit) = $this->limit;
+        if ($limit === null) return '';
+        if ($from === null) return "LIMIT $limit";
+        else return "LIMIT $from, $limit"; 
     }
 
     /**
      * Окружает каждое значение в индексном массиве кавычками. 
      * Они нужны для SQL запроса.
      * @param array $array Индексный массив
-     * @return array
      */
-    private function addIndexQuotes($array)
+    private function addIndexQuotes(array $array): array
     {
         for ($i = 0, $c = count($array); $i < $c; ++$i) 
             $array[$i] = '"' . $array[$i] . '"';
@@ -135,9 +176,8 @@ class Records
      * Окружает каждое значение в ассоциативном массиве кавычками. 
      * Они нужны для SQL запроса.
      * @param array $array Ассоциативный массив
-     * @return array
      */
-    private function addAssocQuotes($array)
+    private function addAssocQuotes(array $array): array
     {
         foreach ($array as $key => $value) 
             $array[$key] = '"' . $value . '"';

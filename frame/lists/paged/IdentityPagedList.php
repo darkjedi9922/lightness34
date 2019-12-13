@@ -1,8 +1,6 @@
 <?php namespace frame\lists\paged;
 
-use frame\cash\database;
 use frame\database\Records;
-use function lightlib\array_assemble;
 use frame\lists\iterators\IdentityIterator;
 
 abstract class IdentityPagedList extends PagedList
@@ -12,25 +10,19 @@ abstract class IdentityPagedList extends PagedList
 
     public function __construct(int $page)
     {
-        $whereFields = $this->getWhere();
+        $where = $this->getWhere();
 
         $table = $this->getIdentityClass()::getTable();
-        $countAll = Records::select($table, $whereFields)->count('id');
+        $countAll = Records::select($table, $where)->count('id');
         $pageLimit = $this->loadPageLimit();
 
         parent::__construct($page, $countAll, $pageLimit);
 
-        $orderFields = $this->getOrderFields();
-        $orderBy = !empty($orderFields) ? 
-            'ORDER BY ' . array_assemble($orderFields, ', ', ' ') : '';
-        
-        $where = !(empty($whereFields)) ?
-            'WHERE ' . array_assemble($whereFields, ' AND ', '=') : '';
+        $this->result = Records::select($table, $where)
+            ->order($this->getOrderFields())
+            ->range($this->getPager()->getStartMaterialIndex(), $pageLimit)
+            ->load();
 
-        $from = $this->getPager()->getStartMaterialIndex();
-        $this->result = database::get()->query(
-            "SELECT * FROM $table $where $orderBy LIMIT $from, $pageLimit"
-        );
         $this->iterator = new IdentityIterator(
             $this->result,
             $this->getIdentityClass()
