@@ -12,19 +12,24 @@ abstract class IdentityPagedList extends PagedList
 
     public function __construct(int $page)
     {
+        $whereFields = $this->getWhere();
+
         $table = $this->getIdentityClass()::getTable();
-        $countAll = Records::select($table)->count('id');
+        $countAll = Records::select($table, $whereFields)->count('id');
         $pageLimit = $this->loadPageLimit();
 
         parent::__construct($page, $countAll, $pageLimit);
 
-        $orderFields = static::getOrderFields();
+        $orderFields = $this->getOrderFields();
         $orderBy = !empty($orderFields) ? 
             'ORDER BY ' . array_assemble($orderFields, ', ', ' ') : '';
         
+        $where = !(empty($whereFields)) ?
+            'WHERE ' . array_assemble($whereFields, ' AND ', '=') : '';
+
         $from = $this->getPager()->getStartMaterialIndex();
         $this->result = database::get()->query(
-            "SELECT * FROM $table $orderBy LIMIT $from, $pageLimit"
+            "SELECT * FROM $table $where $orderBy LIMIT $from, $pageLimit"
         );
         $this->iterator = new IdentityIterator(
             $this->result,
@@ -39,6 +44,8 @@ abstract class IdentityPagedList extends PagedList
      * Если сортировать не нужно, вернуть пустой массив.
      */
     public function getOrderFields(): array { return []; }
+
+    public function getWhere(): array { return []; }
 
     public function countOnPage(): int
     {
