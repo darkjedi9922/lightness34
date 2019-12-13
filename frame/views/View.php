@@ -104,6 +104,16 @@ class View
         echo $this->getContent();
     }
 
+    /**
+     * Аналогично show(), только вывод в строку.
+     */
+    public function getHtml(): string
+    {
+        ob_start();
+        $this->show();
+        return ob_get_clean();
+    }
+
     public function setMeta(string $name, $value)
     {
         $this->meta[$name] = $value;
