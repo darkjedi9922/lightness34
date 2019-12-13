@@ -24,6 +24,7 @@ class Database
         $this->mysqli = new \mysqli($host, $login, $password, $database);
         $this->mysqli->query('SET NAMES UTF8'); // Фикс кодировки
         if ($this->mysqli->connect_errno) throw new \Exception($this->mysqli->connect_error);
+        $this->mysqli->options(MYSQLI_OPT_INT_AND_FLOAT_NATIVE, 1);
 	}	
 
     /**
