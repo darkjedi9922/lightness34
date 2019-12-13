@@ -11,8 +11,12 @@ $articles = new NewArticlePagedList($pagenumber);
 $self->setLayout('admin');
 ?>
 
+<div class="breadcrumbs">
+    <span class="breadcrumbs__item">Новое</a>
+    <span class="breadcrumbs__divisor"></span>
+    <span class="breadcrumbs__item breadcrumbs__item--current">Статьи</span>
+</div>
 <div class="box">
-    <h2>Новые статьи</h2>
     <?php if ($articles->countAll() == 0) : ?>Новых статей нет
     <?php else : ?>
         <table width="100%">

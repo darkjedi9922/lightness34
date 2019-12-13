@@ -14,8 +14,10 @@ $rights = my_rights::get('articles');
 $self->setLayout('admin');
 ?>
 
+<div class="breadcrumbs">
+    <span class="breadcrumbs__item breadcrumbs__item--current">Статьи</span>
+</div>
 <div class="box">
-    <h2>Все статьи</h2>
     <?php if ($articles->countOnPage() == 0) : ?>Статей нет
     <?php else : ?>
         <table width="100%">
