@@ -1,7 +1,10 @@
 .pager {
     // font-size: 1rem;
-    margin-top: 1rem;
     text-align: center;
+
+    &:not(:first-child) {
+        margin-top: 1rem;
+    }
 
     &__item {
         // background: $global-button-color;

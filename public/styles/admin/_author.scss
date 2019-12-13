@@ -1,0 +1,44 @@
+.author {
+    $info-font-size: 1.1rem;
+
+    &__data {
+        align-items: center;
+        display: flex;
+        margin-bottom: 1rem;
+    }
+
+    &__info {
+        align-items: flex-start;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+    }
+
+    &__avatar {
+        margin-right: 0.5rem;
+        height: 3rem;
+    }
+
+    &__login {
+        color: $clr-color;
+        font-family: $global-font;
+        font-size: $info-font-size;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    &__group {
+        color: black;
+        font-family: $global-font;
+        font-size: $info-font-size;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    &__date {
+        color: $clr-grey;
+        font-family: $global-font;
+        font-size: $info-font-size;
+        font-weight: bold;
+    }
+}

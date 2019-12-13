@@ -31,16 +31,15 @@ $article->setReaded(user_me::get());
 <div class="box article">
     <h2 class="article__title"><?= $article->title ?></h2>
     <div class="article__container">
-        <div class="article__info">
-            <div class="article__author">
-                <img src="/<?= $author->getAvatarUrl() ?>" class="article__author-avatar">
-                <div class="article__author-info">
-                    <a href="/admin/users/profile?login=<?= $author->login ?>"
-                        class="article__author-login"><?= $author->login ?></a>
-                    <span class="article__author-group"><?= $group->name ?></span>
+        <div class="author">
+            <div class="author__data">
+                <img src="/<?= $author->getAvatarUrl() ?>" class="author__avatar">
+                <div class="author__info">
+                    <a href="/admin/users/profile?login=<?= $author->login ?>" class="author__login"><?= $author->login ?></a>
+                    <span class="author__group"><?= $group->name ?></span>
                 </div>
             </div>
-            <span class="article__date"><?= date('d.m.Y', $article->date) ?></span>
+            <span class="author__date"><?= date('d.m.Y', $article->date) ?></span>
         </div>
         <p class="article__content"><?= $article->content ?></p>
     </div>

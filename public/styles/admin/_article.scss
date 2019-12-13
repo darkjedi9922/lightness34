@@ -27,9 +27,7 @@
 
     &__author {
         align-items: center;
-        border-bottom: solid 1px $clr-grey;
         display: flex;
-        padding-bottom: 1rem;
         margin-bottom: 1rem;
     }
 
@@ -71,8 +69,8 @@
     &__content {
         font-family: $global-font;
         font-size: 1.3rem;
+        flex-grow: 1;
         margin: 0 1rem;
-        min-width: 45rem;
         white-space: pre-wrap;
         word-wrap: break-word;
     }

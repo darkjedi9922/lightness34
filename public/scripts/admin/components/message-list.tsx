@@ -89,7 +89,10 @@ class MessageList extends React.Component<{}, MessageListState> {
                         placeholder="Текст сообщения"
                         className="box-form__textarea"
                     ></StretchTextarea>
-                    <button className="box-form__button" onClick={this.handleSendClick}>Отправить</button>
+                    <button className="box-form__button" onClick={this.handleSendClick}>
+                        Отправить
+                        <i className="box-form__button-icon fontello icon-ok"></i>
+                    </button>
                 </div>
             </div>
             {this.state.loadedPages > 0 && 
