@@ -3,13 +3,13 @@
     var uls = menu.getElementsByTagName('ul');
     for (var i = 0, c = uls.length; i < c; ++i) {
         uls[i].style.height = 0;
-        var triangle = uls[i].parentElement.firstChild.lastChild;
+        var triangle = uls[i].parentElement.firstElementChild.lastElementChild;
         setRotateValue(triangle, -90);
 
         var a = uls[i].parentElement.firstElementChild;
         a.onclick = function() {
             var ul = this.parentElement.lastElementChild;
-            var triangle = this.parentElement.firstChild.lastElementChild;
+            var triangle = this.parentElement.firstElementChild.lastElementChild;
             if (ul.clientHeight === 0) {
                 animateRotate(triangle, 0);
                 animateShow(ul);
