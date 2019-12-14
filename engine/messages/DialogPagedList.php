@@ -14,9 +14,10 @@ class DialogPagedList extends PagedList
         $me = user_me::get();
 
         $countAll = (int) database::get()->query(
-            "SELECT COUNT(id) FROM messages
-            WHERE from_id = {$me->id} OR to_id = {$me->id}
-            GROUP BY from_id, to_id"
+            "SELECT COUNT(id) FROM (
+                SELECT id FROM messages
+                WHERE from_id = {$me->id} OR to_id = {$me->id}
+                GROUP BY from_id OR to_id) AS dialogs"
         )->readScalar();
 
         $pageLimit = config::get('messages')->{'dialogs.list.amount'};

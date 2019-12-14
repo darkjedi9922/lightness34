@@ -24,21 +24,18 @@ interface DialogListProps {
 }
 
 class DialogList extends React.Component<DialogListProps> {
-    private messageListRef: React.RefObject<MessageList>;
-    private pagerRef: React.RefObject<HTMLDivElement>;
+    private messageListRef = React.createRef<MessageList>();
+    private dialogsRef = React.createRef<HTMLDivElement>();
 
     constructor(props: DialogListProps) {
         super(props);
-
-        this.messageListRef = React.createRef();
-        this.pagerRef = React.createRef();
 
         this.handleDialogClick = this.handleDialogClick.bind(this);
     }
 
     public componentDidMount() {
-        if (this.props.pageCount > 1) 
-            this.pagerRef.current.innerHTML = this.props.pagerHtml;
+        if (this.props.pageCount > 1)
+            this.dialogsRef.current.innerHTML += this.props.pagerHtml;
     }
 
     public render(): React.ReactNode {
@@ -48,7 +45,7 @@ class DialogList extends React.Component<DialogListProps> {
                 {this.props.countAll === 0 &&
                     <span className="warning">Сообщений пока нет</span>
                 }
-                <div className="dialogs">
+                <div className="dialogs" ref={this.dialogsRef}>
                     <div className="dialogs__list">
                         {this.props.list.map((dialog, index) => 
                         <div key={index} className="dialogs__item dialog" 
@@ -79,7 +76,6 @@ class DialogList extends React.Component<DialogListProps> {
                         </div>)}
                     </div>
                 </div>
-                {this.props.pageCount > 1 && <div ref={this.pagerRef}></div>}
             </div>
             <MessageList ref={this.messageListRef}/>
         </div>);
