@@ -1,8 +1,8 @@
 <?php namespace tests\macros\examples;
 
-use frame\macros\Macro2;
+use frame\macros\Macro;
 
-class MacroAccumulationExample implements Macro2
+class MacroAccumulationExample implements Macro
 {
     private static $accumulatedMessages = [];
 

@@ -2,7 +2,7 @@
 
 use frame\Core;
 
-abstract class GetMacro implements Macro2
+abstract class GetMacro implements Macro
 {
     private $name;
 

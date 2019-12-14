@@ -44,12 +44,6 @@ class Core extends Hookable
      */
     private $defaultHandler = null;
 
-    /**
-     * @var array Ключ - команда (GET-параметр) макроса,
-     * значение - имя класса действия макроса.
-     */
-    private $macros = [];
-
     private $modules = [];
 
     /**
@@ -131,33 +125,14 @@ class Core extends Hookable
         return null;
     }
 
-    /**
-     * @param string $name Ключ - команда (GET-параметр) макроса
-     * @param string $macro Имя класса действия макроса
-     */
-    public function setMacro($name, $macro)
-    {
-        $this->macros[$name] = $macro;
-    }
-
     public function exec()
     {
-        $this->execMacros();
         static::hook(static::HOOK_BEFORE_EXECUTION);
         $pagename = $this->router->pagename;
         $page = $this->findPage($pagename);
         if ($page) $page->show();
         else throw new HttpError(404, 'Page ' . $pagename . ' does not exist.');
         static::hook(static::HOOK_AFTER_SUCCESS_EXECUTION);
-    }
-
-    private function execMacros()
-    {
-        foreach ($this->router->args as $key => $value) {
-            if (isset($this->macros[$key])) {
-                (new $this->macros[$key])->exec($value);
-            }
-        }
     }
 
     /**
