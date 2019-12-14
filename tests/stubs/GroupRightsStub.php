@@ -21,9 +21,10 @@ class GroupRightsStub extends GroupRights
 
     protected function loadRights(Records $record): int
     {
-        $moduleId = $record->where['module_id'] ?? null;
+        $whereFields = $record->getWhereFields();
+        $moduleId = $whereFields['module_id'] ?? null;
         if ($moduleId === null) throw new \Exception('Module id is not set');
-        $groupId = $record->where['group_id'] ?? null;
+        $groupId = $whereFields['group_id'] ?? null;
         if ($groupId === null) throw new \Exception('Group id is not set');
         $row = $this->findRow($moduleId, $groupId);
         return $row['rights'];

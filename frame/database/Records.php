@@ -46,6 +46,26 @@ class Records
      */
     private function __construct() {}
 
+    public function getWhereFields(): array
+    {
+        return $this->where;
+    }
+
+    public function getOrderFields(): array
+    {
+        return $this->orderBy;
+    }
+
+    public function getRangeStart(): ?int
+    {
+        return $this->limit[0];
+    }
+
+    public function getRangeLimit(): ?int
+    {
+        return $this->limit[1];
+    }
+
     /**
      * @param array $fields ['field' => 'ASC'|'DESC']
      */
