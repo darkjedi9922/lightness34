@@ -8,7 +8,7 @@ class EncodeSpecialsTest extends TestCase
     public function testEncodeString() 
     {
         $data = '<a>"The \'text\'"</a>';
-        $expected = '&lt;a&gt;&quot;The &#39;text&#39;&quot;&lt;/a&gt;';
+        $expected = '&lt;a&gt;&quot;The &#039;text&#039;&quot;&lt;/a&gt;';
 
         $this->assertEquals($expected, encode_specials($data));
     }
@@ -16,7 +16,7 @@ class EncodeSpecialsTest extends TestCase
     public function testEncodeDeepArrayOfStrings()
     {
         $string = '<a>"The \'text\'"</a>';
-        $expectedString = '&lt;a&gt;&quot;The &#39;text&#39;&quot;&lt;/a&gt;';
+        $expectedString = '&lt;a&gt;&quot;The &#039;text&#039;&quot;&lt;/a&gt;';
 
         $array = [
             'a' => $string,

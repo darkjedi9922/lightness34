@@ -1,6 +1,7 @@
 import React from 'react';
 import StretchTextarea from './stretch-textarea';
 import $ from 'jquery';
+import { encodeHTML, decodeHTML } from 'buk';
 
 interface User {
     avatarUrl: string
@@ -77,7 +78,7 @@ class Comments extends React.Component<CommentsProps, CommentsState> {
                                     </div>
                                 </div>
                             </div>
-                            <div className="comment__content">{comment.text}</div>
+                            <div className="comment__content">{decodeHTML(comment.text)}</div>
                         </div>
                     )}
                 </div>
@@ -138,7 +139,7 @@ class Comments extends React.Component<CommentsProps, CommentsState> {
                         {
                             author: props.me,
                             date: result.result.date,
-                            text: text
+                            text: encodeHTML(text)
                         }
                     ]
                 }));

@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import $ from 'jquery'
 import StretchTextarea from './stretch-textarea';
+import { encodeHTML, decodeHTML } from 'buk';
 
 interface Message {
     id: number,
@@ -129,7 +130,7 @@ class MessageList extends React.Component<{}, MessageListState> {
                                                 </div>
                                             }
                                     </div>
-                                    <span className="message__text">{message.text}</span>
+                                    <span className="message__text">{decodeHTML(message.text)}</span>
                                 </div>
                             )}
                         </div>
@@ -159,7 +160,7 @@ class MessageList extends React.Component<{}, MessageListState> {
                             to_id: this.withWhoId,
                             date: result.result.date,
                             readed: false,
-                            text: text
+                            text: encodeHTML(text)
                         },
                         ...state.list
                     ]

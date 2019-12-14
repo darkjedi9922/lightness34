@@ -116,11 +116,7 @@ function encode_specials($data)
         return $result;
     }
 
-    return str_replace(
-        ['<', '>', '"', '\''], 
-        ['&lt;', '&gt;', '&quot;', '&#39;'],
-        $data
-    );
+    return htmlspecialchars($data, ENT_QUOTES);
 }
 
 // =============================================================================

@@ -53,4 +53,4 @@ foreach ($dialogs as $dialog) {
 $self->setLayout('admin');
 ?>
 
-<div id="dialog-list" class="dialog-list" data-props='<?= json_encode($dialogListData) ?>'></div>
+<div id="dialog-list" class="dialog-list" data-props='<?= json_encode($dialogListData, JSON_HEX_AMP) ?>'></div>

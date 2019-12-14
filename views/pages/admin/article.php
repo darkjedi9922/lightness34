@@ -88,4 +88,4 @@ $article->setReaded(user_me::get());
 </div>
 <span class="content__title">Комментарии</span>
 
-<div id="article-comments" data-props='<?= json_encode($articleCommentsData) ?>'></div>
+<div id="article-comments" data-props='<?= json_encode($articleCommentsData, JSON_HEX_AMP) ?>'></div>

@@ -57,4 +57,4 @@ $dialog = new Dialog($anyMessage);
 $dialog->setReadedBy($me->id);
 
 $self->setLayout(null);
-echo json_encode($result);
+echo json_encode($result, JSON_HEX_AMP);

@@ -1,5 +1,6 @@
 import React from 'react';
 import MessageList from './message-list';
+import { decodeHTML } from 'buk';
 
 interface Message {
     text: string,
@@ -55,7 +56,7 @@ class DialogList extends React.Component<DialogListProps> {
                         >
                             <div className="dialog__header">
                                 <span className="dialog__date">{dialog.lastMessage.date}</span>
-                                <span className="dialog__text">{dialog.lastMessage.text}</span>
+                                <span className="dialog__text">{decodeHTML(dialog.lastMessage.text)}</span>
                             </div>
                             <div className="dialog__info">
                                 <div className={"dialog__status" + 

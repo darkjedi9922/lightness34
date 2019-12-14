@@ -83,15 +83,16 @@ class Action
      */
     public function setData(string $type, string $name, $value)
     {
-        $safeValue = ($type === self::FILES ? $value : encode_specials($value));
         if ($type === self::ARGS && isset($this->body->listGet()[$name]))
-            settype($safeValue, $this->body->listGet()[$name][0]);
+            settype($value, $this->body->listGet()[$name][0]);
         else if ($type === self::POST && isset($this->body->listPost()[$name])) {
             $postType = $this->body->listPost()[$name][0];
             if ($postType === ActionBody::POST_PASSWORD) 
                 $postType = ActionBody::POST_TEXT;
-            settype($safeValue, $postType);
+            settype($value, $postType);
         }
+
+        $safeValue = is_string($value) ? encode_specials($value) : $value;
         $this->data[$type][$name] = $safeValue;
     }
 
