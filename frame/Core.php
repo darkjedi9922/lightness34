@@ -9,9 +9,13 @@ use frame\errors\HttpError;
 use frame\config\Config;
 use frame\modules\Module;
 use frame\views\DynamicPage;
+use frame\macros\Hookable;
 
-class Core
+class Core extends Hookable
 {
+    const HOOK_BEFORE_EXECUTION = 'HOOK_BEFORE_EXECUTION';
+    const HOOK_AFTER_SUCCESS_EXECUTION = 'HOOK_AFTER_SUCCESS_EXECUTION';
+
     /**
      * @var Core $app Экземпляр приложения. Инициализуется
      * при инициализации экземпляра Core
@@ -139,10 +143,12 @@ class Core
     public function exec()
     {
         $this->execMacros();
+        static::hook(static::HOOK_BEFORE_EXECUTION);
         $pagename = $this->router->pagename;
         $page = $this->findPage($pagename);
         if ($page) $page->show();
         else throw new HttpError(404, 'Page ' . $pagename . ' does not exist.');
+        static::hook(static::HOOK_AFTER_SUCCESS_EXECUTION);
     }
 
     private function execMacros()

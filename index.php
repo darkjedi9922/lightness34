@@ -33,9 +33,9 @@ $app->setModule(new UsersModule('users'));
 $app->setModule(new ArticlesModule('articles'));
 $app->setModule(new CommentsModule('article-comments'));
 
-$app->setMacro('action', ActionMacro::class);
-$app->setMacro('value', ValueMacro::class);
-$app->setMacro('block', BlockMacro::class);
-$app->setMacro('widget', WidgetMacro::class);
+Core::addHook(Core::HOOK_BEFORE_EXECUTION, new ActionMacro('action'));
+Core::addHook(Core::HOOK_BEFORE_EXECUTION, new ValueMacro('value'));
+Core::addHook(Core::HOOK_BEFORE_EXECUTION, new BlockMacro('block'));
+Core::addHook(Core::HOOK_BEFORE_EXECUTION, new WidgetMacro('widget'));
 
 $app->exec();

@@ -1,20 +1,20 @@
 <?php namespace frame\actions;
 
 use frame\Core;
-use frame\macros\Macro;
 use frame\actions\Action;
 use frame\actions\ActionRouter;
 use frame\actions\ActionTransmitter;
 use frame\route\Response;
 use frame\route\Router;
 use frame\route\Request;
+use frame\macros\GetMacro;
 
-class ActionMacro extends Macro
+class ActionMacro extends GetMacro
 {
     /** @var Action */
     private $action;
 
-    public function exec($action)
+    protected function triggerExec(string $value)
     {
         $router = new ActionRouter;
         $this->action = $router->fromTriggerUrl(Core::$app->router->url);

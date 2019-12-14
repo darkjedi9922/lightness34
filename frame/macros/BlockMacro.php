@@ -1,10 +1,11 @@
 <?php namespace frame\macros;
 
+use frame\macros\GetMacro;
 use frame\views\Block;
 
-class BlockMacro extends Macro
+class BlockMacro extends GetMacro
 {
-    public function exec($value)
+    protected function triggerExec(string $value)
     {
         ob_clean();
         echo new Block($value);

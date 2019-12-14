@@ -1,10 +1,11 @@
 <?php namespace frame\macros;
 
+use frame\macros\GetMacro;
 use frame\views\Widget;
 
-class WidgetMacro extends Macro
+class WidgetMacro extends GetMacro
 {
-    public function exec($value)
+    protected function triggerExec(string $value)
     {
         ob_clean();
         echo new Widget($value);

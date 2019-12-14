@@ -1,10 +1,11 @@
 <?php namespace frame\macros;
 
+use frame\macros\GetMacro;
 use frame\views\Value;
 
-class ValueMacro extends Macro
+class ValueMacro extends GetMacro
 {
-    public function exec($value)
+    protected function triggerExec(string $value)
     {
         ob_clean();
         echo new Value($value);
