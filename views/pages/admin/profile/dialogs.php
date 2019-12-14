@@ -31,7 +31,7 @@ foreach ($dialogs as $dialog) {
     $newCount = 0;
     $activeCount = 0;
     $toId = (int)$last->to_id;
-    if ($last->readed === '0') {
+    if (!$last->readed) {
         if ($toId === $me->id) $newCount = $dialog->countNewMessages($toId);
         else $activeCount = $dialog->countNewMessages($toId);
     }

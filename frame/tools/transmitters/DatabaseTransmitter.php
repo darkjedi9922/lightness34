@@ -1,7 +1,7 @@
 <?php namespace frame\tools\transmitters;
 
 use frame\database\Records;
-use frame\database\Database;
+use frame\cash\database;
 
 /**
  * Так как этот класс использует базу данных, следует использовать его только 
@@ -94,7 +94,7 @@ class DatabaseTransmitter extends DataTransmitter
                 $end = [];
                 foreach ($this->data as $name => $value) $end[] = '"'.$name.'", "'.$value.'"';
                 $end = implode(' UNION ALL SELECT ', $end);
-                $this->records->db->query('INSERT INTO '.self::TABLE.' SELECT '.$end);
+                database::get()->query('INSERT INTO '.self::TABLE.' SELECT '.$end);
             }
             $this->changed = false;
         }
