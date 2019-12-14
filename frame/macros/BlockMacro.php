@@ -8,7 +8,7 @@ class BlockMacro extends GetMacro
     protected function triggerExec(string $value)
     {
         ob_clean();
-        echo new Block($value);
+        (new Block($value))->show();
         exit;
     }
 }

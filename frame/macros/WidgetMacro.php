@@ -8,7 +8,7 @@ class WidgetMacro extends GetMacro
     protected function triggerExec(string $value)
     {
         ob_clean();
-        echo new Widget($value);
+        (new Widget($value))->show();
         exit;
     }
 }

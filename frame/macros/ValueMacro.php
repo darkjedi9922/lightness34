@@ -8,7 +8,7 @@ class ValueMacro extends GetMacro
     protected function triggerExec(string $value)
     {
         ob_clean();
-        echo new Value($value);
+        (new Value($value))->show();
         exit;
     }
 }
