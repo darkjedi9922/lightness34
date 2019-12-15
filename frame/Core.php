@@ -36,7 +36,7 @@ class Core extends Hookable
      * @var array Ключ - имя класса исключения, 
      * значение - имя класса обработчика
      */
-    private $hanlders = [];
+    private $handlers = [];
 
     /**
      * @var string Имя класса, обрабатывающего ошибки,
@@ -59,7 +59,7 @@ class Core extends Hookable
         define('ROOT_DIR', $_SERVER['DOCUMENT_ROOT']);
         date_default_timezone_set('Europe/Kiev');
 
-        $this->enableErrorHundlers();
+        $this->enableErrorHandlers();
         $this->config = \frame\cash\config::get('core');
         $this->router = new Router(Request::getRequest());
         static::$app = $this;
@@ -84,7 +84,7 @@ class Core extends Hookable
      */
     public function setHandler($throwableClass, $handlerClass)
     {
-        $this->hanlders[$throwableClass] = $handlerClass;
+        $this->handlers[$throwableClass] = $handlerClass;
     }
 
     /**
@@ -139,7 +139,7 @@ class Core extends Hookable
      * Регистрирует все обработчики ошибок, где они преобразуют ошибки в Throwable
      * и делегируют их методу handleError()
      */
-    private function enableErrorHundlers()
+    private function enableErrorHandlers()
     {
         // error
         set_error_handler(function ($type, $message, $file, $line) {
@@ -167,7 +167,7 @@ class Core extends Hookable
         $logging = $this->config->{'log.enabled'};
         if ($logging) $this->writeInLog(Logger::ERROR, $e);
 
-        if (isset($this->hanlders[get_class($e)])) (new $this->hanlders[get_class($e)])->handle($e);
+        if (isset($this->handlers[get_class($e)])) (new $this->handlers[get_class($e)])->handle($e);
         else if ($this->defaultHandler) (new $this->defaultHandler)->handle($e);
         else throw $e;
     }
