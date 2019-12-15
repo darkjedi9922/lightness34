@@ -12,15 +12,17 @@ use frame\errors\StrictException;
 use frame\errors\handlers\HttpErrorHandler;
 use frame\errors\handlers\DefaultErrorHandler;
 use frame\errors\handlers\StrictExceptionHandler;
-use frame\actions\ActionMacro;
-use frame\macros\ValueMacro;
-use frame\macros\BlockMacro;
-use frame\macros\WidgetMacro;
 
 use engine\admin\AdminModule;
 use engine\users\UsersModule;
 use engine\articles\ArticlesModule;
 use engine\comments\CommentsModule;
+use engine\statistics\StatisticsModule;
+
+use frame\actions\ActionMacro;
+use frame\macros\ValueMacro;
+use frame\macros\BlockMacro;
+use frame\macros\WidgetMacro;
 
 $app = new Core;
 
@@ -28,6 +30,7 @@ $app->setDefaultHandler(DefaultErrorHandler::class);
 $app->setHandler(HttpError::class, HttpErrorHandler::class);
 $app->setHandler(StrictException::class, StrictExceptionHandler::class);
 
+$app->setModule(new StatisticsModule('stat'));
 $app->setModule(new AdminModule('admin'));
 $app->setModule(new UsersModule('users'));
 $app->setModule(new ArticlesModule('articles'));
