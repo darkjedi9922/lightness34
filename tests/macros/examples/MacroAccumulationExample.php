@@ -4,14 +4,8 @@ use frame\macros\Macro;
 
 class MacroAccumulationExample implements Macro
 {
-    private static $accumulatedMessages = [];
-
+    private $count = 0;
     private $message;
-
-    public static function getAccumulatedMessages(): array
-    {
-        return self::$accumulatedMessages;
-    }
 
     public function __construct(string $message)
     {
@@ -20,6 +14,11 @@ class MacroAccumulationExample implements Macro
 
     public function exec()
     {
-        self::$accumulatedMessages[] = $this->message;
+        $this->count += 1;
+    }
+
+    public function getCount(): int
+    {
+        return $this->count;
     }
 }

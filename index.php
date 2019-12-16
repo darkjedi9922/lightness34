@@ -30,15 +30,15 @@ $app->setDefaultHandler(DefaultErrorHandler::class);
 $app->setHandler(HttpError::class, HttpErrorHandler::class);
 $app->setHandler(StrictException::class, StrictExceptionHandler::class);
 
-$app->setModule(new StatisticsModule('stat'));
+// $app->setModule(new StatisticsModule('stat'));
 $app->setModule(new AdminModule('admin'));
 $app->setModule(new UsersModule('users'));
 $app->setModule(new ArticlesModule('articles'));
 $app->setModule(new CommentsModule('article-comments'));
 
-Core::addHook(Core::HOOK_BEFORE_EXECUTION, new ActionMacro('action'));
-Core::addHook(Core::HOOK_BEFORE_EXECUTION, new ValueMacro('value'));
-Core::addHook(Core::HOOK_BEFORE_EXECUTION, new BlockMacro('block'));
-Core::addHook(Core::HOOK_BEFORE_EXECUTION, new WidgetMacro('widget'));
+$app->on(Core::EVENT_APP_START, new ActionMacro('action'));
+$app->on(Core::EVENT_APP_START, new ValueMacro('value'));
+$app->on(Core::EVENT_APP_START, new BlockMacro('block'));
+$app->on(Core::EVENT_APP_START, new WidgetMacro('widget'));
 
 $app->exec();

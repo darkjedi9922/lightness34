@@ -9,12 +9,13 @@ use frame\errors\HttpError;
 use frame\config\Config;
 use frame\modules\Module;
 use frame\views\DynamicPage;
-use frame\macros\Hookable;
+use frame\macros\EventManager;
+use frame\macros\Macro;
 
-class Core extends Hookable
+class Core
 {
-    const HOOK_BEFORE_EXECUTION = 'HOOK_BEFORE_EXECUTION';
-    const HOOK_AFTER_SUCCESS_EXECUTION = 'HOOK_AFTER_SUCCESS_EXECUTION';
+    const EVENT_APP_START = 'core-app-started';
+    const EVENT_APP_END = 'core-app-end';
 
     /**
      * @var Core $app Экземпляр приложения. Инициализуется
@@ -46,6 +47,8 @@ class Core extends Hookable
 
     private $modules = [];
 
+    private $events = null;
+
     /**
      * Конструктор
      */
@@ -60,9 +63,16 @@ class Core extends Hookable
         date_default_timezone_set('Europe/Kiev');
 
         $this->enableErrorHandlers();
+        $this->events = new EventManager;
         $this->config = \frame\cash\config::get('core');
         $this->router = new Router(Request::getRequest());
         static::$app = $this;
+    }
+
+    public function __destruct()
+    {
+        if ($this->events->getEmitCount(self::EVENT_APP_START) !== 0)
+            $this->events->emit(self::EVENT_APP_END);
     }
 
     /**
@@ -96,6 +106,21 @@ class Core extends Hookable
         $this->defaultHandler = $handlerClass;
     }
 
+    public function on(string $event, Macro $handler)
+    {
+        $this->events->subscribe($event, $handler);
+    }
+
+    public function emit(string $event)
+    {
+        $this->events->emit($event);
+    }
+
+    public function getEventManager(): EventManager
+    {
+        return $this->events;
+    }
+
     /**
      * @throws \Exception если модуль с таким именем уже существует.
      */
@@ -127,12 +152,11 @@ class Core extends Hookable
 
     public function exec()
     {
-        static::hook(static::HOOK_BEFORE_EXECUTION);
+        $this->events->emit(self::EVENT_APP_START);
         $pagename = $this->router->pagename;
         $page = $this->findPage($pagename);
         if ($page) $page->show();
         else throw new HttpError(404, 'Page ' . $pagename . ' does not exist.');
-        static::hook(static::HOOK_AFTER_SUCCESS_EXECUTION);
     }
 
     /**
