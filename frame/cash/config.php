@@ -9,7 +9,7 @@ class config extends Cash
     public static function get(string $name): FrameConfig
     {
         return self::cash($name, function() use ($name) {
-            return new Json("config/$name.json");
+            return new Json(ROOT_DIR . "/config/$name.json");
         });
     }
 }
