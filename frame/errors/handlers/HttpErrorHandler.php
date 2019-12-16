@@ -2,6 +2,7 @@
 
 use frame\Core;
 use frame\views\Page;
+use frame\route\Response;
 
 class HttpErrorHandler implements ErrorHandler
 {
@@ -10,13 +11,15 @@ class HttpErrorHandler implements ErrorHandler
      */
     public function handle($error)
     {
-        $page = Core::$app->config->{'errors.' . $error->getCode() . '.page'};
-        if (Page::find((string) $error->getCode())) {
-            (new Page($error->getCode()))->show();
+        $code = $error->getCode();
+        $page = Core::$app->config->{"errors.$code.page"};
+        Response::setCode($code);
+        if (Page::find((string) $code)) {
+            (new Page($page))->show();
         } else {
             $defaultHandler = new DefaultErrorHandler;
             $defaultHandler->handle(new \Exception(
-                "Notice: This error can be hidden in {$error->getCode()} page.",
+                "Notice: This error can be hidden in $code page.",
                 0, $error
             ));
         }

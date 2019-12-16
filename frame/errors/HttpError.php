@@ -2,25 +2,17 @@
 
 class HttpError extends \Exception
 {
-    const BAD_REQUEST   = 400;
-    const FORBIDDEN     = 403;
-    const NOT_FOUND     = 404;
+    const OK                    = 200;
+    const BAD_REQUEST           = 400;
+    const FORBIDDEN             = 403;
+    const NOT_FOUND             = 404;
+    const INTERNAL_SERVER_ERROR = 500;
 
-    private $HEADERS = [
-        400 => '400 Bad Request',
-        403 => '403 Forbidden',
-        404 => '404 Not Found'
-    ];
-
-    public function __construct(int $code, string $message = '', \Throwable $previous = null)
-    {
-        parent::__construct($message, $code, $previous);   
-    }
-    /**
-     * Для использования функцией header()
-     */
-    public function getHeader(): string
-    {
-        return 'HTTP/1.0 '.$this->HEADERS[$this->getCode()];
+    public function __construct(
+        int $code,
+        string $message = '',
+        \Throwable $previous = null
+    ) {
+        parent::__construct($message, $code, $previous);
     }
 }

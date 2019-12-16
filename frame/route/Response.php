@@ -22,4 +22,14 @@ class Response
         echo $text;
         exit;
     }
+
+    public static function setCode(int $code)
+    {
+        http_response_code($code);
+    }
+
+    public static function getCode(): int
+    {
+        return http_response_code();
+    }
 }
