@@ -3,7 +3,9 @@
 use frame\Core;
 use frame\modules\Module;
 use frame\modules\RightsDesc;
-use engine\statistics\macros\RouteStatMacro;
+use engine\statistics\stats\RouteStat;
+use engine\statistics\macros\CollectRouteStat;
+use engine\statistics\macros\InsertStat;
 
 class StatisticsModule extends Module
 {
@@ -13,7 +15,11 @@ class StatisticsModule extends Module
 
         $routeStat = new RouteStat;
 
-        Core::addHook(Core::HOOK_BEFORE_EXECUTION, new RouteStatMacro($routeStat));
+        $collectRouteStat = new CollectRouteStat($routeStat);
+        $insertStatHook = new InsertStat($routeStat);
+
+        Core::$app->on(Core::EVENT_APP_START, $collectRouteStat);
+        Core::$app->on(Core::EVENT_APP_END, $insertStatHook);
     }
 
     public function createRightsDescription(): ?RightsDesc

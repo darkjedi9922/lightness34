@@ -30,7 +30,7 @@ $app->setDefaultHandler(DefaultErrorHandler::class);
 $app->setHandler(HttpError::class, HttpErrorHandler::class);
 $app->setHandler(StrictException::class, StrictExceptionHandler::class);
 
-// $app->setModule(new StatisticsModule('stat'));
+$app->setModule(new StatisticsModule('stat'));
 $app->setModule(new AdminModule('admin'));
 $app->setModule(new UsersModule('users'));
 $app->setModule(new ArticlesModule('articles'));

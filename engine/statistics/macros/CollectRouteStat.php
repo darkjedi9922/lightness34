@@ -2,9 +2,10 @@
 
 use frame\Core;
 use frame\macros\Macro;
-use engine\statistics\RouteStat;
+use engine\statistics\stats\RouteStat;
+use frame\route\Request;
 
-class RouteStatMacro implements Macro
+class CollectRouteStat implements Macro
 {
     private $stat;
 
@@ -16,8 +17,7 @@ class RouteStatMacro implements Macro
     public function exec()
     {
         $router = Core::$app->router;
-        $this->stat->setUrl($router->url);
-        $this->stat->setRoute($router->pagename);
-        $this->stat->setParams($router->args);
+        $this->stat->url = $router->url;
+        $this->stat->ajax = Request::isAjax();
     }
 }
