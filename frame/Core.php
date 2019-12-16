@@ -106,16 +106,29 @@ class Core
         $this->defaultHandler = $handlerClass;
     }
 
+    /**
+     * Устанавливает обработчик на любое событие, которое вызывается через 
+     * Core::emit(). События могут устаналиваться любые в пределах всего приложения.
+     * Важно лишь, чтобы они не совпали по имени. 
+     */
     public function on(string $event, Macro $handler)
     {
         $this->events->subscribe($event, $handler);
     }
 
+    /**
+     * Вызывает сигнал о произошедшем событии приложения. События могут вызываться 
+     * любые в пределах всего приложения. Важно лишь, чтобы они не совпали по имени.
+     */
     public function emit(string $event)
     {
         $this->events->emit($event);
     }
 
+    /**
+     * Менеджер событий, через который работает механизм событий в экземпляре класса.
+     * Из него можно узнать дополнительную информацию о работе событий.
+     */
     public function getEventManager(): EventManager
     {
         return $this->events;
