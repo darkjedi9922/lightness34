@@ -2,8 +2,9 @@
 
 use frame\macros\Macro;
 use engine\statistics\stats\RouteStat;
+use frame\route\Response;
 
-class CollectActionType implements Macro
+class CollectRouteEndStat implements Macro
 {
     private $stat;
 
@@ -14,6 +15,6 @@ class CollectActionType implements Macro
 
     public function exec()
     {
-        $this->stat->type = RouteStat::ROUTE_TYPE_ACTION;
+        $this->stat->code = Response::getCode();
     }
 }
