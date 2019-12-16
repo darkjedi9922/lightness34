@@ -11,11 +11,14 @@ use frame\macros\GetMacro;
 
 class ActionMacro extends GetMacro
 {
+    const EVENT_ACTION_TRIGGERED = 'action-triggered';
+
     /** @var Action */
     private $action;
 
     protected function triggerExec(string $value)
     {
+        Core::$app->emit(self::EVENT_ACTION_TRIGGERED);
         $router = new ActionRouter;
         $this->action = $router->fromTriggerUrl(Core::$app->router->url);
         $tokenizer = new ActionToken($this->action);
