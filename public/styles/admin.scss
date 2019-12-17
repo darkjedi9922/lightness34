@@ -21,9 +21,18 @@ $clr-color: #249dcd;
 $clr-box: #e4e4e4;
 $clr-hoverbox: #dcdcdc;
 $clr-grey: #939393;
+
 $global-background-color: #060517;
 $global-button-color: #1e4469;
+$global-ok-color: green;
 $global-warning-color: #b3ab00;
+$global-error-color: red;
+
+$global-color-lightened: lighten($clr-color, 35);
+$global-ok-color-lightened: lighten($global-ok-color, 60);
+$global-warning-color-lightened: lighten($global-warning-color, 50);
+$global-error-color-lightened: lighten($global-error-color, 35);
+
 $global-font: "Greta Sans Light";
 $global-box-radius: 10px;
 
@@ -44,6 +53,7 @@ $global-box-radius: 10px;
 @import 'admin/message';
 @import 'admin/notice';
 @import 'admin/pager';
+@import 'admin/routes';
 
 html {
     height: 100%;

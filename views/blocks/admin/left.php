@@ -113,6 +113,12 @@ $rights = my_rights::get('admin');
     <?php endif ?>
     <?php if ($rights->can('see-logs')) : ?>
         <li class="menu__item">
+            <a class="menu__link" href="/admin/statistics">
+                <i class="menu__icon fontello icon-chart-bar"></i>
+                <span class="menu__label">Статистика</span>
+            </a>
+        </li>
+        <li class="menu__item">
             <a class="menu__link" href="/admin/log">
                 <i class="menu__icon fontello icon-doc-text"></i>
                 <span class="menu__label">Лог</span>
