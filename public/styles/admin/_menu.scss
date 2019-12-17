@@ -9,8 +9,10 @@
     }
 
     &__link {
+        align-items: center;
         color: #c5c5c5;
-        display: inline-block;
+        display: flex;
+        height: 2.5rem;
         text-decoration: none;
         font-family: $global-font;
         font-weight: bold;
@@ -28,25 +30,28 @@
 
     &__icon {
         font-weight: normal;
-        float: left;
-        padding: $vertical-spacing 0 $vertical-spacing 0.5rem;
+        margin-left: 0.5rem;
         text-align: center;
         width: 2rem;
-    }
 
-    &__label {
-        display: block;
-        padding: $vertical-spacing 0;
-
-        &:not(:last-child) {
-            float: left;
+        &:before {
+            vertical-align: middle;
         }
     }
 
     &__arrow {
         display: inline-block;
         font-weight: normal;
-        padding: $vertical-spacing 0.5rem;
+        margin-left: 0.5rem;
+
+        &:before {
+            height: 10px;
+            width: 10px;
+            line-height: 10px;
+            margin: auto;
+            text-align: center;
+            vertical-align: middle;
+        }
     }
 
     &__submenu {
