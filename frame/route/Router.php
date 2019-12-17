@@ -93,6 +93,20 @@ class Router
         else return '';
     }
 
+    public function isInNamespace(string $namespace): bool
+    {
+        $namespace = ltrim($namespace, '/');
+        if ($namespace === '') return true;
+        return strpos($this->pagename, $namespace) === 0;
+    }
+
+    public function isInAnyNamespace(array $namespaces): bool
+    {
+        for ($i = 0, $c = count($namespaces); $i < $c; ++$i)
+            if ($this->isInNamespace($namespaces[$i])) return true;
+        return false;
+    }
+
     /**
      * Преобразует url в тот же url с обновленными get параметрами
      * 

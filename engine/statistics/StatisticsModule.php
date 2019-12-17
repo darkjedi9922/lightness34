@@ -9,12 +9,17 @@ use engine\statistics\macros\CollectRouteEndStat;
 use engine\statistics\macros\InsertStat;
 use frame\actions\ActionMacro;
 use engine\statistics\macros\CollectActionType;
+use frame\cash\config;
 
 class StatisticsModule extends Module
 {
     public function __construct(string $name, ?Module $parent = null)
     {
         parent::__construct($name, $parent);
+
+        $router = Core::$app->router;
+        $config = config::get('statistics');
+        if ($router->isInAnyNamespace($config->ignorePageNamespaces)) return;
 
         $routeStat = new RouteStat;
 
