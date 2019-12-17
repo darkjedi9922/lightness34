@@ -16,7 +16,7 @@ class DefaultErrorHandler implements ErrorHandler
     public function handle($error)
     {
         if (Response::getCode() === HttpError::OK) 
-            Response::setCode(HttpError::INERNAL_SERVER_ERROR);
+            Response::setCode(HttpError::INTERNAL_SERVER_ERROR);
 
         $page = Core::$app->config->{'errors.errorPage'};
         if ($page !== null) {
