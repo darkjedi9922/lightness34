@@ -1,28 +1,3 @@
-/* подключение fontello */
-@font-face {font-family: "fontello";src: url("../fonts/fontello.ttf");font-style: normal;font-weight: normal;}
-.fontello{font-family:fontello;font-style:normal}
-.icon-attention:before { content: '\e800'; } /* '' */
-.icon-home:before { content: '\e801'; } /* '' */
-.icon-down-dir:before { content: '\e802'; } /* '' */
-.icon-user:before { content: '\e803'; } /* '' */
-.icon-email:before { content: '\e804'; } /* '' */
-.icon-ok-circle:before { content: '\e805'; } /* '' */
-.icon-cancel-circle:before { content: '\e806'; } /* '' */
-.icon-doc-text-inv:before { content: '\e807'; } /* '' */
-.icon-doc-text:before { content: '\e808'; } /* '' */
-.icon-group:before { content: '\e809'; } /* '' */
-.icon-database:before { content: '\e80a'; } /* '' */
-.icon-ok:before { content: '\e80b'; } /* '' */
-.icon-cog:before { content: '\e80c'; } /* '' */
-.icon-sliders:before { content: '\e80e'; } /* '' */
-.icon-rss:before { content: '\f09e'; } /* '' */
-.icon-list-bullet:before { content: '\f0ca'; } /* '' */
-.icon-rss-squared:before { content: '\f143'; } /* '' */
-.icon-transgender:before { content: '\f224'; } /* '' */
-.icon-television:before { content: '\f26c'; } /* '' */
-.icon-commenting:before { content: '\f27a'; } /* '' */
-.icon-id-card-o:before { content: '\f2c3'; } /* '' */
-
 /* Для Linux Ubuntu */
 @font-face {font-family: "Consolas";src: url("../fonts/consolas.ttf") format("truetype");font-style: normal;font-weight: normal;}
 @font-face {font-family: "Consolas";src: url("../fonts/consolas-bold.ttf") format("truetype");font-style: normal;font-weight: bold;}

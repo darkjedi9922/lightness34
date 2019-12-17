@@ -1,8 +1,21 @@
+// @font-face {
+//     font-family: 'fontello';
+//     src: url('../fonts/fontello/font/fontello.eot?91754753');
+//     src: url('../fonts/fontello/font/fontello.eot?91754753#iefix') format('embedded-opentype'),
+//         url('../fonts/fontello/font/fontello.woff?91754753') format('woff'),
+//         url('../fonts/fontello/font/fontello.ttf?91754753') format('truetype'),
+//         url('../fonts/fontello/font/fontello.svg?91754753#fontello') format('svg');
+//     font-weight: normal;
+//     font-style: normal;
+// }
+
 @font-face {
 	font-family: "Greta Sans Light";
 	src: url("https://s3-eu-west-1.amazonaws.com/fonts-ireland.typotheque.com/WF-000099-001641-001033-1e48fa95d33ea36c212449f7e42fa328.eot");
 	src: url("https://s3-eu-west-1.amazonaws.com/fonts-ireland.typotheque.com/WF-000099-001641-001033-1e48fa95d33ea36c212449f7e42fa328.eot?#iefix") format("embedded-opentype"), url("https://s3-eu-west-1.amazonaws.com/fonts-ireland.typotheque.com/WF-000099-001641-001033-1e48fa95d33ea36c212449f7e42fa328.woff2") format("woff2"), url("https://s3-eu-west-1.amazonaws.com/fonts-ireland.typotheque.com/WF-000099-001641-001033-1e48fa95d33ea36c212449f7e42fa328.woff") format("woff"), url("https://s3-eu-west-1.amazonaws.com/fonts-ireland.typotheque.com/WF-000099-001641-001033-1e48fa95d33ea36c212449f7e42fa328.svg#typotheque_webfonts_service") format("svg");
 }
+
+@import '../fonts/fontello/css/fontello-embedded.css';
 
 $clr-color: #249dcd;
 $clr-box: #e4e4e4;
