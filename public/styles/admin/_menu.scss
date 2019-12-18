@@ -10,13 +10,12 @@
 
     &__link {
         align-items: center;
-        color: #c5c5c5;
+        color: $menu-text-color;
         display: flex;
-        height: 2.5rem;
+        height: 2.25rem;
         text-decoration: none;
         font-family: $global-font;
-        font-weight: bold;
-        font-size: 18px;
+        font-size: 1rem;
         width: 100%;
 
         &:hover {
@@ -30,19 +29,17 @@
 
     &__icon {
         font-weight: normal;
-        margin-left: 0.5rem;
+        margin-left: 1rem;
         text-align: center;
         width: 2rem;
-
-        &:before {
-            vertical-align: middle;
-        }
+        color: $menu-icon-color;
     }
 
     &__arrow {
         display: inline-block;
         font-weight: normal;
         margin-left: 0.5rem;
+        color: $menu-icon-color;
 
         &:before {
             height: 10px;
