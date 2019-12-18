@@ -2,15 +2,19 @@
     background: $clr-box;
     height: 63px;
     padding: 0px 18px;
+    display: flex;
 
     &__left {
-        float: left;
+        flex-grow: 1;
         display: flex;
         align-items: center;
+
+        i:before {
+            margin: 0;
+        }
     }
 
     &__right {
-        float: right;
         display: flex;
         align-items: center;
     }
@@ -19,6 +23,10 @@
 .mini-profile {
     display: flex;
     align-items: center;
+    
+    i:before {
+        margin: 0;
+    }
 }
 .mini-profile .login {
     display:block;
@@ -71,7 +79,11 @@
 }
 
 .notice-bar {
-    float:right;
+    float: right;
+
+    i:before {
+        margin: 0;
+    }
 }
 .notice-bar a {
     font-family:Calibri;
