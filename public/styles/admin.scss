@@ -28,6 +28,11 @@ $global-ok-color: green;
 $global-warning-color: #b3ab00;
 $global-error-color: red;
 
+$menu-background-color: #131313;
+// $menu-icon-color: #5a5e8d;
+$menu-icon-color: $clr-grey;
+$menu-text-color: white;
+
 $global-color-lightened: lighten($clr-color, 35);
 $global-ok-color-lightened: lighten($global-ok-color, 60);
 $global-warning-color-lightened: lighten($global-warning-color, 50);
@@ -44,6 +49,7 @@ $global-box-radius: 10px;
 @import 'admin/centered-wrapper';
 @import 'admin/checkbox';
 @import 'admin/comment';
+@import 'admin/container';
 @import 'admin/content';
 @import 'admin/dialog-list';
 @import 'admin/dialog';
@@ -57,10 +63,12 @@ $global-box-radius: 10px;
 
 html {
     height: 100%;
+    min-height: 100%;
 }
 
 body {
     height: 100%;
+    min-height: 100%;
     padding: 0;
     margin: 0;
     background: $global-background-color;

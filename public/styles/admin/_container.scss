@@ -1,0 +1,23 @@
+.container {
+    width: 100%;
+    min-height: 100%;
+    display: flex;
+    justify-items: stretch;
+
+    &__sidebox {
+        padding: 0;
+        width: 261px;
+        vertical-align: top;
+        background: $menu-background-color;
+    }
+
+    &__body {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+
+    &__content {
+        flex-grow: 1;
+    }
+}

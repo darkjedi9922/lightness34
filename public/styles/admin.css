@@ -21,10 +21,6 @@ i.f-icon{font-family:fontello;font-style:normal}
 p.content-text{font-size:12pt;white-space:pre-wrap;word-wrap:break-word;word-break:break-all}
 h3{margin:0}
 
-/* глобальные блоки */
-.sidebox{background:#131313;padding:0;height:100%;box-shadow:0 0 20px 2px black;-webkit-box-shadow:0 0 20px 2px black;-moz-box-shadow:0 0 20px 2px black;width:261px;vertical-align:top}
-.container{width:100%;min-height:100%;border-spacing:0;height:100%}
-
 /* label radio */
 div.radio{display:inline-block;}
 div.radio input{display:none;}
