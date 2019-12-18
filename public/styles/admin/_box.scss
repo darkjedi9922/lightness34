@@ -1,14 +1,14 @@
 .box {
     background: $clr-box;
     border-radius: $global-box-radius;
-    padding:10px;
-    margin-bottom:18px;
-    font-family:Arial;
+    padding: 0.5rem;
+    margin-bottom: 18px;
+    font-family: Arial;
     font-size: 1.1rem;
     flex-grow: 1;
-    color:black;
-    font-size:14px;
-    overflow:auto;
+    color: black;
+    font-size: 14px;
+    overflow: auto;
 
     &--login {
         padding: 10px 1.5rem;

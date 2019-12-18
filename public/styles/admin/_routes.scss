@@ -2,18 +2,48 @@
     font-family: $global-font;
     font-size: 1.1rem;
     width: 100%;
+    border-spacing: 0;
 
     &__headers {
         font-weight: bold;
+        display: flex;
+        padding: 0.5rem 1rem 0;
+        margin: -0.5rem -0.5rem 0;
     }
 
     &__header {
         text-transform: uppercase;
-        padding: 0.6rem 0;
+        padding: 0 0 0.6rem 0;
     }
 
-    &__mainrow {
-        height: 1.75rem;
+    &__item {
+        margin: 0 -0.5rem;
+        padding: 0.2rem 1rem;
+        border-top: solid 1px #bfbfbf;
+
+        &:hover {
+            background: $clr-hoverbox;
+        }
+    }
+
+    &__route {
+        display: flex;
+    }
+
+    &__cell {
+        align-self: center;
+        display: inline-block;
+        margin: 0.1rem 0;
+
+        &--path {
+            flex-grow: 1;
+        }
+        &--code {
+            width: 4rem;
+        }
+        &--time {
+            width: 7rem;
+        }
     }
 
     &__pagename {
@@ -29,6 +59,7 @@
         font-size: 1rem;
         padding: 0.1rem 0.5rem;
         border-radius: 1rem;
+        color: white;
 
         &:before {
             content: '';
@@ -37,21 +68,14 @@
             height: 0.5rem;
             border-radius: 100%;
             margin-right: 0.3rem;
+            background: white;
         }
 
         &--ajax {
-            color: $global-warning-color;
-            background: $global-warning-color-lightened;
-            &:before {
-                background: $global-warning-color;
-            }
+            background: $box-yellow;
         }
         &--action {
-            color: $clr-color;
-            background: $global-color-lightened;
-            &:before {
-                background: $clr-color;
-            }
+            background: $box-blue;
         }
     }
 
@@ -61,18 +85,17 @@
         padding: 0.2rem 0;
         width: 2.5rem;
         text-align: center;
+        color: white;
+        font-weight: bold;
 
         &--ok {
-            color: $global-ok-color;
-            background: $global-ok-color-lightened;
+            background: $box-green;
         }
         &--warning {
-            color: $global-warning-color;
-            background: $global-warning-color-lightened;
+            background: $box-yellow;
         }
         &--error {
-            color: $global-error-color;
-            background: $global-error-color-lightened;
+            background: $box-red;
         }
     }
 
