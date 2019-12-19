@@ -94,7 +94,7 @@ class Records
     {
         $from = $this->table;
         $where = $this->assembleWhere();
-        return (int) $this->db->query("SELECT COUNT($field) FROM $from $where")
+        return (int) $this->db->query("SELECT COUNT(`$field`) FROM `$from` $where")
             ->readScalar();
     }
 
@@ -103,7 +103,9 @@ class Records
      */
     public function load(array $fields = []): QueryResult
     {
-        $fields = empty($fields) ? '*' : implode(', ', $fields);
+        $fields = empty($fields) ? 
+            '*' : 
+            implode(', ', $this->addIndexQuotes($fields, '`'));
         $from = $this->table;
         $where = $this->assembleWhere();
         $orderBy = $this->assembleOrderBy();
@@ -122,7 +124,7 @@ class Records
             $what = $this->table;
             $set = array_assemble($this->addAssocQuotes($data), ', ', ' = ');
             $where = $this->assembleWhere();
-            $this->db->query("UPDATE $what SET $set $where");
+            $this->db->query("UPDATE `$what` SET $set $where");
         }
     }
 
@@ -136,10 +138,10 @@ class Records
     public function insert(array $values = []): int
     {
         $into = $this->table;
-        $set = array_merge($this->where, $values);
+        $set = $this->addAssocQuotes(array_merge($this->where, $values));
         $keys = implode(', ', array_keys($set));
-        $values = implode(', ', $this->addIndexQuotes(array_values($set)));
-        $this->db->query("INSERT INTO $into ($keys) VALUES ($values)");
+        $values = implode(', ', array_values($set));
+        $this->db->query("INSERT INTO `$into` ($keys) VALUES ($values)");
         return $this->db->getLastInsertedId();
     }
 
@@ -150,7 +152,7 @@ class Records
     {
         $from = $this->table;
         $where = $this->assembleWhere();
-        $this->db->query("DELETE FROM $from $where");
+        $this->db->query("DELETE FROM `$from` $where");
     }
 
     /**
@@ -166,7 +168,9 @@ class Records
     private function assembleOrderBy(): string
     {
         if (empty($this->orderBy)) return '';
-        return 'ORDER BY ' . array_assemble($this->orderBy, ', ', ' ');
+        $orderBy = [];
+        foreach ($this->orderBy as $field => $order) $orderBy["`$field`"] = $order;
+        return 'ORDER BY ' . array_assemble($orderBy, ', ', ' ');
     }
 
     /**
@@ -185,10 +189,10 @@ class Records
      * Они нужны для SQL запроса.
      * @param array $array Индексный массив
      */
-    private function addIndexQuotes(array $array): array
+    private function addIndexQuotes(array $array, string $quoteSymbol): array
     {
         for ($i = 0, $c = count($array); $i < $c; ++$i) 
-            $array[$i] = '"' . $array[$i] . '"';
+            $array[$i] = "$quoteSymbol" . $array[$i] . "$quoteSymbol";
         return $array;
     }
 
@@ -199,8 +203,9 @@ class Records
      */
     private function addAssocQuotes(array $array): array
     {
+        $result = [];
         foreach ($array as $key => $value) 
-            $array[$key] = '"' . $value . '"';
-        return $array;
+            $result["`$key`"] = "'$value'";
+        return $result;
     }
 }
