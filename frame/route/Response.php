@@ -4,13 +4,21 @@ use function lightlib\ob_end_clean_all;
 
 class Response
 {
+    private static $redirect = null;
+
     /**
      * После выполнения скрипт завершается.
      */
     public static function setUrl(string $url)
     {
+        self::$redirect = $url;
         header('Location: ' . $url);
         exit;
+    }
+
+    public static function getUrl(): ?string
+    {
+        return self::$redirect;
     }
 
     /**
