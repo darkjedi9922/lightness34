@@ -10,18 +10,21 @@ use frame\route\Response;
 use frame\cash\config;
 use frame\views\View;
 use frame\views\DynamicPage;
+use frame\cash\database;
 
 use function lightlib\encode_specials;
 
 class StatisticsModule extends Module
 {
+    private $config;
+
     public function __construct(string $name, ?Module $parent = null)
     {
         parent::__construct($name, $parent);
 
         $router = Core::$app->router;
-        $config = config::get('statistics');
-        if ($router->isInAnyNamespace($config->ignorePageNamespaces)) return;
+        $this->config = config::get('statistics');
+        if ($router->isInAnyNamespace($this->config->ignorePageNamespaces)) return;
 
         $this->setupRouteStatistics();
     }
@@ -78,6 +81,15 @@ class StatisticsModule extends Module
                     $routeStat->code_info = encode_specials("Redirect to url: $redirect");
             }
             $routeStat->insert();
+
+            $table = RouteStat::getTable();
+            $limit = $this->config->{'routes.lastRoutes.maxAmount'};
+            database::get()->query(
+                "DELETE $table
+                FROM $table INNER JOIN (
+                    SELECT id FROM $table ORDER BY id DESC LIMIT $limit, 999999999
+                ) AS cond_table ON $table.id = cond_table.id"
+            );
         });
     }
 }
