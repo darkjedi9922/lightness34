@@ -11,7 +11,7 @@ abstract class GetMacro implements Macro
         $this->name = $name;
     }
 
-    public function exec()
+    public function exec(...$args)
     {
         $value = Core::$app->router->getArg($this->name);
         if ($value !== null) $this->triggerExec($value);

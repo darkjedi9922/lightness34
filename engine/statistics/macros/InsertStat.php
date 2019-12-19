@@ -12,7 +12,7 @@ class InsertStat implements Macro
         $this->stat = $stat;
     }
 
-    public function exec()
+    public function exec(...$args)
     {
         $this->stat->insert();
     }

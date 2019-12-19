@@ -14,7 +14,7 @@ class CollectRouteStat implements Macro
         $this->stat = $stat;
     }
 
-    public function exec()
+    public function exec(...$args)
     {
         $router = Core::$app->router;
         $this->stat->url = $router->url;

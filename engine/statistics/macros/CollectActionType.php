@@ -12,7 +12,7 @@ class CollectActionType implements Macro
         $this->stat = $stat;
     }
 
-    public function exec()
+    public function exec(...$args)
     {
         $this->stat->type = RouteStat::ROUTE_TYPE_ACTION;
     }

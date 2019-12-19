@@ -13,7 +13,7 @@ class CollectRouteEndStat implements Macro
         $this->stat = $stat;
     }
 
-    public function exec()
+    public function exec(...$args)
     {
         $this->stat->code = Response::getCode();
     }
