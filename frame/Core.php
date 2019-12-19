@@ -10,12 +10,17 @@ use frame\config\Config;
 use frame\modules\Module;
 use frame\views\DynamicPage;
 use frame\macros\EventManager;
-use frame\macros\Macro;
 
 class Core
 {
     const EVENT_APP_START = 'core-app-started';
     const EVENT_APP_END = 'core-app-end';
+
+    /**
+     * Event of any uncaught error.
+     * Event args: Throwable.
+     */
+    const EVENT_APP_ERROR = 'core-app-error';
 
     /**
      * @var Core $app Экземпляр приложения. Инициализуется
@@ -201,6 +206,7 @@ class Core
      */
     private function handleError(\Throwable $e)
     {
+        $this->emit(self::EVENT_APP_ERROR, $e);
         $logging = $this->config->{'log.enabled'};
         if ($logging) $this->writeInLog(Logger::ERROR, $e);
 

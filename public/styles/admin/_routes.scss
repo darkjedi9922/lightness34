@@ -99,8 +99,25 @@
         }
     }
 
-    &__details {
+    &__get, &__status {
+        display: block;
         padding: 0.5rem 0 0.5rem 1rem;
+    }
+
+    &__status {
+        &--ok {
+            color: $box-green;
+        }
+        &--warning {
+            color: $box-yellow;
+        }
+        &--error {
+            color: $box-red;
+        }
+    }
+
+    &__status-code {
+        font-weight: bold;
     }
 
     &__subheader {

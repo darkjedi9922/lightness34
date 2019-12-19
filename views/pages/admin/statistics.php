@@ -55,18 +55,26 @@ $self->setLayout('admin');
                         <span class="routes__time"><?= date('d.m.Y H:i', $route->time) ?></span>
                     </div>
                 </div>
-                <?php if (!empty($router->args)) : ?>
-                    <div class="routes__details">
-                        <span class="routes__subheader">Get</span>
-                        <?php foreach ($router->args as $key => $value) : ?>
-                            <div class="param">
-                                <span class="routes__param-name"><?= $key ?></span>
-                                <span class="routes__param-equals">=</span>
-                                <span class="class routes__param-value <?= $value === '' ? 'routes__param-value--empty' : '' ?>"><?= $value !== '' ? $value : 'empty' ?></span>
-                            </div>
-                        <?php endforeach ?>
-                    </div>
-                <?php endif ?>
+                <div class="routes__details">
+                    <?php if (!empty($router->args)) : ?>
+                        <div class="routes__get">
+                            <span class="routes__subheader">Get</span>
+                            <?php foreach ($router->args as $key => $value) : ?>
+                                <div class="param">
+                                    <span class="routes__param-name"><?= $key ?></span>
+                                    <span class="routes__param-equals">=</span>
+                                    <span class="class routes__param-value <?= $value === '' ? 'routes__param-value--empty' : '' ?>"><?= $value !== '' ? $value : 'empty' ?></span>
+                                </div>
+                            <?php endforeach ?>
+                        </div>
+                    <?php endif ?>
+                    <?php if ($route->code_info) : ?>
+                        <span class="routes__status routes__status--<?= $severity ?>">
+                            <span class="routes__status-code">Status <?= $route->code ?></span>
+                            <span class="routes__status-message"><?= $route->code_info ?></span>
+                        </span>
+                    <?php endif ?>
+                </div>
             </div>
         <?php endforeach ?>
     </div>

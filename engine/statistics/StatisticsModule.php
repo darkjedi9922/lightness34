@@ -8,6 +8,7 @@ use frame\actions\ActionMacro;
 use frame\route\Request;
 use frame\route\Response;
 use frame\cash\config;
+use function lightlib\encode_specials;
 
 class StatisticsModule extends Module
 {
@@ -45,8 +46,25 @@ class StatisticsModule extends Module
             $routeStat->type = RouteStat::ROUTE_TYPE_ACTION;
         });
         
+        Core::$app->on(Core::EVENT_APP_ERROR, function(\Throwable $error) use (
+            $routeStat
+        ) {
+            $routeStat->code_info = encode_specials($error->getMessage());
+        });
+
         Core::$app->on(Core::EVENT_APP_END, function() use ($routeStat) {
             $routeStat->code = Response::getCode();
+            switch ((int) ($routeStat->code / 100)) {
+                case 1:
+                case 2:
+                    $routeStat->code_info = '';
+                    break;
+            }
+            switch ($routeStat->code) {
+                case 302:
+                    $redirect = Response::getUrl();
+                    $routeStat->code_info = encode_specials("Redirect to url: $redirect");
+            }
             $routeStat->insert();
         });
     }
