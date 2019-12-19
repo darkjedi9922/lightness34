@@ -120,9 +120,9 @@ class Core
      * Вызывает сигнал о произошедшем событии приложения. События могут вызываться 
      * любые в пределах всего приложения. Важно лишь, чтобы они не совпали по имени.
      */
-    public function emit(string $event)
+    public function emit(string $event, ...$args)
     {
-        $this->events->emit($event);
+        $this->events->emit($event, ...$args);
     }
 
     /**
