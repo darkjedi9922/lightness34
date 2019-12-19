@@ -109,11 +109,11 @@ class Core
     /**
      * Устанавливает обработчик на любое событие, которое вызывается через 
      * Core::emit(). События могут устаналиваться любые в пределах всего приложения.
-     * Важно лишь, чтобы они не совпали по имени. 
+     * Важно лишь, чтобы они не совпали по имени.
      */
-    public function on(string $event, Macro $handler)
+    public function on(string $event, callable $macro)
     {
-        $this->events->subscribe($event, $handler);
+        $this->events->subscribe($event, $macro);
     }
 
     /**

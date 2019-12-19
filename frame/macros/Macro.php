@@ -3,8 +3,15 @@
 /**
  * Макросы - механизм фреймворка, позволяющий настраивать выполнение различных 
  * действий, активируемых классами с помощью событий.
+ * 
+ * Объект макроса может использоваться в качестве callable.
  */
-interface Macro
+abstract class Macro
 {
-    public function exec(...$args);
+    public abstract function exec(...$args);
+
+    public final function __invoke(...$args)
+    {
+        $this->exec(...$args);
+    }
 }

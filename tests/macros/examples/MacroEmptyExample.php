@@ -2,9 +2,9 @@
 
 use frame\macros\Macro;
 
-class MacroEmptyExample implements Macro
+class MacroEmptyExample extends Macro
 {
-    public function exec()
+    public function exec(...$args)
     {
         
     }

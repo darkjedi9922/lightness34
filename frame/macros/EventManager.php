@@ -5,7 +5,7 @@ class EventManager
     private $subscribers = [];
     private $emits = [];
 
-    public function subscribe(string $event, Macro $macro)
+    public function subscribe(string $event, callable $macro)
     {
         $this->subscribers[$event][] = $macro;
     }
@@ -14,7 +14,7 @@ class EventManager
     {
         $this->emits[$event] = $this->getEmitCount($event) + 1;
         for ($i = 0, $c = count($this->subscribers[$event] ?? []); $i < $c; ++$i) {
-            $this->subscribers[$event][$i]->exec(...$args);
+            $this->subscribers[$event][$i](...$args);
         }
     }
 

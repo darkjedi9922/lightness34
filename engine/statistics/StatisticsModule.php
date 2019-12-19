@@ -4,11 +4,9 @@ use frame\Core;
 use frame\modules\Module;
 use frame\modules\RightsDesc;
 use engine\statistics\stats\RouteStat;
-use engine\statistics\macros\CollectRouteStat;
-use engine\statistics\macros\CollectRouteEndStat;
-use engine\statistics\macros\InsertStat;
 use frame\actions\ActionMacro;
-use engine\statistics\macros\CollectActionType;
+use frame\route\Request;
+use frame\route\Response;
 use frame\cash\config;
 
 class StatisticsModule extends Module
@@ -21,18 +19,35 @@ class StatisticsModule extends Module
         $config = config::get('statistics');
         if ($router->isInAnyNamespace($config->ignorePageNamespaces)) return;
 
-        $routeStat = new RouteStat;
-
-        Core::$app->on(Core::EVENT_APP_START, new CollectRouteStat($routeStat));
-        Core::$app->on(
-            ActionMacro::EVENT_ACTION_TRIGGERED, 
-            new CollectActionType($routeStat));
-        Core::$app->on(Core::EVENT_APP_END, new CollectRouteEndStat($routeStat));
-        Core::$app->on(Core::EVENT_APP_END, new InsertStat($routeStat));
+        $this->setupRouteStatistics();
     }
 
     public function createRightsDescription(): ?RightsDesc
     {
         return null;
+    }
+
+    private function setupRouteStatistics()
+    {
+        $router = Core::$app->router;
+        $routeStat = new RouteStat;
+
+        Core::$app->on(Core::EVENT_APP_START, function() use ($routeStat, $router) {
+            $routeStat->url = $router->url;
+            $routeStat->type = RouteStat::ROUTE_TYPE_PAGE;
+            $routeStat->ajax = Request::isAjax();
+            $routeStat->time = time();
+        });
+
+        Core::$app->on(ActionMacro::EVENT_ACTION_TRIGGERED, function() use (
+            $routeStat
+        ) {
+            $routeStat->type = RouteStat::ROUTE_TYPE_ACTION;
+        });
+        
+        Core::$app->on(Core::EVENT_APP_END, function() use ($routeStat) {
+            $routeStat->code = Response::getCode();
+            $routeStat->insert();
+        });
     }
 }

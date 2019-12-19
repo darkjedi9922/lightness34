@@ -2,7 +2,7 @@
 
 use frame\macros\Macro;
 
-class MacroAccumulationExample implements Macro
+class MacroAccumulationExample extends Macro
 {
     private $count = 0;
     private $message;
@@ -12,7 +12,7 @@ class MacroAccumulationExample implements Macro
         $this->message = $message;
     }
 
-    public function exec()
+    public function exec(...$args)
     {
         $this->count += 1;
     }
