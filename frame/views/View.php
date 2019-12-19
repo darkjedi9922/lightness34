@@ -1,5 +1,7 @@
 <?php namespace frame\views;
 
+use frame\Core;
+
 function __show(View $self) 
 {
     require $self->file;
@@ -7,6 +9,18 @@ function __show(View $self)
 
 class View
 {
+    /**
+     * Happens at first time when view starts to load.
+     * Event argument: View object.
+     */
+    const EVENT_LOAD_START = 'view-load-start';
+
+    /**
+     * Happens at first time when view ends to load.
+     * Event argument: View object.
+     */
+    const EVENT_LOAD_END = 'view-load-end';
+
     /**
      * @var string Имя вида
      */
@@ -88,9 +102,11 @@ class View
     protected function getContent()
     {
         if ($this->cachedContent === null) {
+            Core::$app->emit(self::EVENT_LOAD_START, $this);
             ob_start();
             __show($this);
             $this->cachedContent = ob_get_clean();
+            Core::$app->emit(self::EVENT_LOAD_END, $this);
         }
         return $this->cachedContent;
     }

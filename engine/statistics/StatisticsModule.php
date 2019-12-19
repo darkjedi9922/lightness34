@@ -8,6 +8,9 @@ use frame\actions\ActionMacro;
 use frame\route\Request;
 use frame\route\Response;
 use frame\cash\config;
+use frame\views\View;
+use frame\views\DynamicPage;
+
 use function lightlib\encode_specials;
 
 class StatisticsModule extends Module
@@ -50,6 +53,15 @@ class StatisticsModule extends Module
             $routeStat
         ) {
             $routeStat->code_info = encode_specials($error->getMessage());
+        });
+
+        Core::$app->on(View::EVENT_LOAD_START, function(View $view) use (
+            $routeStat
+        ) {
+            if (get_class($view) === DynamicPage::class) {
+                $routeStat->url = $view->name;
+                $routeStat->type = RouteStat::ROUTE_TYPE_DYNAMIC_PAGE;
+            }
         });
 
         Core::$app->on(Core::EVENT_APP_END, function() use ($routeStat) {

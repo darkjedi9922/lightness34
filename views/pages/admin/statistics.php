@@ -47,6 +47,9 @@ $self->setLayout('admin');
                         <?php if ($route->type === $route::ROUTE_TYPE_ACTION) : ?>
                             <span class="routes__mark routes__mark--action">action</span>
                         <?php endif ?>
+                        <?php if ($route->type === $route::ROUTE_TYPE_DYNAMIC_PAGE) : ?>
+                            <span class="routes__mark routes__mark--dynamic">dynamic</span>
+                        <?php endif ?>
                     </span>
                     <div class="routes__cell routes__cell--code">
                         <span class="routes__code routes__code--<?= $severity ?>"><?= $route->code ?></span>
