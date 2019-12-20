@@ -4,6 +4,9 @@ use frame\tools\Init;
 use frame\lists\base\IdentityList;
 use engine\statistics\stats\RouteStat;
 use frame\route\Router;
+use frame\lists\iterators\IdentityIterator;
+use frame\database\Records;
+use engine\statistics\stats\DynamicRouteParam;
 
 Init::accessRight('admin', 'see-logs');
 
@@ -59,6 +62,37 @@ $self->setLayout('admin');
                     </div>
                 </div>
                 <div class="routes__details">
+                    <?php if ($route->viewfile) : ?>
+                        <div class="routes__get">
+                            <span class="routes__subheader">View file</span>
+                            <div class="param">
+                                <span class="routes__param-value"><?= $route->viewfile ?></span>
+                            </div>
+                        </div>
+                    <?php endif ?>
+                    <?php if ($route->type === $route::ROUTE_TYPE_DYNAMIC_PAGE) :
+                        $params = Records::select(DynamicRouteParam::getTable(), [
+                            'route_id' => $route->id
+                        ])->load();
+                        ?>
+                        <?php if ($params->count()) :
+                            $paramsIterator = new IdentityIterator(
+                                $params,
+                                DynamicRouteParam::class
+                            );
+                            ?>
+                            <div class="routes__get">
+                                <span class="routes__subheader">Dynamic Page Arguments</span>
+                                <?php foreach ($paramsIterator as $param) : /** @var DynamicRouteParam $param */ ?>
+                                    <div class="param">
+                                        <span class="routes__param-name"><?= $param->index ?></span>
+                                        <span class="routes__param-equals">=</span>
+                                        <span class="routes__param-value"><?= $param->value ?></span>
+                                    </div>
+                                <?php endforeach ?>
+                            </div>
+                        <?php endif ?>
+                    <?php endif ?>
                     <?php if (!empty($router->args)) : ?>
                         <div class="routes__get">
                             <span class="routes__subheader">Get</span>
@@ -66,7 +100,7 @@ $self->setLayout('admin');
                                 <div class="param">
                                     <span class="routes__param-name"><?= $key ?></span>
                                     <span class="routes__param-equals">=</span>
-                                    <span class="class routes__param-value <?= $value === '' ? 'routes__param-value--empty' : '' ?>"><?= $value !== '' ? $value : 'empty' ?></span>
+                                    <span class="routes__param-value <?= $value === '' ? 'routes__param-value--empty' : '' ?>"><?= $value !== '' ? $value : 'empty' ?></span>
                                 </div>
                             <?php endforeach ?>
                         </div>

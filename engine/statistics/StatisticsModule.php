@@ -4,6 +4,7 @@ use frame\Core;
 use frame\modules\Module;
 use frame\modules\RightsDesc;
 use engine\statistics\stats\RouteStat;
+use engine\statistics\stats\DynamicRouteParam;
 use frame\actions\ActionMacro;
 use frame\route\Request;
 use frame\route\Response;
@@ -58,16 +59,17 @@ class StatisticsModule extends Module
             $routeStat->code_info = encode_specials($error->getMessage());
         });
 
+        $collectPage = new CollectPage;
         Core::$app->on(View::EVENT_LOAD_START, function(View $view) use (
-            $routeStat
+            $collectPage
         ) {
-            if (get_class($view) === DynamicPage::class) {
-                $routeStat->url = $view->name;
-                $routeStat->type = RouteStat::ROUTE_TYPE_DYNAMIC_PAGE;
-            }
+            $collectPage->exec($view);
         });
 
-        Core::$app->on(Core::EVENT_APP_END, function() use ($routeStat) {
+        Core::$app->on(Core::EVENT_APP_END, function() use (
+            $routeStat,
+            $collectPage
+        ) {
             $routeStat->code = Response::getCode();
             switch ((int) ($routeStat->code / 100)) {
                 case 1:
@@ -80,15 +82,38 @@ class StatisticsModule extends Module
                     $redirect = Response::getUrl();
                     $routeStat->code_info = encode_specials("Redirect to url: $redirect");
             }
-            $routeStat->insert();
 
-            $table = RouteStat::getTable();
+            $page = $collectPage->page;
+            if ($page) {
+                $routeStat->viewfile = str_replace(ROOT_DIR . '/', '', $page->file);
+                if (get_class($page) === DynamicPage::class) {
+                    /** @var DynamicPage $page */
+                    $routeStat->type = RouteStat::ROUTE_TYPE_DYNAMIC_PAGE;
+                }
+            }
+
+            $routeId = $routeStat->insert();
+
+            if ($page && get_class($page) === DynamicPage::class) {            
+                $args = $page->getArguments();
+                for ($i = 0, $c = count($args); $i < $c; ++$i) {
+                    $param = new DynamicRouteParam;
+                    $param->route_id = $routeId;
+                    $param->index = $i;
+                    $param->value = encode_specials($args[$i]);
+                    $param->insert();
+                }
+            }
+
+            $routeTable = RouteStat::getTable();
+            $paramTable = DynamicRouteParam::getTable();
             $limit = $this->config->{'routes.lastRoutes.maxAmount'};
             database::get()->query(
-                "DELETE $table
-                FROM $table INNER JOIN (
-                    SELECT id FROM $table ORDER BY id DESC LIMIT $limit, 999999999
-                ) AS cond_table ON $table.id = cond_table.id"
+                "DELETE $routeTable, $paramTable
+                FROM ($routeTable LEFT OUTER JOIN $paramTable ON $routeTable.id = $paramTable.route_id)
+                INNER JOIN (
+                    SELECT id FROM $routeTable ORDER BY id DESC LIMIT $limit, 999999
+                ) AS cond_table ON $routeTable.id = cond_table.id"
             );
         });
     }
