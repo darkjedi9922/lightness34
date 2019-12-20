@@ -55,12 +55,12 @@ abstract class Identity
 
     /** 
      * @throws Exception if there is no such value.
-     * @return string|int
+     * @return string|int|null
      */
     public function __get(string $name)
     {
-        if (!isset($this->data[$name])) 
-            throw new \Exception("There is no '$name' in this identity.");
+        if (!array_key_exists($name, $this->data)) 
+            throw new \Exception("There is no '$name' field in this identity.");
         return $this->data[$name];
     }
 
