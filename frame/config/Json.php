@@ -35,7 +35,8 @@ class Json implements FileConfig
     }
 
     public function save() {
-        file_put_contents($this->file, json_encode($this->getData(), JSON_PRETTY_PRINT));   
+        file_put_contents($this->file, json_encode($this->getData(), 
+            JSON_PRETTY_PRINT | JSON_HEX_AMP));   
     }
 
     public function get($name) {
