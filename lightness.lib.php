@@ -361,3 +361,30 @@ function versionify(string $filename): string
     $version = filemtime($filename);
     return "/$filename?v=$version";
 }
+
+
+/**
+ * @param string    $str           Original string
+ * @param string    $needle        String to trim from the beginning of $str
+ * @return string Trimmed string
+ * @link https://stackoverflow.com/a/32739088/12577122
+ */
+function remove_prefix(string $str, string $needle): string
+{
+    if (strpos($str, $needle) === 0)
+        return substr($str, strlen($needle));
+    return $str;
+}
+
+/**
+ * @param string    $str           Original string
+ * @param string    $needle        String to trim from the end of $str
+ * @return string Trimmed string
+ * @link https://stackoverflow.com/a/32739088/12577122
+ */
+function remove_suffix(string $str, string $needle): string
+{
+    if (strpos($str, $needle, strlen($str) - strlen($needle)) !== false)
+        return substr($str, 0, -strlen($needle));
+    return $str;
+}
