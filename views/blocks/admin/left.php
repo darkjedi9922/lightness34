@@ -125,6 +125,12 @@ $rights = my_rights::get('admin');
                         <span class="menu__label">Маршруты</span>
                     </a>
                 </li>
+                <li class="menu__item">
+                    <a class="menu__link" href="/admin/statistics/actions">
+                        <i class="menu__icon fontello icon-superpowers"></i>
+                        <span class="menu__label">Действия</span>
+                    </a>
+                </li>
             </ul>
         </li>
         <li class="menu__item">
