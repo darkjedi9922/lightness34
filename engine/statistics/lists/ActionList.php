@@ -52,6 +52,8 @@ class ActionList implements BaseList
         $class = str_replace('/', '\\', $name);
         if (!class_exists($class)) return null;
         if (!is_subclass_of($class, ActionBody::class)) return null;
+        $reflection = new \ReflectionClass($class);
+        if (!$reflection->isInstantiable()) return null;
         return $class;
     }
 }
