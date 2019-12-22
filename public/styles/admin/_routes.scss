@@ -11,6 +11,10 @@
         }
     }
 
+    &__duration {
+        color: $clr-grey;
+    }
+
     &__mark {
         @extend .mark;
         &--ajax { @extend .mark--yellow; }

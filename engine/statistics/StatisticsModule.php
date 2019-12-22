@@ -13,6 +13,7 @@ use engine\statistics\macros\CollectActionRouteStat;
 use engine\statistics\macros\CollectErrorRouteStat;
 use engine\statistics\macros\CollectPageRouteStat;
 use engine\statistics\macros\EndCollectRouteStat;
+use engine\statistics\stats\TimeStat;
 
 class StatisticsModule extends Module
 {
@@ -42,14 +43,17 @@ class StatisticsModule extends Module
     private function getRouteStatCollectors(): array
     {
         $route = new RouteStat;
+        $routeTimer = new TimeStat;
+
         $collectPage = new CollectPageRouteStat;
+        $end = new EndCollectRouteStat($route, $collectPage, $routeTimer);
 
         return [
-            Core::EVENT_APP_START => new StartCollectRouteStat($route),
+            Core::EVENT_APP_START => new StartCollectRouteStat($route, $routeTimer),
             ActionMacro::EVENT_ACTION_TRIGGERED => new CollectActionRouteStat($route),
             Core::EVENT_APP_ERROR => new CollectErrorRouteStat($route),
             View::EVENT_LOAD_START => $collectPage,
-            Core::EVENT_APP_END => new EndCollectRouteStat($route, $collectPage)
+            Core::EVENT_APP_END => $end
         ];
     }
 }

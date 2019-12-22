@@ -24,6 +24,7 @@ $self->setLayout('admin');
     <table class="table routes">
         <tr class="table__headers">
             <td class="table__header">Path</td>
+            <td class="table__header">Duration</td>
             <td class="table__header">Code</td>
             <td class="table__header">Time</td>
         </tr>
@@ -57,6 +58,9 @@ $self->setLayout('admin');
                         <?php if ($route->type === $route::ROUTE_TYPE_DYNAMIC_PAGE) : ?>
                             <span class="routes__mark routes__mark--dynamic">dynamic</span>
                         <?php endif ?>
+                    </td>
+                    <td class="table__cell">
+                        <span class="routes__duration"><?= $route->duration_sec ?> sec</span>
                     </td>
                     <td class="table__cell">
                         <span class="routes__code routes__code--<?= $severity ?>"><?= $route->code ?></span>

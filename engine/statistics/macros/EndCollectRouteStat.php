@@ -10,22 +10,29 @@ use frame\cash\config;
 use frame\cash\database;
 
 use function lightlib\encode_specials;
+use engine\statistics\stats\TimeStat;
 
 class EndCollectRouteStat extends Macro
 {
     private $stat;
     private $collectPage;
+    private $timer;
 
-    public function __construct(RouteStat $stat, CollectPageRouteStat $collectPage)
-    {
+    public function __construct(
+        RouteStat $stat,
+        CollectPageRouteStat $collectPage,
+        TimeStat $timer
+    ) {
         $this->stat = $stat;
         $this->collectPage = $collectPage;
+        $this->timer = $timer;
     }
 
     public function exec(...$args)
     {
         $this->collectCodeInfo();
         $this->collectViewfileAndType();
+        $this->stat->duration_sec = $this->timer->resultInSeconds();
         $this->stat->insert();
         $this->collectDynamicParams();
         $this->deleteOldStats();
