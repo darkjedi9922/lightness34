@@ -2,53 +2,6 @@
 @import './mark2';
 
 .routes {
-    font-family: $global-font;
-    font-size: 1.1rem;
-    width: 100%;
-    border-spacing: 0;
-
-    &__headers {
-        font-weight: bold;
-        display: flex;
-        padding: 0.5rem 1rem 0;
-        margin: -0.5rem -0.5rem 0;
-    }
-
-    &__header {
-        text-transform: uppercase;
-        padding: 0 0 0.6rem 0;
-    }
-
-    &__item {
-        margin: 0 -0.5rem;
-        padding: 0.2rem 1rem;
-        border-top: solid 1px #bfbfbf;
-
-        &:hover {
-            background: $clr-hoverbox;
-        }
-    }
-
-    &__route {
-        display: flex;
-    }
-
-    &__cell {
-        align-self: center;
-        display: inline-block;
-        margin: 0.1rem 0;
-
-        &--path {
-            flex-grow: 1;
-        }
-        &--code {
-            width: 4rem;
-        }
-        &--time {
-            width: 7rem;
-        }
-    }
-
     &__pagename {
         margin-right: 0.5rem;
 
@@ -72,12 +25,10 @@
         &--error { @extend .mark2--red; }
     }
 
-    &__get, &__status {
-        display: block;
-        padding: 0.5rem 0 0.5rem 1rem;
-    }
-
     &__status {
+        display: block;
+        padding: 0.5rem 0 0.5rem 2rem;
+
         &--ok {
             color: $box-green;
         }
@@ -91,11 +42,6 @@
 
     &__status-code {
         font-weight: bold;
-    }
-
-    &__subheader {
-        font-weight: bold;
-        text-transform: uppercase;
     }
 
     &__param-value {
