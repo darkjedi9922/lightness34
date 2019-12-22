@@ -30,6 +30,25 @@ class ProfileEditAction extends ProfileAction
     /** @var UploadedFile */
     private $avatar = null;
 
+    public function listGet(): array
+    {
+        return [
+            'id' => [self::GET_INT, 'Id of the user']
+        ];
+    }
+
+    public function listPost(): array
+    {
+        return [
+            'login' => [self::POST_TEXT, 'New login'],
+            'password' => [self::POST_PASSWORD, 'New password or empty string'],
+            'email' => [self::POST_TEXT, 'New email'],
+            'name' => [self::POST_TEXT, 'New name'],
+            'surname' => [self::POST_TEXT, 'New name'],
+            'gender_id' => [self::POST_INT, 'Id of new gender']
+        ];
+    }
+
     public function initialize(array $get)
     {
         parent::initialize($get);
