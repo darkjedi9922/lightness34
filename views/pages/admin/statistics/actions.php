@@ -2,11 +2,14 @@
 
 use frame\tools\Init;
 use frame\actions\ActionBody;
+use frame\lists\base\IdentityList;
 use engine\statistics\lists\ActionList;
+use engine\statistics\stats\ActionStat;
 
 Init::accessRight('admin', 'see-logs');
 
 $actions = new ActionList;
+$history = new IdentityList(ActionStat::class, ['id' => 'DESC']);
 
 $self->setLayout('admin');
 ?>
@@ -16,6 +19,29 @@ $self->setLayout('admin');
     <span class="breadcrumbs__divisor"></span>
     <span class="breadcrumbs__item breadcrumbs__item--current">Действия</span>
 </div>
+
+<span class="content__title">История запусков</span>
+<div class="box box--table">
+    <table class="table routes">
+        <tr class="table__headers">
+            <td class="table__header">Class</td>
+            <td class="table__header">Duration</td>
+            <!-- <td class="table__header">Status</td> -->
+            <td class="table__header">Time</td>
+        </tr>
+        <?php foreach ($history as $action) : /** @var ActionStat $action */ ?>
+            <tbody class="table__item-wrapper">
+                <tr class="table__item">
+                    <td class="table__cell"><?= $action->class ?></td>
+                    <td class="table__cell routes__duration"><?= $action->duration_sec ?> sec</td>
+                    <td class="table__cell"><?= date('d.m.Y H:i', $action->time) ?></td>
+                </tr>
+            </tbody>
+        <?php endforeach ?>
+    </table>
+</div>
+
+<span class="content__title">Доступные действия</span>
 <div class="box box--table">
     <table class="table actions">
         <tr class="table__headers">

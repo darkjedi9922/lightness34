@@ -14,6 +14,10 @@ use engine\statistics\macros\CollectErrorRouteStat;
 use engine\statistics\macros\CollectPageRouteStat;
 use engine\statistics\macros\EndCollectRouteStat;
 use engine\statistics\stats\TimeStat;
+use frame\actions\Action;
+use engine\statistics\macros\StartCollectActionStat;
+use engine\statistics\stats\ActionStat;
+use engine\statistics\macros\EndCollectActionStat;
 
 class StatisticsModule extends Module
 {
@@ -28,6 +32,7 @@ class StatisticsModule extends Module
         if ($router->isInAnyNamespace($this->config->ignorePageNamespaces)) return;
 
         $this->setupEventHandlers($this->getRouteStatCollectors());
+        $this->setupEventHandlers($this->getActionStatCollectors());
     }
 
     public function createRightsDescription(): ?RightsDesc
@@ -54,6 +59,17 @@ class StatisticsModule extends Module
             Core::EVENT_APP_ERROR => new CollectErrorRouteStat($route),
             View::EVENT_LOAD_START => $collectPage,
             Core::EVENT_APP_END => $end
+        ];
+    }
+
+    private function getActionStatCollectors(): array
+    {
+        $stat = new ActionStat;
+        $timer = new TimeStat;
+
+        return [
+            Action::EVENT_START => new StartCollectActionStat($stat, $timer),
+            Action::EVENT_END => new EndCollectActionStat($stat, $timer)
         ];
     }
 }

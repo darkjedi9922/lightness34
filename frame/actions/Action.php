@@ -2,7 +2,7 @@
 
 use frame\actions\UploadedFile;
 use frame\errors\HttpError;
-use frame\tools\Client;
+use frame\Core;
 
 use function lightlib\encode_specials;
 
@@ -15,6 +15,9 @@ use function lightlib\encode_specials;
  */
 class Action
 {
+    const EVENT_START = 'action-exec-start';
+    const EVENT_END = 'action-exec-end';
+
     /** Type of Action data. */
     const ARGS = 'get';
     const POST = 'post';
@@ -125,6 +128,7 @@ class Action
      */
     public final function exec()
     {
+        Core::$app->emit(self::EVENT_START, $this);
         $this->validateGet($this->data[self::ARGS]);
         $this->validatePost($this->data[self::POST]);
         $this->body->initialize($this->data[self::ARGS]);
@@ -143,6 +147,7 @@ class Action
                 $this->data[self::FILES]
             ) ?? [];
         }
+        Core::$app->emit(self::EVENT_END, $this);
     }
 
     public function getErrors(): array
