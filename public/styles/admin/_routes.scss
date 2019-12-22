@@ -1,3 +1,6 @@
+@import './mark';
+@import './mark2';
+
 .routes {
     font-family: $global-font;
     font-size: 1.1rem;
@@ -56,50 +59,17 @@
     }
 
     &__mark {
-        font-size: 1rem;
-        padding: 0.1rem 0.5rem;
-        border-radius: 1rem;
-        color: white;
-
-        &:before {
-            content: '';
-            display: inline-block;
-            width: 0.5rem;
-            height: 0.5rem;
-            border-radius: 100%;
-            margin-right: 0.3rem;
-            background: white;
-        }
-
-        &--ajax {
-            background: $box-yellow;
-        }
-        &--action {
-            background: $box-blue;
-        }
-        &--dynamic {
-            background: $box-purple;
-        }
+        @extend .mark;
+        &--ajax { @extend .mark--yellow; }
+        &--action { @extend .mark--blue; }
+        &--dynamic { @extend .mark--purple; }
     }
 
     &__code {
-        border-radius: 0.5rem;
-        display: inline-block;
-        padding: 0.2rem 0;
-        width: 2.5rem;
-        text-align: center;
-        color: white;
-        font-weight: bold;
-
-        &--ok {
-            background: $box-green;
-        }
-        &--warning {
-            background: $box-yellow;
-        }
-        &--error {
-            background: $box-red;
-        }
+        @extend .mark2;
+        &--ok { @extend .mark2--green; }
+        &--warning { @extend .mark2--yellow; }
+        &--error { @extend .mark2--red; }
     }
 
     &__get, &__status {

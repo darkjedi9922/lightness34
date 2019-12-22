@@ -1,0 +1,25 @@
+.mark2 {
+    border-radius: 0.5rem;
+    display: inline-block;
+    padding: 0.2rem 0.4rem;
+    text-align: center;
+    color: white;
+    font-size: 1.1rem;
+    font-weight: bold;
+
+    &--green {
+        background: $box-green;
+    }
+    &--yellow {
+        background: $box-yellow;
+    }
+    &--red {
+        background: $box-red;
+    }
+    &--blue {
+        background: $box-blue;
+    }
+    &--purple {
+        background: $box-purple;
+    }
+}

@@ -1,0 +1,27 @@
+.mark {
+    font-family: $global-font;
+    font-size: 1rem;
+    padding: 0.1rem 0.5rem;
+    border-radius: 1rem;
+    color: white;
+
+    &:before {
+        content: '';
+        display: inline-block;
+        width: 0.5rem;
+        height: 0.5rem;
+        border-radius: 100%;
+        margin-right: 0.3rem;
+        background: white;
+    }
+
+    &--yellow {
+        background: $box-yellow;
+    }
+    &--blue {
+        background: $box-blue;
+    }
+    &--purple {
+        background: $box-purple;
+    }
+}
