@@ -76,8 +76,12 @@ class Core
 
     public function __destruct()
     {
-        if ($this->events->getEmitCount(self::EVENT_APP_START) !== 0)
-            $this->events->emit(self::EVENT_APP_END);
+        try {
+            if ($this->events->getEmitCount(self::EVENT_APP_START) !== 0)
+                $this->events->emit(self::EVENT_APP_END);
+        } catch (\Throwable $error) {
+            $this->handleError($error);
+        }
     }
 
     /**
@@ -206,9 +210,10 @@ class Core
      */
     private function handleError(\Throwable $e)
     {
-        $this->emit(self::EVENT_APP_ERROR, $e);
         $logging = $this->config->{'log.enabled'};
         if ($logging) $this->writeInLog(Logger::ERROR, $e);
+
+        $this->emit(self::EVENT_APP_ERROR, $e);
 
         if (isset($this->handlers[get_class($e)])) (new $this->handlers[get_class($e)])->handle($e);
         else if ($this->defaultHandler) (new $this->defaultHandler)->handle($e);
