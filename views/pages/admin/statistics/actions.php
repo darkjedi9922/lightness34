@@ -25,7 +25,7 @@ $self->setLayout('admin');
         <?php foreach ($actions as $class) :
             /** @var string $class */
             $module = explode('\\', $class)[2];
-            $color = ord($module[0]) % 5 + 1;
+            // $color = ord($module[0]) % 5 + 1;
             /** @var ActionBody $action */
             $action = new $class;
             ?>
@@ -33,28 +33,32 @@ $self->setLayout('admin');
                 <tr class="table__item">
                     <td class="table__cell"><?= $class ?></td>
                     <td class="table__cell">
-                        <span class="actions__module actions__module--<?= $color ?>"><?= $module ?></span>
+                        <span class="actions__module"><?= $module ?></span>
                     </td>
                 </tr>
                 <tr class="table__item-details-wrapper">
                     <td class="table__item-details" colspan="100">
                         <?php if (!empty($action->listGet())) : ?>
                             <span class="table__subheader">GET Parameters</span>
-                            <div class="table__item-detail">
+                            <div class="table__detail-wrapper">
                                 <?php foreach ($action->listGet() as $name => $desc) : ?>
-                                    <span class="actions__param-name"><?= $name ?></span>
-                                    <span class="actions__param-type"><?= $desc[0] ?></span>
-                                    <span class="actions__param-desc"><?= $desc[1] ?></span>
+                                    <div class="table__item-detail actions__param">
+                                        <span class="actions__param-type actions__param-type--<?= $desc[0] ?>"><?= $desc[0] ?></span>
+                                        <span class="actions__param-name"><?= $name ?></span>
+                                        <span class="actions__param-desc"><?= $desc[1] ?></span>
+                                    </div>
                                 <?php endforeach ?>
                             </div>
                         <?php endif ?>
                         <?php if (!empty($action->listPost())) : ?>
                             <span class="table__subheader">POST Parameters</span>
-                            <div class="table__item-detail">
+                            <div class="table__detail-wrapper">
                                 <?php foreach ($action->listPost() as $name => $desc) : ?>
-                                    <span class="actions__param-name"><?= $name ?></span>
-                                    <span class="actions__param-type"><?= $desc[0] ?></span>
-                                    <span class="actions__param-desc"><?= $desc[1] ?></span>
+                                    <div class="table__item-detail actions__param">
+                                        <span class="actions__param-type actions__param-type--<?= $desc[0] ?>"><?= $desc[0] ?></span>
+                                        <span class="actions__param-name"><?= $name ?></span>
+                                        <span class="actions__param-desc"><?= $desc[1] ?></span>
+                                    </div>
                                 <?php endforeach ?>
                             </div>
                         <?php endif ?>

@@ -4,6 +4,7 @@
     padding: 0.1rem 0.5rem;
     border-radius: 1rem;
     color: white;
+    display: inline-block;
 
     &:before {
         content: '';
@@ -15,13 +16,9 @@
         background: white;
     }
 
-    &--yellow {
-        background: $box-yellow;
-    }
-    &--blue {
-        background: $box-blue;
-    }
-    &--purple {
-        background: $box-purple;
-    }
+    &--yellow { background: $box-yellow; }
+    &--blue { background: $box-blue; }
+    &--green { background: $box-green; }
+    &--red { background: $box-red; }
+    &--purple { background: $box-purple; }
 }
