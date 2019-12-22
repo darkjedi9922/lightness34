@@ -1,0 +1,41 @@
+.table {
+    font-family: $global-font;
+    font-size: 1.1rem;
+    width: 100%;
+    border-spacing: 0;
+
+    &__headers {
+        font-weight: bold;
+    }
+
+    &__header {
+        text-transform: uppercase;
+        padding: 0.5rem 1rem;
+    }
+
+    &__item-wrapper {
+        &:hover {
+            background: $clr-hoverbox;
+        }
+    }
+
+    &__cell {
+        padding: 0.5rem 1rem;
+        border-top: solid 1px #bfbfbf;
+    }
+
+    &__subheader {
+        font-weight: bold;
+        text-transform: uppercase;
+        padding: 0.5rem 0 0 2rem;
+        display: inline-block;
+
+        &:first-child {
+            padding-top: 0;
+        }
+    }
+
+    &__item-detail {
+        padding: 0 0 0.5rem 2rem;
+    }
+}

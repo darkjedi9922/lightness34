@@ -47,6 +47,7 @@ $global-error-color-lightened: lighten($global-error-color, 35);
 $global-font: "Greta Sans Light";
 $global-box-radius: 10px;
 
+@import 'admin/actions';
 @import 'admin/article';
 @import 'admin/author';
 @import 'admin/box-form';
@@ -68,6 +69,7 @@ $global-box-radius: 10px;
 @import 'admin/notice';
 @import 'admin/pager';
 @import 'admin/routes';
+@import 'admin/table';
 
 html {
     height: 100%;
