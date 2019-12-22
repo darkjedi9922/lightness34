@@ -115,7 +115,7 @@ $rights = my_rights::get('admin');
         <li class="menu__item">
             <a class="menu__link menu__link--parent">
                 <i class="menu__icon fontello icon-chart-bar"></i>
-                <span class="menu__label">Статистика</span>
+                <span class="menu__label">Мониторинг</span>
                 <i class="menu__arrow fontello icon-down-dir"></i>
             </a>
             <ul class="menu__submenu">

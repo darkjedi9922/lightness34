@@ -16,7 +16,7 @@ $self->setLayout('admin');
 ?>
 
 <div class="breadcrumbs">
-    <span class="breadcrumbs__item">Статистика</span>
+    <span class="breadcrumbs__item">Мониторинг</span>
     <span class="breadcrumbs__divisor"></span>
     <span class="breadcrumbs__item breadcrumbs__item--current">Маршруты</span>
 </div>
