@@ -10,7 +10,7 @@ use engine\statistics\stats\DynamicRouteParam;
 
 Init::accessRight('admin', 'see-logs');
 
-$routes = new IdentityList(RouteStat::class, ['time' => 'DESC']);
+$routes = new IdentityList(RouteStat::class, ['id' => 'DESC']);
 
 $self->setLayout('admin');
 ?>
