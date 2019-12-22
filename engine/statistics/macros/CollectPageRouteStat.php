@@ -1,10 +1,10 @@
-<?php namespace engine\statistics;
+<?php namespace engine\statistics\macros;
 
 use frame\macros\Macro;
 use frame\views\DynamicPage;
 use frame\views\Page;
 
-class CollectPage extends Macro
+class CollectPageRouteStat extends Macro
 {
     /** @var Page */
     public $page = null;
