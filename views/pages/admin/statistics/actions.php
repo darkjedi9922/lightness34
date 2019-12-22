@@ -32,7 +32,12 @@ $self->setLayout('admin');
         <?php foreach ($history as $action) : /** @var ActionStat $action */ ?>
             <tbody class="table__item-wrapper">
                 <tr class="table__item">
-                    <td class="table__cell"><?= $action->class ?></td>
+                    <td class="table__cell">
+                        <?= $action->class ?>
+                        <?php if ($action->ajax) : ?>
+                            <span class="routes__mark routes__mark--ajax">ajax</span>
+                        <?php endif  ?>
+                    </td>
                     <td class="table__cell routes__duration"><?= $action->duration_sec ?> sec</td>
                     <td class="table__cell"><?= date('d.m.Y H:i', $action->time) ?></td>
                 </tr>
