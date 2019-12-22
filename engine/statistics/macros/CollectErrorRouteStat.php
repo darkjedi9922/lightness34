@@ -1,11 +1,10 @@
 <?php namespace engine\statistics\macros;
 
-use frame\macros\Macro;
 use engine\statistics\stats\RouteStat;
 
 use function lightlib\encode_specials;
 
-class CollectErrorRouteStat extends Macro
+class CollectErrorRouteStat extends BaseStatCollector
 {
     private $stat;
 
@@ -14,7 +13,7 @@ class CollectErrorRouteStat extends Macro
         $this->stat = $stat;
     }
 
-    public function exec(...$args)
+    protected function collect(...$args)
     {
         /** @var \Throwable $error */
         $error = $args[0];

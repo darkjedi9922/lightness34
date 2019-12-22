@@ -1,15 +1,14 @@
 <?php namespace engine\statistics\macros;
 
-use frame\macros\Macro;
 use frame\views\DynamicPage;
 use frame\views\Page;
 
-class CollectPageRouteStat extends Macro
+class CollectPageRouteStat extends BaseStatCollector
 {
     /** @var Page */
     public $page = null;
 
-    public function exec(...$args)
+    protected function collect(...$args)
     {
         $view = $args[0];
         switch (get_class($view)) {

@@ -2,11 +2,10 @@
 
 use engine\statistics\stats\RouteStat;
 use frame\route\Request;
-use frame\macros\Macro;
 use frame\Core;
 use engine\statistics\stats\TimeStat;
 
-class StartCollectRouteStat extends Macro
+class StartCollectRouteStat extends BaseStatCollector
 {
     private $stat;
     private $timer;
@@ -17,7 +16,7 @@ class StartCollectRouteStat extends Macro
         $this->timer = $timer;
     }
 
-    public function exec(...$args)
+    protected function collect(...$args)
     {
         $this->timer->start();
         $router = Core::$app->router;

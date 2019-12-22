@@ -1,6 +1,5 @@
 <?php namespace engine\statistics\macros;
 
-use frame\macros\Macro;
 use frame\route\Response;
 use frame\views\DynamicPage;
 use engine\statistics\stats\RouteStat;
@@ -12,7 +11,7 @@ use frame\cash\database;
 use function lightlib\encode_specials;
 use engine\statistics\stats\TimeStat;
 
-class EndCollectRouteStat extends Macro
+class EndCollectRouteStat extends BaseStatCollector
 {
     private $stat;
     private $collectPage;
@@ -28,7 +27,7 @@ class EndCollectRouteStat extends Macro
         $this->timer = $timer;
     }
 
-    public function exec(...$args)
+    protected function collect(...$args)
     {
         $this->collectCodeInfo();
         $this->collectViewfileAndType();

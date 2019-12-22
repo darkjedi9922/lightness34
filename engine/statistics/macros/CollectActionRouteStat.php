@@ -1,9 +1,8 @@
 <?php namespace engine\statistics\macros;
 
-use frame\macros\Macro;
 use engine\statistics\stats\RouteStat;
 
-class CollectActionRouteStat extends Macro
+class CollectActionRouteStat extends BaseStatCollector
 {
     private $stat;
 
@@ -12,7 +11,7 @@ class CollectActionRouteStat extends Macro
         $this->stat = $stat;    
     }
 
-    public function exec(...$args)
+    protected function collect(...$args)
     {
         $this->stat->type = RouteStat::ROUTE_TYPE_ACTION;
     }
