@@ -134,6 +134,11 @@ class UploadedFile extends File
         return $this->hasError(self::UPLOAD_ERR_OK);
     }
 
+    public function toArray(): array
+    {
+        return $this->file;
+    }
+
     private function throwImportantErrorException()
     {
         // Если одна из ошибок ниже появляется, нужно сразу бросить исключение
