@@ -119,6 +119,21 @@ function encode_specials($data)
     return htmlspecialchars($data, ENT_QUOTES);
 }
 
+/**
+ * Противоположно encode_specials().
+ * @see encode_specials()
+ */
+function decode_specials($data)
+{
+    if (is_array($data)) {
+        $result = [];
+        foreach ($data as $key => $value) $result[$key] = encode_specials($value);
+        return $result;
+    }
+
+    return htmlspecialchars_decode($data, ENT_QUOTES);
+}
+
 // =============================================================================
 
 /**
