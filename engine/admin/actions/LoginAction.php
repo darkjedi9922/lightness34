@@ -18,6 +18,13 @@ class LoginAction extends ActionBody
     /** @var Auth $auth */
     private $auth;
 
+    public function listPost(): array
+    {
+        return [
+            'password' => [self::POST_PASSWORD, 'The password to admin panel']
+        ];
+    }
+
     public function initialize(array $get)
     {
         Init::accessRight('admin', 'enter');
