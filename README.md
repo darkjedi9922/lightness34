@@ -11,7 +11,7 @@ The framework aims on strong component and code structuring. The first purpose i
 3. **Database access.** It gives convenient access to MySQL database.
 4. **Actions**. Handle forms and validate them.
 5. **Error Handlers**. Handle errors of any type from notices to fatal in one way that can be different to different error types.
-6. **Macroses**. Do something when you recieve trigger GET parameters.
+6. **Events and Macros**. Emit and handle events with macros.
 7. **Rules**. Validates data using chains of rule validators.
 8. **Cash**. Pre-defined variables that are created when they are used first time. Should not use cash values in the frame classes because these values make testing and architecture of that classes more difficult.
 9. **Dynamic pages**. It allows to form dynamic routes sort of `page/non-existence-page/another-non-existence-page`. In this example `page` is a existing page that is really present as viewfile, and next parts of the url are *virtual* pages. Their names can be accessed from viewfile of dynamic page. That feature can be used, for example, to form routes like `article/my-first-article` where `my-first-article` is a name of the article that will be loaded from database in `article` viewfile.
