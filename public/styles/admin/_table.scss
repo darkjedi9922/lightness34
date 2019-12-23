@@ -27,15 +27,11 @@
     &__subheader {
         font-weight: bold;
         text-transform: uppercase;
-        padding: 0.5rem 0 0 2rem;
+        padding-left: 2rem;
         display: inline-block;
-
-        &:first-child {
-            padding-top: 0;
-        }
     }
 
     &__detail-wrapper {
-        padding: 0 0 0.5rem 2rem;
+        padding: 0 0 1rem 2rem;
     }
 }
