@@ -26,10 +26,17 @@ $self->setLayout('admin');
         <tr class="table__headers">
             <td class="table__header">Class</td>
             <td class="table__header">Duration</td>
-            <!-- <td class="table__header">Status</td> -->
+            <td class="table__header">Status</td>
             <td class="table__header">Time</td>
         </tr>
-        <?php foreach ($history as $action) : /** @var ActionStat $action */ ?>
+        <?php foreach ($history as $action) :
+            /** @var ActionStat $action */
+            $data = json_decode($action->data_json, true);
+            $success = empty($data['errors']);
+            /** @var ActionBody $body */
+            $body = new $action->class;
+            $postDesc = $body->listPost();
+            ?>
             <tbody class="table__item-wrapper">
                 <tr class="table__item">
                     <td class="table__cell">
@@ -39,7 +46,47 @@ $self->setLayout('admin');
                         <?php endif  ?>
                     </td>
                     <td class="table__cell routes__duration"><?= $action->duration_sec ?> sec</td>
+                    <td class="table__cell">
+                        <span class="routes__code routes__code--status routes__code--<?= $success ? 'ok' : 'error' ?>">
+                            <?= $success ? 'Success' : 'Failure' ?>
+                        </span>
+                    </td>
                     <td class="table__cell"><?= date('d.m.Y H:i', $action->time) ?></td>
+                </tr>
+                <tr class="table__item-details-wrapper">
+                    <td class="table__item-details" colspan="100">
+                        <?php if (!empty($data['data']['get'])) : ?>
+                            <span class="table__subheader">Get Data</span>
+                            <div class="table__detail-wrapper">
+                                <?php foreach ($data['data']['get'] as $field => $value) : ?>
+                                    <div class="table__item-detail">
+                                        <span class="routes__param-name"><?= $field ?></span>
+                                        <span class="routes__param-equals">=</span>
+                                        <span class="routes__param-value <?= $value === '' ? 'routes__param-value--empty' : '' ?>">
+                                            <?= $value !== '' ? $value : 'empty' ?>
+                                        </span>
+                                    </div>
+                                <?php endforeach ?>
+                            </div>
+                        <?php endif ?>
+                        <?php if (!empty($data['data']['post'])) : ?>
+                            <span class="table__subheader">Post Data</span>
+                            <div class="table__detail-wrapper">
+                                <?php foreach ($data['data']['post'] as $field => $value) :
+                                    $empty = $value === '';
+                                    $secret = ($postDesc[$field][0] ?? null) === ActionBody::POST_PASSWORD;
+                                    ?>
+                                    <div class="table__item-detail">
+                                        <span class="routes__param-name"><?= $field ?></span>
+                                        <span class="routes__param-equals">=</span>
+                                        <span class="routes__param-value <?= $empty || $secret ? 'routes__param-value--empty' : '' ?>">
+                                            <?= !$empty ? $value : 'empty' ?>
+                                        </span>
+                                    </div>
+                                <?php endforeach ?>
+                            </div>
+                        <?php endif ?>
+                    </td>
                 </tr>
             </tbody>
         <?php endforeach ?>

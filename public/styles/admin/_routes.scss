@@ -27,6 +27,8 @@
         &--ok { @extend .mark2--green; }
         &--warning { @extend .mark2--yellow; }
         &--error { @extend .mark2--red; }
+
+        &--status { width: 3.4rem; }
     }
 
     &__status {
