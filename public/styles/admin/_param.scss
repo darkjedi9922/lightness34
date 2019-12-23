@@ -1,0 +1,15 @@
+.param {
+    font-family: $global-font;
+    font-size: 1.1rem;
+
+    &__equals {
+        color: $clr-grey;
+    }
+
+    &__value {
+        &--empty {
+            color: $clr-grey;
+            font-style: italic;
+        }
+    }
+}

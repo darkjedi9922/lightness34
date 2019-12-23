@@ -59,10 +59,10 @@ $self->setLayout('admin');
                             <span class="table__subheader">Get Data</span>
                             <div class="table__detail-wrapper">
                                 <?php foreach ($data['data']['get'] as $field => $value) : ?>
-                                    <div class="table__item-detail">
-                                        <span class="routes__param-name"><?= $field ?></span>
-                                        <span class="routes__param-equals">=</span>
-                                        <span class="routes__param-value <?= $value === '' ? 'routes__param-value--empty' : '' ?>">
+                                    <div class="param">
+                                        <span class="param__name"><?= $field ?></span>
+                                        <span class="param__equals">=></span>
+                                        <span class="param__value <?= $value === '' ? 'param__value--empty' : '' ?>">
                                             <?= $value !== '' ? $value : 'empty' ?>
                                         </span>
                                     </div>
@@ -76,10 +76,10 @@ $self->setLayout('admin');
                                     $empty = $value === '';
                                     $secret = ($postDesc[$field][0] ?? null) === ActionBody::POST_PASSWORD;
                                     ?>
-                                    <div class="table__item-detail">
-                                        <span class="routes__param-name"><?= $field ?></span>
-                                        <span class="routes__param-equals">=</span>
-                                        <span class="routes__param-value <?= $empty || $secret ? 'routes__param-value--empty' : '' ?>">
+                                    <div class="param">
+                                        <span class="param__name"><?= $field ?></span>
+                                        <span class="param__equals">=></span>
+                                        <span class="param__value <?= $empty || $secret ? 'param__value--empty' : '' ?>">
                                             <?= !$empty ? $value : 'empty' ?>
                                         </span>
                                     </div>

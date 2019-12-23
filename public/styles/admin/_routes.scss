@@ -49,11 +49,4 @@
     &__status-code {
         font-weight: bold;
     }
-
-    &__param-value {
-        &--empty {
-            color: $clr-grey;
-            font-style: italic;
-        }
-    }
 }

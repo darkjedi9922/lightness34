@@ -91,10 +91,10 @@ $self->setLayout('admin');
                                 <span class="table__subheader">Dynamic Page Arguments</span>
                                 <div class="table__detail-wrapper">
                                     <?php foreach ($paramsIterator as $param) : /** @var DynamicRouteParam $param */ ?>
-                                        <div class="table__item-detail">
-                                            <span class="routes__param-name"><?= $param->index ?></span>
-                                            <span class="routes__param-equals">=</span>
-                                            <span class="routes__param-value"><?= $param->value ?></span>
+                                        <div class="param">
+                                            <span class="param__name"><?= $param->index ?></span>
+                                            <span class="param__equals">=</span>
+                                            <span class="param__value"><?= $param->value ?></span>
                                         </div>
                                     </div>
                                 <?php endforeach ?>
@@ -104,10 +104,10 @@ $self->setLayout('admin');
                             <span class="table__subheader">Get</span>
                             <div class="table__detail-wrapper">
                                 <?php foreach ($router->args as $key => $value) : ?>
-                                    <div class="table__item-detail">
-                                        <span class="routes__param-name"><?= $key ?></span>
-                                        <span class="routes__param-equals">=</span>
-                                        <span class="routes__param-value <?= $value === '' ? 'routes__param-value--empty' : '' ?>"><?= $value !== '' ? $value : 'empty' ?></span>
+                                    <div class="param">
+                                        <span class="param__name"><?= $key ?></span>
+                                        <span class="param__equals">=</span>
+                                        <span class="param__value <?= $value === '' ? 'param__value--empty' : '' ?>"><?= $value !== '' ? $value : 'empty' ?></span>
                                     </div>
                                 <?php endforeach ?>
                             </div>
