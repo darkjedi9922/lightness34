@@ -35,6 +35,7 @@ $self->setLayout('admin');
             /** @var ActionStat $action */
             $data = json_decode($action->data_json, true);
             $errors = $data['errors'];
+            $result = $data['result'];
             $success = empty($errors);
             /** @var ActionBody $body */
             $body = new $action->class;
@@ -93,7 +94,7 @@ $self->setLayout('admin');
                             <div class="details">
                                 <span class="details__header">Uploaded Files</span>
                                 <div class="param">
-                                    <span class="param__value param__value--empty">No files uploaded.</span>
+                                    <span class="param__value param__value--empty">No files uploaded</span>
                                 </div>
                             </div>
                         <?php else : ?>
@@ -160,6 +161,22 @@ $self->setLayout('admin');
                                 </div>
                             <?php endforeach ?>
                         <?php endif ?>
+                        <div class="details">
+                            <span class="details__header">Result data</span>
+                            <?php if (empty($result)) : ?>
+                                <div class="param">
+                                    <span class="param__value param__value--empty">No result data specified</span>
+                                </div>
+                            <?php else : ?>
+                                <?php foreach ($result as $key => $value) : ?>
+                                    <div class="param">
+                                        <span class="param__name"><?= $key ?></span>
+                                        <span class="param__equals">=></span>
+                                        <span class="param__value"><?= $value ?></span>
+                                    </div>
+                                <?php endforeach ?>
+                            <?php endif ?>
+                        </div>
                         <?php if (!empty($errors)) : ?>
                             <div class="details">
                                 <span class="status status--error">
