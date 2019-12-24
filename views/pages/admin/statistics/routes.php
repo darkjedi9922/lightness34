@@ -69,12 +69,14 @@ $self->setLayout('admin');
                         <span class="routes__time"><?= date('d.m.Y H:i', $route->time) ?></span>
                     </td>
                 </tr>
-                <tr class="table__item-details-wrapper">
-                    <td class="table__item-details" colspan="100">
+                <tr class="table__details-wrapper">
+                    <td class="table__details" colspan="100">
                         <?php if ($route->viewfile) : ?>
-                            <span class="table__subheader">View file</span>
-                            <div class="table__detail-wrapper">
-                                <span class="routes__param-value"><?= $route->viewfile ?></span>
+                            <div class="details">
+                                <span class="details__header">View file</span>
+                                <div class="param">
+                                    <span class="routes__param-value"><?= $route->viewfile ?></span>
+                                </div>
                             </div>
                         <?php endif ?>
                         <?php if ($route->type === $route::ROUTE_TYPE_DYNAMIC_PAGE) :
@@ -88,21 +90,21 @@ $self->setLayout('admin');
                                     DynamicRouteParam::class
                                 );
                                 ?>
-                                <span class="table__subheader">Dynamic Page Arguments</span>
-                                <div class="table__detail-wrapper">
+                                <div class="details">
+                                    <span class="details__header">Dynamic Page Arguments</span>
                                     <?php foreach ($paramsIterator as $param) : /** @var DynamicRouteParam $param */ ?>
                                         <div class="param">
                                             <span class="param__name"><?= $param->index ?></span>
                                             <span class="param__equals">=</span>
                                             <span class="param__value"><?= $param->value ?></span>
                                         </div>
-                                    </div>
-                                <?php endforeach ?>
+                                    <?php endforeach ?>
+                                </div>
                             <?php endif ?>
                         <?php endif ?>
                         <?php if (!empty($router->args)) : ?>
-                            <span class="table__subheader">Get</span>
-                            <div class="table__detail-wrapper">
+                            <div class="details">
+                                <span class="details__header">Get</span>
                                 <?php foreach ($router->args as $key => $value) : ?>
                                     <div class="param">
                                         <span class="param__name"><?= $key ?></span>
@@ -113,10 +115,12 @@ $self->setLayout('admin');
                             </div>
                         <?php endif ?>
                         <?php if ($route->code_info) : ?>
-                            <span class="routes__status routes__status--<?= $severity ?>">
-                                <span class="routes__status-code">Status <?= $route->code ?></span>
-                                <span class="routes__status-message"><?= $route->code_info ?></span>
-                            </span>
+                            <div class="details">
+                                <span class="routes__status routes__status--<?= $severity ?>">
+                                    <span class="routes__status-code">Status <?= $route->code ?></span>
+                                    <span class="routes__status-message"><?= $route->code_info ?></span>
+                                </span>
+                            </div>
                         <?php endif ?>
                     </td>
                 </tr>

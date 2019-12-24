@@ -24,14 +24,7 @@
         border-top: solid 1px #bfbfbf;
     }
 
-    &__subheader {
-        font-weight: bold;
-        text-transform: uppercase;
+    &__details {
         padding-left: 2rem;
-        display: inline-block;
-    }
-
-    &__detail-wrapper {
-        padding: 0 0 1rem 2rem;
     }
 }

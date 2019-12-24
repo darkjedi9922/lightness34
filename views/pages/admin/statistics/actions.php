@@ -55,11 +55,11 @@ $self->setLayout('admin');
                     </td>
                     <td class="table__cell"><?= date('d.m.Y H:i', $action->time) ?></td>
                 </tr>
-                <tr class="table__item-details-wrapper">
-                    <td class="table__item-details" colspan="100">
+                <tr class="table__details-wrapper">
+                    <td class="table__details" colspan="100">
                         <?php if (!empty($data['data']['get'])) : ?>
-                            <span class="table__subheader">Get Data</span>
-                            <div class="table__detail-wrapper">
+                            <div class="details">
+                                <span class="details__header">Get Data</span>
                                 <?php foreach ($data['data']['get'] as $field => $value) : ?>
                                     <div class="param">
                                         <span class="param__name"><?= $field ?></span>
@@ -72,8 +72,8 @@ $self->setLayout('admin');
                             </div>
                         <?php endif ?>
                         <?php if (!empty($data['data']['post'])) : ?>
-                            <span class="table__subheader">Post Data</span>
-                            <div class="table__detail-wrapper">
+                            <div class="details">
+                                <span class="details__header">Post Data</span>
                                 <?php foreach ($data['data']['post'] as $field => $value) :
                                     $empty = $value === '';
                                     $secret = ($postDesc[$field][0] ?? null) === ActionBody::POST_PASSWORD;
@@ -89,8 +89,8 @@ $self->setLayout('admin');
                             </div>
                         <?php endif ?>
                         <?php if (empty($data['data']['files'])) : ?>
-                            <span class="table__subheader">Uploaded Files</span>
-                            <div class="table__detail-wrapper">
+                            <div class="details">
+                                <span class="details__header">Uploaded Files</span>
                                 <div class="param">
                                     <span class="param__value param__value--empty">No files uploaded.</span>
                                 </div>
@@ -99,8 +99,8 @@ $self->setLayout('admin');
                             <?php foreach ($data['data']['files'] as $field => $fileData) :
                                 $file = new UploadedFile($fileData);
                                 ?>
-                                <span class="table__subheader">Uploaded file - <?= $field ?></span>
-                                <div class="table__detail-wrapper">
+                                <div class="details">
+                                    <span class="details__header">Uploaded file - <?= $field ?></span>
                                     <?php if ($file->isEmpty()) : ?>
                                         <div class="param">
                                             <span class="param__value param__value--empty">Empty</span>
@@ -187,8 +187,8 @@ $self->setLayout('admin');
                         <span class="actions__module"><?= $module ?></span>
                     </td>
                 </tr>
-                <tr class="table__item-details-wrapper">
-                    <td class="table__item-details" colspan="100">
+                <tr class="table__details-wrapper">
+                    <td class="table__details" colspan="100">
                         <?php if (!empty($action->listGet())) : ?>
                             <span class="table__subheader">GET Parameters</span>
                             <div class="table__detail-wrapper">
