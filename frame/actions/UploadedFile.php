@@ -94,6 +94,11 @@ class UploadedFile extends File
         return last(explode('/', $uniqueFile));
     }
 
+    public function getOriginalName(): string
+    {
+        return $this->file['name'];
+    }
+
     public function getType(): string
     {
         return $this->file['type'];
@@ -129,6 +134,9 @@ class UploadedFile extends File
             || $this->hasError(self::UPLOAD_ERR_FORM_SIZE);
     }
 
+    /**
+     * Вернет true если файл был успешно загружен.
+     */
     public function isLoaded(): bool
     {
         return $this->hasError(self::UPLOAD_ERR_OK);

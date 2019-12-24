@@ -5,6 +5,8 @@ use frame\actions\ActionBody;
 use frame\lists\base\IdentityList;
 use engine\statistics\lists\ActionList;
 use engine\statistics\stats\ActionStat;
+use frame\actions\UploadedFile;
+use function lightlib\bytes_to;
 
 Init::accessRight('admin', 'see-logs');
 
@@ -85,6 +87,77 @@ $self->setLayout('admin');
                                     </div>
                                 <?php endforeach ?>
                             </div>
+                        <?php endif ?>
+                        <?php if (empty($data['data']['files'])) : ?>
+                            <span class="table__subheader">Uploaded Files</span>
+                            <div class="table__detail-wrapper">
+                                <div class="param">
+                                    <span class="param__value param__value--empty">No files uploaded.</span>
+                                </div>
+                            </div>
+                        <?php else : ?>
+                            <?php foreach ($data['data']['files'] as $field => $fileData) :
+                                $file = new UploadedFile($fileData);
+                                ?>
+                                <span class="table__subheader">Uploaded file - <?= $field ?></span>
+                                <div class="table__detail-wrapper">
+                                    <?php if ($file->isEmpty()) : ?>
+                                        <div class="param">
+                                            <span class="param__value param__value--empty">Empty</span>
+                                        </div>
+                                    <?php else : ?>
+                                        <div class="param">
+                                            <span class="param__name">name</span>
+                                            <span class="param__equals">=></span>
+                                            <span class="param__value"><?= $file->getOriginalName() ?></span>
+                                        </div>
+                                        <div class="param">
+                                            <span class="param__name">mime type</span>
+                                            <span class="param__equals">=></span>
+                                            <span class="param__value"><?= $fileData['mime'] ?? '' ?></span>
+                                        </div>
+                                        <div class="param">
+                                            <span class="param__name">temporary path</span>
+                                            <span class="param__equals">=></span>
+                                            <span class="param__value"><?= $file->getTempName() ?></span>
+                                        </div>
+                                        <div class="param">
+                                            <span class="param__name">status</span>
+                                            <span class="param__equals">=></span>
+                                            <?php
+                                            switch ($file->getError()) {
+                                                case UploadedFile::UPLOAD_ERR_INI_SIZE:
+                                                    $status = 'INI size error';
+                                                    break;
+                                                case UploadedFile::UPLOAD_ERR_FORM_SIZE:
+                                                    $status = 'Form size error';
+                                                    break;
+                                                case UploadedFile::UPLOAD_ERR_PARTIAL:
+                                                    $status = 'Partial error';
+                                                    break;
+                                                case UploadedFile::UPLOAD_ERR_NO_TMP_DIR:
+                                                    $status = 'No temporary directory';
+                                                    break;
+                                                case UploadedFile::UPLOAD_ERR_CANT_WRITE:
+                                                    $status = 'Could not write the file on the disk';
+                                                    break;
+                                                case UploadedFile::UPLOAD_ERR_EXTENSION:
+                                                    $status = 'Some extension stopped the file loading';
+                                                    break;
+                                                default:
+                                                    $status = 'OK';
+                                            }
+                                            ?>
+                                            <span class="param__value"><?= $status ?></span>
+                                        </div>
+                                        <div class="param">
+                                            <span class="param__name">size</span>
+                                            <span class="param__equals">=></span>
+                                            <span class="param__value"><?= round(bytes_to($file->getSize(), 'KB'), 1) ?> KB</span>
+                                        </div>
+                                    <?php endif ?>
+                                </div>
+                            <?php endforeach ?>
                         <?php endif ?>
                     </td>
                 </tr>

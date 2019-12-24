@@ -1,8 +1,9 @@
 <?php namespace engine\statistics\macros;
 
-use frame\actions\Action;
-use engine\statistics\stats\ActionStat;
 use frame\route\Request;
+use frame\actions\Action;
+use frame\actions\UploadedFile;
+use engine\statistics\stats\ActionStat;
 use engine\statistics\stats\TimeStat;
 
 class StartCollectActionStat extends BaseStatCollector
@@ -25,7 +26,26 @@ class StartCollectActionStat extends BaseStatCollector
         $this->stat->class = '\\\\' . str_replace('\\', '\\\\', $class);
         $this->stat->ajax = Request::isAjax();
         $this->stat->time = time();
+
+        // Обрабатываем файлы перед началом выполнения действия, потому что во время
+        // него эти файлы могут быть удалены и некоторую информацию уже в конце не
+        // получить.
+        $files = $this->toArrayFiles($action->getDataArray()[Action::FILES]);
+        
+        // Сохраняем это в приватную переменную, чтобы передать в финальный макрос.
+        $this->stat->setHandledFiles($files);
         
         $this->timer->start();
+    }
+
+    private function toArrayFiles(array $files): array
+    {
+        $result = [];
+        foreach ($files as $field => $file) {
+            /** @var UploadedFile $file */
+            $result[$field] = $file->toArray();
+            $result[$field]['mime'] = !$file->isEmpty() ? $file->getMime() : '';
+        }
+        return $result;
     }
 }

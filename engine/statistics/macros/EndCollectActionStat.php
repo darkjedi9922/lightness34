@@ -1,7 +1,6 @@
 <?php namespace engine\statistics\macros;
 
 use frame\actions\Action;
-use frame\actions\UploadedFile;
 use engine\statistics\stats\ActionStat;
 use engine\statistics\stats\TimeStat;
 
@@ -36,8 +35,8 @@ class EndCollectActionStat extends BaseStatCollector
         $data = $action->getDataArray();
         $get = $data[Action::ARGS];
         $post = $this->shortenAndFilterPostData($action);
-        $files = $this->toArrayFiles($data[Action::FILES]);
-        
+        $files = $this->stat->getHandledFiles();
+
         return json_encode([
             'errors' => $action->getErrors(),
             'data' => [
@@ -63,16 +62,6 @@ class EndCollectActionStat extends BaseStatCollector
                 $newValue = encode_specials($newValue);
             }
             $result[$field] = $newValue;
-        }
-        return $result;
-    }
-
-    private function toArrayFiles(array $files): array
-    {
-        $result = [];
-        foreach ($files as $field => $file) {
-            /** @var UploadedFile $file */
-            $result[$field] = $file->toArray();
         }
         return $result;
     }

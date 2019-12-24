@@ -149,6 +149,17 @@ function bytes($number, $unit)
 	else return $number;
 }
 
+/**
+ * @param string $unit KB|MB|GB
+ */
+function bytes_to(int $bytes, string $unit): float
+{
+    if ($unit === 'KB') return $bytes / 1024;
+    else if ($unit === 'MB') return $bytes / (1024 * 1024);
+    else if ($unit === 'GB') return $bytes / (1024 * 1024 * 1024);
+    else return $bytes;
+}
+
 // =============================================================================
 
 /**
