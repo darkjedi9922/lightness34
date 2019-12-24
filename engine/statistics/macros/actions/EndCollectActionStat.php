@@ -1,13 +1,14 @@
-<?php namespace engine\statistics\macros;
+<?php namespace engine\statistics\macros\actions;
 
 use frame\actions\Action;
+use frame\actions\ActionBody;
 use engine\statistics\stats\ActionStat;
 use engine\statistics\stats\TimeStat;
+use engine\statistics\macros\BaseStatCollector;
 
 use function lightlib\shorten;
 use function lightlib\decode_specials;
 use function lightlib\encode_specials;
-use frame\actions\ActionBody;
 
 class EndCollectActionStat extends BaseStatCollector
 {

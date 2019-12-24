@@ -1,5 +1,6 @@
-<?php namespace engine\statistics\macros;
+<?php namespace engine\statistics\macros\routes;
 
+use engine\statistics\macros\BaseStatCollector;
 use frame\views\DynamicPage;
 use frame\views\Page;
 

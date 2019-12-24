@@ -8,16 +8,16 @@ use frame\actions\ActionMacro;
 use frame\cash\config;
 use frame\views\View;
 
-use engine\statistics\macros\StartCollectRouteStat;
-use engine\statistics\macros\CollectActionRouteStat;
-use engine\statistics\macros\CollectErrorRouteStat;
-use engine\statistics\macros\CollectPageRouteStat;
-use engine\statistics\macros\EndCollectRouteStat;
+use engine\statistics\macros\routes\StartCollectRouteStat;
+use engine\statistics\macros\routes\CollectActionRouteStat;
+use engine\statistics\macros\routes\CollectErrorRouteStat;
+use engine\statistics\macros\routes\CollectPageRouteStat;
+use engine\statistics\macros\routes\EndCollectRouteStat;
 use engine\statistics\stats\TimeStat;
 use frame\actions\Action;
-use engine\statistics\macros\StartCollectActionStat;
 use engine\statistics\stats\ActionStat;
-use engine\statistics\macros\EndCollectActionStat;
+use engine\statistics\macros\actions\StartCollectActionStat;
+use engine\statistics\macros\actions\EndCollectActionStat;
 
 class StatisticsModule extends Module
 {

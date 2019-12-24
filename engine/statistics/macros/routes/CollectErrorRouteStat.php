@@ -1,6 +1,7 @@
-<?php namespace engine\statistics\macros;
+<?php namespace engine\statistics\macros\routes;
 
 use engine\statistics\stats\RouteStat;
+use engine\statistics\macros\BaseStatCollector;
 
 use function lightlib\encode_specials;
 

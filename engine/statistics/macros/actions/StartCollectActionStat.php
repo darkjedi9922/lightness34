@@ -1,10 +1,11 @@
-<?php namespace engine\statistics\macros;
+<?php namespace engine\statistics\macros\actions;
 
 use frame\route\Request;
 use frame\actions\Action;
 use frame\actions\UploadedFile;
 use engine\statistics\stats\ActionStat;
 use engine\statistics\stats\TimeStat;
+use engine\statistics\macros\BaseStatCollector;
 
 class StartCollectActionStat extends BaseStatCollector
 {

@@ -1,15 +1,16 @@
-<?php namespace engine\statistics\macros;
+<?php namespace engine\statistics\macros\routes;
 
 use frame\route\Response;
 use frame\views\DynamicPage;
+use engine\statistics\stats\TimeStat;
 use engine\statistics\stats\RouteStat;
 use engine\statistics\stats\DynamicRouteParam;
+use engine\statistics\macros\BaseStatCollector;
 
 use frame\cash\config;
 use frame\cash\database;
 
 use function lightlib\encode_specials;
-use engine\statistics\stats\TimeStat;
 
 class EndCollectRouteStat extends BaseStatCollector
 {
