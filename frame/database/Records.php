@@ -204,8 +204,10 @@ class Records
     private function addAssocQuotes(array $array): array
     {
         $result = [];
-        foreach ($array as $key => $value) 
+        foreach ($array as $key => $value) { 
+            $value = str_replace("'", "\\'", $value);
             $result["`$key`"] = "'$value'";
+        }
         return $result;
     }
 }
