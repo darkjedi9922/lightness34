@@ -1,0 +1,27 @@
+.status {
+    &__code {
+        font-weight: bold;
+    }
+
+    &__hint {
+        color: $clr-grey;
+        display: block;
+
+        &:before {
+            content: '(';
+        }
+        &:after {
+            content: ')';
+        }
+    }
+
+    &--ok {
+        color: $box-green;
+    }
+    &--warning {
+        color: $box-yellow;
+    }
+    &--error {
+        color: $box-red;
+    }
+}

@@ -34,7 +34,8 @@ $self->setLayout('admin');
         <?php foreach ($history as $action) :
             /** @var ActionStat $action */
             $data = json_decode($action->data_json, true);
-            $success = empty($data['errors']);
+            $errors = $data['errors'];
+            $success = empty($errors);
             /** @var ActionBody $body */
             $body = new $action->class;
             $postDesc = $body->listPost();
@@ -158,6 +159,15 @@ $self->setLayout('admin');
                                     <?php endif ?>
                                 </div>
                             <?php endforeach ?>
+                        <?php endif ?>
+                        <?php if (!empty($errors)) : ?>
+                            <div class="details">
+                                <span class="status status--error">
+                                    Validation error codes:
+                                    <span class="status__code"><?= implode(', ', $errors) ?></span>
+                                    <span class="status__hint">See their meaning in the class</span>
+                                </span>
+                            </div>
                         <?php endif ?>
                     </td>
                 </tr>

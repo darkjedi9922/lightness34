@@ -116,9 +116,9 @@ $self->setLayout('admin');
                         <?php endif ?>
                         <?php if ($route->code_info) : ?>
                             <div class="details">
-                                <span class="routes__status routes__status--<?= $severity ?>">
-                                    <span class="routes__status-code">Status <?= $route->code ?></span>
-                                    <span class="routes__status-message"><?= $route->code_info ?></span>
+                                <span class="status status--<?= $severity ?>">
+                                    <span class="status__code">Status <?= $route->code ?></span>
+                                    <span class="status__message"><?= $route->code_info ?></span>
                                 </span>
                             </div>
                         <?php endif ?>

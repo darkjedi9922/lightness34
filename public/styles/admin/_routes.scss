@@ -30,20 +30,4 @@
 
         &--status { width: 3.4rem; }
     }
-
-    &__status {
-        &--ok {
-            color: $box-green;
-        }
-        &--warning {
-            color: $box-yellow;
-        }
-        &--error {
-            color: $box-red;
-        }
-    }
-
-    &__status-code {
-        font-weight: bold;
-    }
 }
