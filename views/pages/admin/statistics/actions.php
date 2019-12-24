@@ -243,8 +243,8 @@ $self->setLayout('admin');
                 <tr class="table__details-wrapper">
                     <td class="table__details" colspan="100">
                         <?php if (!empty($action->listGet())) : ?>
-                            <span class="table__subheader">GET Parameters</span>
-                            <div class="table__detail-wrapper">
+                            <div class="details">
+                                <span class="details__header">GET Parameters</span>
                                 <?php foreach ($action->listGet() as $name => $desc) : ?>
                                     <div class="table__item-detail actions__param">
                                         <span class="actions__param-type actions__param-type--<?= $desc[0] ?>"><?= $desc[0] ?></span>
@@ -255,8 +255,8 @@ $self->setLayout('admin');
                             </div>
                         <?php endif ?>
                         <?php if (!empty($action->listPost())) : ?>
-                            <span class="table__subheader">POST Parameters</span>
-                            <div class="table__detail-wrapper">
+                            <div class="details">
+                                <span class="details__header">POST Parameters</span>
                                 <?php foreach ($action->listPost() as $name => $desc) : ?>
                                     <div class="table__item-detail actions__param">
                                         <span class="actions__param-type actions__param-type--<?= $desc[0] ?>"><?= $desc[0] ?></span>
