@@ -65,7 +65,6 @@ $self->setLayout('admin');
                                 <?php foreach ($data['data']['get'] as $field => $value) : ?>
                                     <div class="param">
                                         <span class="param__name"><?= $field ?></span>
-                                        <span class="param__equals">=></span>
                                         <span class="param__value <?= $value === '' ? 'param__value--empty' : '' ?>">
                                             <?= $value !== '' ? $value : 'empty' ?>
                                         </span>
@@ -82,7 +81,6 @@ $self->setLayout('admin');
                                     ?>
                                     <div class="param">
                                         <span class="param__name"><?= $field ?></span>
-                                        <span class="param__equals">=></span>
                                         <span class="param__value <?= $empty || $secret ? 'param__value--empty' : '' ?>">
                                             <?= !$empty ? $value : 'empty' ?>
                                         </span>
@@ -110,22 +108,18 @@ $self->setLayout('admin');
                                     <?php else : ?>
                                         <div class="param">
                                             <span class="param__name">name</span>
-                                            <span class="param__equals">=></span>
                                             <span class="param__value"><?= $file->getOriginalName() ?></span>
                                         </div>
                                         <div class="param">
                                             <span class="param__name">mime type</span>
-                                            <span class="param__equals">=></span>
                                             <span class="param__value"><?= $fileData['mime'] ?? '' ?></span>
                                         </div>
                                         <div class="param">
                                             <span class="param__name">temporary path</span>
-                                            <span class="param__equals">=></span>
                                             <span class="param__value"><?= $file->getTempName() ?></span>
                                         </div>
                                         <div class="param">
                                             <span class="param__name">status</span>
-                                            <span class="param__equals">=></span>
                                             <?php
                                             switch ($file->getError()) {
                                                 case UploadedFile::UPLOAD_ERR_INI_SIZE:
@@ -154,7 +148,6 @@ $self->setLayout('admin');
                                         </div>
                                         <div class="param">
                                             <span class="param__name">size</span>
-                                            <span class="param__equals">=></span>
                                             <span class="param__value"><?= round(bytes_to($file->getSize(), 'KB'), 1) ?> KB</span>
                                         </div>
                                     <?php endif ?>
@@ -171,7 +164,6 @@ $self->setLayout('admin');
                                 <?php foreach ($result as $key => $value) : ?>
                                     <div class="param">
                                         <span class="param__name"><?= $key ?></span>
-                                        <span class="param__equals">=></span>
                                         <span class="param__value"><?= $value ?></span>
                                     </div>
                                 <?php endforeach ?>
@@ -180,8 +172,8 @@ $self->setLayout('admin');
                         <?php if (!empty($errors)) : ?>
                             <div class="details">
                                 <span class="status status--error">
-                                    Validation error codes:
-                                    <span class="status__code"><?= implode(', ', $errors) ?></span>
+                                    <span class="status__name">Validation error codes:</span>
+                                    <span class="status__message"><?= implode(', ', $errors) ?></span>
                                     <span class="status__hint">See their meaning in the class</span>
                                 </span>
                             </div>

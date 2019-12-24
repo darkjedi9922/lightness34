@@ -2,8 +2,11 @@
     font-family: $global-font;
     font-size: 1.1rem;
 
-    &__equals {
-        color: $clr-grey;
+    &__name {
+        &:after {
+            content: ' => ';
+            color: $clr-grey;
+        }
     }
 
     &__value {

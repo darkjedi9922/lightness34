@@ -95,7 +95,6 @@ $self->setLayout('admin');
                                     <?php foreach ($paramsIterator as $param) : /** @var DynamicRouteParam $param */ ?>
                                         <div class="param">
                                             <span class="param__name"><?= $param->index ?></span>
-                                            <span class="param__equals">=</span>
                                             <span class="param__value"><?= $param->value ?></span>
                                         </div>
                                     <?php endforeach ?>
@@ -108,7 +107,6 @@ $self->setLayout('admin');
                                 <?php foreach ($router->args as $key => $value) : ?>
                                     <div class="param">
                                         <span class="param__name"><?= $key ?></span>
-                                        <span class="param__equals">=</span>
                                         <span class="param__value <?= $value === '' ? 'param__value--empty' : '' ?>"><?= $value !== '' ? $value : 'empty' ?></span>
                                     </div>
                                 <?php endforeach ?>
@@ -117,7 +115,7 @@ $self->setLayout('admin');
                         <?php if ($route->code_info) : ?>
                             <div class="details">
                                 <span class="status status--<?= $severity ?>">
-                                    <span class="status__code">Status <?= $route->code ?></span>
+                                    <span class="status__name">Status <?= $route->code ?></span>
                                     <span class="status__message"><?= $route->code_info ?></span>
                                 </span>
                             </div>
