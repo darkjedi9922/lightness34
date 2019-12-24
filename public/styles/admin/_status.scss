@@ -3,6 +3,13 @@
         font-weight: bold;
     }
 
+    &__message {
+        &--empty {
+            color: $clr-grey;
+            font-style: italic;
+        }
+    }
+
     &__hint {
         color: $clr-grey;
         display: block;

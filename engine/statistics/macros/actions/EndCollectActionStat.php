@@ -28,7 +28,6 @@ class EndCollectActionStat extends BaseStatCollector
 
         $this->stat->duration_sec = $this->timer->resultInSeconds();
         $this->stat->data_json = str_replace('\\', '\\\\', $this->jsonify($action));
-        $this->stat->insert();
     }
 
     protected function jsonify(Action $action): string

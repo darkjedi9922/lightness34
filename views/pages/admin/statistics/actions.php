@@ -36,7 +36,9 @@ $self->setLayout('admin');
             $data = json_decode($action->data_json, true);
             $errors = $data['errors'];
             $result = $data['result'];
-            $success = empty($errors);
+            $fatal = $action->response_type === ActionStat::RESPONSE_TYPE_ERROR;
+            $success = !$fatal && empty($errors);
+            $fail = !$fatal && !empty($errors);
             /** @var ActionBody $body */
             $body = new $action->class;
             $postDesc = $body->listPost();
@@ -51,8 +53,8 @@ $self->setLayout('admin');
                     </td>
                     <td class="table__cell routes__duration"><?= $action->duration_sec ?> sec</td>
                     <td class="table__cell">
-                        <span class="routes__code routes__code--status routes__code--<?= $success ? 'ok' : 'error' ?>">
-                            <?= $success ? 'Success' : 'Failure' ?>
+                        <span class="routes__code routes__code--status routes__code--<?= $success ? 'ok' : ($fail ? 'warning' : 'error') ?>">
+                            <?= $success ? 'Success' : ($fail ? 'Failure' : 'Fatal') ?>
                         </span>
                     </td>
                     <td class="table__cell"><?= date('d.m.Y H:i', $action->time) ?></td>
@@ -158,7 +160,7 @@ $self->setLayout('admin');
                             <span class="details__header">Result data</span>
                             <?php if (empty($result)) : ?>
                                 <div class="param">
-                                    <span class="param__value param__value--empty">No result data specified</span>
+                                    <span class="param__value param__value--empty">No result data</span>
                                 </div>
                             <?php else : ?>
                                 <?php foreach ($result as $key => $value) : ?>
@@ -169,12 +171,31 @@ $self->setLayout('admin');
                                 <?php endforeach ?>
                             <?php endif ?>
                         </div>
-                        <?php if (!empty($errors)) : ?>
+                        <?php if ($fail) : ?>
                             <div class="details">
-                                <span class="status status--error">
+                                <span class="status status--warning">
                                     <span class="status__name">Validation error codes:</span>
                                     <span class="status__message"><?= implode(', ', $errors) ?></span>
                                     <span class="status__hint">See their meaning in the class</span>
+                                </span>
+                            </div>
+                            <?php if ($action->response_type === ActionStat::RESPONSE_TYPE_REDIRECT) : ?>
+                                <div class="details">
+                                    <span class="status status--ok">
+                                        <span class="status__name">Redirect:</span>
+                                        <span class="status__message"><?= $action->response_info ?></span>
+                                    </span>
+                                </div>
+                            <?php endif ?>
+                        <?php elseif ($fatal) : ?>
+                            <div class="details">
+                                <span class="status status--error">
+                                    <span class="status__name">Fatal error:</span>
+                                    <?php if ($action->response_info) : ?>
+                                        <span class="status__message"><?= $action->response_info ?></span>
+                                    <?php else : ?>
+                                        <span class="status__message status__message--empty">The error was not specified<span>
+                                    <?php endif ?>
                                 </span>
                             </div>
                         <?php endif ?>
