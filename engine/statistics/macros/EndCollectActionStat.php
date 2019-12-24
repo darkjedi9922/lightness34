@@ -56,7 +56,7 @@ class EndCollectActionStat extends BaseStatCollector
         foreach ($data as $field => $value) {
             $newValue = $value;
             if (($desc[$field][0] ?? null) === ActionBody::POST_PASSWORD) 
-                $newValue = '*****';
+                $newValue = ($newValue !== '' ? 'secret' : '');
             else if (is_string($value)) {
                 $newValue = shorten(decode_specials($value), 50, '...');
                 $newValue = encode_specials($newValue);
