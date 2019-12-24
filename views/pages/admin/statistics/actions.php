@@ -61,9 +61,18 @@ $self->setLayout('admin');
                 </tr>
                 <tr class="table__details-wrapper">
                     <td class="table__details" colspan="100">
-                        <?php if (!empty($data['data']['get'])) : ?>
-                            <div class="details">
-                                <span class="details__header">Get Data</span>
+                        <div class="details">
+                            <span class="details__header">Get Data</span>
+                            <?php if (empty($data['data']['get'])) : ?>
+                                <div class="param">
+                                    <!-- Скорее всего это условие никогда не выполнится, потому что
+                                                    каждый экшн имеет как минимум поле с пустым идентификатором. -->
+                                    <!-- Но на всякий, если вдруг это изменится, оставлю такой случай тут,
+                                                    чтобы не нужно было вспоминать потом добавить это. -->
+                                    <!-- Или может быть такое, что экшн просто запущен вручную. -->
+                                    <span class="param__value param__value--empty">No data</span>
+                                </div>
+                            <?php else : ?>
                                 <?php foreach ($data['data']['get'] as $field => $value) : ?>
                                     <div class="param">
                                         <span class="param__name"><?= $field ?></span>
@@ -72,11 +81,15 @@ $self->setLayout('admin');
                                         </span>
                                     </div>
                                 <?php endforeach ?>
-                            </div>
-                        <?php endif ?>
-                        <?php if (!empty($data['data']['post'])) : ?>
-                            <div class="details">
-                                <span class="details__header">Post Data</span>
+                            <?php endif ?>
+                        </div>
+                        <div class="details">
+                            <span class="details__header">Post Data</span>
+                            <?php if (empty($data['data']['post'])) : ?>
+                                <div class="param">
+                                    <span class="param__value param__value--empty">No data</span>
+                                </div>
+                            <?php else : ?>
                                 <?php foreach ($data['data']['post'] as $field => $value) :
                                     $empty = $value === '';
                                     $secret = ($postDesc[$field][0] ?? null) === ActionBody::POST_PASSWORD;
@@ -88,8 +101,8 @@ $self->setLayout('admin');
                                         </span>
                                     </div>
                                 <?php endforeach ?>
-                            </div>
-                        <?php endif ?>
+                            <?php endif ?>
+                        </div>
                         <?php if (empty($data['data']['files'])) : ?>
                             <div class="details">
                                 <span class="details__header">Uploaded Files</span>
@@ -195,8 +208,8 @@ $self->setLayout('admin');
                                         <span class="status__message"><?= $action->response_info ?></span>
                                     <?php else : ?>
                                         <span class="status__message status__message--empty">The error was not specified<span>
-                                    <?php endif ?>
-                                </span>
+                                            <?php endif ?>
+                                        </span>
                             </div>
                         <?php endif ?>
                     </td>
