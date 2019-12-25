@@ -4,6 +4,9 @@ use engine\statistics\macros\BaseStatCollector;
 use engine\statistics\stats\ActionStat;
 use frame\route\Response;
 
+use frame\cash\config;
+use frame\cash\database;
+
 class EndCollectAppStat extends BaseStatCollector
 {
     private $stat;
@@ -31,5 +34,19 @@ class EndCollectAppStat extends BaseStatCollector
         }
 
         $this->stat->insert();
+        $this->deleteOldStats();
+    }
+
+    private function deleteOldStats()
+    {
+        $actionTable = ActionStat::getTable();
+        $config = config::get('statistics');
+        $limit = $config->{'actions.history.limit'};
+        database::get()->query(
+            "DELETE $actionTable FROM $actionTable
+            INNER JOIN (
+                SELECT id FROM $actionTable ORDER BY id DESC LIMIT $limit, 999999
+            ) AS cond_table ON $actionTable.id = cond_table.id"
+        );
     }
 }

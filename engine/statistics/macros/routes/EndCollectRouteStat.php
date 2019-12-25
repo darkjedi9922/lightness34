@@ -90,7 +90,7 @@ class EndCollectRouteStat extends BaseStatCollector
         $routeTable = RouteStat::getTable();
         $paramTable = DynamicRouteParam::getTable();
         $config = config::get('statistics');
-        $limit = $config->{'routes.lastRoutes.maxAmount'};
+        $limit = $config->{'routes.history.limit'};
         database::get()->query(
             "DELETE $routeTable, $paramTable
                 FROM ($routeTable LEFT OUTER JOIN $paramTable ON $routeTable.id = $paramTable.route_id)

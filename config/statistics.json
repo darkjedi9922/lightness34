@@ -1,5 +1,6 @@
 {
-    "routes.lastRoutes.maxAmount": 25,
+    "routes.history.limit": 20,
+    "actions.history.limit": 20,
     "ignorePageNamespaces": [
         "admin/statistics/routes"
     ]
