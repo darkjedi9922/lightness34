@@ -91,7 +91,7 @@ class Core
     {
         try {
             if ($this->events->getEmitCount(self::EVENT_APP_START) !== 0)
-                $this->events->emit(self::EVENT_APP_END);
+                $this->emit(self::EVENT_APP_END);
         } catch (\Throwable $error) {
             $this->handleError($error);
         }
@@ -193,7 +193,7 @@ class Core
 
     public function exec()
     {
-        $this->events->emit(self::EVENT_APP_START);
+        $this->emit(self::EVENT_APP_START);
         $pagename = $this->router->pagename;
         $page = $this->findPage($pagename);
         if ($page) $page->show();
