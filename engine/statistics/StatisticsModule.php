@@ -16,10 +16,14 @@ use engine\statistics\macros\routes\EndCollectRouteStat;
 use engine\statistics\stats\TimeStat;
 use frame\actions\Action;
 use engine\statistics\stats\ActionStat;
+use engine\statistics\stats\EventRouteStat;
 use engine\statistics\macros\actions\StartCollectActionStat;
 use engine\statistics\macros\actions\EndCollectActionStat;
 use engine\statistics\macros\actions\CollectActionError;
 use engine\statistics\macros\actions\EndCollectAppStat;
+use engine\statistics\macros\events\CollectEventSubscriber;
+use engine\statistics\macros\events\CollectEventRoute;
+use engine\statistics\macros\events\EndCollectEvents;
 
 class StatisticsModule extends Module
 {
@@ -33,6 +37,7 @@ class StatisticsModule extends Module
         $this->config = config::get('statistics');
         if ($router->isInAnyNamespace($this->config->ignorePageNamespaces)) return;
 
+        $this->setupEventHandlers($this->getEventStatCollectors());
         $this->setupEventHandlers($this->getRouteStatCollectors());
         $this->setupEventHandlers($this->getActionStatCollectors());
     }
@@ -76,6 +81,19 @@ class StatisticsModule extends Module
             Action::EVENT_END => new EndCollectActionStat($stat, $timer),
             Core::EVENT_APP_ERROR => $collectActionError,
             Core::EVENT_APP_END => new EndCollectAppStat($stat, $collectActionError)
+        ];
+    }
+
+    private function getEventStatCollectors(): array
+    {
+        $routeStat = new EventRouteStat;
+        $subsciberCollector = new CollectEventSubscriber($routeStat);
+        $endCollector = new EndCollectEvents($routeStat, $subsciberCollector);
+
+        return [
+            Core::META_APP_EVENT_SUBSCRIBE => $subsciberCollector,
+            Core::EVENT_APP_START => new CollectEventRoute($routeStat),
+            Core::EVENT_APP_END => $endCollector
         ];
     }
 }

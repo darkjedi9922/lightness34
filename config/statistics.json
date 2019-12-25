@@ -2,6 +2,7 @@
     "routes.history.limit": 20,
     "actions.history.limit": 20,
     "ignorePageNamespaces": [
-        "admin/statistics/routes"
+        "admin/statistics/routes",
+        "admin/statistics/events"
     ]
 }

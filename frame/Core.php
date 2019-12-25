@@ -23,6 +23,19 @@ class Core
     const EVENT_APP_ERROR = 'core-app-error';
 
     /**
+     * Происходит при подписке нового макроса на событие. В обработчик передается
+     * string имя события и callable макрос.
+     */
+    const META_APP_EVENT_SUBSCRIBE = '_app-macro-subscribed';
+
+    /**
+     * Происходит после обработки события. В обработчик передается string имя 
+     * выполнившегося события, массив параметров события и массив callable макросов,
+     * что были выполнены. Если никаких обработчиков нет, массив макросов будет пуст.
+     */
+    const META_APP_EVENT_EMIT = '_app-event-emit-and-handle';
+
+    /**
      * @var Core $app Экземпляр приложения. Инициализуется
      * при инициализации экземпляра Core
      */
@@ -123,6 +136,9 @@ class Core
     public function on(string $event, callable $macro)
     {
         $this->events->subscribe($event, $macro);
+        // Не сигнализируем о подписке на мета-событие.
+        // if (($event[0] ?? '') === '_') return;
+        $this->events->emit(self::META_APP_EVENT_SUBSCRIBE, $event, $macro);
     }
 
     /**
@@ -131,7 +147,10 @@ class Core
      */
     public function emit(string $event, ...$args)
     {
-        $this->events->emit($event, ...$args);
+        $macros = $this->events->emit($event, ...$args);
+        // Не сигнализируем о вызове мета-события.
+        // if (($event[0] ?? '') === '_') return;
+        $this->events->emit(self::META_APP_EVENT_EMIT, $event, $args, $macros);
     }
 
     /**
