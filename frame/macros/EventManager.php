@@ -10,12 +10,19 @@ class EventManager
         $this->subscribers[$event][] = $macro;
     }
 
-    public function emit(string $event, ...$args)
+    /**
+     * Возвращает массив callable макросов, которые были вызваны. 
+     */
+    public function emit(string $event, ...$args): array
     {
+        $result = [];
         $this->emits[$event] = $this->getEmitCount($event) + 1;
         for ($i = 0, $c = count($this->subscribers[$event] ?? []); $i < $c; ++$i) {
-            $this->subscribers[$event][$i](...$args);
+            $macro = $this->subscribers[$event][$i];
+            $macro(...$args);
+            $result[] = $macro;
         }
+        return $result;
     }
 
     public function getSubscribers(): array
