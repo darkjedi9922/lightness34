@@ -65,10 +65,10 @@ $self->setLayout('admin');
                             <span class="details__header">Get Data</span>
                             <?php if (empty($data['data']['get'])) : ?>
                                 <div class="param">
-                                    <!-- Скорее всего это условие никогда не выполнится, потому что
-                                                    каждый экшн имеет как минимум поле с пустым идентификатором. -->
-                                    <!-- Но на всякий, если вдруг это изменится, оставлю такой случай тут,
-                                                    чтобы не нужно было вспоминать потом добавить это. -->
+                                    <!-- Скорее всего это условие никогда не выполнится, -->
+                                    <!-- потому что каждый экшн имеет как минимум поле с пустым идентификатором. -->
+                                    <!-- Но на всякий, если вдруг это изменится, оставлю такой случай тут, -->
+                                    <!-- чтобы не нужно было вспоминать потом добавить это. -->
                                     <!-- Или может быть такое, что экшн просто запущен вручную. -->
                                     <span class="param__value param__value--empty">No data</span>
                                 </div>
@@ -232,6 +232,11 @@ $self->setLayout('admin');
             // $color = ord($module[0]) % 5 + 1;
             /** @var ActionBody $action */
             $action = new $class;
+            $doc = (new ReflectionClass($action))->getDocComment();
+            if ($doc) {
+                $doc = str_replace(["/**", "/*", ' * ', ' */', '*/'], '', $doc);
+                $doc = ltrim($doc);
+            }
             ?>
             <tbody class="table__item-wrapper">
                 <tr class="table__item">
@@ -242,6 +247,11 @@ $self->setLayout('admin');
                 </tr>
                 <tr class="table__details-wrapper">
                     <td class="table__details" colspan="100">
+                        <?php if ($doc) : ?>
+                            <div class="details">
+                                <p class="actions__doc"><?= $doc ?></p>
+                            </div>
+                        <?php endif ?>
                         <?php if (!empty($action->listGet())) : ?>
                             <div class="details">
                                 <span class="details__header">GET Parameters</span>

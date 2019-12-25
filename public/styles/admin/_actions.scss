@@ -17,4 +17,11 @@
     &__param-desc {
         color: $clr-grey;
     }
+
+    &__doc {
+        white-space: pre-wrap;
+        margin: 0;
+        padding: 0;
+        color: $clr-grey;
+    }
 }
