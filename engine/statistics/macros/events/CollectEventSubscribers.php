@@ -4,7 +4,7 @@ use engine\statistics\macros\BaseStatCollector;
 use engine\statistics\stats\EventSubscriberStat;
 use engine\statistics\stats\EventRouteStat;
 
-class CollectEventSubscriber extends BaseStatCollector
+class CollectEventSubscribers extends BaseStatCollector
 {
     private $routeStat;
     private $subscribers = [];
@@ -17,6 +17,14 @@ class CollectEventSubscriber extends BaseStatCollector
     public function getSubscribers(): array
     {
         return $this->subscribers;
+    }
+
+    public function findSubscriberStat(callable $macro): ?EventSubscriberStat
+    {
+        for ($i = 0, $c = count($this->subscribers); $i < $c; ++$i) {
+            if ($this->subscribers[1] === $macro) return $this->subscribers[0];
+        }
+        return null;
     }
 
     protected function collect(...$args)

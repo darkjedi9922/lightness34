@@ -21,9 +21,9 @@ use engine\statistics\macros\actions\StartCollectActionStat;
 use engine\statistics\macros\actions\EndCollectActionStat;
 use engine\statistics\macros\actions\CollectActionError;
 use engine\statistics\macros\actions\EndCollectAppStat;
-use engine\statistics\macros\events\CollectEventSubscriber;
+use engine\statistics\macros\events\CollectEventSubscribers;
 use engine\statistics\macros\events\CollectEventRoute;
-use engine\statistics\macros\events\EndCollectEvents;
+use engine\statistics\macros\events\CollectEventEmits;
 
 class StatisticsModule extends Module
 {
@@ -87,13 +87,13 @@ class StatisticsModule extends Module
     private function getEventStatCollectors(): array
     {
         $routeStat = new EventRouteStat;
-        $subsciberCollector = new CollectEventSubscriber($routeStat);
-        $endCollector = new EndCollectEvents($routeStat, $subsciberCollector);
+        $subsciberCollector = new CollectEventSubscribers($routeStat);
+        $emitCollector = new CollectEventEmits($routeStat, $subsciberCollector);
 
         return [
             Core::META_APP_EVENT_SUBSCRIBE => $subsciberCollector,
-            Core::EVENT_APP_START => new CollectEventRoute($routeStat),
-            Core::EVENT_APP_END => $endCollector
+            Core::META_APP_EVENT_EMIT => $emitCollector,
+            Core::EVENT_APP_START => new CollectEventRoute($routeStat)
         ];
     }
 }

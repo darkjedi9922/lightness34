@@ -5,6 +5,7 @@ use frame\lists\base\IdentityList;
 use engine\statistics\stats\EventRouteStat;
 use frame\database\Records;
 use engine\statistics\stats\EventSubscriberStat;
+use engine\statistics\stats\EventEmitStat;
 
 Init::accessRight('admin', 'see-logs');
 
@@ -21,12 +22,16 @@ $self->setLayout('admin');
 <div class="box box--table">
     <table class="table">
         <tr class="table__headers">
-            <td class="table__header">Маршрут</td>
-            <td class="table__header">Установлено</td>
+            <td class="table__header">Path</td>
+            <td class="table__header">Subscribers</td>
+            <td class="table__header">Emits</td>
         </tr>
         <?php foreach ($routes as $route) :
             /** @var EventRouteStat $route */
             $subscriberCount = Records::select(EventSubscriberStat::getTable(), [
+                'route_id' => $route->id
+            ])->count('id');
+            $emitCount = Records::select(EventEmitStat::getTable(), [
                 'route_id' => $route->id
             ])->count('id');
             ?>
@@ -34,6 +39,7 @@ $self->setLayout('admin');
                 <tr class="table__item">
                     <td class="table__cell"><?= $route->route ?></td>
                     <td class="table__cell"><?= $subscriberCount ?></td>
+                    <td class="table__cell"><?= $emitCount ?></td>
                 </tr>
             </tbody>
         <?php endforeach ?>
