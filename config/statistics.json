@@ -1,6 +1,6 @@
 {
     "routes.lastRoutes.maxAmount": 25,
     "ignorePageNamespaces": [
-        "admin/statistics"
+        "admin/statistics/routes"
     ]
 }
