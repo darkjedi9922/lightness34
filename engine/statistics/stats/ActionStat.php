@@ -12,4 +12,10 @@ class ActionStat extends Identity
     {
         return 'stat_actions';
     }
+
+    public function __construct(array $data = [])
+    {
+        parent::__construct($data);
+        if (!isset($data['class'])) $this->class = null;
+    }
 }
