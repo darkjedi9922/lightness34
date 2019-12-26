@@ -9,9 +9,16 @@ use tests\actions\examples\AlwaysFailActionExample;
 use frame\errors\HttpError;
 use frame\actions\ActionRouter;
 use frame\actions\Action;
+use frame\Core;
+use frame\route\Router;
 
 class ActionTest extends TestCase
 {
+    public static function setUpBeforeClass(): void
+    {
+        $app = new Core(new Router);
+    }
+
     public function testDefaultIdIsEmptyString()
     {
         $action = new Action(new UserDeleteAction);
