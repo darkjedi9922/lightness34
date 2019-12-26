@@ -72,7 +72,6 @@ class Core
      */
     public function __construct()
     {
-        ob_start(); // Чтобы можно было стереть весь предыдущий вывод видов и вывести что-то вместо него
         date_default_timezone_set('Europe/Kiev');
 
         $this->enableErrorHandlers();
