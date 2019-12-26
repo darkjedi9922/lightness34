@@ -23,7 +23,7 @@ class Logger
     public function write($type, $message)
     {
         $date = date('d.m.Y H:i');
-        $ip = Client::getIp();
+        $ip = Client::isCli() ? 'from cli' : Client::getIp();
         $text = "[$date - $ip] $type: $message\n";
         fwrite($this->handle, $text);
     }
