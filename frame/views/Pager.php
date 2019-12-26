@@ -1,6 +1,5 @@
 <?php namespace frame\views;
 
-use frame\Core;
 use frame\lists\Pager as ListPager;
 
 class Pager extends Layouted
@@ -22,7 +21,6 @@ class Pager extends Layouted
     /** {@inheritDoc} */
     public function __construct(ListPager $pager, string $name, string $layout = null)
     {
-        if ($layout === null) $layout = Core::$app->config->{'pagers.defaultLayout'};
         parent::__construct($name, $layout);
         $this->pager = $pager;
     }

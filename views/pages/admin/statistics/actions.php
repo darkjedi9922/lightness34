@@ -12,8 +12,6 @@ Init::accessRight('admin', 'see-logs');
 
 $actions = new ActionList;
 $history = new IdentityList(ActionStat::class, ['id' => 'DESC']);
-
-$self->setLayout('admin');
 ?>
 
 <div class="breadcrumbs">

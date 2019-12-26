@@ -20,6 +20,8 @@ use frame\macros\ValueMacro;
 use frame\macros\BlockMacro;
 use frame\macros\WidgetMacro;
 
+use frame\views\View;
+use frame\views\macros\ApplyDefaultLayout;
 
 $app = new Core(new Router(Request::getRequest()));
 
@@ -37,5 +39,7 @@ $app->on(Core::EVENT_APP_START, new ActionMacro('action'));
 $app->on(Core::EVENT_APP_START, new ValueMacro('value'));
 $app->on(Core::EVENT_APP_START, new BlockMacro('block'));
 $app->on(Core::EVENT_APP_START, new WidgetMacro('widget'));
+
+$app->on(View::EVENT_LOAD_START, new ApplyDefaultLayout);
 
 $app->exec();

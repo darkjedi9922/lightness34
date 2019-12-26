@@ -10,8 +10,6 @@ use engine\statistics\stats\EventEmitStat;
 Init::accessRight('admin', 'see-logs');
 
 $routes = new IdentityList(EventRouteStat::class, ['id' => 'DESC']);
-
-$self->setLayout('admin');
 ?>
 
 <div class="breadcrumbs">

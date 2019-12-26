@@ -83,7 +83,7 @@ class View
 
     /**
      * @param string $name Имя вида - путь к файлу без расширения. 
-     * Например: view/blocks/header
+     * Например: blocks/header
      * @throws \Exception Если файл вида не найден
      */
     public function __construct($name)
@@ -139,5 +139,14 @@ class View
     public function getMeta(string $name)
     {
         return $this->meta[$name] ?? null;
+    }
+
+    /**
+     * @param string $namespace Examples: "/pages", "pages/admin", "blocks" etc.
+     */
+    public function isInNamespace(string $namespace): bool
+    {
+        $namespace = self::getFolder() . '/' . ltrim($namespace, '/');
+        return strpos($this->file, $namespace) === 0;
     }
 }
