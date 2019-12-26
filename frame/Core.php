@@ -73,11 +73,6 @@ class Core
     public function __construct()
     {
         ob_start(); // Чтобы можно было стереть весь предыдущий вывод видов и вывести что-то вместо него
-
-        mb_internal_encoding('UTF-8');
-        define('NONE', -1);
-        define('endl', '<br>');
-        define('ROOT_DIR', $_SERVER['DOCUMENT_ROOT']);
         date_default_timezone_set('Europe/Kiev');
 
         $this->enableErrorHandlers();

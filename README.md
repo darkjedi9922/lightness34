@@ -70,11 +70,11 @@ Clone the git project and create a new virtual host like you usually do.
 [PHPUnit Framework](https://phpunit.de) is used for testing.
 
 ```bash
-# Go to the project's tests directory.
-cd tests
+# Go to the project's directory.
+cd lightness34
 
 # Run all the tests using PHPUnit.
-phpunit --bootstrap tests/__bootstrap.php tests
+phpunit --bootstrap ./bootstrap.php ./tests
 ```
 
 ## Versioning
