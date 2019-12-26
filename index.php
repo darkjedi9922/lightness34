@@ -1,6 +1,8 @@
 <?php require_once __DIR__ . '/bootstrap.php';
 
 use frame\Core;
+use frame\route\Router;
+use frame\route\Request;
 use frame\errors\HttpError;
 use frame\errors\StrictException;
 use frame\errors\handlers\HttpErrorHandler;
@@ -18,7 +20,8 @@ use frame\macros\ValueMacro;
 use frame\macros\BlockMacro;
 use frame\macros\WidgetMacro;
 
-$app = new Core;
+
+$app = new Core(new Router(Request::getRequest()));
 
 $app->setDefaultHandler(DefaultErrorHandler::class);
 $app->setHandler(HttpError::class, HttpErrorHandler::class);

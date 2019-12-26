@@ -1,7 +1,6 @@
 <?php namespace frame;
 
 use frame\route\Router;
-use frame\route\Request;
 use frame\views\Page;
 use frame\tools\Logger;
 use frame\errors\ErrorException;
@@ -67,17 +66,14 @@ class Core
 
     private $events = null;
 
-    /**
-     * Конструктор
-     */
-    public function __construct()
+    public function __construct(Router $router)
     {
         date_default_timezone_set('Europe/Kiev');
 
         $this->enableErrorHandlers();
         $this->events = new EventManager;
         $this->config = \frame\cash\config::get('core');
-        $this->router = new Router(Request::getRequest());
+        $this->router = $router;
         static::$app = $this;
     }
 
