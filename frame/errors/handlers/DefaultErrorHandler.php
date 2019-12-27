@@ -1,12 +1,12 @@
 <?php namespace frame\errors\handlers;
 
 use frame\Core;
-use frame\views\Page;
 use frame\errors\StrictException;
 
 use function lightlib\ob_end_clean_all;
 use frame\route\Response;
 use frame\errors\HttpError;
+use frame\views\ErrorPage;
 
 class DefaultErrorHandler implements ErrorHandler
 {
@@ -21,7 +21,7 @@ class DefaultErrorHandler implements ErrorHandler
         $page = Core::$app->config->{'errors.errorPage'};
         if ($page !== null) {
             try {
-                (new Page($page))->show();
+                (new ErrorPage($page))->show();
             } catch (\Exception $pe) {
                 (new StrictExceptionHandler)->handle(new StrictException(
                     'Error page does not exist',
