@@ -18,7 +18,7 @@ $routes = new IdentityList(EventRouteStat::class, ['id' => 'DESC']);
     <span class="breadcrumbs__item breadcrumbs__item--current">События</span>
 </div>
 <div class="box box--table">
-    <table class="table">
+    <table class="table routes">
         <tr class="table__headers">
             <td class="table__header">Path</td>
             <td class="table__header">Subscribers</td>
@@ -33,11 +33,16 @@ $routes = new IdentityList(EventRouteStat::class, ['id' => 'DESC']);
             $emitCount = Records::select(EventEmitStat::getTable(), [
                 'route_id' => $route->id
             ])->count('id');
+            $request = $route->route;
             $handles = $route->loadHandles();
             ?>
             <tbody class="table__item-wrapper">
                 <tr class="table__item">
-                    <td class="table__cell"><?= $route->route ?></td>
+                    <td class="table__cell">
+                        <span class="routes__pagename <?= !$request ? 'routes__pagename--index' : '' ?>">
+                            <?= $request ? $request : 'index request' ?>
+                        </span>
+                    </td>
                     <td class="table__cell"><?= $subscriberCount ?></td>
                     <td class="table__cell"><?= $emitCount ?></td>
                     <td class="table__cell"><?= count($handles) ?></td>
