@@ -28,15 +28,15 @@ class CollectEventEmits extends BaseStatCollector
     {
         $event = $args[0];
         $params = $args[1];
-        $macros = $args[2];
+        $handledMacros = $args[2];
 
         $emitStat = new EventEmitStat;
         $emitStat->event = $event;
 
         $handledSubscriberStats = [];
-        for ($i = 0, $c = count($macros); $i < $c; ++$i) {
+        for ($i = 0, $c = count($handledMacros); $i < $c; ++$i) {
             $handledSubscriberStats[] = 
-                $this->subscriberCollector->findSubscriberStat($macros[$i]);
+                $this->subscriberCollector->findSubscriberStat($handledMacros[$i]);
         }
 
         $this->emits[] = [$emitStat, $params, $handledSubscriberStats];

@@ -23,6 +23,7 @@ $routes = new IdentityList(EventRouteStat::class, ['id' => 'DESC']);
             <td class="table__header">Path</td>
             <td class="table__header">Subscribers</td>
             <td class="table__header">Emits</td>
+            <td class="table__header">Handles</td>
         </tr>
         <?php foreach ($routes as $route) :
             /** @var EventRouteStat $route */
@@ -32,12 +33,14 @@ $routes = new IdentityList(EventRouteStat::class, ['id' => 'DESC']);
             $emitCount = Records::select(EventEmitStat::getTable(), [
                 'route_id' => $route->id
             ])->count('id');
+            $handles = $route->loadHandles();
             ?>
             <tbody class="table__item-wrapper">
                 <tr class="table__item">
                     <td class="table__cell"><?= $route->route ?></td>
                     <td class="table__cell"><?= $subscriberCount ?></td>
                     <td class="table__cell"><?= $emitCount ?></td>
+                    <td class="table__cell"><?= count($handles) ?></td>
                 </tr>
             </tbody>
         <?php endforeach ?>

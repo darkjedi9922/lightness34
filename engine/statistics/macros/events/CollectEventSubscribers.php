@@ -21,8 +21,8 @@ class CollectEventSubscribers extends BaseStatCollector
 
     public function findSubscriberStat(callable $macro): ?EventSubscriberStat
     {
-        for ($i = 0, $c = count($this->subscribers); $i < $c; ++$i) {
-            if ($this->subscribers[1] === $macro) return $this->subscribers[0];
+        foreach ($this->subscribers as $subscriber) {
+            if ($subscriber[1] === $macro) return $subscriber[0];
         }
         return null;
     }
