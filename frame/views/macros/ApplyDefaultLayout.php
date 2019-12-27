@@ -13,6 +13,7 @@ class ApplyDefaultLayout extends Macro
     public function __construct()
     {
         $this->layouts = config::get('layouts')->getData();
+        krsort($this->layouts);
     }
 
     public function exec(...$args)
