@@ -2,9 +2,9 @@
 
 class Page extends Layouted
 {
-    public static function getFolder(): string
+    public static function getNamespace(): string
     {
-        return View::getFolder() . '/pages'; 
+        return 'pages';
     }
 
     /**

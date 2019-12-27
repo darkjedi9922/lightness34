@@ -21,6 +21,8 @@ class View
      */
     const EVENT_LOAD_END = 'view-load-end';
 
+    const VIEWS_FOLDER = ROOT_DIR . '/views';
+
     /**
      * @var string Имя вида
      */
@@ -44,14 +46,9 @@ class View
      */
     private $cachedContent = null;
 
-    /**
-     * Директория, в которой нужно искать вид. Значение НЕ должно заканчиваться на /.
-     * 
-     * Следует переопределять в потомках.
-     */
-    public static function getFolder(): string
+    public static function getNamespace(): string
     {
-        return ROOT_DIR . '/views';
+        return '';
     }
 
     /**
@@ -73,7 +70,8 @@ class View
      */
     public static function find(string $name): ?string
     {
-        $folder = static::getFolder();
+        $namespace = trim(static::getNamespace(), '/');
+        $folder = static::VIEWS_FOLDER . ($namespace ? "/$namespace" : '');
         foreach (static::getExtensions() as $ext) {
             $file = "$folder/$name.$ext";
             if (file_exists($file)) return $file;
@@ -142,11 +140,14 @@ class View
     }
 
     /**
-     * @param string $namespace Examples: "/pages", "pages/admin", "blocks" etc.
+     * @param string $namespace Examples: "pages", "pages/admin", "blocks" etc.
      */
     public function isInNamespace(string $namespace): bool
     {
-        $namespace = self::getFolder() . '/' . ltrim($namespace, '/');
-        return strpos($this->file, $namespace) === 0;
+        $namespace = trim($namespace, '/');
+        if (empty($namespace)) return true;
+        $ownNamespace = trim($this->getNamespace(), '/');
+        $name = ($ownNamespace ? "$ownNamespace/" : '') . $this->name;
+        return strpos($name, $namespace) === 0;
     }
 }

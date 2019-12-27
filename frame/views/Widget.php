@@ -2,8 +2,8 @@
 
 class Widget extends Layouted
 {
-    public static function getFolder(): string
+    public static function getNamespace(): string
     {
-        return View::getFolder() . '/widgets';
+        return 'widgets';
     }
 }

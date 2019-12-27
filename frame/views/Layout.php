@@ -9,9 +9,9 @@ class Layout extends Layouted
         return ['php'];
     }
 
-    public static function getFolder(): string
+    public static function getNamespace(): string
     {
-        return View::getFolder() . '/layouts';
+        return 'layouts';
     }
 
     /**

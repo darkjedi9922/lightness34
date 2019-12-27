@@ -2,8 +2,8 @@
 
 class Value extends View
 {
-    public static function getFolder(): string
+    public static function getNamespace(): string
     {
-        return View::getFolder() . '/values';
+        return 'values';
     }
 }

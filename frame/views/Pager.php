@@ -6,10 +6,9 @@ class Pager extends Layouted
 {
     private $pager;
 
-    /** {@inheritDoc} */
-    public static function getFolder(): string
+    public static function getNamespace(): string
     {
-        return View::getFolder() . '/pagers';
+        return 'pagers';
     }
 
     /** {@inheritDoc} */
