@@ -6,8 +6,6 @@ use engine\users\cash\user_me;
 use engine\admin\actions\EditUserGroupAction;
 use frame\actions\ViewAction;
 
-$self->setLayout('admin');
-
 $me = user_me::get();
 
 Init::access((int) $me->group_id === Group::ROOT_ID);

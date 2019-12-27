@@ -14,8 +14,6 @@ $user = User::selectIdentity($uid);
 Init::require($user !== null);
 Init::accessOneRight('users', ['edit-all' => $user, 'edit-own' => $user]);
 
-$self->setLayout('admin');
-
 $genders = new IdentityList(Gender::class);
 $action = new ViewAction(ProfileEditAction::class, ['id' => $uid]);
 $config = config::get('users');

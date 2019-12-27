@@ -10,8 +10,6 @@ Init::accessGroup(Group::ROOT_ID);
 
 $config = config::get('admin');
 $edit = new ViewAction(EditConfigAction::class, ['name' => 'admin']);
-
-$self->setLayout('admin');
 ?>
 
 <div class="box">

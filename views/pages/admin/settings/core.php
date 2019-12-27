@@ -7,8 +7,6 @@ use frame\cash\config;
 use engine\admin\actions\EditConfigAction;
 use frame\actions\ViewAction;
 
-$self->setLayout('admin');
-
 $me = user_me::get();
 
 Init::access((int) $me->group_id === Group::ROOT_ID);

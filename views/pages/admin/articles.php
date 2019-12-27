@@ -10,8 +10,6 @@ use function lightlib\shorten;
 $pagenumber = pagenumber::get();
 $articles = new ArticlePagedList($pagenumber);
 $rights = my_rights::get('articles');
-
-$self->setLayout('admin');
 ?>
 
 <div class="breadcrumbs">

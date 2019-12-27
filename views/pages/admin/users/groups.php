@@ -8,8 +8,6 @@ use engine\admin\actions\NewUserGroupAction;
 use frame\lists\base\IdentityList;
 use frame\tools\Init;
 
-$self->setLayout('admin');
-
 $myGroup = my_group::get();
 
 Init::access($myGroup->id === $myGroup::ROOT_ID);

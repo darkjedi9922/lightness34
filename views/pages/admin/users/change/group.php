@@ -20,8 +20,6 @@ Init::require((int)$user->group_id !== Group::ROOT_ID);
 
 $groups = new IdentityList(Group::class);
 $action = new ViewAction(ChangeUserGroupAction::class, ['uid' => $id]);
-
-$self->setLayout('admin');
 ?>
 
 <div class="breadcrumbs">

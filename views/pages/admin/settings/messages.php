@@ -10,8 +10,6 @@ Init::accessGroup(Group::ROOT_ID);
 
 $config = config::get('messages');
 $edit = new ViewAction(EditConfigAction::class, ['name' => 'messages']);
-
-$self->setLayout('admin');
 ?>
 
 <div class="box">

@@ -10,8 +10,6 @@ use engine\users\cash\user_me;
 use engine\users\actions\DeleteAvatarAction;
 use frame\actions\ViewAction;
 
-$self->setLayout('admin');
-
 Init::require(count($self->getArguments()) === 1);
 
 $login = $self->getArgument(0);

@@ -10,8 +10,6 @@ Init::accessGroup(Group::ROOT_ID);
 
 $config = config::get('comments');
 $edit = new ViewAction(EditConfigAction::class, ['name' => 'comments']);
-
-$self->setLayout('admin');
 ?>
 
 <div class="box">

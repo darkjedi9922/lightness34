@@ -10,8 +10,6 @@ use frame\modules\GroupRights;
 use frame\modules\Module;
 use frame\tools\Init;
 
-$self->setLayout('admin');
-
 $myGroup = my_group::get();
 
 Init::access($myGroup->id === $myGroup::ROOT_ID);

@@ -6,8 +6,6 @@ use engine\users\User;
 use engine\users\Group;
 use engine\users\Gender;
 
-$self->setLayout('admin');
-
 $pagenumber = pagenumber::get();
 $users = new UserPagedList($pagenumber);
 ?>

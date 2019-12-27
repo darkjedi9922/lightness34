@@ -14,8 +14,6 @@ $gender = Gender::selectIdentity($id);
 Init::require($gender !== null);
 
 $edit = new ViewAction(EditGender::class, ['id' => $id]);
-
-$self->setLayout('admin');
 ?>
 
 <div class="breadcrumbs">

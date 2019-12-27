@@ -12,8 +12,6 @@ use frame\actions\ViewAction;
 use engine\comments\actions\AddComment;
 use engine\comments\CommentList;
 
-$self->setLayout('admin');
-
 $id = (int)Init::requireGet('id');
 $article = Article::selectIdentity($id);
 

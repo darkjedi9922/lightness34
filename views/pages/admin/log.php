@@ -12,8 +12,6 @@ use function lightlib\mkfile;
 
 Init::accessRight('admin', 'see-logs');
 
-$self->setLayout('admin');
-
 if (!file_exists('log.txt')) mkfile('log.txt');
 
 $me = user_me::get();

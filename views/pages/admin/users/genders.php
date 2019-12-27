@@ -10,8 +10,6 @@ use engine\admin\actions\DeleteGender;
 
 Init::accessGroup(Group::ROOT_ID);
 
-$self->setLayout('admin');
-
 $genders = new IdentityList(Gender::class);
 $addGender = new ViewAction(AddGender::class);
 $deleteGender = new ViewAction(DeleteGender::class);

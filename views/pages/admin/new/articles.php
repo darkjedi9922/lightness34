@@ -7,8 +7,6 @@ use function lightlib\shorten;
 
 $pagenumber = pagenumber::get();
 $articles = new NewArticlePagedList($pagenumber);
-
-$self->setLayout('admin');
 ?>
 
 <div class="breadcrumbs">
