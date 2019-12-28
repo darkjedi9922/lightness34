@@ -39,10 +39,25 @@ class Events extends React.Component<EventsProps> {
                     Object.keys(route.emits).length,
                     route.handles.length
                 ];
+                
+                const subscribers = [];
+                for (const id in route.subscribers) {
+                    if (route.subscribers.hasOwnProperty(id)) {
+                        const subscriber = route.subscribers[id];
+                        subscribers.push({
+                            ...subscriber,
+                            handles: this.findSubscriberHandleEmitsId(
+                                route,
+                                parseInt(id)
+                            )
+                        });
+                    }
+                }
+
                 const details: ItemDetails[] = [
                     {
                         title: 'Subscribers',
-                        content: <SubscriberList subscribers={route.subscribers} />
+                        content: <SubscriberList subscribers={subscribers} />
                     }
                 ];
                 items.push({ cells, details })
@@ -56,6 +71,20 @@ class Events extends React.Component<EventsProps> {
                 items={items}
             ></BoxTable>
         );
+    }
+
+    private findSubscriberHandleEmitsId(
+        route: Route,
+        subscriberId: number
+    ): number[] {
+        const result = [];
+        for (let i = 0; i < route.handles.length; i++) {
+            const handle = route.handles[i];
+            if (handle.subscriberId === subscriberId) {
+                result.push(handle.emitId);
+            }
+        }
+        return result;
     }
 }
 

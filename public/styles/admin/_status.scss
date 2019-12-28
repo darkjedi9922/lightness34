@@ -22,6 +22,9 @@
         }
     }
 
+    &--none {
+        color: $clr-grey;
+    }
     &--ok {
         color: $box-green;
     }
