@@ -30,7 +30,10 @@ foreach ($routes as $routeStat) {
     $subscribersIt = new IdentityIterator($subscribers, EventSubscriberStat::class);
     foreach ($subscribersIt as $subscriberStat) {
         /** @var EventSubscriberStat $subscriberStat */
-        $subscriber = [];
+        $subscriber = [
+            'event' => $subscriberStat->event,
+            'class' => $subscriberStat->class
+        ];
         $route['subscribers'][$subscriberStat->id] = $subscriber;
     }
 

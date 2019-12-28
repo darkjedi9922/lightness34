@@ -2,6 +2,15 @@
     font-family: $global-font;
     font-size: 1.1rem;
 
+    &__number {
+        color: $clr-grey;
+        margin-right: 0.5rem;
+
+        &:before {
+            content: '#';
+        }
+    }
+
     &__name {
         &:after {
             content: ' => ';

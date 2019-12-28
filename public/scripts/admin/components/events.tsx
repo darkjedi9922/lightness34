@@ -1,8 +1,7 @@
 import React from 'react';
-
-interface Subscriber {
-
-}
+import BoxTable, { TableItem, ItemDetails } from './box-table';
+import SubscriberList, { Subscriber } from './events/subscriber-list';
+import RouteRequest from './routes/Request';
 
 interface Emit {
 
@@ -30,48 +29,33 @@ class Events extends React.Component<EventsProps> {
     }
 
     public render(): React.ReactNode {
-        return (<>
-            <div className="box box--table">
-                <table className="table routes">
-                    <thead>
-                        <tr className="table__headers">
-                            <td className="table__header">Path</td>
-                            <td className="table__header">Subscribers</td>
-                            <td className="table__header">Emits</td>
-                            <td className="table__header">Handles</td>
-                        </tr>
-                    </thead>
-                    {Object.keys(this.props.routes).map((id) => {
-                        let route = this.props.routes[id] as Route;
-                        return (
-                            <tbody key={id} className="table__item-wrapper">
-                                <tr className="table__item">
-                                    <td className="table__cell">
-                                        <span className={"routes__pagename" 
-                                            + (route.route === '' ?
-                                                ' routes__pagename--index' : '')
-                                        }>
-                                            {route.route !== '' ? 
-                                                route.route : 'index request'
-                                            }
-                                        </span>
-                                    </td>
-                                    <td className="table__cell">
-                                        {Object.keys(route.subscribers).length}
-                                    </td>
-                                    <td className="table__cell">
-                                        {Object.keys(route.emits).length}
-                                    </td>
-                                    <td className="table__cell">
-                                        {route.handles.length}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        )
-                    })}
-                </table>
-            </div>
-        </>);
+        const items: TableItem[] = [];
+        for (const id in this.props.routes) {
+            if (this.props.routes.hasOwnProperty(id)) {
+                const route = this.props.routes[id];
+                const cells = [
+                    <RouteRequest route={route.route} />,
+                    Object.keys(route.subscribers).length,
+                    Object.keys(route.emits).length,
+                    route.handles.length
+                ];
+                const details: ItemDetails[] = [
+                    {
+                        title: 'Subscribers',
+                        content: <SubscriberList subscribers={route.subscribers} />
+                    }
+                ];
+                items.push({ cells, details })
+            }
+        }
+
+        return (
+            <BoxTable
+                className="routes"
+                headers={['Path', 'Subscribers', 'Emits', 'Handles']}
+                items={items}
+            ></BoxTable>
+        );
     }
 }
 
