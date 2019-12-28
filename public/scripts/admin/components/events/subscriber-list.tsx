@@ -38,13 +38,12 @@ class SubscriberList extends React.Component<Props> {
                         <span className="param__number">{++index}</span>
                         <span className="param__name">{subscriber.event}</span>
                         <span className="param__value">{subscriber.class}</span>
-                        <div className="param__status">
-                            <span className={statusClasses}>
-                                <span className="status__message">
-                                    Executions: {subscriber.handles.length}
-                                </span>
+                        &nbsp;
+                        <span className={statusClasses}>
+                            <span className="status__message">
+                                (executions: {subscriber.handles.length})
                             </span>
-                        </div>
+                        </span>
                     </div>
                 );
     }

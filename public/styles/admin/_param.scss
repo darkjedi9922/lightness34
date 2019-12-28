@@ -1,6 +1,7 @@
 .param {
     font-family: $global-font;
     font-size: 1.1rem;
+    padding: 0.1rem 0;
 
     &__number {
         color: $clr-grey;
@@ -23,9 +24,5 @@
             color: $clr-grey;
             font-style: italic;
         }
-    }
-
-    &__status {
-        float: right;
     }
 }
