@@ -1,7 +1,8 @@
 import React from 'react';
-import BoxTable, { TableItem, ItemDetails } from './box-table';
+import Table, { TableItem, ItemDetails } from './table';
 import SubscriberList from './events/subscriber-list';
 import RouteRequest from './routes/Request';
+import EmitList from './events/emit-list';
 import { Subscriber, Emit, Handle } from '../structures';
 
 interface Route {
@@ -38,6 +39,11 @@ class Events extends React.Component<EventsProps> {
                         subscribers={route.subscribers}
                         handles={route.handles}
                     ></SubscriberList>
+                }, {
+                    content: <EmitList 
+                        emits={route.emits}
+                        handles={route.handles}
+                    ></EmitList>
                 }];
 
                 items.unshift({ cells, details })
@@ -45,11 +51,13 @@ class Events extends React.Component<EventsProps> {
         }
 
         return (
-            <BoxTable
-                className="routes"
-                headers={['Path', 'Subscribers', 'Emits', 'Handles']}
-                items={items}
-            ></BoxTable>
+            <div className="box box--table">
+                <Table
+                    className="routes"
+                    headers={['Path', 'Subscribers', 'Emits', 'Handles']}
+                    items={items}
+                ></Table>
+            </div>
         );
     }
 }

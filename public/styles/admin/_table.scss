@@ -24,6 +24,13 @@
         border-top: solid 1px #bfbfbf;
     }
 
+    &__number {
+        color: $clr-grey;
+        &:before {
+            content: '#';
+        }
+    }
+
     &__details {
         padding: 0 2rem;
     }
