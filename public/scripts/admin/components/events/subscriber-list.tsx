@@ -21,7 +21,9 @@ class SubscriberList extends React.Component<Props> {
             );
             items.unshift(
                 <div key={i} className="param">
-                    <span className="param__number">{i + 1}</span>
+                    <span className="param__number">
+                        {this.props.subscribers.length - i}
+                    </span>
                     <span className="param__name">{subscriber.event}</span>
                     <span className="param__value">{subscriber.class}</span>
                     &nbsp;
