@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import { size, isObject, isString, isBoolean, isNumber, isNull } from 'lodash';
+import { size, isObject, isString, isBoolean, isNull } from 'lodash';
 
 interface Props {
     argsJson: string
@@ -43,15 +43,15 @@ class EmitParameters extends React.Component<Props> {
                     <div key={key} className="param">
                         <span className="param__name">{key}</span>
                         <span className={paramValueClasses}>
-                            {isEmpty ? ('empty' + (isObject(arg) ? ' array' : ''))
-                            :
-                            (isObject(arg) ?
-                                <>[
+                            {isEmpty 
+                            ? ('empty' + (isObject(arg) ? ' array' : ''))
+                            : (isObject(arg)
+                                ? <>[
                                     <div className="table__details details">
                                         {this.createParameterElements(arg)}
                                     </div>
                                 ]</>
-                            : strValue
+                                : strValue
                             )}
                         </span>
                     </div>
