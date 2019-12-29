@@ -94,8 +94,8 @@ $history = new IdentityList(ActionStat::class, ['id' => 'DESC']);
                                     ?>
                                     <div class="param">
                                         <span class="param__name"><?= $field ?></span>
-                                        <span class="param__value <?= $empty || $secret ? 'param__value--empty' : '' ?>">
-                                            <?= !$empty ? $value : 'empty' ?>
+                                        <span class="param__value <?= $empty || $secret || is_array($value) ? 'param__value--empty' : '' ?>">
+                                            <?= !$empty ? (!is_array($value) ? $value : 'array') : 'empty' ?>
                                         </span>
                                     </div>
                                 <?php endforeach ?>
