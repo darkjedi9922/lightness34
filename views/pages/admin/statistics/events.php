@@ -31,20 +31,23 @@ foreach ($routes as $routeStat) {
     foreach ($subscribersIt as $subscriberStat) {
         /** @var EventSubscriberStat $subscriberStat */
         $subscriber = [
+            'id' => $subscriberStat->id,
             'event' => $subscriberStat->event,
             'class' => $subscriberStat->class
         ];
-        $route['subscribers'][$subscriberStat->id] = $subscriber;
+        $route['subscribers'][] = $subscriber;
     }
 
     $emits = Records::select(EventEmitStat::getTable(), [
         'route_id' => $routeStat->id
-    ])->load();
+    ])->order(['id' => 'ASC'])->load();
     $emitsIt = new IdentityIterator($emits, EventEmitStat::class);
     foreach ($emitsIt as $emitStat) {
         /** @var EventEmitStat $emitStat */
-        $emit = [];
-        $route['emits'][$emitStat->id] = $emit;
+        $route['emits'][] = [
+            'id' => $emitStat->id,
+            'event' => $emitStat->event
+        ];
     }
 
     $handles = $routeStat->loadHandles();

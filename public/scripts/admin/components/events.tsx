@@ -1,21 +1,13 @@
 import React from 'react';
 import BoxTable, { TableItem, ItemDetails } from './box-table';
-import SubscriberList, { Subscriber } from './events/subscriber-list';
+import SubscriberList from './events/subscriber-list';
 import RouteRequest from './routes/Request';
-
-interface Emit {
-
-}
-
-interface Handle {
-    emitId: number
-    subscriberId: number,
-}
+import { Subscriber, Emit, Handle } from '../structures';
 
 interface Route {
     route: string,
-    subscribers: { [id: number]: Subscriber },
-    emits: { [id: number]: Emit },
+    subscribers: Subscriber[],
+    emits: Emit[],
     handles: Handle[]
 }
 
@@ -35,32 +27,20 @@ class Events extends React.Component<EventsProps> {
                 const route = this.props.routes[id];
                 const cells = [
                     <RouteRequest route={route.route} />,
-                    Object.keys(route.subscribers).length,
-                    Object.keys(route.emits).length,
+                    route.subscribers.length,
+                    route.emits.length,
                     route.handles.length
                 ];
                 
-                const subscribers = [];
-                for (const id in route.subscribers) {
-                    if (route.subscribers.hasOwnProperty(id)) {
-                        const subscriber = route.subscribers[id];
-                        subscribers.push({
-                            ...subscriber,
-                            handles: this.findSubscriberHandleEmitsId(
-                                route,
-                                parseInt(id)
-                            )
-                        });
-                    }
-                }
+                const details: ItemDetails[] = [{
+                    title: 'Subscribers',
+                    content: <SubscriberList 
+                        subscribers={route.subscribers}
+                        handles={route.handles}
+                    ></SubscriberList>
+                }];
 
-                const details: ItemDetails[] = [
-                    {
-                        title: 'Subscribers',
-                        content: <SubscriberList subscribers={subscribers} />
-                    }
-                ];
-                items.push({ cells, details })
+                items.unshift({ cells, details })
             }
         }
 
@@ -71,20 +51,6 @@ class Events extends React.Component<EventsProps> {
                 items={items}
             ></BoxTable>
         );
-    }
-
-    private findSubscriberHandleEmitsId(
-        route: Route,
-        subscriberId: number
-    ): number[] {
-        const result = [];
-        for (let i = 0; i < route.handles.length; i++) {
-            const handle = route.handles[i];
-            if (handle.subscriberId === subscriberId) {
-                result.push(handle.emitId);
-            }
-        }
-        return result;
     }
 }
 
