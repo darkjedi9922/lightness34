@@ -46,7 +46,8 @@ foreach ($routes as $routeStat) {
         /** @var EventEmitStat $emitStat */
         $route['emits'][] = [
             'id' => $emitStat->id,
-            'event' => $emitStat->event
+            'event' => $emitStat->event,
+            'argsJson' => str_replace('\\', '\\\\', $emitStat->args_json)
         ];
     }
 

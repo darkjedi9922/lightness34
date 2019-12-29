@@ -6,7 +6,8 @@ export interface Subscriber {
 
 export interface Emit {
     id: number,
-    event: string
+    event: string,
+    argsJson: string
 }
 
 export interface Handle {

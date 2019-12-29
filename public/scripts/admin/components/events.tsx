@@ -43,6 +43,7 @@ class Events extends React.Component<EventsProps> {
                     content: <EmitList 
                         emits={route.emits}
                         handles={route.handles}
+                        subscribers={route.subscribers}
                     ></EmitList>
                 }];
 
