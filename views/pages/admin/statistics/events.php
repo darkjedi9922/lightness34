@@ -27,7 +27,7 @@ foreach ($routes as $routeStat) {
 
     $subscribers = Records::select(EventSubscriberStat::getTable(), [
         'route_id' => $routeStat->id
-    ])->load();
+    ])->order(['id' => 'ASC'])->load();
     $subscribersIt = new IdentityIterator($subscribers, EventSubscriberStat::class);
     foreach ($subscribersIt as $subscriberStat) {
         /** @var EventSubscriberStat $subscriberStat */

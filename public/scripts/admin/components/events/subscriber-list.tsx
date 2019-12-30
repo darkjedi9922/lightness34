@@ -19,7 +19,7 @@ class SubscriberList extends React.Component<Props> {
                 { 'status--ok': hasExecutions },
                 { 'status--none': !hasExecutions },
             );
-            items.unshift(
+            items.push(
                 <div key={i} className="param">
                     <span className="param__number">
                         {this.props.subscribers.length - i}
