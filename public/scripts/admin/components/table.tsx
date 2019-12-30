@@ -52,7 +52,9 @@ class Table extends React.Component<TableProps> {
                                                     {details.title}
                                                 </span>
                                             }
-                                            {details.content}
+                                            <div className="details__content">
+                                                {details.content}
+                                            </div>
                                         </div>
                                     )}
                                 </td>
