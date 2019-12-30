@@ -9,7 +9,8 @@ interface Route {
     route: string,
     subscribers: Subscriber[],
     emits: Emit[],
-    handles: Handle[]
+    handles: Handle[],
+    time: string,
 }
 
 interface EventsProps {
@@ -30,7 +31,8 @@ class Events extends React.Component<EventsProps> {
                     <RouteRequest route={route.route} />,
                     route.subscribers.length,
                     route.emits.length,
-                    route.handles.length
+                    route.handles.length,
+                    route.time
                 ];
                 
                 const details: ItemDetails[] = [{
@@ -55,7 +57,7 @@ class Events extends React.Component<EventsProps> {
             <div className="box box--table">
                 <Table
                     className="routes"
-                    headers={['Path', 'Subscribers', 'Emits', 'Handles']}
+                    headers={['Path', 'Subscribers', 'Emits', 'Handles', 'Time']}
                     items={items}
                 ></Table>
             </div>

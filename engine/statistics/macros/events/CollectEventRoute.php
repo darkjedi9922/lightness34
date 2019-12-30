@@ -17,5 +17,6 @@ class CollectEventRoute extends BaseStatCollector
     {
         $router = Core::$app->router;
         $this->routeStat->route = $router->pagename;
+        $this->routeStat->time = time();
     }
 }

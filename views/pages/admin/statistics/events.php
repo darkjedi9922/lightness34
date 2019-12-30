@@ -21,7 +21,8 @@ foreach ($routes as $routeStat) {
         'route' => $routeStat->route,
         'subscribers' => [],
         'emits' => [],
-        'handles' => []
+        'handles' => [],
+        'time' => date('d.m.Y H:i', $routeStat->time)
     ];
 
     $subscribers = Records::select(EventSubscriberStat::getTable(), [
