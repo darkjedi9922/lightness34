@@ -26,7 +26,7 @@ class Item extends React.Component<Props> {
     }
 
     public componentDidMount(): void {
-        if (this.props.collapsable) this.collapse(false);
+        if (this.props.collapsable) this.collapse();
     }
 
     public render(): React.ReactNode {
@@ -70,27 +70,22 @@ class Item extends React.Component<Props> {
     private toggleCollapse(event: React.MouseEvent): void {
         if (!this.props.collapsable) return;
         if (this.isCollapsed()) this.expand();
-        else this.collapse(true);
+        else this.collapse();
         event.stopPropagation();
         event.preventDefault();
     }
 
-    private collapse(animate: boolean): void {
+    private collapse(): void {
         if (this.isCollapsed()) return;
         const detailsContent = this.detailsContentRef.current;
         this.lastDetailsHeight = $(detailsContent).height();
-        if (animate) $(detailsContent).animate({ height: 0 }, 250);
-        else $(detailsContent).height(0);
+        $(detailsContent).height(0);
     }
 
     private expand(): void {
         if (!this.isCollapsed()) return;
         if (!this.props.item.details) return;
-        $(this.detailsContentRef.current).animate({
-            height: `${this.lastDetailsHeight}px`
-        }, 250, function (this) {
-            $(this).css({ height: 'auto' })
-        });
+        $(this.detailsContentRef.current).css({ 'height': 'auto' });
     }
 
     private isCollapsed(): boolean {
