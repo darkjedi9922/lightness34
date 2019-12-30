@@ -1,9 +1,10 @@
 import React from 'react';
-import Table, { TableItem, ItemDetails } from './table';
+import Table from './table';
 import SubscriberList from './events/subscriber-list';
 import RouteRequest from './routes/Request';
 import EmitList from './events/emit-list';
 import { Subscriber, Emit, Handle } from '../structures';
+import { TableItem, ItemDetails } from './table/item';
 
 interface Route {
     route: string,
@@ -59,6 +60,7 @@ class Events extends React.Component<EventsProps> {
                     className="routes"
                     headers={['Path', 'Subscribers', 'Emits', 'Handles', 'Time']}
                     items={items}
+                    collapsable={true}
                 ></Table>
             </div>
         );

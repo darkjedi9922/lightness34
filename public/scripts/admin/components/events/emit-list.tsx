@@ -1,8 +1,9 @@
 import React from 'react';
-import Table, { TableItem } from '../table';
+import Table from '../table';
 import { Handle, Emit, Subscriber } from 'scripts/admin/structures';
 import EmitParameters from './emit-list/emit-parameters';
 import ExecutedEmitSubscribers, { Execution } from './emit-list/executed-subscribers';
+import { TableItem } from '../table/item';
 
 interface Props {
     emits: Emit[],
@@ -38,6 +39,7 @@ class EmitList extends React.Component<Props> {
             <Table
                 headers={['Emit', 'Event', 'Handles']} 
                 items={items}
+                collapsable={true}
             ></Table>
         );
     }
