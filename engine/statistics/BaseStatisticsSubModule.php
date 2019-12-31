@@ -14,7 +14,7 @@ abstract class BaseStatisticsSubModule extends Module
 
         $router = Core::$app->router;
         $config = config::get('statistics');
-        if ($router->isInAnyNamespace($config->ignorePageNamespaces)) return;
+        if ($router->isInAnyNamespace($config->ignoreRouteNamespaces)) return;
 
         $this->setupEventHandlers($this->getAppEventHandlers());
     }
