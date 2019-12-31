@@ -20,7 +20,7 @@ class StatisticsModule extends Module
 
         $app->setModule(new EventStatisticsSubModule("events", $this));
         $app->setModule(new RouteStatisticsSubModule("routes", $this));
-        $app->setModule(new ActionStatisticsSubModule("common", $this));
+        $app->setModule(new ActionStatisticsSubModule("actions", $this));
     }
 
     public function createRightsDescription(): ?RightsDesc
