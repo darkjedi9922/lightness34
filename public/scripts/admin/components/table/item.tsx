@@ -32,7 +32,7 @@ class Item extends React.Component<Props> {
     public render(): React.ReactNode {
         return <tbody 
             className="table__item-wrapper" 
-            onClick={this.toggleCollapse}
+            onDoubleClick={this.toggleCollapse}
         >
             <tr className="table__item">
                 {this.props.item.cells.map((value, index) =>
