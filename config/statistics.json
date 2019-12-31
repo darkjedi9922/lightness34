@@ -4,6 +4,7 @@
     "events.history.limit": 20,
     "ignoreRouteNamespaces": [
         "admin/statistics/routes",
-        "admin/statistics/events"
+        "admin/statistics/events",
+        "engine/statistics/actions/ClearStatistics"
     ]
 }
