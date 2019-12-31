@@ -26,11 +26,12 @@ $me = user_me::get();
 $deleteAvatar = new ViewAction(DeleteAvatarAction::class, ['uid' => $profile->id]);
 ?>
 
-<div class="breadcrumbs">
-    <a href="/admin/users?p=<?= $prevPagenumber ?>" 
-        class="breadcrumbs__item breadcrumbs__item--link">Пользователи</a>
-    <span class="breadcrumbs__divisor"></span>
-    <span class="breadcrumbs__item breadcrumbs__item--current">ID <?= $profile->id ?></span>
+<div class="content__header">
+    <div class="breadcrumbs">
+        <a href="/admin/users?p=<?= $prevPagenumber ?>" class="breadcrumbs__item breadcrumbs__item--link">Пользователи</a>
+        <span class="breadcrumbs__divisor"></span>
+        <span class="breadcrumbs__item breadcrumbs__item--current">ID <?= $profile->id ?></span>
+    </div>
 </div>
 <div class="box">
     <div style="float:left;margin-right:1%;max-width:40%">

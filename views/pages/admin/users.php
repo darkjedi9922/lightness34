@@ -10,8 +10,10 @@ $pagenumber = pagenumber::get();
 $users = new UserPagedList($pagenumber);
 ?>
 
-<div class="breadcrumbs">
-    <span class="breadcrumbs__item breadcrumbs__item--current">Пользователи</span>
+<div class="content__header">
+    <div class="breadcrumbs">
+        <span class="breadcrumbs__item breadcrumbs__item--current">Пользователи</span>
+    </div>
 </div>
 <div class="box">
     <table width="100%">

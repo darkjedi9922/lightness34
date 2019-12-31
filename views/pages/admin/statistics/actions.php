@@ -14,10 +14,12 @@ $actions = new ActionList;
 $history = new IdentityList(ActionStat::class, ['id' => 'DESC']);
 ?>
 
-<div class="breadcrumbs">
-    <span class="breadcrumbs__item">Мониторинг</span>
-    <span class="breadcrumbs__divisor"></span>
-    <span class="breadcrumbs__item breadcrumbs__item--current">Действия</span>
+<div class="content__header">
+    <div class="breadcrumbs">
+        <span class="breadcrumbs__item">Мониторинг</span>
+        <span class="breadcrumbs__divisor"></span>
+        <span class="breadcrumbs__item breadcrumbs__item--current">Действия</span>
+    </div>
 </div>
 
 <span class="content__title">История запусков</span>

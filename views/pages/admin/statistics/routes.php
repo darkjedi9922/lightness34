@@ -13,10 +13,12 @@ Init::accessRight('admin', 'see-logs');
 $routes = new IdentityList(RouteStat::class, ['id' => 'DESC']);
 ?>
 
-<div class="breadcrumbs">
-    <span class="breadcrumbs__item">Мониторинг</span>
-    <span class="breadcrumbs__divisor"></span>
-    <span class="breadcrumbs__item breadcrumbs__item--current">Маршруты</span>
+<div class="content__header">
+    <div class="breadcrumbs">
+        <span class="breadcrumbs__item">Мониторинг</span>
+        <span class="breadcrumbs__divisor"></span>
+        <span class="breadcrumbs__item breadcrumbs__item--current">Маршруты</span>
+    </div>
 </div>
 <div class="box box--table">
     <table class="table routes">

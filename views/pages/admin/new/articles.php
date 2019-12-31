@@ -9,10 +9,12 @@ $pagenumber = pagenumber::get();
 $articles = new NewArticlePagedList($pagenumber);
 ?>
 
-<div class="breadcrumbs">
-    <span class="breadcrumbs__item">Новое</a>
-    <span class="breadcrumbs__divisor"></span>
-    <span class="breadcrumbs__item breadcrumbs__item--current">Статьи</span>
+<div class="content__header">
+    <div class="breadcrumbs">
+        <span class="breadcrumbs__item">Новое</a>
+        <span class="breadcrumbs__divisor"></span>
+        <span class="breadcrumbs__item breadcrumbs__item--current">Статьи</span>
+    </div>
 </div>
 <div class="box">
     <?php if ($articles->countAll() == 0) : ?>Новых статей нет

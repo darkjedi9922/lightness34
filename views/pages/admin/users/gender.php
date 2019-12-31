@@ -16,10 +16,12 @@ Init::require($gender !== null);
 $edit = new ViewAction(EditGender::class, ['id' => $id]);
 ?>
 
-<div class="breadcrumbs">
-    <a href="/admin/users/genders" class="breadcrumbs__item breadcrumbs__item--link">Пол</a>
-    <span class="breadcrumbs__divisor"></span>
-    <span class="breadcrumbs__item breadcrumbs__item--current">ID <?= $gender->id ?></span>
+<div class="content__header">
+    <div class="breadcrumbs">
+        <a href="/admin/users/genders" class="breadcrumbs__item breadcrumbs__item--link">Пол</a>
+        <span class="breadcrumbs__divisor"></span>
+        <span class="breadcrumbs__item breadcrumbs__item--current">ID <?= $gender->id ?></span>
+    </div>
 </div>
 <div class="box">
     <form action="<?= $edit->getUrl() ?>" method="post">

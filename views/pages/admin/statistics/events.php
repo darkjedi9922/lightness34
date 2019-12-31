@@ -64,10 +64,12 @@ foreach ($routes as $routeStat) {
 }
 ?>
 
-<div class="breadcrumbs">
-    <span class="breadcrumbs__item">Мониторинг</span>
-    <span class="breadcrumbs__divisor"></span>
-    <span class="breadcrumbs__item breadcrumbs__item--current">События</span>
+<div class="content__header">
+    <div class="breadcrumbs">
+        <span class="breadcrumbs__item">Мониторинг</span>
+        <span class="breadcrumbs__divisor"></span>
+        <span class="breadcrumbs__item breadcrumbs__item--current">События</span>
+    </div>
 </div>
 
 <div id="events" data-props='<?= json_encode($eventsProps, JSON_HEX_AMP) ?>'></div>

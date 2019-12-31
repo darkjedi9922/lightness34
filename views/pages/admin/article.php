@@ -61,12 +61,14 @@ foreach ($comments as $comment) {
 $article->setReaded(user_me::get());
 ?>
 
-<div class="breadcrumbs">
-    <a href="/admin/articles?p=<?= $prevPagenumber ?>" 
-        class="breadcrumbs__item breadcrumbs__item--link"
-    >Статьи</a>
-    <span class="breadcrumbs__divisor"></span>
-    <span class="breadcrumbs__item breadcrumbs__item--current">ID <?= $article->id ?></span>
+<div class="content__header">
+    <div class="breadcrumbs">
+        <a href="/admin/articles?p=<?= $prevPagenumber ?>" 
+            class="breadcrumbs__item breadcrumbs__item--link"
+        >Статьи</a>
+        <span class="breadcrumbs__divisor"></span>
+        <span class="breadcrumbs__item breadcrumbs__item--current">ID <?= $article->id ?></span>
+    </div>
 </div>
 <div class="box article">
     <h2 class="article__title"><?= $article->title ?></h2>

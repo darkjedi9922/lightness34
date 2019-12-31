@@ -24,10 +24,12 @@ $action = new ViewAction(EditRightsAction::class, ['id' => $id]);
 $me = user_me::get();
 ?>
 
-<div class="breadcrumbs">
-    <a href="/admin/users/groups" class="breadcrumbs__item breadcrumbs__item--link">Группы</a>
-    <span class="breadcrumbs__divisor"></span>
-    <span class="breadcrumbs__item breadcrumbs__item--current"><?= $group->name ?></span>
+<div class="content__header">
+    <div class="breadcrumbs">
+        <a href="/admin/users/groups" class="breadcrumbs__item breadcrumbs__item--link">Группы</a>
+        <span class="breadcrumbs__divisor"></span>
+        <span class="breadcrumbs__item breadcrumbs__item--current"><?= $group->name ?></span>
+    </div>
 </div>
 <div class="box">
     <form action="<?= $action->getUrl() ?>" method="post">

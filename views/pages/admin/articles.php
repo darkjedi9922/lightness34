@@ -12,8 +12,10 @@ $articles = new ArticlePagedList($pagenumber);
 $rights = my_rights::get('articles');
 ?>
 
-<div class="breadcrumbs">
-    <span class="breadcrumbs__item breadcrumbs__item--current">Статьи</span>
+<div class="content__header">
+    <div class="breadcrumbs">
+        <span class="breadcrumbs__item breadcrumbs__item--current">Статьи</span>
+    </div>
 </div>
 <div class="box">
     <?php if ($articles->countOnPage() == 0) : ?>Статей нет

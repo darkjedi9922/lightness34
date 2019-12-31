@@ -22,13 +22,14 @@ $groups = new IdentityList(Group::class);
 $action = new ViewAction(ChangeUserGroupAction::class, ['uid' => $id]);
 ?>
 
-<div class="breadcrumbs">
-    <a href="/admin/users" class="breadcrumbs__item breadcrumbs__item--link">Пользователи</a>
-    <span class="breadcrumbs__divisor"></span>
-    <a href="/admin/users/profile/<?= $user->login ?>" 
-        class="breadcrumbs__item breadcrumbs__item--link"><?= $user->login ?></a>
-    <span class="breadcrumbs__divisor"></span>
-    <span class="breadcrumbs__item breadcrumbs__item--current">Изменить группу</span>
+<div class="content__header">
+    <div class="breadcrumbs">
+        <a href="/admin/users" class="breadcrumbs__item breadcrumbs__item--link">Пользователи</a>
+        <span class="breadcrumbs__divisor"></span>
+        <a href="/admin/users/profile/<?= $user->login ?>" class="breadcrumbs__item breadcrumbs__item--link"><?= $user->login ?></a>
+        <span class="breadcrumbs__divisor"></span>
+        <span class="breadcrumbs__item breadcrumbs__item--current">Изменить группу</span>
+    </div>
 </div>
 <div class="box">
     <form action="<?= $action->getUrl() ?>" method="post">
