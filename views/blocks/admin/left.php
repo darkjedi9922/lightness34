@@ -3,148 +3,100 @@
 use engine\users\cash\my_group;
 use engine\users\cash\my_rights;
 
-use function lightlib\versionify;
-
 $group = my_group::get();
 $rights = my_rights::get('admin');
+
+$menu = [
+    'items' => [[
+        'name' => 'Главная',
+        'link' => '/admin/home',
+        'icon' => 'home'
+    ], [
+        'name' => 'Пользователи',
+        'link' => '/admin/users',
+        'icon' => 'user'
+    ], [
+        'name' => 'Статьи',
+        'link' => '/admin/articles',
+        'icon' => 'doc-text'
+    ], [
+        'name' => 'Новое',
+        'icon' => 'rss',
+        'submenu' => [[
+            'name' => 'Статьи',
+            'link' => '/admin/new/articles',
+            'icon' => 'doc-text'
+        ]]
+    ]]
+];
+
+if ($group->id === $group::ROOT_ID) $menu = array_merge_recursive($menu, [
+    'items' => [[
+        'name' => 'Настройки',
+        'icon' => 'cog',
+        'submenu' => [[
+            'name' => 'Общие',
+            'icon' => 'sliders',
+            'link' => '/admin/settings/core'
+        ], [
+            'name' => 'Пользователи',
+            'icon' => 'user',
+            'submenu' => [[
+                'name' => 'Общие',
+                'icon' => 'cog',
+                'link' => '/admin/settings/user'
+            ], [
+                'name' => 'Группы',
+                'icon' => 'id-card-o',
+                'link' => '/admin/users/groups'
+            ], [
+                'name' => 'Пол',
+                'icon' => 'transgender',
+                'link' => '/admin/users/genders'
+            ], [
+                'name' => 'Сообщения',
+                'icon' => 'email',
+                'link' => '/admin/settings/messages'
+            ]]
+        ], [
+            'name' => 'Статьи',
+            'icon' => 'doc-text',
+            'link' => '/admin/settings/articles'
+        ], [
+            'name' => 'Комментарии',
+            'icon' => 'commenting',
+            'link' => '/admin/settings/comments'
+        ], [
+            'name' => 'Админ-панель',
+            'icon' => 'television',
+            'link' => '/admin/settings/admin'
+        ]]
+    ]]
+]);
+
+if ($rights->can('see-logs')) $menu = array_merge_recursive($menu, [
+    'items' => [[
+        'name' => 'Мониторинг',
+        'icon' => 'chart-bar',
+        'submenu' => [[
+            'name' => 'Маршруты',
+            'icon' => 'link',
+            'link' => '/admin/statistics/routes'
+        ], [
+            'name' => 'События',
+            'icon' => 'flash-1',
+            'link' => '/admin/statistics/events'
+        ], [
+            'name' => 'Действия',
+            'icon' => 'superpowers',
+            'link' => '/admin/statistics/actions'
+        ]]
+    ], [
+        'name' => 'Лог',
+        'icon' => 'doc-text',
+        'link' => '/admin/log'
+    ]]
+]);
 ?>
 
-<ul class="menu" id="menu">
-    <li class="menu__item">
-        <a class="menu__link" href="/admin/home">
-            <i class="menu__icon fontello icon-home"></i>
-            <span class="menu__label">Главная</span>
-        </a>
-    </li>
-    <li class="menu__item">
-        <a class="menu__link" href="/admin/users">
-            <i class="menu__icon fontello icon-user"></i>
-            <span class="menu__label">Пользователи</span>
-        </a>
-    </li>
-    <li class="menu__item">
-        <a class="menu__link" href="/admin/articles">
-            <i class="menu__icon fontello icon-doc-text"></i>
-            <span class="menu__label">Статьи</span>
-        </a>
-    </li>
-    <li class="menu__item">
-        <span class="menu__link menu__link--parent">
-            <i class="menu__icon fontello icon-rss"></i>
-            <span class="menu__label">Новое</span>
-            <i class="menu__arrow fontello icon-down-dir"></i>
-        </span>
-        <ul class="menu__submenu">
-            <li class="menu__item">
-                <a class="menu__link" href="/admin/new/articles">
-                    <i class="menu__icon fontello icon-doc-text"></i>
-                    <span class="menu__label">Статьи</span>
-                </a>
-            </li>
-        </ul>
-    </li>
-    <?php if ($group->id === $group::ROOT_ID) : ?>
-        <li class="menu__item">
-            <a class="menu__link menu__link--parent">
-                <i class="menu__icon fontello icon-cog"></i>
-                <span class="menu__label">Настройки</span>
-                <i class="menu__arrow fontello icon-down-dir"></i>
-            </a>
-            <ul class="menu__submenu">
-                <li class="menu__item">
-                    <a class="menu__link" href="/admin/settings/core">
-                        <i class="menu__icon fontello icon-sliders"></i>
-                        <span class="menu__label">Общие</span>
-                    </a>
-                </li>
-                <li class="menu__item">
-                    <a class="menu__link menu__link--parent">
-                        <i class="menu__icon fontello icon-user"></i>
-                        <span class="menu__label">Пользователи</span>
-                        <i class="menu__arrow fontello icon-down-dir"></i>
-                    </a>
-                    <ul class="menu__submenu">
-                        <li class="menu__item">
-                            <a class="menu__link" href="/admin/settings/users">
-                                <i class="menu__icon fontello icon-cog"></i>
-                                <span class="menu__label">Общие</span>
-                            </a>
-                        </li>
-                        <li class="menu__item">
-                            <a class="menu__link" href="/admin/users/groups">
-                                <i class="menu__icon fontello icon-id-card-o"></i>
-                                <span class="menu__label">Группы</span>
-                            </a>
-                        </li>
-                        <li class="menu__item">
-                            <a class="menu__link" href="/admin/users/genders">
-                                <i class="menu__icon fontello icon-transgender"></i>
-                                <span class="menu__label">Пол</span>
-                            </a>
-                        </li>
-                        <li class="menu__item">
-                            <a class="menu__link" href="/admin/settings/messages">
-                                <i class="menu__icon fontello icon-email"></i>
-                                <span class="menu__label">Сообщения</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="menu__item">
-                    <a class="menu__link" href="/admin/settings/articles">
-                        <i class="menu__icon fontello icon-doc-text"></i>
-                        <span class="menu__label">Статьи</span>
-                    </a>
-                </li>
-                <li class="menu__item">
-                    <a class="menu__link" href="/admin/settings/comments">
-                        <i class="menu__icon fontello icon-commenting"></i>
-                        <span class="menu__label">Комментарии</span>
-                    </a>
-                </li>
-                <li class="menu__item">
-                    <a class="menu__link" href="/admin/settings/admin">
-                        <i class="menu__icon fontello icon-television"></i>
-                        <span class="menu__label">Админ-Панель</span>
-                    </a>
-                </li>
-            </ul>
-        </li>
-    <?php endif ?>
-    <?php if ($rights->can('see-logs')) : ?>
-        <li class="menu__item">
-            <a class="menu__link menu__link--parent">
-                <i class="menu__icon fontello icon-chart-bar"></i>
-                <span class="menu__label">Мониторинг</span>
-                <i class="menu__arrow fontello icon-down-dir"></i>
-            </a>
-            <ul class="menu__submenu">
-                <li class="menu__item">
-                    <a class="menu__link" href="/admin/statistics/routes">
-                        <i class="menu__icon fontello icon-link"></i>
-                        <span class="menu__label">Маршруты</span>
-                    </a>
-                </li>
-                <li class="menu__item">
-                    <a class="menu__link" href="/admin/statistics/events">
-                        <i class="menu__icon fontello icon-flash-1"></i>
-                        <span class="menu__label">События</span>
-                    </a>
-                </li>
-                <li class="menu__item">
-                    <a class="menu__link" href="/admin/statistics/actions">
-                        <i class="menu__icon fontello icon-superpowers"></i>
-                        <span class="menu__label">Действия</span>
-                    </a>
-                </li>
-            </ul>
-        </li>
-        <li class="menu__item">
-            <a class="menu__link" href="/admin/log">
-                <i class="menu__icon fontello icon-doc-text"></i>
-                <span class="menu__label">Лог</span>
-            </a>
-        </li>
-    <?php endif ?>
-</ul>
-<script src="<?= versionify('public/scripts/admin-menu.js') ?>"></script>
+<div id="menu" data-props='<?= json_encode($menu, JSON_HEX_AMP) ?>'></div>
