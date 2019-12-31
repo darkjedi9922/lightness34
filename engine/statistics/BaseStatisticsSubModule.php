@@ -24,6 +24,7 @@ abstract class BaseStatisticsSubModule extends Module
         return null;
     }
 
+    public abstract function clearStats();
     protected abstract function getAppEventHandlers(): array;
 
     private function setupEventHandlers(array $macros)

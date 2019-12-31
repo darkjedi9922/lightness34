@@ -7,10 +7,13 @@ use frame\route\Router;
 use frame\lists\iterators\IdentityIterator;
 use frame\database\Records;
 use engine\statistics\stats\DynamicRouteParam;
+use frame\actions\ViewAction;
+use engine\statistics\actions\ClearStatistics;
 
 Init::accessRight('admin', 'see-logs');
 
 $routes = new IdentityList(RouteStat::class, ['id' => 'DESC']);
+$clear = new ViewAction(ClearStatistics::class, ['module' => 'stat/routes']);
 ?>
 
 <div class="content__header">
@@ -19,6 +22,7 @@ $routes = new IdentityList(RouteStat::class, ['id' => 'DESC']);
         <span class="breadcrumbs__divisor"></span>
         <span class="breadcrumbs__item breadcrumbs__item--current">Маршруты</span>
     </div>
+    <a href="<?= $clear->getUrl() ?>" class="button">Очистить статистику</a>
 </div>
 <div class="box box--table">
     <table class="table routes">

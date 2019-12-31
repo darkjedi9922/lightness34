@@ -7,11 +7,14 @@ use engine\statistics\lists\ActionList;
 use engine\statistics\stats\ActionStat;
 use frame\actions\UploadedFile;
 use function lightlib\bytes_to;
+use frame\actions\ViewAction;
+use engine\statistics\actions\ClearStatistics;
 
 Init::accessRight('admin', 'see-logs');
 
 $actions = new ActionList;
 $history = new IdentityList(ActionStat::class, ['id' => 'DESC']);
+$clear = new ViewAction(ClearStatistics::class, ['module' => 'stat/actions']);
 ?>
 
 <div class="content__header">
@@ -20,6 +23,7 @@ $history = new IdentityList(ActionStat::class, ['id' => 'DESC']);
         <span class="breadcrumbs__divisor"></span>
         <span class="breadcrumbs__item breadcrumbs__item--current">Действия</span>
     </div>
+    <a href="<?= $clear->getUrl() ?>" class="button">Очистить статистику</a>
 </div>
 
 <span class="content__title">История запусков</span>

@@ -10,9 +10,17 @@ use engine\statistics\macros\routes\CollectPageRouteStat;
 use engine\statistics\macros\routes\CollectActionRouteStat;
 use engine\statistics\macros\routes\CollectErrorRouteStat;
 use engine\statistics\macros\routes\EndCollectRouteStat;
+use engine\statistics\stats\DynamicRouteParam;
+use frame\database\Records;
 
 class RouteStatisticsSubModule extends BaseStatisticsSubModule
 {
+    public function clearStats()
+    {
+        Records::select(DynamicRouteParam::getTable())->delete();
+        Records::select(RouteStat::getTable())->delete();
+    }
+
     protected function getAppEventHandlers(): array
     {
         $route = new RouteStat;

@@ -9,9 +9,15 @@ use engine\statistics\macros\actions\StartCollectActionStat;
 use engine\statistics\macros\actions\EndCollectActionStat;
 use engine\statistics\macros\actions\CollectActionError;
 use engine\statistics\macros\actions\EndCollectAppStat;
+use frame\database\Records;
 
 class ActionStatisticsSubModule extends BaseStatisticsSubModule
 {
+    public function clearStats()
+    {
+        Records::select(ActionStat::getTable())->delete();
+    }
+
     protected function getAppEventHandlers(): array
     {
         $stat = new ActionStat;

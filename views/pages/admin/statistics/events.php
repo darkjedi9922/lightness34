@@ -7,8 +7,12 @@ use frame\database\Records;
 use engine\statistics\stats\EventSubscriberStat;
 use engine\statistics\stats\EventEmitStat;
 use frame\lists\iterators\IdentityIterator;
+use frame\actions\ViewAction;
+use engine\statistics\actions\ClearStatistics;
 
 Init::accessRight('admin', 'see-logs');
+
+$clear = new ViewAction(ClearStatistics::class, ['module' => 'stat/events']);
 
 $eventsProps = [
     'routes' => []
@@ -70,6 +74,7 @@ foreach ($routes as $routeStat) {
         <span class="breadcrumbs__divisor"></span>
         <span class="breadcrumbs__item breadcrumbs__item--current">События</span>
     </div>
+    <a href="<?= $clear->getUrl() ?>" class="button">Очистить статистику</a>
 </div>
 
 <div id="events" data-props='<?= json_encode($eventsProps, JSON_HEX_AMP) ?>'></div>
