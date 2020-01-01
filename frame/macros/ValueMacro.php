@@ -2,6 +2,7 @@
 
 use frame\macros\GetMacro;
 use frame\views\Value;
+use frame\route\Response;
 
 class ValueMacro extends GetMacro
 {
@@ -9,6 +10,6 @@ class ValueMacro extends GetMacro
     {
         ob_clean();
         (new Value($value))->show();
-        exit;
+        Response::finish();
     }
 }
