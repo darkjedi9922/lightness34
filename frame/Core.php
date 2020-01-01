@@ -9,6 +9,7 @@ use frame\config\Config;
 use frame\modules\Module;
 use frame\views\DynamicPage;
 use frame\macros\EventManager;
+use frame\route\Response;
 
 class Core
 {
@@ -72,6 +73,7 @@ class Core
 
         $this->enableErrorHandlers();
         $this->events = new EventManager;
+        $this->setupCorrectFinish();
         $this->config = \frame\cash\config::get('core');
         $this->router = $router;
         static::$app = $this;
@@ -227,6 +229,19 @@ class Core
         if (isset($this->handlers[get_class($e)])) (new $this->handlers[get_class($e)])->handle($e);
         else if ($this->defaultHandler) (new $this->defaultHandler)->handle($e);
         else throw $e;
+    }
+
+    private function setupCorrectFinish()
+    {
+        $this->on(Response::EVENT_FINISH, function() {
+            $handles = $this->events->getHandleStack();
+            // -> i - 1 потому что в индекс в массивах начинается с 0
+            // -> i - 2 потому что последнее событие это этот же EVENT_FINISH, а тут
+            // мы учитываем все события, что произошли ДО него.
+            for ($i = count($handles) - 2; $i >= 0; --$i) {
+                $this->emit(self::META_APP_EVENT_EMIT, ...$handles[$i]);
+            }
+        });
     }
 
     private function findPage(string $pagename): ?Page

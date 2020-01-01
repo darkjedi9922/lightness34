@@ -25,10 +25,22 @@ class EventStatisticsSubModule extends BaseStatisticsSubModule
         $subsciberCollector = new CollectEventSubscribers($routeStat);
         $emitCollector = new CollectEventEmits($routeStat, $subsciberCollector);
 
+        $this->collectAlreadySubscribers($subsciberCollector);
+
         return [
             Core::META_APP_EVENT_SUBSCRIBE => $subsciberCollector,
             Core::META_APP_EVENT_EMIT => $emitCollector,
             Core::EVENT_APP_START => new CollectEventRoute($routeStat)
         ];
+    }
+
+    private function collectAlreadySubscribers(CollectEventSubscribers $collector)
+    {
+        $subscribers = Core::$app->getEventManager()->getSubscribers();
+        foreach ($subscribers as $event => $eventSubscribers) {
+            foreach ($eventSubscribers as $subscriber) {
+                $collector->exec($event, $subscriber);
+            }
+        }
     }
 }
