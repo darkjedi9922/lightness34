@@ -2,13 +2,17 @@
 
 class EventManager
 {
+    const HISTORY_SUBSCRIBE_TYPE = 'subscribe';
+    const HISTORY_EMIT_TYPE = 'emit';
+
     private $subscribers = [];
     private $emits = [];
-    private $handleStack = [];
+    private $history = [];
 
     public function subscribe(string $event, callable $macro)
     {
         $this->subscribers[$event][] = $macro;
+        $this->history[] = [self::HISTORY_SUBSCRIBE_TYPE, $event, $macro];
     }
 
     /**
@@ -16,18 +20,20 @@ class EventManager
      */
     public function emit(string $event, ...$args): array
     {
+        $result = [];
+        $this->history[] = [self::HISTORY_EMIT_TYPE, $event, $args, &$result];
+
         $this->emits[$event] = $this->getEmitCount($event) + 1;
         $subscribers = $this->subscribers[$event] ?? [];
         if (empty($subscribers)) return [];
         
-        $result = [$event, $args, []];
-        $this->handleStack[] = &$result;
         for ($i = 0, $c = count($subscribers); $i < $c; ++$i) {
             $macro = $this->subscribers[$event][$i];
-            $result[2][] = $macro;
+            $result[] = $macro;
             $macro(...$args);
         }
-        return array_pop($this->handleStack)[2];
+
+        return $result;
     }
 
     public function getSubscribers(): array
@@ -43,13 +49,9 @@ class EventManager
     /**
      * Стек (индексный массив), где каждый элемент это массив вида
      * [(string) event, (array) event_args, (array of callables) ...handled_macro]
-     * 
-     * Последнему элементу соответствует последнее на данный момент выполняющееся
-     * событие которое содержит массив обработчиков, которые были выполнены вплоть
-     * до последнего (что выполняется в текущий момент).
      */
-    public function getHandleStack(): array
+    public function getEmitHistory(): array
     {
-        return $this->handleStack;
+        return $this->history;
     }
 }
