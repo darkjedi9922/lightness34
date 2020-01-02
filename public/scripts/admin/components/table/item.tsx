@@ -1,5 +1,5 @@
 import React from 'react'
-import $ from 'jquery'
+import classNames from 'classnames'
 
 export interface ItemDetails {
     title?: string,
@@ -16,25 +16,39 @@ interface Props {
     collapsable?: boolean
 }
 
-class Item extends React.Component<Props> {
-    private detailsContentRef = React.createRef<HTMLDivElement>();
-    private lastDetailsHeight = 0;
+interface State {
+    collapsed: boolean
+}
 
+class Item extends React.Component<Props, State> {
     public constructor(props: Props) {
         super(props);
+
+        this.state = {
+            collapsed: this.props.collapsable ? true : false
+        }
+
         this.toggleCollapse = this.toggleCollapse.bind(this);
     }
 
-    public componentDidMount(): void {
-        if (this.props.collapsable) this.collapse();
-    }
-
     public render(): React.ReactNode {
-        return <tbody 
-            className="table__item-wrapper" 
-            onDoubleClick={this.toggleCollapse}
-        >
+        return <tbody className={classNames(
+            'table__item-wrapper',
+            {'table__item-wrapper--opened': !this.state.collapsed}
+        )}>
             <tr className="table__item">
+                {this.props.collapsable &&
+                    <td 
+                        className="table__cell table__cell--collapse"
+                        onClick={this.toggleCollapse}
+                    >
+                        <i className={classNames(
+                            'table__collapse',
+                            {'icon-down-open': this.state.collapsed},
+                            {'icon-up-open': !this.state.collapsed}
+                        )}></i>
+                    </td>
+                }
                 {this.props.item.cells.map((value, index) =>
                     <td key={index} className="table__cell">
                         {value}
@@ -46,7 +60,11 @@ class Item extends React.Component<Props> {
                     <td className="table__details" colSpan={100}>
                         <div
                             className="table__details-content" 
-                            ref={this.detailsContentRef}
+                            style={{
+                                // Если использовать переключение display, то колонки
+                                // таблицы почему-то начинают менять размер.
+                                height: this.state.collapsed ? 0 : 'auto'
+                            }}
                         >
                             {this.props.item.details.map((details, index) =>
                                 <div key={index} className="details">
@@ -68,30 +86,9 @@ class Item extends React.Component<Props> {
     }
 
     private toggleCollapse(event: React.MouseEvent): void {
-        if (!this.props.collapsable) return;
-        if (this.isCollapsed()) this.expand();
-        else this.collapse();
-        event.stopPropagation();
+        this.setState((state) => ({ collapsed: !state.collapsed }));
         event.preventDefault();
-    }
-
-    private collapse(): void {
-        if (this.isCollapsed()) return;
-        const detailsContent = this.detailsContentRef.current;
-        this.lastDetailsHeight = $(detailsContent).height();
-        $(detailsContent).height(0);
-    }
-
-    private expand(): void {
-        if (!this.isCollapsed()) return;
-        if (!this.props.item.details) return;
-        $(this.detailsContentRef.current).css({ 'height': 'auto' });
-    }
-
-    private isCollapsed(): boolean {
-        if (!this.props.item.details) return true;
-        const detailsContent = this.detailsContentRef.current;
-        return $(detailsContent).height() ? false : true;
+        event.stopPropagation();
     }
 }
 

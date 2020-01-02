@@ -14,14 +14,32 @@
     }
 
     &__item-wrapper {
-        &:hover {
+        &--opened {
             background: $clr-hoverbox;
+        }
+    }
+
+    &__collapse {
+        @extend .fontello;
+        color: $clr-grey;
+
+        &:before {
+            margin: 0;
         }
     }
 
     &__cell {
         padding: 0.5rem 1rem;
         border-top: solid 1px #bfbfbf;
+
+        &--collapse {
+            cursor: pointer;
+            text-align: center;
+        }
+    }
+
+    &__cell--collapse:hover &__collapse {
+        color: $global-button-color;
     }
 
     &__number {

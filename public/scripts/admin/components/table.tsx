@@ -17,6 +17,9 @@ class Table extends React.Component<TableProps> {
                 {this.props.headers && this.props.headers.length &&
                     <thead>
                         <tr className="table__headers">
+                            {this.props.collapsable &&
+                                <td className="table__header"></td>
+                            }
                             {this.props.headers.map((name, index) => 
                                 <td key={index} className="table__header">
                                     {name}
