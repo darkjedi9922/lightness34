@@ -36,7 +36,7 @@ class DefaultErrorHandler implements ErrorHandler
              */
             ob_end_clean_all();
             echo str_replace("\n", endl, $error);
-            exit;
+            Response::finish();
         }
     }
 }

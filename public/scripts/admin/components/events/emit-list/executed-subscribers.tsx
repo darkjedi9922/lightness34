@@ -21,7 +21,7 @@ class ExecutedEmitSubscribers extends React.Component<Props> {
             message="No subscribers"
         ></Status>;
 
-        return this.props.executions.reverse().map((execution, index) => 
+        return this.props.executions.map((execution, index) => 
             <Parameter
                 key={index}
                 number={index + 1}

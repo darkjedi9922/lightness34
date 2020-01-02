@@ -2,6 +2,7 @@
 
 use frame\macros\GetMacro;
 use frame\views\Widget;
+use frame\route\Response;
 
 class WidgetMacro extends GetMacro
 {
@@ -9,6 +10,6 @@ class WidgetMacro extends GetMacro
     {
         ob_clean();
         (new Widget($value))->show();
-        exit;
+        Response::finish();
     }
 }
