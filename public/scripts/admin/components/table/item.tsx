@@ -34,7 +34,8 @@ class Item extends React.Component<Props, State> {
     public render(): React.ReactNode {
         return <tbody className={classNames(
             'table__item-wrapper',
-            {'table__item-wrapper--opened': !this.state.collapsed}
+            {'table__item-wrapper--opened': 
+                this.props.collapsable && !this.state.collapsed}
         )}>
             <tr className="table__item">
                 {this.props.collapsable &&
