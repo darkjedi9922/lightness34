@@ -8,6 +8,22 @@ use engine\users\Gender;
 
 $pagenumber = pagenumber::get();
 $users = new UserPagedList($pagenumber);
+
+$tableProps = ['items' => []];
+foreach ($users as $user) {
+    /** @var User $user */
+    $group = Group::selectIdentity($user->group_id);
+    $gender = Gender::selectIdentity($user->gender_id);
+    $tableProps['items'][] = [
+        'id' => $user->id,
+        'login' => $user->login,
+        'name' => $user->name,
+        'surname' => $user->surname,
+        'group' => $group->name,
+        'gender' => $gender->name,
+        'email' => $user->email
+    ];
+}
 ?>
 
 <div class="content__header">
@@ -15,28 +31,7 @@ $users = new UserPagedList($pagenumber);
         <span class="breadcrumbs__item breadcrumbs__item--current">Пользователи</span>
     </div>
 </div>
+<div id="users" data-props='<?= json_encode($tableProps, JSON_HEX_AMP) ?>'></div>
 <div class="box">
-    <table width="100%">
-        <tr>
-            <td><b>ID</b></td>
-            <td><b>Логин</b></td>
-            <td><b>Имя</b></td>
-            <td><b>Группа</b></td>
-            <td><b>Пол</b></td>
-            <td><b>E-mail</b></td>
-        </tr>
-        <?php foreach ($users as $user) : /** @var User $user */ ?>
-        <?php $group = Group::selectIdentity($user->group_id) ?>
-        <?php $gender = Gender::selectIdentity($user->gender_id) ?>
-            <tr>
-                <td><?= $user->id ?></td>
-                <td><a class="link" href="/admin/users/profile/<?= $user->login ?>"><?= $user->login ?></a></td>
-                <td><?= "{$user->name} {$user->surname}" ?></td>
-                <td><?= $group->name ?></td>
-                <td><?= $gender->name ?></td>
-                <td><?= $user->email ?></td>
-            </tr>
-        <?php endforeach ?>
-    </table>
     <?php $users->getPager()->show('admin') ?>
 </div>

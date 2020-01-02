@@ -49,6 +49,15 @@
         }
     }
 
+    &__link {
+        color: $clr-color;
+        text-decoration: none;
+
+        &:hover {
+            color: $global-button-color;
+        }
+    }
+
     &__details {
         padding: 0 2rem;
         overflow: hidden;
