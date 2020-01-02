@@ -22,20 +22,6 @@ class EventManagerTest extends TestCase
         ], $events->getSubscribers());
     }
 
-    public function testEmitCountEquals0IfThereIsNoEmits()
-    {
-        $events = new EventManager;
-        $this->assertEquals(0, $events->getEmitCount('event1'));
-    }
-
-    public function testCountsEmits()
-    {
-        $events = new EventManager;
-        $count = 3;
-        for ($i = 0; $i < $count; ++$i) $events->emit('event1');
-        $this->assertEquals($count, $events->getEmitCount('event1'));
-    }
-
     public function testMacrosHandlesEmits()
     {
         $events = new EventManager;

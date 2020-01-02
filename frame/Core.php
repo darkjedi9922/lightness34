@@ -50,8 +50,8 @@ class Core
     private $defaultHandler = null;
 
     private $modules = [];
-
     private $events = null;
+    private $executed = false;
 
     public function __construct(Router $router)
     {
@@ -67,8 +67,7 @@ class Core
     public function __destruct()
     {
         try {
-            if ($this->events->getEmitCount(self::EVENT_APP_START) !== 0)
-                $this->emit(self::EVENT_APP_END);
+            if ($this->executed) $this->emit(self::EVENT_APP_END);
         } catch (\Throwable $error) {
             $this->handleError($error);
         }
@@ -164,6 +163,7 @@ class Core
 
     public function exec()
     {
+        $this->executed = true;
         $this->emit(self::EVENT_APP_START);
         $pagename = $this->router->pagename;
         $page = $this->findPage($pagename);

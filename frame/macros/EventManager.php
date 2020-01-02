@@ -6,7 +6,6 @@ class EventManager
     const HISTORY_EMIT_TYPE = 'emit';
 
     private $subscribers = [];
-    private $emits = [];
     private $history = [];
 
     public function subscribe(string $event, callable $macro)
@@ -23,7 +22,6 @@ class EventManager
         $result = [];
         $this->history[] = [self::HISTORY_EMIT_TYPE, $event, $args, &$result];
 
-        $this->emits[$event] = $this->getEmitCount($event) + 1;
         $subscribers = $this->subscribers[$event] ?? [];
         if (empty($subscribers)) return [];
         
@@ -39,11 +37,6 @@ class EventManager
     public function getSubscribers(): array
     {
         return $this->subscribers;
-    }
-
-    public function getEmitCount(string $event): int
-    {
-        return $this->emits[$event] ?? 0;
     }
 
     /**
