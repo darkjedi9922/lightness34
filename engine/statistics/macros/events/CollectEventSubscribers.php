@@ -3,28 +3,31 @@
 use engine\statistics\macros\BaseStatCollector;
 use engine\statistics\stats\EventSubscriberStat;
 use engine\statistics\stats\EventRouteStat;
+use SplObjectStorage;
 
 class CollectEventSubscribers extends BaseStatCollector
 {
     private $routeStat;
-    private $subscribers = [];
+
+    /**
+     * Key: callable macro.
+     * Value: EventSubscriberStat.
+     */
+    private $subscriberStats;
 
     public function __construct(EventRouteStat $routeStat)
     {
         $this->routeStat = $routeStat;
+        $this->subscriberStats = new SplObjectStorage;
     }
 
-    public function getSubscribers(): array
+    /**
+     * Key: callable macro
+     * Value: EventSubscriberStat
+     */
+    public function getSubscriberStats(): SplObjectStorage
     {
-        return $this->subscribers;
-    }
-
-    public function findSubscriberStat(callable $macro): ?EventSubscriberStat
-    {
-        foreach ($this->subscribers as $subscriber) {
-            if ($subscriber[1] === $macro) return $subscriber[0];
-        }
-        return null;
+        return $this->subscriberStats;
     }
 
     protected function collect(...$args)
@@ -36,6 +39,6 @@ class CollectEventSubscribers extends BaseStatCollector
         $subscriber->event = $event;
         $subscriber->class = str_replace('\\', '\\\\', get_class($macro));
 
-        $this->subscribers[] = [$subscriber, $macro];
+        $this->subscriberStats[$macro] = $subscriber;
     }
 }

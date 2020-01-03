@@ -2,23 +2,17 @@
 
 use engine\statistics\macros\BaseStatCollector;
 use engine\statistics\stats\EventEmitStat;
-use engine\statistics\stats\EventRouteStat;
-use frame\Core;
 
 class CollectEventEmits extends BaseStatCollector
 {
-    private $routeStat;
-    private $subscriberCollector;
+    /**
+     * Массив вида (int) innerEmitId => (EventEmitStat) stat
+     */
     private $emits = [];
 
-    public function __construct(
-        EventRouteStat $routeStat,
-        CollectEventSubscribers $subscriberCollector
-    ) {
-        $this->routeStat = $routeStat;
-        $this->subscriberCollector = $subscriberCollector;
-    }
-
+    /**
+     * Массив вида (int) innerEmitId => (EventEmitStat) stat
+     */
     public function getEmits(): array
     {
         return $this->emits;
@@ -26,9 +20,9 @@ class CollectEventEmits extends BaseStatCollector
 
     protected function collect(...$args)
     {
-        $event = $args[0];
-        $params = $args[1];
-        $handledMacros = $args[2];
+        $emitId = $args[0];
+        $event = $args[1];
+        $params = $args[2];
 
         $emitStat = new EventEmitStat;
         $emitStat->event = $event;
@@ -37,25 +31,7 @@ class CollectEventEmits extends BaseStatCollector
             JSON_HEX_AMP
         );
 
-        $handledSubscriberStats = [];
-        for ($i = 0, $c = count($handledMacros); $i < $c; ++$i) {
-            $handledSubscriberStats[] = 
-                $this->subscriberCollector->findSubscriberStat($handledMacros[$i]);
-        }
-
-        $this->emits[] = [$emitStat, $params, $handledSubscriberStats];
-
-        // Конец сбора статистики о событиях происходит ПОСЛЕ обработки конечного
-        // события приложения (а не во время него). Иначе конец наступает прежде, 
-        // чем данный сборщик об этом узнает и соберет последнюю информацию.
-        if ($event === Core::EVENT_APP_END) {
-            $endCollector = new EndCollectEvents(
-                $this->routeStat,
-                $this->subscriberCollector,
-                $this
-            );
-            $endCollector->exec();
-        }
+        $this->emits[$emitId] = $emitStat;
     }
 
     private function prepareArgs(array $params): array

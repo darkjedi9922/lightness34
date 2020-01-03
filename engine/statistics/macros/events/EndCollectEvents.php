@@ -13,15 +13,18 @@ class EndCollectEvents extends BaseStatCollector
     private $routeStat;
     private $subscriberCollector;
     private $emitCollector;
+    private $startHandleCollector;
 
     public function __construct(
         EventRouteStat $routeStat,
         CollectEventSubscribers $subscriberCollector,
-        CollectEventEmits $emitCollector
+        CollectEventEmits $emitCollector,
+        StartCollectHandles $startHandleCollector
     ) {
         $this->routeStat = $routeStat;
         $this->subscriberCollector = $subscriberCollector;
         $this->emitCollector = $emitCollector;
+        $this->startHandleCollector = $startHandleCollector;
     }
 
     protected function collect(...$args)
@@ -29,42 +32,47 @@ class EndCollectEvents extends BaseStatCollector
         $routeId = $this->routeStat->insert();
         $this->insertSubscribers($routeId);
         $this->insertEmits($routeId);
+        $this->insertHandles();
         $this->deleteOldStats();
     }
 
     private function insertSubscribers(int $routeId)
     {
-        $subscribers = $this->subscriberCollector->getSubscribers();
-        for ($i = 0, $c = count($subscribers); $i < $c; ++$i) {
-            /** @var EventSubscriberStat $subscriber */
-            $subscriber = $subscribers[$i][0];
-            $subscriber->route_id = $routeId;
-            $subscriber->insert();
+        $subscriberStats = $this->subscriberCollector->getSubscriberStats();
+        $subscriberStats->rewind();
+        while ($subscriberStats->valid()) {
+            /** @var callable $macro */
+            $macro = $subscriberStats->key();
+            /** @var EventSubscriberStat $stat */
+            $stat = $subscriberStats->getInfo();
+            $stat->route_id = $routeId;
+            $stat->insert();
+            $subscriberStats->next();
         }
     }
 
     private function insertEmits(int $routeId)
     {
         $emits = $this->emitCollector->getEmits();
-        for ($i = 0, $c = count($emits); $i < $c; ++$i) {
-            /** @var EventEmitStat $emitStat */
-            $emitStat = $emits[$i][0];
-            $emitStat->route_id = $routeId;
-            $id = $emitStat->insert();
-            $this->insertHandles($id, $emits[$i][2]);
+        foreach ($emits as $stat) {
+            /** @var EventEmitStat $stat */
+            $stat->route_id = $routeId;
+            $stat->insert();
         }
     }
 
-    private function insertHandles(int $emitId, array $handledSubscribers)
+    private function insertHandles()
     {
-        foreach ($handledSubscribers as $subscriberStat) {
-            /** @var EventSubscriberStat $subscriberStat */
-            Records::select('stat_event_emit_handles')->insert([
-                'emit_id' => $emitId,
-                // В данный момент все подписчики, что объявлялись на странице уже
-                // должны быть записаны в БД -> у них уже есть id.
-                'subscriber_id' => $subscriberStat->id
-            ]);
+        $handles = $this->startHandleCollector->getHandles();
+        $subscribers = $this->subscriberCollector->getSubscriberStats();
+        $emits = $this->emitCollector->getEmits();
+        foreach ($handles as $innerEmitId => $macros) {
+            for ($i = 0, $c = count($macros); $i < $c; ++$i) {
+                Records::select('stat_event_emit_handles')->insert([
+                    'emit_id' => $emits[$innerEmitId]->id,
+                    'subscriber_id' => $subscribers[$macros[$i]]->id
+                ]);
+            }
         }
     }
 
