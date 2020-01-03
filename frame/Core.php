@@ -9,6 +9,7 @@ use frame\config\Config;
 use frame\modules\Module;
 use frame\views\DynamicPage;
 use frame\macros\EventManager;
+use frame\route\Response;
 
 class Core
 {
@@ -20,6 +21,19 @@ class Core
      * Event args: Throwable.
      */
     const EVENT_APP_ERROR = 'core-app-error';
+
+    /**
+     * Происходит при подписке нового макроса на событие. В обработчик передается
+     * string имя события и callable макрос.
+     */
+    const META_APP_EVENT_SUBSCRIBE = '_app-macro-subscribed';
+
+    /**
+     * Происходит после обработки события. В обработчик передается string имя 
+     * выполнившегося события, массив параметров события и массив callable макросов,
+     * что были выполнены. Если никаких обработчиков нет, массив макросов будет пуст.
+     */
+    const META_APP_EVENT_EMIT = '_app-event-emit-and-handle';
 
     /**
      * @var Core $app Экземпляр приложения. Инициализуется
@@ -59,6 +73,7 @@ class Core
 
         $this->enableErrorHandlers();
         $this->events = new EventManager;
+        $this->setupCorrectFinish();
         $this->config = \frame\cash\config::get('core');
         $this->router = $router;
         static::$app = $this;
@@ -112,6 +127,9 @@ class Core
     public function on(string $event, callable $macro)
     {
         $this->events->subscribe($event, $macro);
+        // Не сигнализируем о подписке на мета-событие.
+        // if (($event[0] ?? '') === '_') return;
+        $this->events->emit(self::META_APP_EVENT_SUBSCRIBE, $event, $macro);
     }
 
     /**
@@ -120,7 +138,10 @@ class Core
      */
     public function emit(string $event, ...$args)
     {
-        $this->events->emit($event, ...$args);
+        $macros = $this->events->emit($event, ...$args);
+        // Не сигнализируем о вызове мета-события.
+        // if (($event[0] ?? '') === '_') return;
+        $this->events->emit(self::META_APP_EVENT_EMIT, $event, $args, $macros);
     }
 
     /**
@@ -208,6 +229,19 @@ class Core
         if (isset($this->handlers[get_class($e)])) (new $this->handlers[get_class($e)])->handle($e);
         else if ($this->defaultHandler) (new $this->defaultHandler)->handle($e);
         else throw $e;
+    }
+
+    private function setupCorrectFinish()
+    {
+        $this->on(Response::EVENT_FINISH, function() {
+            $handles = $this->events->getHandleStack();
+            // -> i - 1 потому что в индекс в массивах начинается с 0
+            // -> i - 2 потому что последнее событие это этот же EVENT_FINISH, а тут
+            // мы учитываем все события, что произошли ДО него.
+            for ($i = count($handles) - 2; $i >= 0; --$i) {
+                $this->emit(self::META_APP_EVENT_EMIT, ...$handles[$i]);
+            }
+        });
     }
 
     private function findPage(string $pagename): ?Page

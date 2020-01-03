@@ -2,7 +2,9 @@
 
 use frame\Core;
 use engine\statistics\stats\EventRouteStat;
-use engine\statistics\macros\events\CollectEventHistory;
+use engine\statistics\macros\events\CollectEventSubscribers;
+use engine\statistics\macros\events\CollectEventRoute;
+use engine\statistics\macros\events\CollectEventEmits;
 use engine\statistics\stats\EventEmitStat;
 use engine\statistics\stats\EventSubscriberStat;
 use frame\database\Records;
@@ -19,8 +21,26 @@ class EventStatisticsSubModule extends BaseStatisticsSubModule
 
     protected function getAppEventHandlers(): array
     {
+        $routeStat = new EventRouteStat;
+        $subsciberCollector = new CollectEventSubscribers($routeStat);
+        $emitCollector = new CollectEventEmits($routeStat, $subsciberCollector);
+
+        $this->collectAlreadySubscribers($subsciberCollector);
+
         return [
-            Core::EVENT_APP_END => new CollectEventHistory
+            Core::META_APP_EVENT_SUBSCRIBE => $subsciberCollector,
+            Core::META_APP_EVENT_EMIT => $emitCollector,
+            Core::EVENT_APP_START => new CollectEventRoute($routeStat)
         ];
+    }
+
+    private function collectAlreadySubscribers(CollectEventSubscribers $collector)
+    {
+        $subscribers = Core::$app->getEventManager()->getSubscribers();
+        foreach ($subscribers as $event => $eventSubscribers) {
+            foreach ($eventSubscribers as $subscriber) {
+                $collector->exec($event, $subscriber);
+            }
+        }
     }
 }
