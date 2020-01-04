@@ -27,6 +27,10 @@ abstract class Module
         return crc32($this->name);
     }
 
+    public function getParent(): ?Module {
+        return $this->parent;
+    }
+
     /**
      * Модуль может не иметь прав, тогда нужно вернуть null.
      */
