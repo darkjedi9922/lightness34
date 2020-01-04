@@ -131,11 +131,15 @@ $clear = new ViewAction(ClearStatistics::class, ['module' => 'stat/actions']);
                                         </div>
                                         <div class="param">
                                             <span class="param__name">mime type</span>
-                                            <span class="param__value"><?= $fileData['mime'] ?? '' ?></span>
+                                            <span class="param__value <?= !$fileData['mime'] ? 'param__value--empty' : '' ?>">
+                                                <?= $fileData['mime'] ? $fileData['mime'] : 'file was not successfully loaded' ?>
+                                            </span>
                                         </div>
                                         <div class="param">
                                             <span class="param__name">temporary path</span>
-                                            <span class="param__value"><?= $file->getTempName() ?></span>
+                                            <span class="param__value <?= !$file->getTempName() ? 'param__value--empty' : '' ?>">
+                                                <?= $file->getTempName() ? $file->getTempName() : 'file was not successfully loaded' ?>
+                                            </span>
                                         </div>
                                         <div class="param">
                                             <span class="param__name">status</span>

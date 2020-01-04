@@ -79,7 +79,7 @@ class StartCollectActionStat extends BaseStatCollector
         foreach ($files as $field => $file) {
             /** @var UploadedFile $file */
             $result[$field] = $file->toArray();
-            $result[$field]['mime'] = !$file->isEmpty() ? $file->getMime() : '';
+            $result[$field]['mime'] = $file->isLoaded() ? $file->getMime() : '';
         }
         return $result;
     }
