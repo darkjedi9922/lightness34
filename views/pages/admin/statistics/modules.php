@@ -11,11 +11,22 @@ $modules = Core::$app->getModules();
 foreach ($modules as $name => $module) {
     /** @var Module $module */
     $parent = $module->getParent();
-    $listProps['list'][] = [
+    $rightsDesc = $module->createRightsDescription();
+    $moduleProps = [
         'name' => $name,
         'class' => get_class($module),
-        'parentModuleName' => $parent ? $parent->getName() : null
+        'parentModuleName' => $parent ? $parent->getName() : null,
+        'rights' => $rightsDesc ? ['list' => []] : null
     ];
+    if ($rightsDesc) {
+        foreach ($rightsDesc->listRights() as $name => $desc) {
+            $moduleProps['rights']['list'][] = [
+                'name' => $name,
+                'description' => $desc
+            ];
+        }
+    }
+    $listProps['list'][] = $moduleProps;
 }
 ?>
 
