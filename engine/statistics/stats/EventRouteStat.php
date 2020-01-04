@@ -16,12 +16,13 @@ class EventRouteStat extends Identity
         $emitsTable = EventEmitStat::getTable();
         $handlesTable = 'stat_event_emit_handles';
         return database::get()->query(
-            "SELECT $handlesTable.emit_id, $handlesTable.subscriber_id
+            "SELECT $handlesTable.*
             FROM 
                 $handlesTable 
                 INNER JOIN $emitsTable ON $handlesTable.emit_id = $emitsTable.id
                 INNER JOIN $routeTable ON $emitsTable.route_id = $routeTable.id
-            WHERE $routeTable.id = {$this->id}"
+            WHERE $routeTable.id = {$this->id}
+            ORDER BY $handlesTable.id ASC"
         )->readAll();
     }
 }
