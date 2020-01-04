@@ -9,7 +9,7 @@ abstract class Module
      * @param string $name Должно быть уникальным в пределах всего приложения.
      */
     public function __construct(string $name, Module $parent = null) {
-        $this->name = $name;
+        $this->name = $parent ? $parent->getName() . '/' . $name : $name;
         $this->parent = $parent;
     }
 

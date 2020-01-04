@@ -33,7 +33,7 @@ $app->setModule(new StatisticsModule('stat'));
 $app->setModule(new AdminModule('admin'));
 $app->setModule(new UsersModule('users'));
 $app->setModule(new ArticlesModule('articles'));
-$app->setModule(new CommentsModule('article-comments'));
+$app->setModule(new CommentsModule('comments', $app->getModule('articles')));
 
 $app->on(Core::EVENT_APP_START, new ActionMacro('action'));
 $app->on(Core::EVENT_APP_START, new ValueMacro('value'));

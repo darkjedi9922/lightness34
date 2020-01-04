@@ -10,7 +10,7 @@ abstract class BaseStatisticsSubModule extends Module
 {
     public function __construct(string $name, Module $parent)
     {
-        parent::__construct("{$parent->getName()}/$name", $parent);
+        parent::__construct($name, $parent);
 
         $router = Core::$app->router;
         $config = config::get('statistics');
