@@ -8,6 +8,7 @@ use engine\statistics\macros\events\CollectEventSubscribers;
 use engine\statistics\macros\events\CollectEventRoute;
 use engine\statistics\macros\events\CollectEventEmits;
 use engine\statistics\macros\events\StartCollectHandles;
+use engine\statistics\macros\events\EndCollectHandles;
 use engine\statistics\macros\events\EndCollectEvents;
 use frame\macros\EventManager;
 use frame\database\Records;
@@ -19,6 +20,7 @@ class EventStatisticsSubModule extends BaseStatisticsSubModule
     private $subsciberCollector;
     private $emitCollector;
     private $startHandleCollector;
+    private $endHandleCollector;
 
     public function __construct(string $name, Module $parent = null)
     {
@@ -26,6 +28,9 @@ class EventStatisticsSubModule extends BaseStatisticsSubModule
         $this->subsciberCollector = new CollectEventSubscribers($this->routeStat);
         $this->emitCollector = new CollectEventEmits;
         $this->startHandleCollector = new StartCollectHandles;
+        $this->endHandleCollector = new EndCollectHandles(
+            $this->startHandleCollector
+        );
 
         // Сделаем time = null, чтобы потом проверять запускалась ли вообще сборка
         // статистики событий.
@@ -63,6 +68,7 @@ class EventStatisticsSubModule extends BaseStatisticsSubModule
             EventManager::BLOCK_EVENT_SUBSCRIBE => $this->subsciberCollector,
             EventManager::BLOCK_EVENT_EMIT => $this->emitCollector,
             EventManager::BLOCK_EVENT_MACRO_START => $this->startHandleCollector,
+            EventManager::BLOCK_EVENT_MACRO_END => $this->endHandleCollector,
             Core::EVENT_APP_START => new CollectEventRoute($this->routeStat),
         ];
     }

@@ -12,5 +12,6 @@ export interface Emit {
 
 export interface Handle {
     emitId: number,
-    subscriberId: number
+    subscriberId: number,
+    durationSec: number
 }

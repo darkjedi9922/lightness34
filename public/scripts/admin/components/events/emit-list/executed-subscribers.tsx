@@ -22,11 +22,16 @@ class ExecutedEmitSubscribers extends React.Component<Props> {
         ></Status>;
 
         return this.props.executions.map((execution, index) => 
-            <Parameter
-                key={index}
-                number={index + 1}
-                value={execution.subscriber.class}
-            ></Parameter>
+            <div className="executed-subscriber">
+                <Parameter
+                    key={index}
+                    number={index + 1}
+                    value={execution.subscriber.class}
+                ></Parameter>
+                <span className="executed-subscriber__duration">
+                    {execution.handle.durationSec} sec
+                </span>
+            </div>
         );
     }
 }

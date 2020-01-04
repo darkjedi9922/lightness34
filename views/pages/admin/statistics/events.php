@@ -60,7 +60,8 @@ foreach ($routes as $routeStat) {
     foreach ($handles as $handle) {
         $route['handles'][] = [
             'emitId' => $handle['emit_id'],
-            'subscriberId' => $handle['subscriber_id']
+            'subscriberId' => $handle['subscriber_id'],
+            'durationSec' => $handle['duration_sec']
         ];
     }
 
