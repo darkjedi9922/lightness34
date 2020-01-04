@@ -16,10 +16,12 @@ class ExecutedEmitSubscribers extends React.Component<Props> {
     public render(): React.ReactNode {
         const hasExecutions = this.props.executions.length !== 0;
         
-        if (!hasExecutions) return <Status 
-            type={Type.EMPTY} 
-            message="No subscribers"
-        ></Status>;
+        if (!hasExecutions) return (
+            <Status 
+                type={Type.EMPTY} 
+                message="No subscribers"
+            ></Status>
+        );
 
         return this.props.executions.map((execution, index) => 
             <div className="executed-subscriber">

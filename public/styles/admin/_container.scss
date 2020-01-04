@@ -9,6 +9,7 @@
         width: 261px;
         vertical-align: top;
         background: $menu-background-color;
+        flex-shrink: 0;
     }
 
     &__body {
