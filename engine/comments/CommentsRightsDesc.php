@@ -16,14 +16,15 @@ class CommentsRightsDesc extends RightsDesc
         ];
     }
 
-    /** @param Comment $object */
-    public function additionCheck(string $right, User $user, $object = null): bool
+    public function listAdditionChecks(User $user): array
     {
-        switch ($right) {
-            case 'edit-own':
-            case 'delete-own':
-                return $user->id === $object->author_id; 
-        }
-        return true;
+        $ownCheck = function (Comment $object) use ($user) {
+            return $user->id === $object->author_id;
+        };
+
+        return [
+            'edit-own' => $ownCheck,
+            'delete-own' => $ownCheck
+        ];
     }
 }

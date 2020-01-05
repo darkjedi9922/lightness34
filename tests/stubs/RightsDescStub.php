@@ -15,12 +15,12 @@ class RightsDescStub extends RightsDesc
         ];
     }
 
-    public function additionCheck(string $right, User $user, $object = null): bool
+    public function listAdditionChecks(User $user): array
     {
-        switch ($right) {
-            case 'see-own': return $user->id === $object;
-        }
-
-        return true;
+        return [
+            'see-own' => function (int $userId) use ($user) {
+                return $user->id === $userId;
+            }
+        ];
     }
 }

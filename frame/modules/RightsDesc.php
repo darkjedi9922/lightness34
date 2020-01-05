@@ -9,8 +9,7 @@ abstract class RightsDesc
      */
     public abstract function listRights(): array;
 
-    public function additionCheck(string $right, User $user, $object = null): 
-        bool { return true; }
+    public function listAdditionChecks(User $user): array { return []; }
 
     /**
      * Для каждого права расчитывается степень двойки, соответствующий индексу права

@@ -8,19 +8,24 @@ class UserRights
     private $desc;
     private $user;
     private $rights;
+    private $additionChecks;
 
     public function __construct(RightsDesc $desc, int $moduleId, User $user)
     {
         $this->user = $user;
 
         $this->desc = $desc;
+        $this->additionChecks = $desc->listAdditionChecks($user);
         $this->rights = $this->createGroupRights($desc, $moduleId, $user);
     }
 
     public function can(string $right, $object = null): bool
     {
-        return $this->rights->can($right) && 
-            $this->desc->additionCheck($right, $this->user, $object);
+        return $this->rights->can($right)
+            && (isset($this->additionChecks[$right]) 
+                ? $this->additionChecks[$right]($object) :
+                true
+            );
     }
 
     /**

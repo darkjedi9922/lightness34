@@ -15,6 +15,10 @@ class GroupRightsStub extends GroupRights
             'module_id' => (new ModuleStub('stub'))->getId(),
             'group_id' => 1,
             'rights' => 0b0000110 // can 'make' and 'create'
+        ], [
+            'module_id' => (new ModuleStub('stub'))->getId(),
+            'group_id' => 2,
+            'rights' => 0b0001000 // can 'see-own'
         ]];
         parent::__construct($desc, $moduleId, $groupId);
     }

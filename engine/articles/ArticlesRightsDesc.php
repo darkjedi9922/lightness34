@@ -1,6 +1,7 @@
 <?php namespace engine\articles;
 
 use frame\modules\RightsDesc;
+use engine\articles\Article;
 use engine\users\User;
 
 class ArticlesRightsDesc extends RightsDesc
@@ -14,12 +15,12 @@ class ArticlesRightsDesc extends RightsDesc
         ];
     }
 
-    public function additionCheck(string $right, User $user, $object = null): bool
+    public function listAdditionChecks(User $user): array
     {
-        switch ($right) {
-        case 'edit-own':
-            return $user->id === $object->author_id;
-        }
-        return true;
+        return [
+            'edit-own' => function (Article $object) use ($user) {
+                return $user->id === $object->author_id;
+            }
+        ];
     }
 }

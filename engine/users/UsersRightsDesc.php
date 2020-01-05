@@ -14,16 +14,16 @@ class UsersRightsDesc extends RightsDesc
         ];
     }
 
-    /**
-     * @param User $object
-     */
-    public function additionCheck(string $right, User $user, $object = null): bool
+    public function listAdditionChecks(User $user): array
     {
-        switch ($right) {
-            case 'edit-own': return $user->id === $object->id;
-            case 'edit-all': return $object->group_id !== Group::ROOT_ID 
-                                 || $user->group_id === Group::ROOT_ID;
-            default: return true;
-        }
+        return [
+            'edit-own' => function (User $object) use ($user) {
+                return $user->id === $object->id;
+            },
+            'edit-all' => function (User $object) use ($user) {
+                return $object->group_id !== Group::ROOT_ID
+                    || $user->group_id === Group::ROOT_ID;
+            }
+        ];
     }
 }
