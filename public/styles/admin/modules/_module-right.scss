@@ -1,0 +1,30 @@
+.module-right {
+    display: flex;
+    white-space: pre;
+    align-items: center;
+
+    &__check {
+        &:before {
+            content: ' (check args: ';
+            color: $clr-grey;
+        }
+        &:after {
+            content: ')';
+            color: $clr-grey;
+        }
+    }
+
+    &__check-arg {
+        color: $box-blue;
+
+        &:not(:last-of-type) {
+            &:after {
+                content: ', ';
+                color: $clr-grey;
+            }
+        }
+
+        &--string, &--int, &--float, &--double { color: $box-green; }
+        &--variadic, &--mixed { color: $box-purple; }
+    }
+}

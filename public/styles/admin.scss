@@ -75,6 +75,7 @@ $global-box-radius: 10px;
 @import 'admin/table';
 @import 'admin/actions/action-param';
 @import 'admin/events/emit-list/executed-subscriber';
+@import 'admin/modules/module-right';
 
 html {
     height: 100%;

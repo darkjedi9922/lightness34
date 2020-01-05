@@ -3,6 +3,7 @@
 use frame\Core;
 use frame\tools\Init;
 use frame\modules\Module;
+use engine\users\User;
 
 Init::accessRight('admin', 'see-logs');
 
@@ -19,11 +20,25 @@ foreach ($modules as $name => $module) {
         'rights' => $rightsDesc ? ['list' => []] : null
     ];
     if ($rightsDesc) {
+        $additionChecks = $rightsDesc->listAdditionChecks(new User);
         foreach ($rightsDesc->listRights() as $name => $desc) {
-            $moduleProps['rights']['list'][] = [
+            $right = [
                 'name' => $name,
-                'description' => $desc
+                'description' => $desc,
+                'checkArgs' => null
             ];
+            if (isset($additionChecks[$name])) {
+                $checkReflector = new ReflectionFunction($additionChecks[$name]);
+                $right['checkArgs'] = [];
+                foreach ($checkReflector->getParameters() as $parameter) {
+                    /** @var \ReflectionParameter $parameter */
+                    $type = $parameter->getType();
+                    $right['checkArgs'][] = $parameter->isVariadic() 
+                        ? 'variadic' 
+                        : ($type ? $type->getName() : 'mixed');
+                }
+            }
+            $moduleProps['rights']['list'][] = $right;
         }
     }
     $listProps['list'][] = $moduleProps;

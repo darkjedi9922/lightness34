@@ -2,12 +2,14 @@ import React from 'react'
 import Table from '../table'
 import { TableItem, ItemDetails } from '../table/item'
 import { isNil } from 'lodash'
-import Parameter from '../parameter';
-import Status, { Type } from '../status';
+import Parameter from '../parameter'
+import Status, { Type } from '../status'
+import classNames from 'classnames'
 
 interface Right {
     name: string,
-    description: string
+    description: string,
+    checkArgs?: string[]
 }
 
 interface RightsDesc {
@@ -35,11 +37,22 @@ class ModulesList extends React.Component<ModulesListProps> {
                 title: 'Rights',
                 content: hasRights
                     ? module.rights.list.map((right, i) => (
-                        <Parameter
-                            key={i}
-                            name={right.name}
-                            value={right.description}
-                        ></Parameter>
+                        <div key={i} className="module-right">
+                            <Parameter
+                                name={right.name}
+                                value={right.description}
+                            ></Parameter>
+                            {!isNil(right.checkArgs) && right.checkArgs.length &&
+                                <span className="module-right__check">
+                                    {right.checkArgs.map((type, i) =>
+                                        <span key={i} className={classNames(
+                                            "module-right__check-arg",
+                                            `module-right__check-arg--${type}`
+                                        )}>{type}</span>
+                                    )}
+                                </span>
+                            }
+                        </div>
                     ))
                     : <Status
                         type={Type.EMPTY}
