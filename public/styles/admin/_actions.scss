@@ -1,27 +1,9 @@
 @import './mark';
 
 .actions {
-    &__param {
-        padding: 0.1rem 0;
-    }
-    &__param-name {
-        margin: 0 0.5rem;
-    }
-    &__param-type {
-        @extend .mark;
-
-        &--string { @extend .mark--blue; }
-        &--int { @extend .mark--green; }
-        &--password { @extend .mark--red; }
-    }
-    &__param-desc {
-        color: $clr-grey;
-    }
-
     &__doc {
         white-space: pre-wrap;
         margin: 0;
         padding: 0;
-        color: $clr-grey;
     }
 }

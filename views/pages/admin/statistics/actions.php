@@ -5,10 +5,12 @@ use frame\actions\ActionBody;
 use frame\lists\base\IdentityList;
 use engine\statistics\lists\ActionList;
 use engine\statistics\stats\ActionStat;
-use frame\actions\UploadedFile;
-use function lightlib\bytes_to;
-use frame\actions\ViewAction;
 use engine\statistics\actions\ClearStatistics;
+use frame\actions\UploadedFile;
+use frame\actions\ViewAction;
+
+use function lightlib\bytes_to;
+use function lightlib\encode_specials;
 
 Init::accessRight('admin', 'see-logs');
 
@@ -245,10 +247,14 @@ $clear = new ViewAction(ClearStatistics::class, ['module' => 'stat/actions']);
                 $doc = str_replace(["/**", "/*", ' * ', ' */', '*/'], '', $doc);
                 $doc = ltrim($doc);
             }
+            $parameters = [
+                'GET' => $action->listGet(),
+                'POST' => $action->listPost()
+            ]
             ?>
             <tbody class="table__item-wrapper">
                 <tr class="table__item">
-                    <td class="table__cell"><?= $class ?></td>
+                    <td class="table__cell"><?= ltrim($class, '\\') ?></td>
                     <td class="table__cell">
                         <span class="actions__module"><?= $module ?></span>
                     </td>
@@ -257,33 +263,24 @@ $clear = new ViewAction(ClearStatistics::class, ['module' => 'stat/actions']);
                     <td class="table__details" colspan="100">
                         <?php if ($doc) : ?>
                             <div class="details">
-                                <p class="actions__doc"><?= $doc ?></p>
+                                <span class="details__header">Description</span>
+                                <p class="actions__doc"><?= encode_specials($doc) ?></p>
                             </div>
                         <?php endif ?>
-                        <?php if (!empty($action->listGet())) : ?>
-                            <div class="details">
-                                <span class="details__header">GET Parameters</span>
-                                <?php foreach ($action->listGet() as $name => $desc) : ?>
-                                    <div class="table__item-detail actions__param">
-                                        <span class="actions__param-type actions__param-type--<?= $desc[0] ?>"><?= $desc[0] ?></span>
-                                        <span class="actions__param-name"><?= $name ?></span>
-                                        <span class="actions__param-desc"><?= $desc[1] ?></span>
-                                    </div>
-                                <?php endforeach ?>
-                            </div>
-                        <?php endif ?>
-                        <?php if (!empty($action->listPost())) : ?>
-                            <div class="details">
-                                <span class="details__header">POST Parameters</span>
-                                <?php foreach ($action->listPost() as $name => $desc) : ?>
-                                    <div class="table__item-detail actions__param">
-                                        <span class="actions__param-type actions__param-type--<?= $desc[0] ?>"><?= $desc[0] ?></span>
-                                        <span class="actions__param-name"><?= $name ?></span>
-                                        <span class="actions__param-desc"><?= $desc[1] ?></span>
-                                    </div>
-                                <?php endforeach ?>
-                            </div>
-                        <?php endif ?>
+                        <?php foreach ($parameters as $type => $list) : ?>
+                            <?php if (!empty($list)) : ?>
+                                <div class="details">
+                                    <span class="details__header"><?= $type ?> Parameters</span>
+                                    <?php foreach ($list as $name => $desc) : ?>
+                                        <div class="param action-param">
+                                            <span class="param__name"><?= $name ?></span>
+                                            <span class="param__value action-param__type action-param__type--<?= $desc[0] ?>"><?= $desc[0] ?></span>
+                                            <span class="action-param__desc"><?= $desc[1] ?></span>
+                                        </div>
+                                    <?php endforeach ?>
+                                </div>
+                            <?php endif ?>
+                        <?php endforeach ?>
                     </td>
                 </tr>
             </tbody>
