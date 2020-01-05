@@ -11,7 +11,8 @@ class RightsDescStub extends RightsDesc
             'add' => 'Adding something',
             'make' => 'Making something',
             'create' => 'Creating something',
-            'see-own' => 'See own id'
+            'see-own' => 'See own id',
+            'execute-order' => 'Execute order 66'
         ];
     }
 
@@ -20,6 +21,9 @@ class RightsDescStub extends RightsDesc
         return [
             'see-own' => function (int $userId) use ($user) {
                 return $user->id === $userId;
+            },
+            'execute-order' => function (int $firstNumber, int $secondNumber) {
+                return $firstNumber === 6 && $secondNumber === 6;
             }
         ];
     }

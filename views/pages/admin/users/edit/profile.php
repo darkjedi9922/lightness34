@@ -12,7 +12,7 @@ $uid = (int)Init::requireGet('id');
 $user = User::selectIdentity($uid);
 
 Init::require($user !== null);
-Init::accessOneRight('users', ['edit-all' => $user, 'edit-own' => $user]);
+Init::accessOneRight('users', ['edit-all' => [$user], 'edit-own' => [$user]]);
 
 $genders = new IdentityList(Gender::class);
 $action = new ViewAction(ProfileEditAction::class, ['id' => $uid]);

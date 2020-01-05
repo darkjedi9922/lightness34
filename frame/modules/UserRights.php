@@ -19,23 +19,23 @@ class UserRights
         $this->rights = $this->createGroupRights($desc, $moduleId, $user);
     }
 
-    public function can(string $right, $object = null): bool
+    public function can(string $right, ...$additionCheckArgs): bool
     {
         return $this->rights->can($right)
             && (isset($this->additionChecks[$right]) 
-                ? $this->additionChecks[$right]($object) :
+                ? $this->additionChecks[$right](...$additionCheckArgs) :
                 true
             );
     }
 
     /**
-     * @param array $rights is an array ['right' => $object, 'right2' => null]
+     * @param array $rights is an array ['right' => [...$args], 'right2' => null]
      * The object like in self::can(). If there is no need in an object, set null.
      */
     public function canOneOf(array $rights): bool
     {
-        foreach ($rights as $right => $object)
-            if ($this->can($right, $object)) return true;
+        foreach ($rights as $right => $args)
+            if ($this->can($right, ...$args)) return true;
         return false;
     }
 

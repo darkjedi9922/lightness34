@@ -29,8 +29,8 @@ class DeleteAvatarAction extends ActionBody
         $this->user = User::selectIdentity($get['uid']);
         Init::require($this->user !== null);
         Init::accessOneRight('users', [
-            'edit-all' => $this->user, 
-            'edit-own' => $this->user
+            'edit-all' => [$this->user], 
+            'edit-own' => [$this->user]
         ]);
     }
 

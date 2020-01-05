@@ -61,8 +61,8 @@ class ProfileEditAction extends ProfileAction
         
         Init::require($this->user !== null);
         Init::accessOneRight('users', [
-            'edit-all' => $this->user, 
-            'edit-own' => $this->user
+            'edit-all' => [$this->user], 
+            'edit-own' => [$this->user]
         ]);
 
         $this->me = user_me::get();

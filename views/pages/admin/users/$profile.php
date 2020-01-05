@@ -36,8 +36,10 @@ $deleteAvatar = new ViewAction(DeleteAvatarAction::class, ['uid' => $profile->id
 <div class="box">
     <div style="float:left;margin-right:1%;max-width:40%">
         <img src="/<?= $profile->getAvatarUrl() ?>" style="max-width:100%">
-        <?php if ($rights->canOneOf(['edit-all' => $profile, 'edit-own' => $profile])) :
-            ?>
+        <?php if ($rights->canOneOf([
+            'edit-all' => [$profile], 
+            'edit-own' => [$profile]
+        ])) : ?>
             <?php if ($profile->avatar) : ?><br><a class="link" href="<?= $deleteAvatar->getUrl() ?>">Удалить аватар</a><?php endif ?>
             <br><a class="link" href="/admin/users/edit/profile?id=<?= $profile->id ?>">Редактировать профиль</a>
         <?php endif ?>

@@ -47,9 +47,9 @@ class Init
      * @throws \Exception if there is no such module.
      * @throws \Exception if there is no such module rights.
      */
-    public static function accessRight(string $module, string $right, $object = null)
+    public static function accessRight(string $module, string $right, ...$args)
     {
-        if (!my_rights::get($module)->can($right, $object)) 
+        if (!my_rights::get($module)->can($right, ...$args)) 
             throw new HttpError(HttpError::FORBIDDEN);
     }
 
