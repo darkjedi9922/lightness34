@@ -13,7 +13,7 @@ class Comment extends Identity
 
     public static function count(string $module, int $materialId): int
     {
-        return Records::select(static::getTable(), [
+        return Records::from(static::getTable(), [
             'module_id' => Core::$app->getModule($module)->getId(),
             'material_id' => $materialId
         ])->count('id');

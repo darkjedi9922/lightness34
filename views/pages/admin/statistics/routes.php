@@ -84,9 +84,9 @@ $clear = new ViewAction(ClearStatistics::class, ['module' => 'stat/routes']);
                             </div>
                         <?php endif ?>
                         <?php if ($route->type === $route::ROUTE_TYPE_DYNAMIC_PAGE) :
-                            $params = Records::select(DynamicRouteParam::getTable(), [
+                            $params = Records::from(DynamicRouteParam::getTable(), [
                                 'route_id' => $route->id
-                            ])->load();
+                            ])->select();
                             ?>
                             <?php if ($params->count()) :
                                 $paramsIterator = new IdentityIterator(

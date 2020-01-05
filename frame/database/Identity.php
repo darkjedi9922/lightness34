@@ -21,8 +21,8 @@ abstract class Identity
      */
     public static function select(array $fields)
     {
-        $records = Records::select(static::getTable(), $fields);
-        $data = $records->load()->readLine();
+        $records = Records::from(static::getTable(), $fields);
+        $data = $records->select()->readLine();
         if (!$data) return null;
         if (!isset($data['id']))
             throw new \Exception('The record is not an identity');
@@ -75,7 +75,7 @@ abstract class Identity
     public function update()
     {
         if (!$this->exists) throw new \Exception('The record does not exist yet.');
-        $records = Records::select(static::getTable(), ['id' => $this->id]);
+        $records = Records::from(static::getTable(), ['id' => $this->id]);
         $newData = $this->data;
         unset($newData['id']);
         $records->update($newData);
@@ -84,7 +84,7 @@ abstract class Identity
     public function insert(): int
     {
         unset($this->data['id']);
-        $records = Records::select(static::getTable(), $this->data);
+        $records = Records::from(static::getTable(), $this->data);
         $this->data['id'] = $records->insert();
         $this->exists = true;
         return $this->data['id'];
@@ -92,6 +92,6 @@ abstract class Identity
 
     public function delete()
     {
-        Records::select(static::getTable(), ['id' => $this->id])->delete();
+        Records::from(static::getTable(), ['id' => $this->id])->delete();
     }
 }

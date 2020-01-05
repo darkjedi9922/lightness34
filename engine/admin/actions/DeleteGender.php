@@ -35,7 +35,7 @@ class DeleteGender extends ActionBody
 
     public function succeed(array $post, array $files)
     {
-        Records::select('users', ['gender_id' => $this->gender->id])->update([
+        Records::from('users', ['gender_id' => $this->gender->id])->update([
             'gender_id' => Gender::UNKNOWN_ID
         ]);
         $this->gender->delete();

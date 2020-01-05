@@ -21,8 +21,8 @@ class Message extends Identity
 
     public function loadText(): string
     {
-        return Records::select('message_texts', [
+        return Records::from('message_texts', [
             'message_id' => $this->id
-        ])->load(['text'])->readScalar();
+        ])->select(['text'])->readScalar();
     }
 }

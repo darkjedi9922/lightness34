@@ -39,8 +39,8 @@ class LoginAction extends ActionBody
 
         if (empty($errors)) {
             $password = Encoder::getPassword($password);
-            $data = Records::select('users', ['login' => $login])
-                ->load(['password', 'sid'])->readLine();
+            $data = Records::from('users', ['login' => $login])
+                ->select(['password', 'sid'])->readLine();
             if ($data === null || $password !== $data['password']) 
                 $errors[] = self::E_WRONG_PASSWORD;
             else $this->sid = $data['sid'];

@@ -15,7 +15,7 @@ class ActionStatisticsSubModule extends BaseStatisticsSubModule
 {
     public function clearStats()
     {
-        Records::select(ActionStat::getTable())->delete();
+        Records::from(ActionStat::getTable())->delete();
     }
 
     protected function getAppEventHandlers(): array

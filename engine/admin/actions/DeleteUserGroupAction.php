@@ -30,7 +30,7 @@ class DeleteUserGroupAction extends ActionBody
 
     public function succeed(array $post, array $files)
     {
-        Records::select('users', ['group_id' => $this->group->id])->update([
+        Records::from('users', ['group_id' => $this->group->id])->update([
             'group_id' => Group::USER_ID
         ]);
         $this->group->delete();

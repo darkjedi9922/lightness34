@@ -48,13 +48,13 @@ class AddMessage extends ActionBody
     public function succeed(array $post, array $files)
     {
         $date = time();
-        $id = Records::select('messages')->insert([
+        $id = Records::from('messages')->insert([
             'from_id' => $this->me->id,
             'to_id' => $this->who->id,
             'date' => $date
         ]);
 
-        Records::select('message_texts')->insert([
+        Records::from('message_texts')->insert([
             'message_id' => $id,
             'text' => $post['text']
         ]);

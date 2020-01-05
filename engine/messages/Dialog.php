@@ -46,7 +46,7 @@ class Dialog
 
     public function setReadedBy(int $userId)
     {
-        Records::select('messages', [
+        Records::from('messages', [
             'from_id' => $this->getWhoId($userId),
             'to_id' => $userId
         ])->update(['readed' => true]);

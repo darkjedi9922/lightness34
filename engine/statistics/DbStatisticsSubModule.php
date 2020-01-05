@@ -8,8 +8,8 @@ class DbStatisticsSubModule extends BaseStatisticsSubModule
 {
     public function clearStats()
     {
-        Records::select(QueryStat::getTable())->delete();
-        Records::select(QueryRouteStat::getTable())->delete();
+        Records::from(QueryStat::getTable())->delete();
+        Records::from(QueryRouteStat::getTable())->delete();
     }
 
     protected function getAppEventHandlers(): array

@@ -33,7 +33,7 @@ class NewUserGroupAction extends ActionBody
 
     public function succeed(array $post, array $files)
     {
-        Records::select('user_groups', [
+        Records::from('user_groups', [
             'name' => $post['name'],
             'icon' => $post['icon'] ?? ''
         ])->insert();

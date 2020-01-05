@@ -13,15 +13,15 @@ abstract class IdentityPagedList extends PagedList
         $where = $this->getWhere();
 
         $table = $this->getIdentityClass()::getTable();
-        $countAll = Records::select($table, $where)->count('id');
+        $countAll = Records::from($table, $where)->count('id');
         $pageLimit = $this->loadPageLimit();
 
         parent::__construct($page, $countAll, $pageLimit);
 
-        $this->result = Records::select($table, $where)
+        $this->result = Records::from($table, $where)
             ->order($this->getOrderFields())
             ->range($this->getPager()->getStartMaterialIndex(), $pageLimit)
-            ->load();
+            ->select();
 
         $this->iterator = new IdentityIterator(
             $this->result,

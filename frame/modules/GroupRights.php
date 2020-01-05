@@ -16,7 +16,7 @@ class GroupRights
         $this->desc = $desc;
         $this->groupId = $groupId;
         if ($groupId !== Group::ROOT_ID) {
-            $this->record = Records::select('group_rights', [
+            $this->record = Records::from('group_rights', [
                 'module_id' => $moduleId,
                 'group_id' => $groupId
             ]);
@@ -68,6 +68,6 @@ class GroupRights
 
     protected function loadRights(Records $record): int
     {
-        return (int) $record->load(['rights'])->readScalar();
+        return (int) $record->select(['rights'])->readScalar();
     }
 }

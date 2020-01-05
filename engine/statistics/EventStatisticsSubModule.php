@@ -54,10 +54,10 @@ class EventStatisticsSubModule extends BaseStatisticsSubModule
 
     public function clearStats()
     {
-        Records::select('stat_event_emit_handles')->delete();
-        Records::select(EventEmitStat::getTable())->delete();
-        Records::select(EventSubscriberStat::getTable())->delete();
-        Records::select(EventRouteStat::getTable())->delete();
+        Records::from('stat_event_emit_handles')->delete();
+        Records::from(EventEmitStat::getTable())->delete();
+        Records::from(EventSubscriberStat::getTable())->delete();
+        Records::from(EventRouteStat::getTable())->delete();
     }
 
     protected function getAppEventHandlers(): array

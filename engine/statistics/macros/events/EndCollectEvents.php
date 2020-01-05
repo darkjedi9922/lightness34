@@ -68,7 +68,7 @@ class EndCollectEvents extends BaseStatCollector
         $emits = $this->emitCollector->getEmits();
         foreach ($handles as $innerEmitId => $emitHandles) {
             for ($i = 0, $c = count($emitHandles); $i < $c; ++$i) {
-                Records::select('stat_event_emit_handles')->insert([
+                Records::from('stat_event_emit_handles')->insert([
                     'emit_id' => $emits[$innerEmitId]->id,
                     'subscriber_id' => $subscribers[$emitHandles[$i][0]]->id,
                     'duration_sec' => $emitHandles[$i][1]

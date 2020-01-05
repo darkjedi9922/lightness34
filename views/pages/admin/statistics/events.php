@@ -29,9 +29,9 @@ foreach ($routes as $routeStat) {
         'time' => date('d.m.Y H:i', $routeStat->time)
     ];
 
-    $subscribers = Records::select(EventSubscriberStat::getTable(), [
+    $subscribers = Records::from(EventSubscriberStat::getTable(), [
         'route_id' => $routeStat->id
-    ])->order(['id' => 'ASC'])->load();
+    ])->order(['id' => 'ASC'])->select();
     $subscribersIt = new IdentityIterator($subscribers, EventSubscriberStat::class);
     foreach ($subscribersIt as $subscriberStat) {
         /** @var EventSubscriberStat $subscriberStat */
@@ -43,9 +43,9 @@ foreach ($routes as $routeStat) {
         $route['subscribers'][] = $subscriber;
     }
 
-    $emits = Records::select(EventEmitStat::getTable(), [
+    $emits = Records::from(EventEmitStat::getTable(), [
         'route_id' => $routeStat->id
-    ])->order(['id' => 'ASC'])->load();
+    ])->order(['id' => 'ASC'])->select();
     $emitsIt = new IdentityIterator($emits, EventEmitStat::class);
     foreach ($emitsIt as $emitStat) {
         /** @var EventEmitStat $emitStat */

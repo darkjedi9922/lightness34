@@ -31,7 +31,7 @@ class Records
      * @param array $where Ассоциативный массив, где ключи - имена полей, а значения 
      * - значения этих полей
      */
-    public static function select(string $table, array $where = []): Records
+    public static function from(string $table, array $where = []): Records
     {
         $records = new static;
         $records->table = $table;
@@ -41,7 +41,7 @@ class Records
     }
 
     /**
-     * Метод select() предоставляет более удобный, красивый и семантический 
+     * Метод from() предоставляет более удобный, красивый и семантический 
      * способ создания экземпляра.
      */
     private function __construct() {}
@@ -101,7 +101,7 @@ class Records
     /**
      * Загружает заданные поля из записей. Если поля не указаны, будут загружены все.
      */
-    public function load(array $fields = []): QueryResult
+    public function select(array $fields = []): QueryResult
     {
         $fields = empty($fields) ? 
             '*' : 

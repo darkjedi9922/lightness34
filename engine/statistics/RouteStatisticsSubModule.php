@@ -17,8 +17,8 @@ class RouteStatisticsSubModule extends BaseStatisticsSubModule
 {
     public function clearStats()
     {
-        Records::select(DynamicRouteParam::getTable())->delete();
-        Records::select(RouteStat::getTable())->delete();
+        Records::from(DynamicRouteParam::getTable())->delete();
+        Records::from(RouteStat::getTable())->delete();
     }
 
     protected function getAppEventHandlers(): array

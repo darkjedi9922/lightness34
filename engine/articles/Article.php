@@ -34,7 +34,7 @@ class Article extends Identity
             || $for->id === $this->author_id
         ) return;
 
-        if (is_article_new::get($this, $for)) Records::select('readed_articles', [
+        if (is_article_new::get($this, $for)) Records::from('readed_articles', [
             'article_id' => $this->id,
             'user_id' => $for->id
         ])->insert();
@@ -49,7 +49,7 @@ class Article extends Identity
             || $for->id === $this->author_id
         ) return false;
         
-        return Records::select('readed_articles', [
+        return Records::from('readed_articles', [
             'article_id' => $this->id,
             'user_id' => $for->id
         ])->count('article_id') === 0;

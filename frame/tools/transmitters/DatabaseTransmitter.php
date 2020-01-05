@@ -22,8 +22,8 @@ class DatabaseTransmitter extends DataTransmitter
 
     public function __construct()
     {
-        $this->records = Records::select(self::TABLE);
-        $data = $this->records->load()->readAll();
+        $this->records = Records::from(self::TABLE);
+        $data = $this->records->select()->readAll();
         for ($i = 0, $c = count($data); $i < $c; ++$i) {
             $this->data[$data[$i]['name']] = $data[$i]['value'];
         }

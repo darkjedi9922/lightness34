@@ -23,9 +23,9 @@ foreach ($queryRoutes as $routeStat) {
     ];
 
     $routeQueries = new IdentityIterator(
-        Records::select(QueryStat::getTable(), ['route_id' => $routeStat->id])
+        Records::from(QueryStat::getTable(), ['route_id' => $routeStat->id])
             ->order(['id' => 'ASC'])
-            ->load(),
+            ->select(),
         QueryStat::class
     );
     foreach ($routeQueries as $queryStat) {
