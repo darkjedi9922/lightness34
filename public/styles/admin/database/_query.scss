@@ -1,0 +1,16 @@
+.query {
+    display: flex;
+    align-items: center;
+
+    &__duration {
+        color: $clr-grey;
+
+        &:before {
+            content: ' (';
+            white-space: pre; // Чтобы работал пробел в content.
+        }
+        &:after {
+            content: ')';
+        }
+    }
+}

@@ -11,9 +11,10 @@ class StatisticsModule extends Module
         parent::__construct($name, $parent);
         $app = Core::$app;
 
-        $app->setModule(new EventStatisticsSubModule("events", $this));
-        $app->setModule(new RouteStatisticsSubModule("routes", $this));
-        $app->setModule(new ActionStatisticsSubModule("actions", $this));
+        $app->setModule(new EventStatisticsSubModule('events', $this));
+        $app->setModule(new RouteStatisticsSubModule('routes', $this));
+        $app->setModule(new ActionStatisticsSubModule('actions', $this));
+        $app->setModule(new DbStatisticsSubModule('db', $this));
     }
 
     public function createRightsDescription(): ?RightsDesc
