@@ -9,7 +9,6 @@ use frame\config\Config;
 use frame\modules\Module;
 use frame\views\DynamicPage;
 use frame\macros\EventManager;
-use frame\route\Response;
 
 class Core
 {
@@ -21,19 +20,6 @@ class Core
      * Event args: Throwable.
      */
     const EVENT_APP_ERROR = 'core-app-error';
-
-    /**
-     * Происходит при подписке нового макроса на событие. В обработчик передается
-     * string имя события и callable макрос.
-     */
-    const META_APP_EVENT_SUBSCRIBE = '_app-macro-subscribed';
-
-    /**
-     * Происходит после обработки события. В обработчик передается string имя 
-     * выполнившегося события, массив параметров события и массив callable макросов,
-     * что были выполнены. Если никаких обработчиков нет, массив макросов будет пуст.
-     */
-    const META_APP_EVENT_EMIT = '_app-event-emit-and-handle';
 
     /**
      * @var Core $app Экземпляр приложения. Инициализуется
