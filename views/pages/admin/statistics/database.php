@@ -52,4 +52,4 @@ $clear = new ViewAction(ClearStatistics::class, ['module' => 'stat/db']);
 </div>
 
 <span class="content__title">История запросов</span>
-<div id="query-history" data-props=<?= json_encode($queryHistoryProps, JSON_HEX_AMP) ?>></div>
+<div id="query-history" data-props='<?= json_encode($queryHistoryProps, JSON_HEX_AMP) ?>'></div>

@@ -1,8 +1,11 @@
 <?php namespace engine\statistics;
 
+use frame\Core;
 use frame\database\Records;
 use engine\statistics\stats\QueryRouteStat;
 use engine\statistics\stats\QueryStat;
+use engine\statistics\macros\database\CollectQueryRouteStat;
+use engine\statistics\macros\database\EndCollectDbStat;
 
 class DbStatisticsSubModule extends BaseStatisticsSubModule
 {
@@ -14,6 +17,12 @@ class DbStatisticsSubModule extends BaseStatisticsSubModule
 
     protected function getAppEventHandlers(): array
     {
-        return [];
+        $routeStatCollector = new CollectQueryRouteStat;
+        $endCollector = new EndCollectDbStat($routeStatCollector);
+
+        return [
+            Core::EVENT_APP_START => $routeStatCollector,
+            Core::EVENT_APP_END => $endCollector
+        ];
     }
 }
