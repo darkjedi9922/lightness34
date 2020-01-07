@@ -41,7 +41,7 @@ class EventManager
     const BLOCK_EVENT_MACRO_END = '!macro-end';
 
     private $subscribers = [];
-    private $blocked = false;
+    private $blockedEvent = null;
     private $lastEmitId = 0;
 
     public function subscribe(string $event, callable $macro)
@@ -59,13 +59,18 @@ class EventManager
      */
     public function emit(string $event, ...$args): array
     {
-        if ($this->blocked)
-            throw new \Exception('Currently there is handling a blocking event');
+        if ($this->blockedEvent) {
+            throw new \Exception(
+                "Currently there is handling a blocking event" .
+                " '{$this->blockedEvent[0]}'"
+            );
+        }
 
         $emitId = ++$this->lastEmitId;
-        $this->blocked = $this->isBlockingEvent($event);
+        if ($this->isBlockingEvent($event)) 
+            $this->blockedEvent = [$event, $args];
 
-        if (!$this->blocked) $this->emit(
+        if (!$this->blockedEvent) $this->emit(
             self::BLOCK_EVENT_EMIT,
             $emitId,
             $event,
@@ -77,7 +82,7 @@ class EventManager
         if (!empty($subscribers)) {
             for ($i = 0, $c = count($subscribers); $i < $c; ++$i) {
                 $macro = $this->subscribers[$event][$i];
-                if (!$this->blocked) $this->emit(
+                if (!$this->blockedEvent) $this->emit(
                     self::BLOCK_EVENT_MACRO_START,
                     $emitId,
                     $event,
@@ -85,7 +90,7 @@ class EventManager
                     $args
                 );
                 $result[] = $macro;
-                if (!$this->blocked) $this->emit(
+                if (!$this->blockedEvent) $this->emit(
                     self::BLOCK_EVENT_MACRO_END,
                     $emitId,
                     $event,
@@ -96,7 +101,7 @@ class EventManager
             }
         }
 
-        $this->blocked = false;
+        $this->blockedEvent = null;
         return $result;
     }
 
@@ -108,5 +113,10 @@ class EventManager
     public function isBlockingEvent(string $event): bool
     {
         return ($event[0] ?? '') === '!';
+    }
+
+    public function isBlocked(): bool
+    {
+        return $this->blockedEvent !== null;
     }
 }

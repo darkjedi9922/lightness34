@@ -203,7 +203,7 @@ class Core
         $logging = $this->config->{'log.enabled'};
         if ($logging) $this->writeInLog(Logger::ERROR, $e);
 
-        $this->emit(self::EVENT_APP_ERROR, $e);
+        if (!$this->events->isBlocked()) $this->emit(self::EVENT_APP_ERROR, $e);
 
         if (isset($this->handlers[get_class($e)])) (new $this->handlers[get_class($e)])->handle($e);
         else if ($this->defaultHandler) (new $this->defaultHandler)->handle($e);
