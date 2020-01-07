@@ -19,4 +19,9 @@
     &--table {
         padding: 0;
     }
+
+    &--headed {
+        flex-grow: 0;
+        margin: -0.5rem 0;
+    }
 }
