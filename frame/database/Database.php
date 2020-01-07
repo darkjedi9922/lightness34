@@ -1,5 +1,6 @@
 <?php namespace frame\database;
 
+use frame\Core;
 use frame\database\QueryResult;
 
 /**
@@ -7,22 +8,26 @@ use frame\database\QueryResult;
  */
 class Database 
 {
-    /**
-     * @var \mysqli 
-     */
+    const EVENT_QUERY_START = 'db-query-start';
+    const EVENT_QUERY_END = 'db-query-end';
+
     private $mysqli;
 
     /**
      * @throws \Exception в случае неудачи подключения
      */
-	public function __construct(string $host, string $login, string $password, string $database) 
-	{
+	public function __construct(
+        string $host,
+        string $login,
+        string $password,
+        string $database
+    ) {
         $this->mysqli = new \mysqli($host, $login, $password, $database);
         $this->mysqli->query('SET NAMES UTF8'); // Фикс кодировки
         if ($this->mysqli->connect_errno) 
             throw new \Exception($this->mysqli->connect_error);
         $this->mysqli->options(MYSQLI_OPT_INT_AND_FLOAT_NATIVE, 1);
-	}	
+	}
 
     /**
      * Выполняет SQL-запрос.
@@ -30,7 +35,9 @@ class Database
      */
     public function query(string $sql)
     {
+        Core::$app->emit(self::EVENT_QUERY_START, $sql);
         $result = $this->mysqli->query($sql);
+        Core::$app->emit(self::EVENT_QUERY_END, $sql);
         if ($this->mysqli->errno) throw new \Exception($this->mysqli->error);
         return is_bool($result) ? $result : new QueryResult($result);
     }
