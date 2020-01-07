@@ -1,10 +1,9 @@
 <?php namespace engine\statistics\macros\database;
 
-use engine\statistics\macros\BaseStatCollector;
 use engine\statistics\stats\QueryStat;
 use engine\statistics\stats\TimeStat;
 
-class StartCollectQueryStat extends BaseStatCollector
+class StartCollectQueryStat extends BaseDatabaseStatCollector
 {
     private $queryStats = [];
     /** @var TimeStat */
@@ -21,9 +20,11 @@ class StartCollectQueryStat extends BaseStatCollector
             ->duration_sec = $this->lastQueryTimer->resultInSeconds();
     }
 
-    protected function collect(...$args)
+    protected function collectDb(...$args)
     {
         $sql = $args[0];
+
+        if ($this->isSqlAboutStats($sql)) return;
 
         $queryStat = new QueryStat;
         $queryStat->sql_text = $sql;

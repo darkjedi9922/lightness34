@@ -1,8 +1,6 @@
 <?php namespace engine\statistics\macros\database;
 
-use engine\statistics\macros\BaseStatCollector;
-
-class EndCollectQueryStat extends BaseStatCollector
+class EndCollectQueryStat extends BaseDatabaseStatCollector
 {
     private $startQueryCollector;
 
@@ -11,8 +9,10 @@ class EndCollectQueryStat extends BaseStatCollector
         $this->startQueryCollector = $startQueryCollector;
     }
 
-    protected function collect(...$args)
+    protected function collectDb(...$args)
     {
+        $sql = $args[0];
+        if ($this->isSqlAboutStats($sql)) return;
         $this->startQueryCollector->measureLastQueryDuration();
     }
 }
