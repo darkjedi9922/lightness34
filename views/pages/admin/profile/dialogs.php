@@ -9,6 +9,7 @@ use frame\cash\pagenumber;
 use function lightlib\shorten;
 use engine\users\User;
 use frame\views\Pager;
+use frame\tools\JsonEncoder;
 
 $me = user_me::get();
 
@@ -49,6 +50,9 @@ foreach ($dialogs as $dialog) {
         ]
     ];
 }
+
+$jsonEncoder = new JsonEncoder;
+$dialogListData = $jsonEncoder->forHtmlAttribute($dialogListData);
 ?>
 
-<div id="dialog-list" class="dialog-list" data-props='<?= json_encode($dialogListData, JSON_HEX_AMP) ?>'></div>
+<div id="dialog-list" class="dialog-list" data-props="<?= $dialogListData ?>"></div>

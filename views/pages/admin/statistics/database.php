@@ -8,6 +8,7 @@ use frame\database\Records;
 use engine\statistics\stats\QueryStat;
 use frame\actions\ViewAction;
 use engine\statistics\actions\ClearStatistics;
+use frame\tools\JsonEncoder;
 
 Init::accessRight('admin', 'see-logs');
 
@@ -40,6 +41,8 @@ foreach ($queryRoutes as $routeStat) {
 }
 
 $clear = new ViewAction(ClearStatistics::class, ['module' => 'stat/db']);
+$jsonEncoder = new JsonEncoder;
+$queryHistoryProps = $jsonEncoder->forHtmlAttribute($queryHistoryProps);
 ?>
 
 <div class="content__header">
@@ -52,4 +55,4 @@ $clear = new ViewAction(ClearStatistics::class, ['module' => 'stat/db']);
 </div>
 
 <span class="content__title">История запросов</span>
-<div id="query-history" data-props='<?= json_encode($queryHistoryProps, JSON_HEX_AMP) ?>'></div>
+<div id="query-history" data-props="<?= $queryHistoryProps ?>"></div>

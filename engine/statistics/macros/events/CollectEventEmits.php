@@ -2,6 +2,7 @@
 
 use engine\statistics\macros\BaseStatCollector;
 use engine\statistics\stats\EventEmitStat;
+use frame\tools\JsonEncoder;
 
 class CollectEventEmits extends BaseStatCollector
 {
@@ -24,12 +25,12 @@ class CollectEventEmits extends BaseStatCollector
         $event = $args[1];
         $params = $args[2];
 
+        $jsonEncoder = new JsonEncoder;
+        $argsJson = $jsonEncoder->toValidJson($this->prepareArgs($params));
+
         $emitStat = new EventEmitStat;
         $emitStat->event = $event;
-        $emitStat->args_json = json_encode(
-            $this->prepareArgs($params),
-            JSON_HEX_AMP
-        );
+        $emitStat->args_json = str_replace('\\', '\\\\', $argsJson);
 
         $this->emits[$emitId] = $emitStat;
     }

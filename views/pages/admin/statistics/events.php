@@ -1,6 +1,7 @@
 <?php /** @var frame\views\Page $self */
 
 use frame\tools\Init;
+use frame\tools\JsonEncoder;
 use frame\lists\base\IdentityList;
 use engine\statistics\stats\EventRouteStat;
 use frame\database\Records;
@@ -52,7 +53,7 @@ foreach ($routes as $routeStat) {
         $route['emits'][] = [
             'id' => $emitStat->id,
             'event' => $emitStat->event,
-            'argsJson' => str_replace('\\', '\\\\', $emitStat->args_json)
+            'argsJson' => $emitStat->args_json
         ];
     }
 
@@ -67,6 +68,9 @@ foreach ($routes as $routeStat) {
 
     $eventsProps['routes'][$routeStat->id] = $route;
 }
+
+$jsonEncoder = new JsonEncoder;
+$eventsProps = $jsonEncoder->forHtmlAttribute($eventsProps);
 ?>
 
 <div class="content__header">
@@ -78,4 +82,4 @@ foreach ($routes as $routeStat) {
     <a href="<?= $clear->getUrl() ?>" class="button">Очистить статистику</a>
 </div>
 
-<div id="events" data-props='<?= json_encode($eventsProps, JSON_HEX_AMP) ?>'></div>
+<div id="events" data-props="<?= $eventsProps ?>"></div>

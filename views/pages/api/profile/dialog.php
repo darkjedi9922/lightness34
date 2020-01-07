@@ -10,6 +10,7 @@ use engine\users\User;
 use frame\actions\ViewAction;
 use engine\messages\actions\AddMessage;
 use engine\messages\Dialog;
+use frame\tools\JsonEncoder;
 
 $me = user_me::get();
 
@@ -56,4 +57,5 @@ foreach ($list as $message) {
 $dialog = new Dialog($anyMessage);
 $dialog->setReadedBy($me->id);
 
-echo json_encode($result, JSON_HEX_AMP);
+$jsonEncoder = new JsonEncoder;
+echo $jsonEncoder->forViewText($result);
