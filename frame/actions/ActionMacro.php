@@ -29,8 +29,9 @@ class ActionMacro extends GetMacro
     
     private function result()
     {
-        if (Request::isAjax()) $this->jsonify();
-        else $this->redirect();
+        if (Request::isAjax() || ($redirect = $this->getRedirect()) === null) {
+            $this->jsonify();
+        } else $this->redirect($redirect);
     }
 
     private function jsonify()
@@ -41,14 +42,11 @@ class ActionMacro extends GetMacro
         ]));
     }
 
-    private function redirect()
+    private function redirect(string $redirect)
     {
-        $redirect = $this->getRedirect();
-        if ($redirect !== null) {
-            $transmitter = new ActionTransmitter;
-            $transmitter->save($this->action);
-            Response::setUrl(Router::toUrlOf($redirect));
-        }
+        $transmitter = new ActionTransmitter;
+        $transmitter->save($this->action);
+        Response::setUrl(Router::toUrlOf($redirect));
     }
 
     private function getRedirect(): ?string
