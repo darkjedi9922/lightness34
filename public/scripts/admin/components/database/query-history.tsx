@@ -33,7 +33,7 @@ class QueryHistory extends React.Component<QueryHistoryProps> {
                                     value={query.sql}
                                 ></Parameter>
                                 <span className="query__duration">
-                                    `${query.durationSec} sec`
+                                    {`${query.durationSec} sec`}
                                 </span>
                             </div>
                         )}

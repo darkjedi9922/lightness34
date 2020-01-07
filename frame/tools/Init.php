@@ -18,8 +18,10 @@ class Init
     public static function requireGet(string $name): string
     {
         $router = Core::$app->router;
-        if ($router->getArg($name) === null) throw new HttpError(HttpError::NOT_FOUND, 
-            'The '.$name.' url argument does not exist.');
+        if ($router->getArg($name) === null) throw new HttpError(
+            HttpError::NOT_FOUND, 
+            'The '.$name.' url argument does not exist.'
+        );
         return $router->getArg($name);
     }
 
