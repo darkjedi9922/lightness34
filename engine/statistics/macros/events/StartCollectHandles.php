@@ -49,6 +49,9 @@ class StartCollectHandles extends BaseStatCollector
     {
         $emitId = $args[0];
         $macro = $args[2];
+
+        // Не собираем статистику о статистике.
+        if ($macro instanceof BaseStatCollector) return;
         
         // Сначала добавим TimeStat на место времени обработки, чтобы потом взять его
         // в конце обработки и заменить на результат таймера - кол-во прошедших сек.

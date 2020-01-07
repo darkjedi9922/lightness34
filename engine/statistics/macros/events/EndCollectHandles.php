@@ -19,6 +19,9 @@ class EndCollectHandles extends BaseStatCollector
         $event = $args[1];
         $macro = $args[2];
 
+        // Не собираем статистику о статистике.
+        if ($macro instanceof BaseStatCollector) return;
+
         $timer = $this->startCollector->getHandleTimer($emitId, $macro);
         $this->startCollector->setHandleDuration(
             $emitId,

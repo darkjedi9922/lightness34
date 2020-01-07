@@ -25,10 +25,13 @@ class CollectEventEmits extends BaseStatCollector
         $event = $args[1];
         $params = $args[2];
 
+        if ($this->isEventAboutStats($params)) return;
+
         $jsonEncoder = new JsonEncoder;
         $argsJson = $jsonEncoder->toValidJson($this->prepareArgs($params));
 
         $emitStat = new EventEmitStat;
+        $emitStat->id = null;
         $emitStat->event = $event;
         $emitStat->args_json = str_replace('\\', '\\\\', $argsJson);
 
@@ -46,5 +49,15 @@ class CollectEventEmits extends BaseStatCollector
             } else $result[$key] = $value;
         }
         return $result;
+    }
+
+    private function isEventAboutStats(array $params): bool
+    {
+        foreach ($params as $value) {
+            if (   is_string($value) 
+                && strpos($value, 'stat_') !== false
+            ) return true;
+        }
+        return false;
     }
 }

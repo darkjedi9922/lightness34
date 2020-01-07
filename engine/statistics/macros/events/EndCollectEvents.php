@@ -67,6 +67,13 @@ class EndCollectEvents extends BaseStatCollector
         $subscribers = $this->subscriberCollector->getSubscriberStats();
         $emits = $this->emitCollector->getEmits();
         foreach ($handles as $innerEmitId => $emitHandles) {
+            if (   !isset($emits[$innerEmitId]) 
+                || $emits[$innerEmitId]->id === null) {
+                // Некоторые события сознательно не были учтены но могут тут
+                // появиться, поэтому, просто проигнорируем их (например события
+                // о запросах в БД на вставку данных о самом сборе статистики).
+                continue;
+            }
             for ($i = 0, $c = count($emitHandles); $i < $c; ++$i) {
                 Records::from('stat_event_emit_handles')->insert([
                     'emit_id' => $emits[$innerEmitId]->id,

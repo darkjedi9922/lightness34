@@ -34,6 +34,9 @@ class CollectEventSubscribers extends BaseStatCollector
     {
         $event = $args[0];
         $macro = $args[1];
+
+        // Не собираем статистику о статистике.
+        if ($macro instanceof BaseStatCollector) return;
         
         $subscriber = new EventSubscriberStat;
         $subscriber->event = $event;
