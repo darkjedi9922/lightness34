@@ -44,7 +44,7 @@ class AddComment extends ActionBody
         $date = time();
 
         $comment = new Comment;
-        $comment->text = $post['text'];
+        $comment->text = str_replace('\\', '\\\\', $post['text']);
         $comment->module_id = $this->module->getId();
         $comment->material_id = $this->materialId;
         $comment->author_id = user_me::get()->id;

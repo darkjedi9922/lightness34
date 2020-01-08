@@ -11,6 +11,7 @@ use frame\views\Pager;
 use frame\actions\ViewAction;
 use engine\comments\actions\AddComment;
 use engine\comments\CommentList;
+use frame\tools\JsonEncoder;
 
 $id = (int)Init::requireGet('id');
 $article = Article::selectIdentity($id);
@@ -58,6 +59,8 @@ foreach ($comments as $comment) {
     ];
 }
 
+$articleCommentsData = JsonEncoder::forHtmlAttribute($articleCommentsData);
+
 $article->setReaded(user_me::get());
 ?>
 
@@ -88,4 +91,4 @@ $article->setReaded(user_me::get());
 </div>
 <span class="content__title">Комментарии</span>
 
-<div id="article-comments" data-props='<?= json_encode($articleCommentsData, JSON_HEX_AMP) ?>'></div>
+<div id="article-comments" data-props='<?= $articleCommentsData ?>'></div>
