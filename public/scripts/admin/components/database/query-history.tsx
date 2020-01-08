@@ -5,6 +5,7 @@ import Parameter from '../parameter';
 import RouteRequest from '../routes/Request';
 import Status, { Type } from '../status';
 import { isNil } from 'lodash';
+import classNames from 'classnames';
 
 interface Query {
     sql: string,
@@ -26,6 +27,14 @@ class QueryHistory extends React.Component<QueryHistoryProps> {
     public render(): React.ReactNode {
         const items: TableItem[] = [];
         this.props.routes.map((route, i) => {
+            let status: React.ReactNode;
+            if (route.queries.length === 0) 
+                status = <span className="mark2 mark2--grey">No queries</span>;
+            else if (route.queries.find((query) => !isNil(query.error)))
+                status = <span className="mark2 mark2--red">Has errors</span>;
+            else
+                status = <span className="mark2 mark2--green">All passed</span>;
+
             const details: ItemDetails[] = [];
             if (route.queries.length) {
                 const queryList = (
@@ -61,6 +70,7 @@ class QueryHistory extends React.Component<QueryHistoryProps> {
                 cells: [
                     <RouteRequest route={route.route}></RouteRequest>,
                     route.queries.length,
+                    <div className="queries-status">{status}</div>,
                     route.time
                 ],
                 details
@@ -69,8 +79,8 @@ class QueryHistory extends React.Component<QueryHistoryProps> {
         return (
             <div className="box box--table">
                 <Table
-                    className="routes"
-                    headers={['Route', 'Queries', 'Time']}
+                    className="routes queries"
+                    headers={['Route', 'Queries', 'Status', 'Time']}
                     items={items}
                 ></Table>
             </div>
