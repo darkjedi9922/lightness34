@@ -48,9 +48,21 @@ $queryHistoryProps = JsonEncoder::forHtmlAttribute($queryHistoryProps);
 $tablesProps = ['tables' => []];
 $tables = database::get()->query("SHOW TABLES")->readColumn(0);
 foreach ($tables as $table) {
-    $tablesProps['tables'][] = [
-        'name' => $table
+    $tableProps = [
+        'name' => $table,
+        'fields' => []
     ];
+    $fields = database::get()->query("DESCRIBE `$table`")->readAll();
+    foreach ($fields as $field) {
+        $tableProps['fields'][] = [
+            'name' => $field['Field'],
+            'type' => $field['Type'],
+            'null' => $field['Null'] !== 'NO',
+            'primary' => $field['Key'] === 'PRI',
+            'default' => $field['Default']
+        ];
+    }
+    $tablesProps['tables'][] = $tableProps;
 }
 $tablesCount = count($tablesProps['tables']);
 $tablesProps = JsonEncoder::forHtmlAttribute($tablesProps);
