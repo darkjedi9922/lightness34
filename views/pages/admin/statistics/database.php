@@ -42,6 +42,7 @@ foreach ($queryRoutes as $routeStat) {
 
     $queryHistoryProps['routes'][] = $route;
 }
+$queryHistoryCount = count($queryHistoryProps['routes']);
 $queryHistoryProps = JsonEncoder::forHtmlAttribute($queryHistoryProps);
 
 $tablesProps = ['tables' => []];
@@ -51,6 +52,7 @@ foreach ($tables as $table) {
         'name' => $table
     ];
 }
+$tablesCount = count($tablesProps['tables']);
 $tablesProps = JsonEncoder::forHtmlAttribute($tablesProps);
 ?>
 
@@ -63,8 +65,8 @@ $tablesProps = JsonEncoder::forHtmlAttribute($tablesProps);
     <a href="<?= $clear->getUrl() ?>" class="button">Очистить статистику</a>
 </div>
 
-<span class="content__title">История запросов</span>
+<span class="content__title">История запросов (<?= $queryHistoryCount ?>)</span>
 <div id="query-history" data-props="<?= $queryHistoryProps ?>"></div>
 
-<span class="content__title">Таблицы</span>
+<span class="content__title">Таблицы (<?= $tablesCount ?>)</span>
 <div id="db-tables" data-props="<?= $tablesProps ?>"></div>
