@@ -14,7 +14,8 @@ interface DatabaseTableField {
 
 interface DatabaseTable {
     name: string,
-    fields: DatabaseTableField[]
+    fields: DatabaseTableField[],
+    rowCount: number
 }
 
 interface DatabaseTablesProps {
@@ -56,7 +57,7 @@ class DatabaseTables extends React.Component<DatabaseTablesProps> {
                 })
             })
             items.push({
-                cells: [table.name, fields.length],
+                cells: [table.name, fields.length, table.rowCount],
                 details: [{
                     content: (
                         <Table
@@ -70,7 +71,7 @@ class DatabaseTables extends React.Component<DatabaseTablesProps> {
         return (
             <div className="box box--table">
                 <Table
-                    headers={['Name', 'Fields']}
+                    headers={['Name', 'Fields', 'Rows']}
                     items={items}
                 ></Table>
             </div>

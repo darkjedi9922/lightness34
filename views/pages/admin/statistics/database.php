@@ -62,6 +62,9 @@ foreach ($tables as $table) {
             'default' => $field['Default']
         ];
     }
+    $tableProps['rowCount'] = database::get()
+        ->query("SELECT COUNT(*) FROM `$table`")
+        ->readScalar();
     $tablesProps['tables'][] = $tableProps;
 }
 $tablesCount = count($tablesProps['tables']);
