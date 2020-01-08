@@ -33,6 +33,7 @@ foreach ($queryRoutes as $routeStat) {
         /** @var QueryStat $queryStat */
         $route['queries'][] = [
             'sql' => $queryStat->sql_text,
+            'error' => $queryStat->error,
             'durationSec' => $queryStat->duration_sec
         ];
     }

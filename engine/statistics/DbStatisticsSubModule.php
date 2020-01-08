@@ -9,6 +9,7 @@ use engine\statistics\macros\database\CollectQueryRouteStat;
 use engine\statistics\macros\database\EndCollectDbStat;
 use engine\statistics\macros\database\StartCollectQueryStat;
 use engine\statistics\macros\database\EndCollectQueryStat;
+use engine\statistics\macros\database\CollectDbError;
 
 class DbStatisticsSubModule extends BaseStatisticsSubModule
 {
@@ -23,6 +24,7 @@ class DbStatisticsSubModule extends BaseStatisticsSubModule
         $routeStatCollector = new CollectQueryRouteStat;
         $startQueryCollector = new StartCollectQueryStat;
         $endQueryCollector = new EndCollectQueryStat($startQueryCollector);
+        $errorCollector = new CollectDbError($startQueryCollector);
         $endCollector = new EndCollectDbStat(
             $routeStatCollector,
             $startQueryCollector
@@ -30,6 +32,7 @@ class DbStatisticsSubModule extends BaseStatisticsSubModule
 
         return [
             Core::EVENT_APP_START => $routeStatCollector,
+            Core::EVENT_APP_ERROR => $errorCollector,
             Database::EVENT_QUERY_START => $startQueryCollector,
             Database::EVENT_QUERY_END => $endQueryCollector,
             Core::EVENT_APP_END => $endCollector

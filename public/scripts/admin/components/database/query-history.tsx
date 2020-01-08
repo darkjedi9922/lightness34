@@ -3,9 +3,12 @@ import Table from '../table';
 import { TableItem, ItemDetails } from '../table/item';
 import Parameter from '../parameter';
 import RouteRequest from '../routes/Request';
+import Status, { Type } from '../status';
+import { isNil } from 'lodash';
 
 interface Query {
     sql: string,
+    error?: string,
     durationSec: number
 }
 
@@ -29,18 +32,30 @@ class QueryHistory extends React.Component<QueryHistoryProps> {
                     <>
                         {route.queries.map((query, i) =>
                             <div key={i} className="query">
-                                <Parameter
-                                    number={i + 1}
-                                    value={query.sql}
-                                ></Parameter>
-                                <span className="query__duration">
-                                    {`${query.durationSec} sec`}
-                                </span>
+                                <div className="query__sql">
+                                    <Parameter
+                                        number={i + 1}
+                                        value={query.sql}
+                                    ></Parameter>
+                                    <span className="query__duration">
+                                        {`${query.durationSec} sec`}
+                                    </span>
+                                </div>
+                                {!isNil(query.error) &&
+                                    <Status 
+                                        type={Type.ERROR}
+                                        name="Error "
+                                        message={query.error}
+                                    ></Status>
+                                }
                             </div>
                         )}
                     </>
                 );
-                details.push({ content: queryList })
+                details.push({
+                    title: 'Queries',
+                    content: queryList
+                })
             }
             items.push({
                 cells: [

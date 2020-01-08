@@ -13,6 +13,6 @@ class EndCollectQueryStat extends BaseDatabaseStatCollector
     {
         $sql = $args[0];
         if ($this->isSqlAboutStats($sql)) return;
-        $this->startQueryCollector->measureLastQueryDuration();
+        $this->startQueryCollector->measureLastNonIgnoredQueryDuration();
     }
 }

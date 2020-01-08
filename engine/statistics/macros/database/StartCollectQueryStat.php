@@ -7,31 +7,48 @@ class StartCollectQueryStat extends BaseDatabaseStatCollector
 {
     private $queryStats = [];
     /** @var TimeStat */
-    private $lastQueryTimer = null;
+    private $lastNonIgnoredQueryTimer = null;
+    private $lastQueryIgnored = false;
 
     public function getQueryStats(): array
     {
         return $this->queryStats;
     }
 
-    public function measureLastQueryDuration()
+    public function isLastQueryIgnored(): bool
+    {
+        return $this->lastQueryIgnored;
+    }
+
+    public function getLastNonIgnoredQueryStat(): ?QueryStat
+    {
+        if (empty($this->queryStats)) return null;
+        return $this->queryStats[array_key_last($this->queryStats)];
+    }
+
+    public function measureLastNonIgnoredQueryDuration()
     {
         $this->queryStats[array_key_last($this->queryStats)]
-            ->duration_sec = $this->lastQueryTimer->resultInSeconds();
+            ->duration_sec = $this->lastNonIgnoredQueryTimer->resultInSeconds();
     }
 
     protected function collectDb(...$args)
     {
         $sql = $args[0];
 
-        if ($this->isSqlAboutStats($sql)) return;
+        if ($this->isSqlAboutStats($sql)) {
+            $this->lastQueryIgnored = true;
+            return;
+        } else {
+            $this->lastQueryIgnored = false;
+        };
 
         $queryStat = new QueryStat;
         $queryStat->sql_text = $sql;
 
         $this->queryStats[] = $queryStat;
         
-        $this->lastQueryTimer = new TimeStat;
-        $this->lastQueryTimer->start();
+        $this->lastNonIgnoredQueryTimer = new TimeStat;
+        $this->lastNonIgnoredQueryTimer->start();
     }
 }
