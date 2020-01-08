@@ -9,11 +9,13 @@ use engine\statistics\stats\QueryStat;
 use frame\actions\ViewAction;
 use engine\statistics\actions\ClearStatistics;
 use frame\tools\JsonEncoder;
+use frame\cash\database;
 
 Init::accessRight('admin', 'see-logs');
 
-$queryHistoryProps = ['routes' => []];
+$clear = new ViewAction(ClearStatistics::class, ['module' => 'stat/db']);
 
+$queryHistoryProps = ['routes' => []];
 $queryRoutes = new IdentityList(QueryRouteStat::class, ['id' => 'DESC']);
 foreach ($queryRoutes as $routeStat) {
     /** @var QueryRouteStat $routeStat */
@@ -40,9 +42,16 @@ foreach ($queryRoutes as $routeStat) {
 
     $queryHistoryProps['routes'][] = $route;
 }
-
-$clear = new ViewAction(ClearStatistics::class, ['module' => 'stat/db']);
 $queryHistoryProps = JsonEncoder::forHtmlAttribute($queryHistoryProps);
+
+$tablesProps = ['tables' => []];
+$tables = database::get()->query("SHOW TABLES")->readColumn(0);
+foreach ($tables as $table) {
+    $tablesProps['tables'][] = [
+        'name' => $table
+    ];
+}
+$tablesProps = JsonEncoder::forHtmlAttribute($tablesProps);
 ?>
 
 <div class="content__header">
@@ -56,3 +65,6 @@ $queryHistoryProps = JsonEncoder::forHtmlAttribute($queryHistoryProps);
 
 <span class="content__title">История запросов</span>
 <div id="query-history" data-props="<?= $queryHistoryProps ?>"></div>
+
+<span class="content__title">Таблицы</span>
+<div id="db-tables" data-props="<?= $tablesProps ?>"></div>
