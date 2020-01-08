@@ -1,6 +1,5 @@
 .query {
-    display: flex;
-    align-items: center;
+    padding: 0.1rem 0; // .param при inline теряет вертикальный padding.
 
     &__duration {
         color: $clr-grey;
@@ -12,5 +11,9 @@
         &:after {
             content: ')';
         }
+    }
+
+    .param {
+        display: inline;
     }
 }

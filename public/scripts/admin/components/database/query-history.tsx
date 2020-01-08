@@ -2,6 +2,7 @@ import React from 'react'
 import Table from '../table';
 import { TableItem, ItemDetails } from '../table/item';
 import Parameter from '../parameter';
+import RouteRequest from '../routes/Request';
 
 interface Query {
     sql: string,
@@ -43,7 +44,7 @@ class QueryHistory extends React.Component<QueryHistoryProps> {
             }
             items.push({
                 cells: [
-                    route.route,
+                    <RouteRequest route={route.route}></RouteRequest>,
                     route.queries.length,
                     route.time
                 ],
