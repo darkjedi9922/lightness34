@@ -24,8 +24,7 @@ foreach ($articles as $article) {
     ];
     $tableProps['items'][] = $item;
 }
-$jsonEncoder = new JsonEncoder;
-$tableProps = $jsonEncoder->forHtmlAttribute($tableProps);
+$tableProps = JsonEncoder::forHtmlAttribute($tableProps);
 ?>
 
 <div class="content__header">

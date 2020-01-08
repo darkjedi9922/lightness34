@@ -51,8 +51,7 @@ foreach ($dialogs as $dialog) {
     ];
 }
 
-$jsonEncoder = new JsonEncoder;
-$dialogListData = $jsonEncoder->forHtmlAttribute($dialogListData);
+$dialogListData = JsonEncoder::forHtmlAttribute($dialogListData);
 ?>
 
 <div id="dialog-list" class="dialog-list" data-props="<?= $dialogListData ?>"></div>

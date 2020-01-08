@@ -41,8 +41,7 @@ foreach ($queryRoutes as $routeStat) {
 }
 
 $clear = new ViewAction(ClearStatistics::class, ['module' => 'stat/db']);
-$jsonEncoder = new JsonEncoder;
-$queryHistoryProps = $jsonEncoder->forHtmlAttribute($queryHistoryProps);
+$queryHistoryProps = JsonEncoder::forHtmlAttribute($queryHistoryProps);
 ?>
 
 <div class="content__header">

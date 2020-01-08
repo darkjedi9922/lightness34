@@ -27,8 +27,7 @@ class CollectEventEmits extends BaseStatCollector
 
         if ($this->isEventAboutStats($params)) return;
 
-        $jsonEncoder = new JsonEncoder;
-        $argsJson = $jsonEncoder->toValidJson($this->prepareArgs($params));
+        $argsJson = JsonEncoder::toValidJson($this->prepareArgs($params));
 
         $emitStat = new EventEmitStat;
         $emitStat->id = null;

@@ -57,5 +57,4 @@ foreach ($list as $message) {
 $dialog = new Dialog($anyMessage);
 $dialog->setReadedBy($me->id);
 
-$jsonEncoder = new JsonEncoder;
-echo $jsonEncoder->forViewText($result);
+echo JsonEncoder::forViewText($result);

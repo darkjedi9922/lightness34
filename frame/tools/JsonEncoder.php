@@ -2,7 +2,7 @@
 
 class JsonEncoder
 {
-    public function toValidJson($value): string
+    public static function toValidJson($value): string
     {
         return json_encode(
             $value,
@@ -10,20 +10,24 @@ class JsonEncoder
         );
     }
 
-    public function forViewText($value): string
+    public static function forViewText($value): string
     {
-        return $this->toValidJson($value);
+        return static::toValidJson($value);
     }
 
-    public function forHtmlAttribute($value, bool $isSubJson = false): string
-    {
-        $json = $this->toValidJson($value);
+    public static function forHtmlAttribute(
+        $value,
+        bool $isSubJson = false
+    ): string {
+        $json = static::toValidJson($value);
         return $isSubJson ? $json : str_replace('"', '&quot;', $json);
     }
 
-    public function forJavascriptString($value, bool $isSubJson = false): string
-    {
-        $json = $this->toValidJson($value);
+    public static function forJavascriptString(
+        $value,
+        bool $isSubJson = false
+    ): string {
+        $json = static::toValidJson($value);
         return $isSubJson ? $json : str_replace(
             ['\\', '"'],
             ['\\\\', '\"'],

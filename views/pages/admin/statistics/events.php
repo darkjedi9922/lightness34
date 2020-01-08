@@ -69,8 +69,7 @@ foreach ($routes as $routeStat) {
     $eventsProps['routes'][$routeStat->id] = $route;
 }
 
-$jsonEncoder = new JsonEncoder;
-$eventsProps = $jsonEncoder->forHtmlAttribute($eventsProps);
+$eventsProps = JsonEncoder::forHtmlAttribute($eventsProps);
 ?>
 
 <div class="content__header">
