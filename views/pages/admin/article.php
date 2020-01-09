@@ -13,6 +13,7 @@ use engine\comments\actions\AddComment;
 use engine\comments\CommentList;
 use frame\tools\JsonEncoder;
 use engine\users\cash\my_rights;
+use engine\articles\actions\DeleteArticleAction;
 
 $id = (int)Init::requireGet('id');
 $article = Article::selectIdentity($id);
@@ -30,6 +31,7 @@ $comments = new CommentList($moduleId, $materialId, $page);
 $pages = $comments->getPager()->countPages();
 $articleRights = my_rights::get('articles');
 
+$delete = new ViewAction(DeleteArticleAction::class, ['id' => $id]);
 $add = new ViewAction(AddComment::class, [
     'module_id' => $moduleId,
     'material_id' => $materialId
@@ -74,12 +76,24 @@ $article->setReaded(user_me::get());
         <span class="breadcrumbs__divisor"></span>
         <span class="breadcrumbs__item breadcrumbs__item--current">ID <?= $article->id ?></span>
     </div>
-    <?php if ($articleRights->canOneOf([
-        'edit-own' => [$article],
-        'edit-all' => null
-    ])): ?>
-        <a href="/admin/article/edit?id=<?= $id ?>" class="button">Редактировать</a>
-    <?php endif ?>
+    <div class="actions">
+        <div class="actions__item">
+            <?php if ($articleRights->canOneOf([
+                'edit-own' => [$article],
+                'edit-all' => null
+            ])) : ?>
+                <a href="/admin/article/edit?id=<?= $id ?>" class="button">Редактировать</a>
+            <?php endif ?>
+        </div>
+        <div class="actions__item">
+            <?php if ($articleRights->canOneOf([
+                'delete-own' => [$article],
+                'delete-all' => null
+            ])) : ?>
+                <a href="<?= $delete->getUrl() ?>" class="button button--red">Удалить</a>
+            <?php endif ?>
+        </div>
+    </div>
 </div>
 <div class="box article">
     <h2 class="article__title"><?= $article->title ?></h2>

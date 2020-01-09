@@ -11,16 +11,21 @@ class ArticlesRightsDesc extends RightsDesc
         return [
             'add' => 'Adding a new article',
             'edit-all' => 'Edit all articles',
-            'edit-own' => 'Edit own article'
+            'edit-own' => 'Edit own article',
+            'delete-all' => 'Delete all articles',
+            'delete-own' => 'Delete own article'
         ];
     }
 
     public function listAdditionChecks(User $user): array
     {
+        $ownCheck = function (Article $object) use ($user) {
+            return $user->id === $object->author_id;
+        };
+
         return [
-            'edit-own' => function (Article $object) use ($user) {
-                return $user->id === $object->author_id;
-            }
+            'edit-own' => $ownCheck,
+            'delete-own' => $ownCheck
         ];
     }
 }
