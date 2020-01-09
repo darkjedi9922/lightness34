@@ -16,6 +16,7 @@ setupReactComponent('query-history', QueryHistory);
 setupReactComponent('db-tables', DatabaseTables);
 setupReactComponent('articles', ArticlesTable);
 setupReactComponent('new-article-form', Form);
+setupReactComponent('admin-login-form', Form);
 setupReactComponent('modules', ModulesList);
 setupReactComponent('users', UsersTable);
 setupReactComponent('events', Events);

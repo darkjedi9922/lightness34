@@ -4,6 +4,7 @@ use frame\cash\prev_router;
 use engine\admin\actions\LoginAction;
 use frame\actions\ViewAction;
 use engine\admin\Auth;
+use frame\tools\JsonEncoder;
 
 $self->setLayout('admin-base');
 $self->setMeta('admin-login-page-flag', true);
@@ -11,22 +12,30 @@ $self->setMeta('admin-login-page-flag', true);
 $action = new ViewAction(LoginAction::class);
 $auth = new Auth;
 $prevRoute = prev_router::get();
-$isTimeup = $auth->isTimeup() && $prevRoute && $prevRoute->getPathPart(0) == 'admin'; 
+$isTimeup = $auth->isTimeup() && $prevRoute && $prevRoute->getPathPart(0) == 'admin';
+
+$loginErrors = [];
+if ($isTimeup) $loginErrors[] = 'Время сессии вышло';
+if ($action->hasError(LoginAction::E_WRONG_PASSWORD))
+    $loginErrors[] = 'Неверный пароль';
+
+$formProps = JsonEncoder::forHtmlAttribute([
+    'actionUrl' => $action->getUrl(),
+    'method' => 'post',
+    'fields' => [[
+        'title' => 'Пароль',
+        'name' => 'password',
+        'type' => 'password'
+    ]],
+    'errors' => $loginErrors,
+    'buttonText' => 'Войти'
+]);
 ?>
 
 <div class="centered-wrapper">
     <div class="box box--login">
         <center><h2>Вход в админ-панель</h2></center>
-        <?php if ($isTimeup): ?>
-            <span style="font-weight:bold;color:red">Время сессии вышло</span><br><br>
-        <?php endif?>
-        <?php if ($action->hasError(LoginAction::E_WRONG_PASSWORD)): ?>
-            <span class='error' style="margin-bottom:10px">Неверный пароль</span><br/>
-        <?php endif ?>
-        <form action="<?= $action->getUrl() ?>" method="post">
-            Пароль: <input type="password" name="password">
-            <br><button>Войти</button>
-        </form>
+        <div id="admin-login-form" data-props="<?= $formProps ?>"></div>
     </div>
 </div>
 
