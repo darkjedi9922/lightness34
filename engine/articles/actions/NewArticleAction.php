@@ -5,6 +5,7 @@ use engine\users\cash\user_me;
 use frame\actions\ActionBody;
 use frame\config\Json;
 use frame\tools\Init;
+use frame\cash\prev_router;
 
 /**
  * Права: добавление статей
@@ -41,11 +42,11 @@ class NewArticleAction extends ActionBody
         $title = $post['title'];
         $text = $post['text'];
 
-        if (!$title) $errors[] = static::E_NO_TITLE;
+        if ($title === '') $errors[] = static::E_NO_TITLE;
         else if (mb_strlen($title) > $config->{'title.maxLength'}) 
             $errors[] = static::E_LONG_TITLE;
 
-        if (!$text) $errors[] = static::E_NO_TEXT;
+        if ($text === '') $errors[] = static::E_NO_TEXT;
 
         return $errors;
     }
@@ -62,7 +63,9 @@ class NewArticleAction extends ActionBody
 
     public function getSuccessRedirect(): string
     {
-        // return '/article?id='.$this->id;
-        return '/articles';
+        $prevRouter = prev_router::get();
+        if ($prevRouter && $prevRouter->isInNamespace('admin'))
+            return '/admin/article?id=' . $this->id;
+        return '/article?id=' . $this->id;
     }
 }
