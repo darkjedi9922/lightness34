@@ -9,13 +9,6 @@ Init::accessRight('articles', 'add');
 
 $add = new ViewAction(NewArticleAction::class);
 
-$textareaProps = JsonEncoder::forHtmlAttribute([
-    'placeholder' => 'Текст',
-    'name' => 'text',
-    'className' => 'form__textarea',
-    'defaultValue' => $add->getPost('text' , '')
-]);
-
 $errorMessages = [];
 if ($add->hasError(NewArticleAction::E_NO_TITLE))
     $errorMessages[] = 'Название не указано';

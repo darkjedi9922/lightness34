@@ -12,6 +12,7 @@ use frame\actions\ViewAction;
 use engine\comments\actions\AddComment;
 use engine\comments\CommentList;
 use frame\tools\JsonEncoder;
+use engine\users\cash\my_rights;
 
 $id = (int)Init::requireGet('id');
 $article = Article::selectIdentity($id);
@@ -27,6 +28,7 @@ $moduleId = Core::$app->getModule('articles/comments')->getId();
 $materialId = $article->id;
 $comments = new CommentList($moduleId, $materialId, $page);
 $pages = $comments->getPager()->countPages();
+$articleRights = my_rights::get('articles');
 
 $add = new ViewAction(AddComment::class, [
     'module_id' => $moduleId,
@@ -72,6 +74,12 @@ $article->setReaded(user_me::get());
         <span class="breadcrumbs__divisor"></span>
         <span class="breadcrumbs__item breadcrumbs__item--current">ID <?= $article->id ?></span>
     </div>
+    <?php if ($articleRights->canOneOf([
+        'edit-own' => [$article],
+        'edit-all' => null
+    ])): ?>
+        <a href="/admin/article/edit?id=<?= $id ?>" class="button">Редактировать</a>
+    <?php endif ?>
 </div>
 <div class="box article">
     <h2 class="article__title"><?= $article->title ?></h2>
