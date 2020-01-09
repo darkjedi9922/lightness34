@@ -1,0 +1,22 @@
+button, .button, .button-hovered {
+    background: $global-button-color;
+    border: 0px;
+    border-radius: 7px;
+    color: #c4c5c6;
+    display: inline-block;
+    font-family: Tahoma;
+    font-size: 13px;
+    padding: 8px 20px;
+    text-decoration: none;
+    margin:0px;
+    font-weight:normal;
+    cursor:default;
+    outline: none;
+
+    &:hover {
+        background: none;
+        color: $clr-color;
+        box-shadow: inset 0px 0px 30px 0px $clr-color;
+        cursor: pointer;
+    }
+}

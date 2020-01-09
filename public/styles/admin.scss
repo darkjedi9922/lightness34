@@ -47,6 +47,8 @@ $global-error-color-lightened: lighten($global-error-color, 35);
 $global-font: "Greta Sans Light";
 $global-box-radius: 10px;
 
+@import 'admin/base/button';
+
 @import 'admin/actions';
 @import 'admin/article';
 @import 'admin/author';
@@ -90,48 +92,4 @@ body {
     padding: 0;
     margin: 0;
     background: $global-background-color;
-}
-
-button, .button, .button-hovered {
-    // background: $global-button-color;
-    // border: none;
-    // border-radius: $global-box-radius;
-    // box-shadow: none;
-    // color: white !important;
-    // display: inline-block;
-    // font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif !important;
-    // font-size: 1rem;
-    // font-weight: bold;
-    // padding: 0.6rem 2rem;
-    // outline: none;
-    // text-decoration: none !important;
-    // text-transform: uppercase;
-
-    // &:hover {
-    //     background: lighten($global-button-color, 10);
-    //     box-shadow: none;
-    //     color: white !important;
-    //     cursor: pointer;
-    // }
-
-    background: $global-button-color;
-    border: 0px;
-    border-radius: 7px;
-    color: #c4c5c6;
-    display: inline-block;
-    font-family: Tahoma;
-    font-size: 13px;
-    padding: 8px 20px;
-    text-decoration: none;
-    margin:0px;
-    font-weight:normal;
-    cursor:default;
-    outline: none;
-
-    &:hover {
-        background: none;
-        color: $clr-color;
-        box-shadow: inset 0px 0px 30px 0px $clr-color;
-        cursor: pointer;
-    }
 }
