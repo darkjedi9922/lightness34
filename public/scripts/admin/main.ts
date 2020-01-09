@@ -6,6 +6,7 @@ import ModulesList from './components/modules/list';
 import DialogList from './components/dialog-list';
 import UsersTable from './components/users-table';
 import Comments from './components/comments';
+import Form from './components/form/Form';
 import Events from './components/events';
 import Menu from './components/menu';
 
@@ -14,6 +15,7 @@ setupReactComponent('article-comments', Comments);
 setupReactComponent('query-history', QueryHistory);
 setupReactComponent('db-tables', DatabaseTables);
 setupReactComponent('articles', ArticlesTable);
+setupReactComponent('new-article-form', Form);
 setupReactComponent('modules', ModulesList);
 setupReactComponent('users', UsersTable);
 setupReactComponent('events', Events);

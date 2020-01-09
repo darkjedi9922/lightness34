@@ -31,8 +31,17 @@ $tableProps = JsonEncoder::forHtmlAttribute($tableProps);
     <div class="breadcrumbs">
         <span class="breadcrumbs__item breadcrumbs__item--current">Статьи</span>
     </div>
-        <?php $articles->getPager()->show('admin') ?>
     <div class="actions">
+        <?php if ($articles->getPager()->countPages() > 1) : ?>
+            <div class="actions__item">
+                <?php $articles->getPager()->show('admin') ?>
+            </div>
+        <?php endif ?>
+        <?php if ($rights->can('add')): ?>
+            <div class="actions__item">
+                <a href="/admin/article/new" class="button">Добавить статью</a>
+            </div>
+        <?php endif ?>
     </div>
 </div>
 <div id="articles" data-props="<?= $tableProps ?>"></div>

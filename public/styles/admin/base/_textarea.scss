@@ -1,0 +1,20 @@
+.textarea {
+    background: transparent;
+    border: none;
+    border-bottom: solid 1px $clr-grey;
+    box-sizing: border-box;
+    color: black;
+    display: block;
+    font-family: $global-font;
+    font-size: 1.1rem;
+    font-weight: normal;
+    outline: none;
+    padding-bottom: 0.6rem;
+    resize: none;
+    width: 100%;
+    word-break: break-all;
+
+    &[data-placeholdered] {
+        color: $clr-grey;
+    }
+}
