@@ -11,7 +11,7 @@ $articles = new NewArticlePagedList($pagenumber);
 
 <div class="content__header">
     <div class="breadcrumbs">
-        <span class="breadcrumbs__item">Новое</a>
+        <span class="breadcrumbs__item">Новое</span>
         <span class="breadcrumbs__divisor"></span>
         <span class="breadcrumbs__item breadcrumbs__item--current">Статьи</span>
     </div>
