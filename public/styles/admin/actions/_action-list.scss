@@ -1,0 +1,9 @@
+@import '../mark';
+
+.action-list {
+    &__doc {
+        white-space: pre-wrap;
+        margin: 0;
+        padding: 0;
+    }
+}

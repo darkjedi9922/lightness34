@@ -231,7 +231,7 @@ $clear = new ViewAction(ClearStatistics::class, ['module' => 'stat/actions']);
 
 <span class="content__title">Доступные действия</span>
 <div class="box box--table">
-    <table class="table actions">
+    <table class="table action-list">
         <tr class="table__headers">
             <td class="table__header">Class</td>
             <td class="table__header">Module</td>

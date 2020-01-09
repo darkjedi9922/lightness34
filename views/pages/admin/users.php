@@ -30,8 +30,10 @@ foreach ($users as $user) {
     <div class="breadcrumbs">
         <span class="breadcrumbs__item breadcrumbs__item--current">Пользователи</span>
     </div>
-    <div class="box box--headed">
-        <?php $users->getPager()->show('admin') ?>
+    <div class="actions">
+        <div class="actions__item">
+            <?php $users->getPager()->show('admin') ?>
+        </div>
     </div>
 </div>
 <div id="users" data-props='<?= json_encode($tableProps, JSON_HEX_AMP) ?>'></div>

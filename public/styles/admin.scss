@@ -75,6 +75,7 @@ $global-box-radius: 10px;
 @import 'admin/routes';
 @import 'admin/status';
 @import 'admin/table';
+@import 'admin/actions/action-list';
 @import 'admin/actions/action-param';
 @import 'admin/database/queries-status';
 @import 'admin/database/query';

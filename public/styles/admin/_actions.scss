@@ -1,9 +1,13 @@
-@import './mark';
+@import './box';
 
 .actions {
-    &__doc {
-        white-space: pre-wrap;
-        margin: 0;
-        padding: 0;
+    @extend .box;
+
+    display: flex;
+    flex-grow: 0 !important;
+    margin: 0 !important;
+
+    &__item:not(:first-child) {
+        margin-left: 1rem;
     }
 }

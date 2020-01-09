@@ -31,8 +31,8 @@ $tableProps = JsonEncoder::forHtmlAttribute($tableProps);
     <div class="breadcrumbs">
         <span class="breadcrumbs__item breadcrumbs__item--current">Статьи</span>
     </div>
-    <div class="box box--headed">
         <?php $articles->getPager()->show('admin') ?>
+    <div class="actions">
     </div>
 </div>
 <div id="articles" data-props="<?= $tableProps ?>"></div>
