@@ -86,7 +86,7 @@ class Form extends React.Component<FormProps> {
             let width = $(element).width();
             if (width > maxKeyWidth) maxKeyWidth = width;
         })
-        if (maxKeyWidth !== -1) keyElements.width(maxKeyWidth);
+        if (maxKeyWidth !== -1) keyElements.css('min-width', `${maxKeyWidth}px`);
     }
 }
 
