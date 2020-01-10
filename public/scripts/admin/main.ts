@@ -1,6 +1,7 @@
 import setupReactComponent from './setup-app';
 import QueryHistory from './components/database/query-history';
 import DatabaseTables from './components/database/db-tables';
+import CashUseHistory from './components/cash/use-history';
 import ArticlesTable from './components/articles-table';
 import ModulesList from './components/modules/list';
 import DialogList from './components/dialog-list';
@@ -10,10 +11,11 @@ import Form from './components/form/Form';
 import Events from './components/events';
 import Menu from './components/menu';
 
-setupReactComponent('dialog-list', DialogList);
-setupReactComponent('article-comments', Comments);
+setupReactComponent('cash-use-history', CashUseHistory);
 setupReactComponent('query-history', QueryHistory);
+setupReactComponent('article-comments', Comments);
 setupReactComponent('db-tables', DatabaseTables);
+setupReactComponent('dialog-list', DialogList);
 setupReactComponent('articles', ArticlesTable);
 setupReactComponent('new-article-form', Form);
 setupReactComponent('admin-login-form', Form);

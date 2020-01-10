@@ -15,6 +15,7 @@ class StatisticsModule extends Module
         $app->setModule(new RouteStatisticsSubModule('routes', $this));
         $app->setModule(new ActionStatisticsSubModule('actions', $this));
         $app->setModule(new DbStatisticsSubModule('db', $this));
+        $app->setModule(new CashStatisticsSubModule('cash', $this));
     }
 
     public function createRightsDescription(): ?RightsDesc
