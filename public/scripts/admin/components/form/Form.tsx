@@ -31,8 +31,19 @@ interface FormProps {
 }
 
 class Form extends React.Component<FormProps> {
+    private textareaRefs: TextareaAutosize[] = [];
+
     public componentDidMount(): void {
         this.maximizeKeysWidth();
+
+        // Важно использовать именно при window load ибо оказалось, что реакт
+        // вызывает componentDidMount ДО этого события >>:C
+        // (А я то думал почему все вечно не работало в этом хуке...)
+        window.addEventListener('load', () => {
+            // Костыль - компонент TextareaAutosize неправильно расчитывает высоту
+            // своего текстового поля в самом начале. Так поможем ему! 
+            this.textareaRefs.map((textarea) => textarea._resizeComponent());
+        });
     }
 
     public render(): React.ReactNode {
@@ -64,6 +75,9 @@ class Form extends React.Component<FormProps> {
                         }
                         {field.type === FieldType.TEXTAREA &&
                             <TextareaAutosize
+                                ref={(textarea: TextareaAutosize) => {
+                                    this.textareaRefs.push(textarea)
+                                }}
                                 name={field.name}
                                 className="form__textarea"
                                 placeholder={field.placeholder}
