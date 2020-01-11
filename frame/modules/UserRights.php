@@ -31,11 +31,15 @@ class UserRights
     /**
      * @param array $rights is an array ['right' => [...$args], 'right2' => null]
      * The object like in self::can(). If there is no need in an object, set null.
+     * If you need to pass only one arg, you can pass it without array (like the
+     * null in the example above).
      */
     public function canOneOf(array $rights): bool
     {
-        foreach ($rights as $right => $args)
+        foreach ($rights as $right => $args) {
+            if (!is_array($args)) $args = [$args];
             if ($this->can($right, ...$args)) return true;
+        }
         return false;
     }
 

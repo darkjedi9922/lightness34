@@ -30,4 +30,30 @@ class UserRightsTest extends TestCase
         $this->assertTrue($rights->can('execute-order', 6, 6));
         $this->assertFalse($rights->can('execute-order', 4, 2));
     }
+
+    public function testChecksIfUserCanAtLeastOneOfRights()
+    {
+        $desc = new RightsDescStub;
+        $module = new ModuleStub('stub');
+        $user = new User(['id' => 1, 'group_id' => 2]); // has right 'see-own'
+        $rights = new UserRightsStub($desc, $module->getId(), $user);
+
+        $this->assertTrue($rights->canOneOf([
+            'create' => null,
+            'see-own' => [$user->id]
+        ]));
+    }
+
+    public function testYouCanPassOneArgWithoutArrayInMultipleRightsCheck()
+    {
+        $desc = new RightsDescStub;
+        $module = new ModuleStub('stub');
+        $user = new User(['id' => 1, 'group_id' => 2]); // has right 'see-own'
+        $rights = new UserRightsStub($desc, $module->getId(), $user);
+
+        $this->assertTrue($rights->canOneOf([
+            'create' => null,
+            'see-own' => $user->id // <- without array, just one argument
+        ]));
+    }
 }
