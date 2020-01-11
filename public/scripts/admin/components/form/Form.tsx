@@ -82,6 +82,7 @@ class Form extends React.Component<FormProps> {
                                 className="form__textarea"
                                 placeholder={field.placeholder}
                                 defaultValue={decodeHTML(field.defaultValue || '')}
+                                minRows={3}
                             />
                         }
                     </div>

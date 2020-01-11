@@ -14,6 +14,7 @@
     &__row {
         display: flex;
         align-items: baseline;
+        margin-bottom: 0.5rem;
     }
 
     &__table &__row {
@@ -53,29 +54,13 @@
     }
 
     &__textarea {
-        background: transparent;
-        border: none;
-        border-bottom: solid 2px $global-button-color;
-        box-sizing: border-box;
-        color: black;
-        display: block;
-        font-family: $global-font;
-        font-size: 1.1rem;
-        outline: none;
-        padding: 0.4rem 0;
+        @extend .form__input;
         resize: none;
-        width: 100%;
-        word-break: break-word;
-
-        &[data-placeholdered], &::placeholder {
-            color: $clr-color;
-            font-weight: bold;
-        }
+        overflow-y: hidden;
     }
 
     &__button {
         @extend .button;
-        margin-top: 0.5rem;
     }
 
     &__error {
