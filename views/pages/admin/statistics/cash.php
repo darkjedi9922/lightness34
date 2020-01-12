@@ -35,5 +35,5 @@ $historyProps = JsonEncoder::forHtmlAttribute([
     </div>
     <a href="<?= $clear->getUrl() ?>" class="button">Очистить статистику</a>
 </div>
-<span class="content__title">История использований</span>
+<span class="content__title">История вызовов</span>
 <div id="cash-use-history" data-props="<?= $historyProps ?>"></div>

@@ -9,9 +9,6 @@
 
 /* теги */
 h1, h2, h3{font-family:Arial;margin:0;font-weight:bold;color:#249dcd;margin-bottom:18px}
-form{font-family:Arial;font-weight:bold;color:#249dcd;font-size:16px}
-input{background: #1e4469;border: 0;border-radius: 10px;-moz-border-radius: 10px;-webkit-border-radius: 10px;box-sizing: border-box;box-shadow: inset 0px 0px 10px 0px #000;color: #c4c5c6;font-family: Arial;font-size: 20px;outline: none;padding: 5px 10px;}
-form button{margin-top:7px}
 
 table.big-inputs{width:100%;}
 table.big-inputs input{width:50%;}
