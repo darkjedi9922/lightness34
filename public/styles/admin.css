@@ -20,19 +20,3 @@ table.big-inputs input{width:50%;}
 i.f-icon{font-family:fontello;font-style:normal}
 p.content-text{font-size:12pt;white-space:pre-wrap;word-wrap:break-word;word-break:break-all}
 h3{margin:0}
-
-/* label radio */
-div.radio{display:inline-block;}
-div.radio input{display:none;}
-div.radio label{background: #1e4469;border: 0px;border-radius: 7px;-moz-border-radius: 7px;-webkit-border-radius: 7px;color: #c4c5c6;display: inline-block;font-family: Tahoma;font-size: 13px;padding: 8px 20px;text-decoration: none;margin:0px;font-weight:normal;cursor:default}
-div.radio input:checked + label, div.radio label:hover{background: none;color: #1d98db;box-shadow: inset 0px 0px 30px 0px #1d98db;}
-
-/* radio-classic */
-.radio-classic label{display:inline-block;width:20px;height:20px;background: #1e4469;margin-right:5px;border-radius: 50%;-moz-border-radius: 50%;-webkit-border-radius: 50%;position:relative;top:3px;}
-.radio-classic label i{background:#c4c5c6;display:none;width:70%;height:70%;position:absolute;border-radius: 50%;-moz-border-radius: 50%;-webkit-border-radius: 50%;margin:15%;}
-.radio-classic input:checked + label i{display:inline-block;}
-.radio-classic input{display:none;}
-
-/* input file */
-.input-file {position:relative;}
-.input-file input[type="file"] {position:absolute;left:-150px;top:0;opacity: 0;}

@@ -1,0 +1,39 @@
+.radio {
+    &__item {
+        display: flex;
+        align-items: center;
+
+        &:not(:last-of-type) {
+            margin-bottom: 0.15rem;
+        }
+    }
+
+    &__mark-container {
+        display:inline-block;
+        width:20px;
+        height:20px;
+        background: #1e4469;
+        margin-right:5px;
+        border-radius: 50%;
+        position:relative;
+        cursor: pointer;
+    }
+    
+    &__mark {
+        background:#c4c5c6;
+        display:none;
+        width:70%;
+        height:70%;
+        position:absolute;
+        border-radius: 50%;
+        margin:15%;
+    }
+    
+    &__input {
+        display:none;
+    }
+
+    &__input:checked + &__mark-container &__mark {
+        display:inline-block;
+    }
+}

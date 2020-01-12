@@ -48,6 +48,8 @@ $global-font: "Greta Sans Light";
 $global-box-radius: 10px;
 
 @import 'admin/base/button';
+@import 'admin/base/radio';
+@import 'admin/base/file-input';
 @import 'admin/base/form';
 @import 'admin/base/textarea';
 

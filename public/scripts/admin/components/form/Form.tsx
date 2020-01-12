@@ -1,29 +1,46 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { isNil } from 'lodash';
-import TextareaAutosize from 'react-textarea-autosize';
 import $ from 'jquery';
 import classNames from 'classnames';
-import { decodeHTML } from 'buk';
+import FormTextInput from './FormTextInput';
+import FormRadio from './FormRadio';
+import FormTextarea from './FormTextarea';
+import FormFileInput from './FormFileInput';
 
-enum FieldType {
-    TEXT = 'text',
-    PASSWORD = 'password',
-    TEXTAREA = 'textarea'
-}
-
-interface Field {
+export interface Field {
+    type: string, // it is defined by descendants
     title?: string
     name: string,
-    type: FieldType,
+    errors?: string[]
+}
+
+export interface TextField extends Field
+{
+    type: 'text'|'password'|'textarea'
     placeholder?: string,
     defaultValue?: string,
-    errors?: string[]
+}
+
+export interface RadioField extends Field {
+    type: 'radio',
+    values: RadioValue[],
+    currentValue: string
+}
+
+export interface FileField extends Field {
+    type: 'file'
+}
+
+export interface RadioValue {
+    label: string,
+    value: string
 }
 
 interface FormProps {
     actionUrl: string,
     method: 'get'|'post',
+    multipart?: boolean,
     fields: Field[],
     errors?: string[],
     buttonText: string,
@@ -31,19 +48,8 @@ interface FormProps {
 }
 
 class Form extends React.Component<FormProps> {
-    private textareaRefs: TextareaAutosize[] = [];
-
     public componentDidMount(): void {
         this.maximizeKeysWidth();
-
-        // Важно использовать именно при window load ибо оказалось, что реакт
-        // вызывает componentDidMount ДО этого события >>:C
-        // (А я то думал почему все вечно не работало в этом хуке...)
-        window.addEventListener('load', () => {
-            // Костыль - компонент TextareaAutosize неправильно расчитывает высоту
-            // своего текстового поля в самом начале. Так поможем ему! 
-            this.textareaRefs.map((textarea) => textarea._resizeComponent());
-        });
     }
 
     public render(): React.ReactNode {
@@ -52,6 +58,7 @@ class Form extends React.Component<FormProps> {
                 className={classNames("form", this.props.className)}
                 action={this.props.actionUrl}
                 method={this.props.method}
+                encType={this.props.multipart ? 'multipart/form-data' : null}
             >
                 {!isNil(this.props.errors) && this.props.errors.map((error, i) => (
                     <span key={i} className="form__error form__error--full">
@@ -63,28 +70,23 @@ class Form extends React.Component<FormProps> {
                         {!isNil(field.title) &&
                             <span className="form__key">{field.title}</span>
                         }
-                        {  (field.type === FieldType.TEXT 
-                        || field.type === FieldType.PASSWORD) &&
-                            <input 
-                                type={field.type}
-                                name={field.name}
-                                className="form__input"
-                                placeholder={field.placeholder}
-                                defaultValue={decodeHTML(field.defaultValue || '')}
-                            />
-                        }
-                        {field.type === FieldType.TEXTAREA &&
-                            <TextareaAutosize
-                                ref={(textarea: TextareaAutosize) => {
-                                    this.textareaRefs.push(textarea)
-                                }}
-                                name={field.name}
-                                className="form__textarea"
-                                placeholder={field.placeholder}
-                                defaultValue={decodeHTML(field.defaultValue || '')}
-                                minRows={3}
-                            />
-                        }
+                        <div className="form__field-container">
+                            {(field.type === 'text' || field.type === 'password') &&
+                                <FormTextInput field={field as TextField} />
+                            }
+                            {field.type === 'textarea' &&
+                                <FormTextarea field={field as TextField} />
+                            }
+                            {field.type === 'radio' &&
+                                <FormRadio field={field as RadioField} />
+                            }
+                            {field.type === 'file' &&
+                                <FormFileInput field={field as FileField} />
+                            }
+                        </div>
+                        {!isNil(field.errors) && field.errors.map((error, i) => (
+                            <span key={i} className="form__error">{error}</span>
+                        ))}
                     </div>
                 ))}
                 <button className="form__button">{this.props.buttonText}</button>
@@ -96,7 +98,6 @@ class Form extends React.Component<FormProps> {
         const rootEl = ReactDOM.findDOMNode(this);
         let maxKeyWidth = -1;
         const keyElements = $(rootEl).find("> .form__row > .form__key");
-        console.log(keyElements);
         keyElements.map((index, element) => {
             let width = $(element).width();
             if (width > maxKeyWidth) maxKeyWidth = width;
