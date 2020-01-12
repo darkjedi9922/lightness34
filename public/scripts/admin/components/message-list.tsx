@@ -1,8 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import $ from 'jquery'
-import StretchTextarea from './stretch-textarea';
 import { encodeHTML, decodeHTML } from 'buk';
+import Form, { TextField } from './form/Form';
 
 interface Message {
     id: number,
@@ -40,7 +40,6 @@ interface MessageListState {
 
 class MessageList extends React.Component<{}, MessageListState> {
     private withWhoId: number;
-    private textAreaRef = React.createRef<StretchTextarea>();
     private addMessageUrl: string;
     
     public constructor(props) {
@@ -84,18 +83,17 @@ class MessageList extends React.Component<{}, MessageListState> {
         <div className="content__column">
             <span className="content__title">Новое сообщение</span>
             <div className="box">
-                <div className="box-form">
-                    <span className="box-form__title">Новое сообщение</span>
-                    <StretchTextarea 
-                        ref={this.textAreaRef} 
-                        placeholder="Текст сообщения"
-                        className="box-form__textarea"
-                    ></StretchTextarea>
-                    <button className="box-form__button" onClick={this.handleSendClick}>
-                        Отправить
-                        <i className="box-form__button-icon fontello icon-ok"></i>
-                    </button>
-                </div>
+                <Form 
+                    method="post"
+                    fields={[{
+                        type: 'textarea',
+                        name: 'text',
+                        placeholder: 'Текст сообщения',
+                        defaultValue: ''
+                    } as TextField]}
+                    buttonText="Отправить"
+                    onSubmit={this.handleSendClick}
+                />
             </div>
             {this.state.loadedPages > 0 &&
                 <>
@@ -144,9 +142,12 @@ class MessageList extends React.Component<{}, MessageListState> {
         </div>);
     }
 
-    private handleSendClick(event: React.MouseEvent) {
-        let text = this.textAreaRef.current.getText();
-        console.log(text);
+    private handleSendClick(event: React.FormEvent<HTMLFormElement>): void {
+        event.preventDefault();
+        event.stopPropagation();
+        
+        const textInput: HTMLTextAreaElement = event.currentTarget.elements['text'];
+        let text = textInput.value;
         if (text.length === 0) return;
 
         $.ajax({
@@ -169,7 +170,7 @@ class MessageList extends React.Component<{}, MessageListState> {
                         ...state.list
                     ]
                 }));
-                this.textAreaRef.current.empty();
+                textInput.value = '';
             }
         });
     }

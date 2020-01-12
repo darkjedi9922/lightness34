@@ -38,13 +38,14 @@ export interface RadioValue {
 }
 
 interface FormProps {
-    actionUrl: string,
+    actionUrl?: string,
     method: 'get'|'post',
     multipart?: boolean,
     fields: Field[],
     errors?: string[],
     buttonText: string,
-    className?: string
+    className?: string,
+    onSubmit?: (event: React.FormEvent<HTMLFormElement>) => void
 }
 
 class Form extends React.Component<FormProps> {
@@ -56,9 +57,10 @@ class Form extends React.Component<FormProps> {
         return (
             <form
                 className={classNames("form", this.props.className)}
-                action={this.props.actionUrl}
+                action={!isNil(this.props.actionUrl) ? this.props.actionUrl : null}
                 method={this.props.method}
                 encType={this.props.multipart ? 'multipart/form-data' : null}
+                onSubmit={!isNil(this.props.onSubmit) ? this.props.onSubmit : null}
             >
                 {!isNil(this.props.errors) && this.props.errors.map((error, i) => (
                     <span key={i} className="form__error form__error--full">

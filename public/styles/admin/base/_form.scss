@@ -58,6 +58,10 @@
         @extend .form__input;
         resize: none;
         overflow-y: hidden;
+
+        &::placeholder {
+            color: $clr-grey;
+        }
     }
 
     &__button {
