@@ -23,7 +23,11 @@ $dialogListData = [
     'countAll' => $dialogs->countAll(),
     'list' => [],
     'pageCount' => $pageCount,
-    'pagerHtml' => ($pageCount > 1 ? (new Pager($dialogs->getPager(), 'admin'))->getHtml() : '')
+    'pagerHtml' => ($pageCount > 1 ? (new Pager($dialogs->getPager(), 'admin'))->getHtml() : ''),
+    'userMe' => [
+        'id' => $me->id,
+        'login' => $me->login
+    ]
 ];
 
 foreach ($dialogs as $dialog) {
