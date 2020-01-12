@@ -5,17 +5,38 @@ use engine\users\Group;
 use engine\users\cash\user_me;
 use engine\admin\actions\EditUserGroupAction;
 use frame\actions\ViewAction;
+use frame\tools\JsonEncoder;
 
 $me = user_me::get();
 
-Init::access((int) $me->group_id === Group::ROOT_ID);
+Init::access((int)$me->group_id === Group::ROOT_ID);
 
-$id = (int) Init::requireGet('id');
+$id = (int)Init::requireGet('id');
 $group = Group::selectIdentity($id);
 
 Init::require($group !== null);
 
 $action = new ViewAction(EditUserGroupAction::class, ['id' => $id]);
+
+$formProps = [
+    'actionUrl' => $action->getUrl(),
+    'method' => 'post',
+    'fields' => [[
+        'type' => 'text',
+        'title' => 'Название',
+        'name' => 'name',
+        'defaultValue' => $action->getPost('name', $group->name)
+    ], [
+        'type' => 'text',
+        'title' => 'Иконка',
+        'name' => 'icon',
+        'defaultValue' => $action->getPost('icon', $group->icon)
+    ]],
+    'buttonText' => 'Сохранить',
+    'className' => 'form--short'
+];
+
+$formProps = JsonEncoder::forHtmlAttribute($formProps);
 ?>
 
 <div class="content__header">
@@ -26,17 +47,5 @@ $action = new ViewAction(EditUserGroupAction::class, ['id' => $id]);
     </div>
 </div>
 <div class="box">
-    <form action="<?= $action->getUrl() ?>" method="post">
-        <table>
-            <tr>
-                <td>Название:</td>
-                <td><input name="name" type="text" value="<?= $action->getPost('name', $group->name) ?>"></td>
-            </tr>
-            <tr>
-                <td>Иконка:</td>
-                <td><input name="icon" type="text" value="<?= $action->getPost('icon', $group->icon) ?>"></td>
-            </tr>
-        </table>
-        <button>Сохранить</button>
-    </form>
+    <div id="group-edit-form" data-props="<?= $formProps ?>"></div>
 </div>

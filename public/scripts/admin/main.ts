@@ -20,6 +20,8 @@ setupReactComponent('articles', ArticlesTable);
 setupReactComponent('profile-edit-form', Form);
 setupReactComponent('new-article-form', Form);
 setupReactComponent('admin-login-form', Form);
+setupReactComponent('group-edit-form', Form);
+setupReactComponent('group-add-form', Form);
 setupReactComponent('modules', ModulesList);
 setupReactComponent('users', UsersTable);
 setupReactComponent('events', Events);
