@@ -1,6 +1,7 @@
 <?php namespace engine\statistics\macros\database;
 
 use engine\statistics\macros\BaseStatCollector;
+use frame\database\QueryException;
 
 class CollectDbError extends BaseStatCollector
 {
@@ -17,6 +18,8 @@ class CollectDbError extends BaseStatCollector
 
         /** @var \Throwable $error */
         $error = $args[0];
+
+        if (!($error instanceof QueryException)) return;
         
         $queryStat = $this->startQueryCollector->getLastNonIgnoredQueryStat();
         $queryStat->error = $error->getCode() . ': ' . $error->getMessage();
