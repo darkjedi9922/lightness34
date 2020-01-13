@@ -1,11 +1,20 @@
 <?php namespace frame\tools;
 
+use frame\Core;
+
 /**
  * Не используй этот механизм во frame и engine классах и тогда классы будет проще 
  * тестировать, и их архитектура будет лучше.
  */
 abstract class Cash
 {
+    /**
+     * Вызывается во время обращения к значению кеша.
+     * В параметры события передается string класс значения кеша, string ключ, под 
+     * которым он сохраняется и callable функция, которая инициализирует значение.
+     */
+    const EVENT_CALL = 'cash-call';
+
     // В наследнике нужно определить метод, подобный тому, что приведен ниже.
     // При этом метод должен использовать self::cash() для, собственно, кеширования.
     // public static function get(<args>): <type>;
@@ -21,6 +30,7 @@ abstract class Cash
      */
     protected static function cash(string $key, callable $creator)
     {
+        Core::$app->emit(self::EVENT_CALL, static::class, $key, $creator);
         return self::$storage[static::class][$key] ?? 
             self::$storage[static::class][$key] = $creator();
     }

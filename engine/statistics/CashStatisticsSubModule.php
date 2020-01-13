@@ -5,6 +5,8 @@ use frame\database\Records;
 use engine\statistics\stats\CashRouteStat;
 use engine\statistics\macros\cash\CollectCashRouteStat;
 use engine\statistics\macros\cash\EndCollectCashStats;
+use engine\statistics\macros\cash\CollectCashValues;
+use frame\tools\Cash;
 
 class CashStatisticsSubModule extends BaseStatisticsSubModule
 {
@@ -15,10 +17,12 @@ class CashStatisticsSubModule extends BaseStatisticsSubModule
 
     protected function getAppEventHandlers(): array
     {
+        $valuesCollector = new CollectCashValues;
         $routeCollector = new CollectCashRouteStat;
-        $endCollector = new EndCollectCashStats($routeCollector);
+        $endCollector = new EndCollectCashStats($routeCollector, $valuesCollector);
 
         return [
+            Cash::EVENT_CALL => $valuesCollector,
             Core::EVENT_APP_START => $routeCollector,
             Core::EVENT_APP_END => $endCollector
         ];

@@ -54,14 +54,18 @@ class Core
     private $executed = false;
 
     public function __construct(Router $router)
-    {
+    { 
+        // Должно находится в самом начале т.к. последующие действия могут в своей
+        // реализации обращаться в Core::$app.
+        static::$app = $this;
+
         date_default_timezone_set('Europe/Kiev');
 
         $this->enableErrorHandlers();
         $this->events = new EventManager;
         $this->config = \frame\cash\config::get('core');
         $this->router = $router;
-        static::$app = $this;
+        
     }
 
     public function __destruct()

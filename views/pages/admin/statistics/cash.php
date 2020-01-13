@@ -3,9 +3,11 @@
 use frame\tools\Init;
 use frame\lists\base\IdentityList;
 use engine\statistics\stats\CashRouteStat;
+use engine\statistics\stats\CashValueStat;
 use frame\tools\JsonEncoder;
 use frame\actions\ViewAction;
 use engine\statistics\actions\ClearStatistics;
+use frame\cash\database;
 
 Init::accessRight('admin', 'see-logs');
 
@@ -15,10 +17,15 @@ $routes = new IdentityList(CashRouteStat::class, ['id' => 'DESC']);
 $routesProps = [];
 foreach ($routes as $route) {
     /** @var CashRouteStat $route */
+    $cashValuesTable = CashValueStat::getTable();
+    $counts = database::get()->query(
+        "SELECT COUNT(id), SUM(call_count) 
+        FROM `$cashValuesTable` WHERE route_id = {$route->id}"
+    )->readLine();
     $routesProps[] = [
         'route' => $route->route,
-        'usedCashValues' => 0,
-        'cashCalls' => 0,
+        'usedCashValues' => $counts['COUNT(id)'],
+        'cashCalls' => $counts['SUM(call_count)'] ?? 0,
         'time' => date('d.m.Y H:i', $route->time)
     ];
 }
