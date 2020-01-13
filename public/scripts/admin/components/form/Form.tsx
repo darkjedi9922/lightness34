@@ -49,6 +49,11 @@ interface FormProps {
 }
 
 class Form extends React.Component<FormProps> {
+    public constructor(props: FormProps) {
+        super(props);
+        this.onSubmit = this.onSubmit.bind(this);
+    }
+
     public componentDidMount(): void {
         this.maximizeKeysWidth();
     }
@@ -60,7 +65,7 @@ class Form extends React.Component<FormProps> {
                 action={!isNil(this.props.actionUrl) ? this.props.actionUrl : null}
                 method={this.props.method}
                 encType={this.props.multipart ? 'multipart/form-data' : null}
-                onSubmit={!isNil(this.props.onSubmit) ? this.props.onSubmit : null}
+                onSubmit={this.onSubmit}
             >
                 {!isNil(this.props.errors) && this.props.errors.map((error, i) => (
                     <span key={i} className="form__error form__error--full">
@@ -105,6 +110,14 @@ class Form extends React.Component<FormProps> {
             if (width > maxKeyWidth) maxKeyWidth = width;
         })
         if (maxKeyWidth !== -1) keyElements.css('min-width', `${maxKeyWidth}px`);
+    }
+
+    private onSubmit(event: React.FormEvent<HTMLFormElement>): void {
+        if (isNil(this.props.actionUrl)) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        if (!isNil(this.props.onSubmit)) this.props.onSubmit(event);
     }
 }
 

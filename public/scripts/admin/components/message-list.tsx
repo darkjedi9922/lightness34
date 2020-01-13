@@ -143,9 +143,6 @@ class MessageList extends React.Component<{}, MessageListState> {
     }
 
     private handleSendClick(event: React.FormEvent<HTMLFormElement>): void {
-        event.preventDefault();
-        event.stopPropagation();
-        
         const textInput: HTMLTextAreaElement = event.currentTarget.elements['text'];
         let text = textInput.value;
         if (text.length === 0) return;
