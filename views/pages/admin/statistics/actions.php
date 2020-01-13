@@ -242,11 +242,6 @@ $clear = new ViewAction(ClearStatistics::class, ['module' => 'stat/actions']);
             // $color = ord($module[0]) % 5 + 1;
             /** @var ActionBody $action */
             $action = new $class;
-            $doc = (new ReflectionClass($action))->getDocComment();
-            if ($doc) {
-                $doc = str_replace(["/**", "/*", ' * ', ' */', '*/'], '', $doc);
-                $doc = ltrim($doc);
-            }
             $parameters = [
                 'GET' => $action->listGet(),
                 'POST' => $action->listPost()
@@ -261,12 +256,6 @@ $clear = new ViewAction(ClearStatistics::class, ['module' => 'stat/actions']);
                 </tr>
                 <tr class="table__details-wrapper">
                     <td class="table__details" colspan="100">
-                        <?php if ($doc) : ?>
-                            <div class="details">
-                                <span class="details__header">Description</span>
-                                <p class="actions__doc"><?= encode_specials($doc) ?></p>
-                            </div>
-                        <?php endif ?>
                         <?php foreach ($parameters as $type => $list) : ?>
                             <?php if (!empty($list)) : ?>
                                 <div class="details">
