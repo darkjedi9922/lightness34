@@ -1,7 +1,7 @@
 import React from 'react';
-import StretchTextarea from './stretch-textarea';
 import $ from 'jquery';
 import { encodeHTML, decodeHTML } from 'buk';
+import Form, { TextField } from './form/Form';
 
 interface User {
     avatarUrl: string
@@ -44,8 +44,6 @@ interface APIAddAnswer {
 }
 
 class Comments extends React.Component<CommentsProps, CommentsState> {
-    private textAreaRef = React.createRef<StretchTextarea>();
-
     public constructor(props: CommentsProps) {
         super(props);
 
@@ -63,46 +61,52 @@ class Comments extends React.Component<CommentsProps, CommentsState> {
     // }
 
     public render(): React.ReactNode {
-        return (<>
-            {this.state.list.length !== 0 &&
-                <div className="box">
-                    {this.state.list.map((comment, index) => 
-                        <div key={index} className="comment">
-                            <div className="comment__author author">
-                                <div className="author__data">
-                                    <img src={comment.author.avatarUrl} className="author__avatar"/>
-                                    <div className="author__info">
-                                        <a href={"/admin/users/profile/" + comment.author.login}
-                                            className="author__login">{comment.author.login}</a>
-                                        <span className="author__date">{comment.date}</span>
+        return (
+            <>
+                {this.state.list.length !== 0 &&
+                    <>
+                    <span className="content__title">
+                        Комментарии ({this.state.list.length})
+                    </span>
+                        <div className="box">
+                            {this.state.list.map((comment, index) => 
+                                <div key={index} className="comment">
+                                    <div className="comment__author author">
+                                        <div className="author__data">
+                                            <img src={comment.author.avatarUrl} className="author__avatar"/>
+                                            <div className="author__info">
+                                                <a href={"/admin/users/profile/" + comment.author.login}
+                                                    className="author__login">{comment.author.login}</a>
+                                                <span className="author__date">{comment.date}</span>
+                                            </div>
+                                        </div>
                                     </div>
+                                    <div className="comment__content">{decodeHTML(comment.text)}</div>
                                 </div>
-                            </div>
-                            <div className="comment__content">{decodeHTML(comment.text)}</div>
+                            )}
                         </div>
-                    )}
+                    </>
+                }
+                <span className="content__title">Добавить комментарий</span>
+                <div className="box">
+                    <Form
+                        method="post"
+                        fields={[{
+                            type: 'textarea',
+                            name: 'text',
+                            placeholder: 'Текст комментария'
+                        } as TextField]}
+                        buttonText="Добавить"
+                        onSubmit={this.handleAddCommentClick}
+                    />
                 </div>
-            }
-            <div className="box">
-                <div className="box-form">
-                    <span className="box-form__title">Добавить комментарий</span>
-                    <StretchTextarea
-                        ref={this.textAreaRef}
-                        placeholder="Текст комментария"
-                        className="box-form__textarea"
-                    ></StretchTextarea>
-                    <button className="box-form__button" onClick={this.handleAddCommentClick}>
-                        Добавить
-                        <i className="box-form__button-icon fontello icon-ok"></i>
-                    </button>
-                </div>
-            </div>
-            {this.props.pagerHtml && 
-                <div className="box" 
-                    dangerouslySetInnerHTML={{ __html: this.props.pagerHtml }}
-                ></div>
-            }
-        </>);
+                {this.props.pagerHtml && 
+                    <div className="box" 
+                        dangerouslySetInnerHTML={{ __html: this.props.pagerHtml }}
+                    ></div>
+                }
+            </>
+        );
     }
 
     // private loadPage(page: number) {
@@ -120,9 +124,10 @@ class Comments extends React.Component<CommentsProps, CommentsState> {
     //     })
     // }
 
-    private handleAddCommentClick(event: React.MouseEvent) {
-        const text = this.textAreaRef.current.getText();
-        if (!text) return; 
+    private handleAddCommentClick(event: React.FormEvent<HTMLFormElement>) {
+        const textarea: HTMLTextAreaElement = event.currentTarget.elements['text'];
+        const text = textarea.value;
+        if (text === '') return; 
 
         $.ajax({
             url: this.props.addUrl,
@@ -143,7 +148,7 @@ class Comments extends React.Component<CommentsProps, CommentsState> {
                         }
                     ]
                 }));
-                this.textAreaRef.current.empty();
+                textarea.value = '';
             }
         });
     }

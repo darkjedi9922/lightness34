@@ -111,6 +111,4 @@ $article->setReaded(user_me::get());
         <p class="article__content"><?= $article->content ?></p>
     </div>
 </div>
-<span class="content__title">Комментарии</span>
-
 <div id="article-comments" data-props='<?= $articleCommentsData ?>'></div>
