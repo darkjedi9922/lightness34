@@ -11,8 +11,6 @@ interface CashValue {
 interface CashRoute {
     route: string,
     values: CashValue[],
-    usedCashValues: number,
-    cashCalls: number,
     time: string
 }
 
@@ -29,8 +27,10 @@ class CashUseHistory extends React.Component<CashUseHistoryProps> {
                     items={this.props.routes.map((route) => ({
                         cells: [
                             route.route,
-                            route.usedCashValues,
-                            route.cashCalls,
+                            route.values.length,
+                            route.values.reduce<number>((sum, current) => {
+                                return sum + current.calls;
+                            }, 0),
                             route.time
                         ],
                         details: (() => {

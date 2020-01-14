@@ -7,7 +7,6 @@ use engine\statistics\stats\CashValueStat;
 use frame\tools\JsonEncoder;
 use frame\actions\ViewAction;
 use engine\statistics\actions\ClearStatistics;
-use frame\cash\database;
 use frame\database\Records;
 use frame\lists\iterators\IdentityIterator;
 
@@ -34,16 +33,9 @@ foreach ($routes as $route) {
             'calls' => $cashValue->call_count
         ];
     }
-    $cashValuesTable = CashValueStat::getTable();
-    $counts = database::get()->query(
-        "SELECT COUNT(id), SUM(call_count) 
-        FROM `$cashValuesTable` WHERE route_id = {$route->id}"
-    )->readLine();
     $routesProps[] = [
         'route' => $route->route,
         'values' => $cashValues,
-        'usedCashValues' => $counts['COUNT(id)'],
-        'cashCalls' => $counts['SUM(call_count)'] ?? 0,
         'time' => date('d.m.Y H:i', $route->time)
     ];
 }
