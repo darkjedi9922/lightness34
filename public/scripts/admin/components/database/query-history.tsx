@@ -33,7 +33,7 @@ class QueryHistory extends React.Component<QueryHistoryProps> {
             else if (route.queries.find((query) => !isNil(query.error)))
                 status = <span className="mark2 mark2--red">Has errors</span>;
             else
-                status = <span className="mark2 mark2--green">All passed</span>;
+                status = <span className="mark2 mark2--green">All OK</span>;
 
             const details: ItemDetails[] = [];
             if (route.queries.length) {
@@ -70,7 +70,7 @@ class QueryHistory extends React.Component<QueryHistoryProps> {
                 cells: [
                     <RouteRequest route={route.route}></RouteRequest>,
                     route.queries.length,
-                    <div className="queries-status">{status}</div>,
+                    <div className="stat-status">{status}</div>,
                     route.time
                 ],
                 details

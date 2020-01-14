@@ -7,10 +7,16 @@ use engine\statistics\stats\TimeStat;
 class CollectCashCalls extends BaseStatCollector
 {
     private $valueStats = [];
+    private $creating = null;
 
     public function getValueStats(): array
     {
         return $this->valueStats;
+    }
+
+    public function getStatOfNowCreating(): ?CashValueStat
+    {
+        return $this->creating;
     }
 
     protected function collect(...$args)
@@ -29,12 +35,17 @@ class CollectCashCalls extends BaseStatCollector
             $valueStat->value_key = $key;
             $valueStat->call_count = 1;
 
+            // Вставляем до попытки создать. Если при создании кеша будут ошибки,
+            // stat не будет вставлен в массив потом, следовательно, ошибка не
+            // попадет в БД.
+            $this->valueStats[$class][$key] = $valueStat;
+
             $timer = new TimeStat;
+            $this->creating = $valueStat;
             $timer->start();
             $creator();
             $valueStat->init_duration_sec = $timer->resultInSeconds();
-            
-            $this->valueStats[$class][$key] = $valueStat;
+            $this->creating = null;
         }
     }
 }

@@ -53,6 +53,8 @@ $global-box-radius: 10px;
 @import 'admin/base/form';
 @import 'admin/base/textarea';
 
+@import 'admin/stats/stat-status';
+
 @import 'admin/actions';
 @import 'admin/article';
 @import 'admin/author';
@@ -80,7 +82,6 @@ $global-box-radius: 10px;
 @import 'admin/table';
 @import 'admin/actions/action-list';
 @import 'admin/actions/action-param';
-@import 'admin/database/queries-status';
 @import 'admin/database/query';
 @import 'admin/events/emit-list/executed-subscriber';
 @import 'admin/modules/module-right';

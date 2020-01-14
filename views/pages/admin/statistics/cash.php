@@ -31,6 +31,7 @@ foreach ($routes as $route) {
             'class' => $cashValue->class,
             'key' => $cashValue->value_key,
             'initDurationSec' => $cashValue->init_duration_sec,
+            'initError' => $cashValue->init_error,
             'calls' => $cashValue->call_count
         ];
     }
