@@ -13,7 +13,7 @@ class EndCollectCashStats extends BaseStatCollector
 
     public function __construct(
         CollectCashRouteStat $routeCollector,
-        CollectCashValues $valuesCollector
+        CollectCashCalls $valuesCollector
     ) {
         $this->routeCollector = $routeCollector;
         $this->valuesCollector = $valuesCollector;

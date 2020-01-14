@@ -30,6 +30,7 @@ foreach ($routes as $route) {
         $cashValues[] = [
             'class' => $cashValue->class,
             'key' => $cashValue->value_key,
+            'initDurationSec' => $cashValue->init_duration_sec,
             'calls' => $cashValue->call_count
         ];
     }

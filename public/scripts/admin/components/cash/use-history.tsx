@@ -5,6 +5,7 @@ import { TableItem, ItemDetails } from '../table/item';
 interface CashValue {
     class: string,
     key: string,
+    initDurationSec: number,
     calls: number
 }
 
@@ -38,11 +39,20 @@ class CashUseHistory extends React.Component<CashUseHistoryProps> {
                             return [{
                                 content: (
                                     <Table
-                                        headers={['Cash', 'Key', 'Calls']}
+                                        className="routes"
+                                        headers={[
+                                            'Cash',
+                                            'Key',
+                                            'Initialize time',
+                                            'Calls'
+                                        ]}
                                         items={route.values.map((cash) => ({
                                             cells: [
                                                 cash.class,
                                                 cash.key,
+                                                <span className="routes__duration">
+                                                    {cash.initDurationSec} sec
+                                                </span>,
                                                 cash.calls
                                             ]
                                         }))}

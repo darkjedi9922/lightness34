@@ -2,8 +2,9 @@
 
 use engine\statistics\macros\BaseStatCollector;
 use engine\statistics\stats\CashValueStat;
+use engine\statistics\stats\TimeStat;
 
-class CollectCashValues extends BaseStatCollector
+class CollectCashCalls extends BaseStatCollector
 {
     private $valueStats = [];
 
@@ -16,6 +17,7 @@ class CollectCashValues extends BaseStatCollector
     {
         $class = $args[0];
         $key = $args[1];
+        $creator = $args[2];
         
         if (isset($this->valueStats[$class][$key])) {
             /** @var CashValueStat $valueStat */
@@ -26,6 +28,12 @@ class CollectCashValues extends BaseStatCollector
             $valueStat->class = str_replace('\\', '\\\\', $class);
             $valueStat->value_key = $key;
             $valueStat->call_count = 1;
+
+            $timer = new TimeStat;
+            $timer->start();
+            $creator();
+            $valueStat->init_duration_sec = $timer->resultInSeconds();
+            
             $this->valueStats[$class][$key] = $valueStat;
         }
     }
