@@ -20,6 +20,12 @@ class EventManager
      */
     const BLOCK_EVENT_SUBSCRIBE = '!event-subscribe';
 
+    /** 
+     * Происходит при отписке слушателя от события.
+     * Аргументы: string событие и callable макрос.
+     */
+    const BLOCK_EVENT_UNSUBSCRIBE = '!event-unsubscribe';
+
     /**
      * Происходит при сигнале о любом неблокирующем событии.
      * Аргументы: int идентификатор события, string событие и массив его аргументов.
@@ -49,6 +55,18 @@ class EventManager
         $this->subscribers[$event][] = $macro;
         if (!$this->isBlockingEvent($event)) $this->emit(
             self::BLOCK_EVENT_SUBSCRIBE,
+            $event,
+            $macro
+        );
+    }
+
+    public function unsubscribe(string $event, callable $macro)
+    {
+        $index = array_search($macro, $this->subscribers[$event] ?? []);
+        if ($index === false) return;
+        unset($this->subscribers[$event][$index]);
+        if (!$this->isBlockingEvent($event)) $this->emit(
+            self::BLOCK_EVENT_UNSUBSCRIBE,
             $event,
             $macro
         );
