@@ -1,9 +1,8 @@
 <?php namespace engine\statistics\stats;
 
-use frame\database\Identity;
 use frame\cash\database;
 
-class EventRouteStat extends Identity
+class EventRouteStat extends BaseRouteStat
 {
     public static function getTable(): string
     {

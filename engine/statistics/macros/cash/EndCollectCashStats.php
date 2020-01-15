@@ -3,25 +3,26 @@
 use engine\statistics\macros\BaseStatCollector;
 use engine\statistics\stats\CashRouteStat;
 use engine\statistics\stats\CashValueStat;
+use engine\statistics\stats\BaseRouteStat;
 use frame\cash\database;
 use frame\cash\config;
 
 class EndCollectCashStats extends BaseStatCollector
 {
-    private $routeCollector;
+    private $routeStat;
     private $valuesCollector;
 
     public function __construct(
-        CollectCashRouteStat $routeCollector,
+        BaseRouteStat $routeStat,
         CollectCashCalls $valuesCollector
     ) {
-        $this->routeCollector = $routeCollector;
+        $this->routeStat = $routeStat;
         $this->valuesCollector = $valuesCollector;
     }
 
     protected function collect(...$args)
     {
-        $routeId = $this->routeCollector->getRouteStat()->insert();
+        $routeId = $this->routeStat->insert();
         $this->insertValueStats($routeId);
         $this->deleteOldStats();
     }

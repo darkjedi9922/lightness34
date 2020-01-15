@@ -5,7 +5,6 @@ use engine\statistics\stats\EventRouteStat;
 use engine\statistics\stats\EventEmitStat;
 use engine\statistics\stats\EventSubscriberStat;
 use engine\statistics\macros\events\CollectEventSubscribers;
-use engine\statistics\macros\events\CollectEventRoute;
 use engine\statistics\macros\events\CollectEventEmits;
 use engine\statistics\macros\events\StartCollectHandles;
 use engine\statistics\macros\events\EndCollectHandles;
@@ -59,14 +58,14 @@ class EventStatisticsSubModule extends BaseStatisticsSubModule
 
     public function getAppEventHandlers(): array
     {
+        $this->routeStat->collectCurrent();
         $this->collectAlreadySubscribers($this->subsciberCollector);
 
         return [
             EventManager::BLOCK_EVENT_SUBSCRIBE => $this->subsciberCollector,
             EventManager::BLOCK_EVENT_EMIT => $this->emitCollector,
             EventManager::BLOCK_EVENT_MACRO_START => $this->startHandleCollector,
-            EventManager::BLOCK_EVENT_MACRO_END => $this->endHandleCollector,
-            Core::EVENT_APP_START => new CollectEventRoute($this->routeStat),
+            EventManager::BLOCK_EVENT_MACRO_END => $this->endHandleCollector
         ];
     }
 

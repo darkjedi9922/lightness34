@@ -3,25 +3,26 @@
 use engine\statistics\macros\BaseStatCollector;
 use engine\statistics\stats\QueryStat;
 use engine\statistics\stats\QueryRouteStat;
+use engine\statistics\stats\BaseRouteStat;
 use frame\cash\database;
 use frame\cash\config;
 
 class EndCollectDbStat extends BaseStatCollector
 {
-    private $routeStatCollector;
+    private $routeStat;
     private $startQueryCollector;
 
     public function __construct(
-        CollectQueryRouteStat $routeStatCollector,
+        BaseRouteStat $routeStat,
         StartCollectQueryStat $startQueryCollector
     ) {
-        $this->routeStatCollector = $routeStatCollector;
+        $this->routeStat = $routeStat;
         $this->startQueryCollector = $startQueryCollector;
     }
 
     protected function collect(...$args)
     {
-        $routeId = $this->routeStatCollector->getRouteStat()->insert();
+        $routeId = $this->routeStat->insert();
         $this->insertQueryStats($routeId);
         $this->deleteOldStats();
     }

@@ -5,7 +5,6 @@ use frame\database\Records;
 use frame\database\Database;
 use engine\statistics\stats\QueryRouteStat;
 use engine\statistics\stats\QueryStat;
-use engine\statistics\macros\database\CollectQueryRouteStat;
 use engine\statistics\macros\database\EndCollectDbStat;
 use engine\statistics\macros\database\StartCollectQueryStat;
 use engine\statistics\macros\database\EndCollectQueryStat;
@@ -14,13 +13,13 @@ use frame\modules\Module;
 
 class DbStatisticsSubModule extends BaseStatisticsSubModule
 {
-    private $routeStatCollector;
+    private $routeStat;
     private $startQueryCollector;
 
     public function __construct(string $name, ?Module $parent = null)
     {
         parent::__construct($name, $parent);
-        $this->routeStatCollector = new CollectQueryRouteStat;
+        $this->routeStat = new QueryRouteStat;
         $this->startQueryCollector = new StartCollectQueryStat;
     }
 
@@ -33,18 +32,18 @@ class DbStatisticsSubModule extends BaseStatisticsSubModule
     public function endCollecting()
     {
         (new EndCollectDbStat(
-            $this->routeStatCollector,
+            $this->routeStat,
             $this->startQueryCollector
         ))->exec();
     }
 
     public function getAppEventHandlers(): array
     {
+        $this->routeStat->collectCurrent();
         $endQueryCollector = new EndCollectQueryStat($this->startQueryCollector);
         $errorCollector = new CollectDbError($this->startQueryCollector);
 
         return [
-            Core::EVENT_APP_START => $this->routeStatCollector,
             Core::EVENT_APP_ERROR => $errorCollector,
             Database::EVENT_QUERY_START => $this->startQueryCollector,
             Database::EVENT_QUERY_END => $endQueryCollector

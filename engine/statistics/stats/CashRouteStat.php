@@ -1,8 +1,6 @@
 <?php namespace engine\statistics\stats;
 
-use frame\database\Identity;
-
-class CashRouteStat extends Identity
+class CashRouteStat extends BaseRouteStat
 {
     public static function getTable(): string
     {
