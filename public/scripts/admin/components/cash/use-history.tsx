@@ -3,6 +3,7 @@ import Table from '../table';
 import { TableItem, ItemDetails } from '../table/item';
 import { isNil } from 'lodash';
 import Status, { Type } from '../status';
+import RouteRequest from '../routes/Request';
 
 interface CashValue {
     class: string,
@@ -36,7 +37,7 @@ class CashUseHistory extends React.Component<CashUseHistoryProps> {
                     ]}
                     items={this.props.routes.map((route) => ({
                         cells: [
-                            route.route,
+                            <RouteRequest route={route.route} />,
                             route.values.length,
                             route.values.reduce<number>((sum, current) => {
                                 return sum + current.calls;

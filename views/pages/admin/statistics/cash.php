@@ -41,6 +41,7 @@ foreach ($routes as $route) {
         'time' => date('d.m.Y H:i', $route->time)
     ];
 }
+$historyRouteCount = count($routesProps);
 $historyProps = JsonEncoder::forHtmlAttribute([
     'routes' => $routesProps
 ]);
@@ -54,5 +55,5 @@ $historyProps = JsonEncoder::forHtmlAttribute([
     </div>
     <a href="<?= $clear->getUrl() ?>" class="button">Очистить статистику</a>
 </div>
-<span class="content__title">История вызовов</span>
+<span class="content__title">История вызовов (<?= $historyRouteCount ?>)</span>
 <div id="cash-use-history" data-props="<?= $historyProps ?>"></div>
