@@ -21,7 +21,7 @@ class RouteStatisticsSubModule extends BaseStatisticsSubModule
         Records::from(RouteStat::getTable())->delete();
     }
 
-    protected function getAppEventHandlers(): array
+    public function getAppEventHandlers(): array
     {
         $route = new RouteStat;
         $routeTimer = new TimeStat;

@@ -18,7 +18,7 @@ class ActionStatisticsSubModule extends BaseStatisticsSubModule
         Records::from(ActionStat::getTable())->delete();
     }
 
-    protected function getAppEventHandlers(): array
+    public function getAppEventHandlers(): array
     {
         $stat = new ActionStat;
         $timer = new TimeStat;

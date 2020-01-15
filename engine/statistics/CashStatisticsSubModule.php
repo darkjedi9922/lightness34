@@ -16,7 +16,7 @@ class CashStatisticsSubModule extends BaseStatisticsSubModule
         Records::from(CashRouteStat::getTable())->delete();
     }
 
-    protected function getAppEventHandlers(): array
+    public function getAppEventHandlers(): array
     {
         $callsCollector = new CollectCashCalls;
         $errorCollector = new CollectCashError($callsCollector);

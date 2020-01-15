@@ -60,7 +60,7 @@ class EventStatisticsSubModule extends BaseStatisticsSubModule
         Records::from(EventRouteStat::getTable())->delete();
     }
 
-    protected function getAppEventHandlers(): array
+    public function getAppEventHandlers(): array
     {
         $this->collectAlreadySubscribers($this->subsciberCollector);
 

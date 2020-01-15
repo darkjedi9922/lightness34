@@ -19,7 +19,7 @@ class DbStatisticsSubModule extends BaseStatisticsSubModule
         Records::from(QueryRouteStat::getTable())->delete();
     }
 
-    protected function getAppEventHandlers(): array
+    public function getAppEventHandlers(): array
     {
         $routeStatCollector = new CollectQueryRouteStat;
         $startQueryCollector = new StartCollectQueryStat;
