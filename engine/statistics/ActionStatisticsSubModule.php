@@ -10,26 +10,48 @@ use engine\statistics\macros\actions\EndCollectActionStat;
 use engine\statistics\macros\actions\CollectActionError;
 use engine\statistics\macros\actions\EndCollectAppStat;
 use frame\database\Records;
+use frame\modules\Module;
 
 class ActionStatisticsSubModule extends BaseStatisticsSubModule
 {
+    private $actionStat;
+    private $timer;
+    private $collectActionError;
+
+    public function __construct(string $name, ?Module $parent = null)
+    {
+        parent::__construct($name, $parent);
+
+        $this->stat = new ActionStat;
+        $this->timer = new TimeStat;
+        $this->collectActionError = new CollectActionError($this->stat);
+    }
+
     public function clearStats()
     {
         Records::from(ActionStat::getTable())->delete();
     }
 
+    public function endCollecting()
+    {
+        (new EndCollectAppStat(
+            $this->stat,
+            $this->collectActionError
+        ))->exec();
+    }
+
     public function getAppEventHandlers(): array
     {
-        $stat = new ActionStat;
-        $timer = new TimeStat;
-
-        $collectActionError = new CollectActionError($stat);
-
         return [
-            Action::EVENT_START => new StartCollectActionStat($stat, $timer),
-            Action::EVENT_END => new EndCollectActionStat($stat, $timer),
-            Core::EVENT_APP_ERROR => $collectActionError,
-            Core::EVENT_APP_END => new EndCollectAppStat($stat, $collectActionError)
+            Action::EVENT_START => new StartCollectActionStat(
+                $this->stat,
+                $this->timer
+            ),
+            Action::EVENT_END => new EndCollectActionStat(
+                $this->stat,
+                $this->timer
+            ),
+            Core::EVENT_APP_ERROR => $this->collectActionError
         ];
     }
 }

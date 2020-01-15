@@ -11,5 +11,6 @@ abstract class BaseStatisticsSubModule extends Module
     }
 
     public abstract function clearStats();
+    public abstract function endCollecting();
     public abstract function getAppEventHandlers(): array;
 }

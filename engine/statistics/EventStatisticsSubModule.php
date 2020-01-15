@@ -39,25 +39,22 @@ class EventStatisticsSubModule extends BaseStatisticsSubModule
         parent::__construct($name, $parent);
     }
 
-    public function __destruct()
-    {
-        // Если time === null, значит сборка статистики событий и не запускалась.
-        if ($this->routeStat->time !== null) {
-            (new EndCollectEvents(
-                $this->routeStat, 
-                $this->subsciberCollector, 
-                $this->emitCollector,
-                $this->startHandleCollector
-            ))->exec();
-        }
-    }
-
     public function clearStats()
     {
         Records::from('stat_event_emit_handles')->delete();
         Records::from(EventEmitStat::getTable())->delete();
         Records::from(EventSubscriberStat::getTable())->delete();
         Records::from(EventRouteStat::getTable())->delete();
+    }
+
+    public function endCollecting()
+    {
+        (new EndCollectEvents(
+            $this->routeStat,
+            $this->subsciberCollector,
+            $this->emitCollector,
+            $this->startHandleCollector
+        ))->exec();
     }
 
     public function getAppEventHandlers(): array
