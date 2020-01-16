@@ -42,11 +42,13 @@ class EndCollectCashStats extends BaseStatCollector
     private function deleteOldStats()
     {
         $routeTable = CashRouteStat::getTable();
+        $cashTable = CashValueStat::getTable();
         $limit = config::get('statistics')->{'cash.history.limit'};
         database::get()->query(
             "DELETE $routeTable
             FROM
                 $routeTable
+                LEFT JOIN $cashTable ON $routeTable.id = $cashTable.route_id
                 INNER JOIN
                 (
                     SELECT id FROM $routeTable 
