@@ -17,13 +17,9 @@ class StartCollectViewStats extends BaseStatCollector
         $this->viewStats = new SplObjectStorage;
     }
 
-    public function getViewStats(): array
+    public function getViewStats(): SplObjectStorage
     {
-        $result = [];
-        foreach ($this->viewStats as $view) {
-            $result[] = $this->viewStats[$view];
-        }
-        return $result;
+        return $this->viewStats;
     }
 
     public function endViewStatCollecting(View $view)
@@ -36,7 +32,7 @@ class StartCollectViewStats extends BaseStatCollector
         // В данный момент, пока что, тут хранится сам stat вида, а не его id.
         // Нужно вернутся на прежнего родителя по окончанию вида. Если его и не было
         // будет записан null, что и должно быть.
-        $this->currentViewStat = $stat->parent_id; 
+        $this->currentViewStat = $stat->parent_id;
     }
 
     protected function collect(...$args)

@@ -6,6 +6,7 @@ use engine\statistics\stats\ViewRouteStat;
 use engine\statistics\macros\views\StartCollectViewStats;
 use engine\statistics\macros\views\EndCollectViewStats;
 use frame\modules\Module;
+use frame\views\Layouted;
 use frame\views\View;
 use frame\cash\config;
 use frame\cash\database;
@@ -31,8 +32,17 @@ class ViewStatisticsSubModule extends BaseStatisticsSubModule
     public function endCollecting()
     {
         $routeId = $this->routeStat->insert();
-        foreach ($this->viewStartCollector->getViewStats() as $stat) {
+        $stats = $this->viewStartCollector->getViewStats();
+        foreach ($stats as $view) {
+            /** @var View $view */
             /** @var ViewStat $stat */
+            $stat = $stats[$view];
+            $stat->layout_name = null;
+            if ($view instanceof Layouted) {
+                /** @var Layouted $view */
+                if ($view->getLayout() !== null)
+                    $stat->layout_name = $view->getLayout();
+            }
             if ($stat->parent_id !== null) {
                 // Если есть родитель, то сначала тут записан сам stat вида.
                 // Если он родитель, значит он был записан раньше, значит у него уже

@@ -10,6 +10,7 @@ interface ViewStat {
     class: string,
     name: string,
     file: string,
+    layoutName?: string,
     parentId?: number,
     durationSec: number
 }
@@ -55,12 +56,21 @@ class ViewsHistory extends React.Component<ViewsHistoryProps> {
                                             headers={[
                                                 'Class',
                                                 'Name',
+                                                'Layout',
                                                 'Load'
                                             ]}
                                             items={route.views.map((view) => ({
                                                 cells: [
                                                     view.class,
                                                     view.name,
+                                                    !isNil(view.layoutName)
+                                                    ? view.layoutName
+                                                    : (
+                                                        <Status
+                                                            type={Type.EMPTY}
+                                                            message="None"
+                                                        />
+                                                    ),
                                                     <span 
                                                         className="routes__duration"
                                                     >

@@ -36,6 +36,7 @@ foreach ($routesIt as $routeStat) {
             'class' => $viewStat->class,
             'name' => $viewStat->name,
             'file' => $viewStat->file,
+            'layoutName' => $viewStat->layout_name,
             'parentId' => $viewStat->parent_id,
             'durationSec' => $viewStat->duration_sec
         ];
