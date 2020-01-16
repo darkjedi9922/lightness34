@@ -1,6 +1,7 @@
 import setupReactComponent from './setup-app';
 import QueryHistory from './components/database/query-history';
 import DatabaseTables from './components/database/db-tables';
+import ViewsHistory from './components/views/views-history';
 import CashUseHistory from './components/cash/use-history';
 import ArticlesTable from './components/articles-table';
 import ModulesList from './components/modules/list';
@@ -12,6 +13,7 @@ import Events from './components/events';
 import Menu from './components/menu';
 
 setupReactComponent('cash-use-history', CashUseHistory);
+setupReactComponent('views-stat-page', ViewsHistory);
 setupReactComponent('query-history', QueryHistory);
 setupReactComponent('article-comments', Comments);
 setupReactComponent('db-tables', DatabaseTables);

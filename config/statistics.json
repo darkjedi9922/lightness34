@@ -4,6 +4,7 @@
     "events.history.limit": 20,
     "queries.history.limit": 20,
     "cash.history.limit": 20,
+    "views.history.limit": 20,
     "ignoreRouteNamespaces": [
         "admin/statistics",
         "engine/statistics/actions"

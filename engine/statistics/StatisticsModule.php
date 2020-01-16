@@ -18,7 +18,8 @@ class StatisticsModule extends Module
             new RouteStatisticsSubModule('routes', $this),
             new ActionStatisticsSubModule('actions', $this),
             new DbStatisticsSubModule('db', $this),
-            new CashStatisticsSubModule('cash', $this)
+            new CashStatisticsSubModule('cash', $this),
+            new ViewStatisticsSubModule('views', $this)
         ];
 
         foreach ($submodules as $submodule) {
