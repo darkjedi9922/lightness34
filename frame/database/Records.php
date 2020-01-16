@@ -205,8 +205,11 @@ class Records
     {
         $result = [];
         foreach ($array as $key => $value) { 
-            $value = str_replace("'", "\\'", $value);
-            $result["`$key`"] = "'$value'";
+            if (is_string($value)) 
+                $value = "'" . str_replace("'", "\\'", $value) . "'";
+            else if (is_bool($value)) $value = $value ? '1' : '0';
+            else if (is_null($value)) $value = 'null'; 
+            $result["`$key`"] = $value;
         }
         return $result;
     }
