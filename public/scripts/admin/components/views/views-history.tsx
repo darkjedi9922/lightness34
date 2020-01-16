@@ -41,6 +41,9 @@ class ViewsHistory extends React.Component<ViewsHistoryProps> {
                         Очистить статистику
                     </a>
                 </div>
+                <span className="content__title">
+                    История ({this.props.routes.length})
+                </span>
                 <div className="box box--table">
                     <Table 
                         className="routes"
