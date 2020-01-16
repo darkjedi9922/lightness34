@@ -10,7 +10,8 @@ interface ViewStat {
     class: string,
     name: string,
     file: string,
-    parentId?: number
+    parentId?: number,
+    durationSec: number
 }
 
 interface ViewRoute {
@@ -51,9 +52,21 @@ class ViewsHistory extends React.Component<ViewsHistoryProps> {
                                 return [{
                                     content: (
                                         <Table
-                                            headers={['Class', 'Name']}
+                                            headers={[
+                                                'Class',
+                                                'Name',
+                                                'Load'
+                                            ]}
                                             items={route.views.map((view) => ({
-                                                cells: [view.class, view.name],
+                                                cells: [
+                                                    view.class,
+                                                    view.name,
+                                                    <span 
+                                                        className="routes__duration"
+                                                    >
+                                                        {view.durationSec} sec
+                                                    </span>
+                                                ],
                                                 details: [{
                                                     title: 'File',
                                                     content: view.file
