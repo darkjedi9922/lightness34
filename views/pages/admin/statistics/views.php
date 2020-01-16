@@ -38,6 +38,7 @@ foreach ($routesIt as $routeStat) {
             'file' => $viewStat->file,
             'layoutName' => $viewStat->layout_name,
             'parentId' => $viewStat->parent_id,
+            'error' => $viewStat->error,
             'durationSec' => $viewStat->duration_sec
         ];
     }

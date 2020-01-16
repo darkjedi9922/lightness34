@@ -4,6 +4,7 @@ import Table from '../table';
 import RouteRequest from '../routes/Request';
 import { isNil } from 'lodash';
 import Status, { Type } from '../status';
+import { ItemDetails } from '../table/item';
 
 interface ViewStat {
     id: number,
@@ -12,6 +13,7 @@ interface ViewStat {
     file: string,
     layoutName?: string,
     parentId?: number,
+    error?: string,
     durationSec: number
 }
 
@@ -42,11 +44,32 @@ class ViewsHistory extends React.Component<ViewsHistoryProps> {
                 <div className="box box--table">
                     <Table 
                         className="routes"
-                        headers={['Route', 'Views']}
+                        headers={['Route', 'Views', 'Status']}
                         items={this.props.routes.map((route) => ({
                             cells: [
                                 <RouteRequest route={route.route} />,
-                                route.views.length
+                                route.views.length,
+                                <div className="stat-status">
+                                    {route.views.length
+                                        ? (
+                                            route.views.find((view) =>
+                                                !isNil(view.error))
+                                            ? (
+                                                <span className="mark2 mark2--red">
+                                                    Has errors
+                                                </span>
+                                            ) : (
+                                                <span className="mark2 mark2--green">
+                                                    All OK
+                                                </span>
+                                            )
+                                        ) : (
+                                            <span className="mark2 mark2--grey">
+                                                No views
+                                            </span>
+                                        )
+                                    }
+                                </div>
                             ],
                             details: (() => {
                                 if (!route.views.length) return;
@@ -77,12 +100,13 @@ class ViewsHistory extends React.Component<ViewsHistoryProps> {
                                                         {view.durationSec} sec
                                                     </span>
                                                 ],
-                                                details: [{
-                                                    title: 'File',
-                                                    content: view.file
-                                                }, {
-                                                    title: 'Parent',
-                                                    content: !isNil(view.parentId)
+                                                details: (() => {
+                                                    const details: ItemDetails[] = [{
+                                                        title: 'File',
+                                                        content: view.file
+                                                    }, {
+                                                        title: 'Parent',
+                                                        content: !isNil(view.parentId)
                                                         ? route.views.find((stat) =>
                                                             stat.id === view.parentId
                                                         ).file
@@ -92,7 +116,20 @@ class ViewsHistory extends React.Component<ViewsHistoryProps> {
                                                                 message="No parent"
                                                             />
                                                         )
-                                                }]
+                                                    }];
+                                                    if (!isNil(view.error)) {
+                                                        details.push({
+                                                            content: (
+                                                                <Status
+                                                                    type={Type.ERROR}
+                                                                    name="Error: "
+                                                                    message={view.error}
+                                                                />
+                                                            )
+                                                        })
+                                                    }
+                                                    return details;
+                                                })()
                                             }))}
                                         />
                                     )

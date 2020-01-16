@@ -22,6 +22,11 @@ class StartCollectViewStats extends BaseStatCollector
         return $this->viewStats;
     }
 
+    public function getCurrentViewStat(): ?ViewStat
+    {
+        return $this->currentViewStat;
+    }
+
     public function endViewStatCollecting(View $view)
     {
         $stat = $this->viewStats[$view];
@@ -44,7 +49,7 @@ class StartCollectViewStats extends BaseStatCollector
         $stat->class = str_replace('\\', '\\\\', get_class($view));
         $stat->name = $view->name;
         $stat->file = remove_prefix($view->file, ROOT_DIR);
-        
+
         // Пока будем хранить сам stat вида, а после его вставки в БД, возьмем id.
         // Если родителя нет, будет записан null, что и должно быть в таком случае.
         $stat->parent_id = $this->currentViewStat;
