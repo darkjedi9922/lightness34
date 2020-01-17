@@ -139,6 +139,11 @@ class View
         return $this->meta[$name] ?? null;
     }
 
+    public function getMetaArray(): array
+    {
+        return $this->meta;
+    }
+
     /**
      * @param string $namespace Examples: "pages", "pages/admin", "blocks" etc.
      */
