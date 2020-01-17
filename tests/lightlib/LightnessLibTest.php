@@ -8,6 +8,7 @@ use function lightlib\shorten;
 use function lightlib\empty_recursive;
 use function lightlib\bytes;
 use function lightlib\stored;
+use function lightlib\to_string_and_type;
 
 /**
  * @testdox lightness.lib
@@ -147,5 +148,29 @@ final class LightnessLibTest extends TestCase
         $this->assertEquals('px', stored($storage, 'size', function() {
             throw new Exception('This exception must not be raised');
         }));
+    }
+
+    /**
+     * @dataProvider toStringAndTypeProvider
+     */
+    public function testOfGettingStringAndType($var, string $strRepr, string $type)
+    {
+        $this->assertEquals([$strRepr, $type], to_string_and_type($var));
+    }
+
+    public function toStringAndTypeProvider(): array
+    {
+        return [
+            [new stdClass, 'stdClass', 'object'],
+            [null, 'null', 'null'],
+            ['false', 'false', 'string'],
+            [[1, 2, 3], 'array', 'array'],
+            [function() {}, 'Closure', 'object'],
+            [new class {}, 'anonymous', 'object'],
+            [0.1234, '0.1234', 'double'],
+            [0, '0', 'integer'],
+            [true, 'true', 'boolean'],
+            [false, 'false', 'boolean']
+        ];
     }
 }
