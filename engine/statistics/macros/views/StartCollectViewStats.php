@@ -6,20 +6,29 @@ use engine\statistics\stats\ViewStat;
 use engine\statistics\stats\TimeStat;
 use function lightlib\remove_prefix;
 use SplObjectStorage;
+use engine\statistics\stats\ViewMetaStat;
+use function lightlib\to_string_and_type;
 
 class StartCollectViewStats extends BaseStatCollector
 {
     private $viewStats;
+    private $viewMetaStats; 
     private $currentViewStat = null;
 
     public function __construct()
     {
         $this->viewStats = new SplObjectStorage;
+        $this->viewMetaStats = new SplObjectStorage;
     }
 
     public function getViewStats(): SplObjectStorage
     {
         return $this->viewStats;
+    }
+
+    public function getViewMetaStats(): SplObjectStorage
+    {
+        return $this->viewMetaStats;
     }
 
     public function getCurrentViewStat(): ?ViewStat
@@ -33,6 +42,17 @@ class StartCollectViewStats extends BaseStatCollector
 
         // Преобразуем записанный ранее обьект таймера в результирующее время.
         $stat->duration_sec = $stat->duration_sec->resultInSeconds();
+
+        $metaStats = [];
+        foreach ($view->getMetaArray() as $name => $value) {
+            $metaStat = new ViewMetaStat;
+            $metaStat->name = $name;
+            list($valueStrRepr, $valueType) = to_string_and_type($value);
+            $metaStat->value = $valueStrRepr;
+            $metaStat->type = $valueType;
+            $metaStats[] = $metaStat;
+        }
+        $this->viewMetaStats[$view] = $metaStats;
 
         // В данный момент, пока что, тут хранится сам stat вида, а не его id.
         // Нужно вернутся на прежнего родителя по окончанию вида. Если его и не было

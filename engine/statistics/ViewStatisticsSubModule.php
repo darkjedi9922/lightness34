@@ -3,6 +3,7 @@
 use frame\database\Records;
 use engine\statistics\stats\ViewStat;
 use engine\statistics\stats\ViewRouteStat;
+use engine\statistics\stats\ViewMetaStat;
 use engine\statistics\macros\views\StartCollectViewStats;
 use engine\statistics\macros\views\EndCollectViewStats;
 use engine\statistics\macros\views\CollectViewError;
@@ -28,6 +29,7 @@ class ViewStatisticsSubModule extends BaseStatisticsSubModule
 
     public function clearStats()
     {
+        Records::from(ViewMetaStat::getTable())->delete();
         Records::from(ViewStat::getTable())->delete();
         Records::from(ViewRouteStat::getTable())->delete();
     }
@@ -62,6 +64,13 @@ class ViewStatisticsSubModule extends BaseStatisticsSubModule
             
             $stat->route_id = $routeId;
             $stat->insert();
+
+            $metaStats = $this->viewStartCollector->getViewMetaStats()[$view];
+            foreach ($metaStats as $metaStat) {
+                /** @var ViewMetaStat $metaStat */
+                $metaStat->view_id = $stat->id;
+                $metaStat->insert();
+            }
         }
         $this->deleteOldStats();
     }
@@ -82,12 +91,14 @@ class ViewStatisticsSubModule extends BaseStatisticsSubModule
     {
         $routeTable = ViewRouteStat::getTable();
         $viewTable = ViewStat::getTable();
+        $metaTable = ViewMetaStat::getTable();
         $limit = config::get('statistics')->{'views.history.limit'};
         database::get()->query(
             "DELETE $routeTable
             FROM
                 $routeTable
                 LEFT JOIN $viewTable ON $routeTable.id = $viewTable.route_id
+                LEFT JOIN $metaTable ON $viewTable.id = $metaTable.view_id
                 INNER JOIN
                 (
                     SELECT id FROM $routeTable 

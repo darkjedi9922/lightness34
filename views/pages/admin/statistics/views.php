@@ -8,6 +8,7 @@ use frame\tools\JsonEncoder;
 use frame\database\Records;
 use engine\statistics\stats\ViewRouteStat;
 use engine\statistics\stats\ViewStat;
+use engine\statistics\stats\ViewMetaStat;
 
 Init::accessRight('admin', 'see-logs');
 
@@ -31,6 +32,21 @@ foreach ($routesIt as $routeStat) {
     );
     foreach ($viewsIt as $viewStat) {
         /** @var ViewStat $viewStat */
+        $meta = [];
+        $metaIt = new IdentityIterator(
+            Records::from(ViewMetaStat::getTable(), ['view_id' => $viewStat->id])
+                ->order(['id' => 'ASC'])
+                ->select(),
+            ViewMetaStat::class
+        );
+        foreach ($metaIt as $metaStat) {
+            /** @var ViewMetaStat $metaStat */
+            $meta[] = [
+                'name' => $metaStat->name,
+                'value' => $metaStat->value,
+                'type' => $metaStat->type
+            ];
+        }
         $routeViews[] = [
             'id' => $viewStat->id,
             'class' => $viewStat->class,
@@ -39,7 +55,8 @@ foreach ($routesIt as $routeStat) {
             'layoutName' => $viewStat->layout_name,
             'parentId' => $viewStat->parent_id,
             'error' => $viewStat->error,
-            'durationSec' => $viewStat->duration_sec
+            'durationSec' => $viewStat->duration_sec,
+            'meta' => $meta
         ];
     }
     $routes[] = [

@@ -25,4 +25,17 @@
             font-style: italic;
         }
     }
+
+    &__type {
+        color: $box-blue;
+
+        &:before {
+            content: '(';
+            white-space: pre;
+        }
+        &:after {
+            content: ') ';
+            white-space: pre;
+        }
+    }
 }

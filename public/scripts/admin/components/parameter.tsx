@@ -5,7 +5,8 @@ import classNames from 'classnames'
 interface Props {
     number?: number,
     name?: string,
-    value: string
+    value: string,
+    type?: string
 }
 
 class Parameter extends React.Component<Props> {
@@ -15,6 +16,9 @@ class Parameter extends React.Component<Props> {
         return <div className="param">
             {hasNumber && <span className="param__number">{this.props.number}</span>}
             {hasName && <span className="param__name">{this.props.name}</span>}
+            {!isNil(this.props.type) &&
+                <span className="param__type">{this.props.type}</span>
+            }
             <span className={this.getParamValueClasses()}>{this.props.value}</span>
         </div>
     }
