@@ -54,6 +54,7 @@ class ViewsHistory extends React.Component<ViewsHistoryProps> {
             <div className="box box--table">
                 <Table 
                     className="routes"
+                    collapsable={true}
                     headers={['Route', 'Views', 'Status']}
                     items={this.props.routes.map((route) => ({
                         cells: [
@@ -82,10 +83,18 @@ class ViewsHistory extends React.Component<ViewsHistoryProps> {
                             </div>
                         ],
                         details: (() => {
-                            if (!route.views.length) return [];
+                            if (!route.views.length) return [{
+                                content: (
+                                    <Status 
+                                        type={Type.EMPTY}
+                                        message="No views"
+                                    />
+                                )
+                            }];
                             return [{
                                 content: (
                                     <Table
+                                        collapsable={true}
                                         headers={[
                                             'Class',
                                             'Name',
@@ -95,12 +104,38 @@ class ViewsHistory extends React.Component<ViewsHistoryProps> {
                                         items={route.views.map((view) => ({
                                             cells: [
                                                 view.class,
-                                                view.name,
+                                                <>
+                                                    {view.name}
+                                                    {!isNil(view.error) &&
+                                                        <>
+                                                            &nbsp;
+                                                            <span className="mark mark--red">
+                                                                Error
+                                                            </span>
+                                                        </>
+                                                    }
+                                                    {view.meta.length > 0 &&
+                                                        <>
+                                                            &nbsp;
+                                                            <span className="mark mark--blue">
+                                                                Meta
+                                                            </span>
+                                                        </>
+                                                    }
+                                                </>,
                                                 !isNil(view.layoutName)
-                                                ? view.layoutName
+                                                ? (
+                                                    view.layoutName !== ''
+                                                    ? view.layoutName
+                                                    : (
+                                                        <span className="routes__pagename routes__pagename--index">
+                                                            index layout
+                                                        </span>   
+                                                    )
+                                                )
                                                 : (
                                                     <Status
-                                                        type={Type.EMPTY}
+                                                        type={Type.NONE}
                                                         message="None"
                                                     />
                                                 ),

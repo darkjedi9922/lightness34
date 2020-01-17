@@ -68,7 +68,7 @@ class StartCollectViewStats extends BaseStatCollector
         $stat = new ViewStat;
         $stat->class = str_replace('\\', '\\\\', get_class($view));
         $stat->name = $view->name;
-        $stat->file = remove_prefix($view->file, ROOT_DIR);
+        $stat->file = remove_prefix($view->file, ROOT_DIR . '/');
 
         // Пока будем хранить сам stat вида, а после его вставки в БД, возьмем id.
         // Если родителя нет, будет записан null, что и должно быть в таком случае.
