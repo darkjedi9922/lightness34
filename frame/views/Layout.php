@@ -18,8 +18,11 @@ class Layout extends Layouted
      * @param string $name Имя вида
      * @param string $layout Вид компоновщика
      */
-    public function __construct(string $name, Layouted $child, string $layout = '')
-    {
+    public function __construct(
+        string $name,
+        Layouted $child,
+        ?string $layout = null
+    ) {
         $this->child = $child;
         parent::__construct($name, $layout);
     }

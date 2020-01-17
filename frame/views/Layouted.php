@@ -45,7 +45,7 @@ class Layouted extends View
     public function show()
     {
         $content = $this->getContent(); // загружаем на случай, если внутри шаблон изменился
-        if ($this->layoutname) {
+        if ($this->layoutname !== null) {
             $layout = new Layout($this->layoutname, $this);
             $layout->show(); // внутри layout сам выведет содержимое текущего вида
         } else echo $content;
