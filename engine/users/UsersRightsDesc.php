@@ -1,7 +1,7 @@
 <?php namespace engine\users;
 
 use frame\modules\RightsDesc;
-use engine\users\User;
+use frame\modules\GroupUser;
 use engine\users\Group;
 
 class UsersRightsDesc extends RightsDesc
@@ -14,7 +14,7 @@ class UsersRightsDesc extends RightsDesc
         ];
     }
 
-    public function listAdditionChecks(User $user): array
+    public function listAdditionChecks(GroupUser $user): array
     {
         return [
             'edit-own' => function (User $object) use ($user) {

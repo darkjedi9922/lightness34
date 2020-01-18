@@ -1,7 +1,7 @@
 <?php namespace engine\comments;
 
 use frame\modules\RightsDesc;
-use engine\users\User;
+use frame\modules\GroupUser;
 
 class CommentsRightsDesc extends RightsDesc
 {
@@ -16,7 +16,7 @@ class CommentsRightsDesc extends RightsDesc
         ];
     }
 
-    public function listAdditionChecks(User $user): array
+    public function listAdditionChecks(GroupUser $user): array
     {
         $ownCheck = function (Comment $object) use ($user) {
             return $user->id === $object->author_id;

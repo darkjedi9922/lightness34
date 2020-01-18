@@ -1,8 +1,8 @@
 <?php namespace engine\articles;
 
 use frame\modules\RightsDesc;
+use frame\modules\GroupUser;
 use engine\articles\Article;
-use engine\users\User;
 
 class ArticlesRightsDesc extends RightsDesc
 {
@@ -17,7 +17,7 @@ class ArticlesRightsDesc extends RightsDesc
         ];
     }
 
-    public function listAdditionChecks(User $user): array
+    public function listAdditionChecks(GroupUser $user): array
     {
         $ownCheck = function (Article $object) use ($user) {
             return $user->id === $object->author_id;
