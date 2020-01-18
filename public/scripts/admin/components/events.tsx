@@ -1,7 +1,7 @@
 import React from 'react';
 import Table from './table';
 import SubscriberList from './events/subscriber-list';
-import RouteRequest from './routes/Request';
+import RouteRequest from './routes/request';
 import EmitList from './events/emit-list';
 import { Subscriber, Emit, Handle } from '../structures';
 import { TableItem, ItemDetails } from './table/item';

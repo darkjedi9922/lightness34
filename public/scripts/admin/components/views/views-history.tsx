@@ -1,7 +1,7 @@
 import React from 'react';
 import Breadcrumbs from '../common/Breadcrumbs';
 import Table from '../table';
-import RouteRequest from '../routes/Request';
+import RouteRequest from '../routes/request';
 import { isNil } from 'lodash';
 import Status, { Type } from '../status';
 import { ItemDetails } from '../table/item';

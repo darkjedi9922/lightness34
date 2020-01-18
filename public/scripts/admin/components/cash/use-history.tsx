@@ -3,7 +3,7 @@ import Table from '../table';
 import { TableItem, ItemDetails } from '../table/item';
 import { isNil } from 'lodash';
 import Status, { Type } from '../status';
-import RouteRequest from '../routes/Request';
+import RouteRequest from '../routes/request';
 
 interface CashValue {
     class: string,

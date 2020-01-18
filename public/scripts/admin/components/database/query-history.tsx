@@ -2,7 +2,7 @@ import React from 'react'
 import Table from '../table';
 import { TableItem, ItemDetails } from '../table/item';
 import Parameter from '../parameter';
-import RouteRequest from '../routes/Request';
+import RouteRequest from '../routes/request';
 import Status, { Type } from '../status';
 import { isNil } from 'lodash';
 import classNames from 'classnames';
