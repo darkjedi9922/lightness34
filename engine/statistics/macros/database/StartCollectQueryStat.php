@@ -2,6 +2,7 @@
 
 use engine\statistics\stats\QueryStat;
 use engine\statistics\stats\TimeStat;
+use function lightlib\last;
 
 class StartCollectQueryStat extends BaseDatabaseStatCollector
 {
@@ -23,12 +24,12 @@ class StartCollectQueryStat extends BaseDatabaseStatCollector
     public function getLastNonIgnoredQueryStat(): ?QueryStat
     {
         if (empty($this->queryStats)) return null;
-        return $this->queryStats[array_key_last($this->queryStats)];
+        return last($this->queryStats);
     }
 
     public function measureLastNonIgnoredQueryDuration()
     {
-        $this->queryStats[array_key_last($this->queryStats)]
+        last($this->queryStats)
             ->duration_sec = $this->lastNonIgnoredQueryTimer->resultInSeconds();
     }
 
