@@ -6,7 +6,7 @@ use engine\users\cash\my_rights;
 use engine\users\cash\user_me;
 use frame\tools\Init;
 use frame\lists\base\FileLineList;
-use frame\tools\FileReadingTracker;
+use frame\tools\trackers\read\FileReadTracker;
 
 use function lightlib\mkfile;
 
@@ -16,7 +16,7 @@ if (!file_exists('log.txt')) mkfile('log.txt');
 
 $me = user_me::get();
 $log = new FileLineList('log.txt');
-$tracker = new FileReadingTracker('log.txt', $me->id);
+$tracker = new FileReadTracker('log.txt', $me->id);
 $lineCount = $tracker->countLines();
 $unreadedLineCount = $tracker->countNewLines();
 $readedLineCount = $lineCount - $unreadedLineCount;

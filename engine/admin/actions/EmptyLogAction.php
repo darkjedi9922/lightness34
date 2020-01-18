@@ -3,7 +3,7 @@
 use engine\users\cash\user_me;
 use frame\tools\Init;
 use frame\actions\ActionBody;
-use frame\tools\FileReadingTracker;
+use frame\tools\trackers\read\FileReadTracker;
 
 /**
  * Права: очистка лога.
@@ -31,7 +31,7 @@ class EmptyLogAction extends ActionBody
     {
         if (file_exists($this->file)) {
             file_put_contents($this->file, '');
-            $tracker = new FileReadingTracker($this->file, user_me::get()->id);
+            $tracker = new FileReadTracker($this->file, user_me::get()->id);
             $tracker->setUnreadedForAll();
         }
     }

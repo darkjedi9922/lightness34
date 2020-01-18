@@ -1,6 +1,6 @@
 <?php /** @var frame\views\Block $self */
 
-use frame\tools\FileReadingTracker;
+use frame\tools\trackers\read\FileReadTracker;
 use engine\articles\Article;
 use engine\users\cash\my_group;
 use engine\users\cash\user_me;
@@ -10,7 +10,7 @@ $me = user_me::get();
 $group = my_group::get();
 $unreadedMessages = Message::countUnreaded($me->id);
 $unreadedArticles = Article::countUnreaded($me->id);
-$logTracker = new FileReadingTracker('log.txt', $me->id);
+$logTracker = new FileReadTracker('log.txt', $me->id);
 $logUnreadedLines = $logTracker->countNewLines();
 ?>
 
