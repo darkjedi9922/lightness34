@@ -92,6 +92,7 @@
     color: $global-warning-color;
     font-weight:bold;
     margin-right:14px;
+    line-height: 0px; // fix on linux to vertical center the element
 }
 .notice-bar a:hover {
     color: lighten($global-warning-color, 8);
