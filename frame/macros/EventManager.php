@@ -113,7 +113,7 @@ class EventManager
                     $emitId,
                     $event,
                     $macro,
-                    $args,
+                    $args
                 );
                 $macro(...$args);
             }

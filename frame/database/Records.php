@@ -1,7 +1,6 @@
 <?php namespace frame\database;
 
-use frame\database\Database;
-
+use frame\cash\database;
 use function lightlib\array_assemble;
 
 /**
@@ -22,9 +21,6 @@ class Records
 
     private $limit = [null, null];
 
-    /** @var Database */
-    private $db;
-
     /**
      * Создает экземпляр класса
      * 
@@ -36,7 +32,6 @@ class Records
         $records = new static;
         $records->table = $table;
         $records->where = $where;
-        $records->db = \frame\cash\database::get();
         return $records;
     }
 
@@ -94,7 +89,7 @@ class Records
     {
         $from = $this->table;
         $where = $this->assembleWhere();
-        return (int) $this->db->query("SELECT COUNT(`$field`) FROM `$from` $where")
+        return database::get()->query("SELECT COUNT(`$field`) FROM `$from` $where")
             ->readScalar();
     }
 
@@ -110,7 +105,9 @@ class Records
         $where = $this->assembleWhere();
         $orderBy = $this->assembleOrderBy();
         $limit = $this->assembleLimit();
-        return $this->db->query("SELECT $fields FROM $from $where $orderBy $limit");
+        return database::get()->query(
+            "SELECT $fields FROM $from $where $orderBy $limit"
+        );
     }
 
     /**
@@ -124,7 +121,7 @@ class Records
             $what = $this->table;
             $set = array_assemble($this->addAssocQuotes($data), ', ', ' = ');
             $where = $this->assembleWhere();
-            $this->db->query("UPDATE `$what` SET $set $where");
+            database::get()->query("UPDATE `$what` SET $set $where");
         }
     }
 
@@ -141,8 +138,9 @@ class Records
         $set = $this->addAssocQuotes(array_merge($this->where, $values));
         $keys = implode(', ', array_keys($set));
         $values = implode(', ', array_values($set));
-        $this->db->query("INSERT INTO `$into` ($keys) VALUES ($values)");
-        return $this->db->getLastInsertedId();
+        $db = database::get();
+        $db->query("INSERT INTO `$into` ($keys) VALUES ($values)");
+        return $db->getLastInsertedId();
     }
 
     /**
@@ -152,7 +150,7 @@ class Records
     {
         $from = $this->table;
         $where = $this->assembleWhere();
-        $this->db->query("DELETE FROM `$from` $where");
+        database::get()->query("DELETE FROM `$from` $where");
     }
 
     /**
