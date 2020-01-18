@@ -18,6 +18,8 @@ class CollectErrorRouteStat extends BaseStatCollector
     {
         /** @var \Throwable $error */
         $error = $args[0];
-        $this->stat->code_info = encode_specials($error->getMessage());
+        $this->stat->code_info = str_replace('\\', '\\\\', encode_specials(
+            $error->getMessage())
+        );
     }
 }
