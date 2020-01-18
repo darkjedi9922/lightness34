@@ -41,8 +41,9 @@ class QueryResult
      * Считывает и возвращает первое значение в текущей строке. 
      * Значениями могут быть строки и null. Также вернет null, если
      * непрочитанных строк в результате больше не осталось.
+     * @return null|string|int
      */
-    public function readScalar(): ?string
+    public function readScalar()
     {
         $line = $this->readLine();
         if ($line) return current($line);
