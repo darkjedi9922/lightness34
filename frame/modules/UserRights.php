@@ -1,6 +1,6 @@
 <?php namespace frame\modules;
 
-use engine\users\User;
+use frame\modules\GroupUser;
 use frame\modules\RightsDesc;
 
 class UserRights
@@ -10,7 +10,7 @@ class UserRights
     private $rights;
     private $additionChecks;
 
-    public function __construct(RightsDesc $desc, int $moduleId, User $user)
+    public function __construct(RightsDesc $desc, int $moduleId, GroupUser $user)
     {
         $this->user = $user;
 
@@ -46,8 +46,8 @@ class UserRights
     protected function createGroupRights(
         RightsDesc $desc, 
         int $moduleId,
-        User $user
+        GroupUser $user
     ): GroupRights {
-        return new GroupRights($desc, $moduleId, $user->group_id);
+        return new GroupRights($desc, $moduleId, $user->getGroupId());
     }
 }

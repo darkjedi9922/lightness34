@@ -1,7 +1,7 @@
 <?php namespace frame\modules;
 
-use engine\users\Group;
 use frame\database\Records;
+use frame\modules\UserGroup;
 use frame\modules\RightsDesc;
 
 class GroupRights
@@ -15,7 +15,7 @@ class GroupRights
     {
         $this->desc = $desc;
         $this->groupId = $groupId;
-        if ($groupId !== Group::ROOT_ID) {
+        if ($groupId !== UserGroup::ROOT_ID) {
             $this->record = Records::from('group_rights', [
                 'module_id' => $moduleId,
                 'group_id' => $groupId
@@ -26,7 +26,7 @@ class GroupRights
 
     public function can(string $right): bool
     {
-        return $this->groupId === Group::ROOT_ID
+        return $this->groupId === UserGroup::ROOT_ID
             || (bool) ($this->rights & $this->desc->calcMask([$right]));
     }
 
@@ -37,7 +37,7 @@ class GroupRights
      */
     public function set(string $right, bool $can)
     {
-        if ($this->groupId === Group::ROOT_ID)
+        if ($this->groupId === UserGroup::ROOT_ID)
             throw new \Exception('The root rights cannot be modified.');
             
         $this->rights = $can ? 
@@ -50,7 +50,7 @@ class GroupRights
      */
     public function save()
     {
-        if ($this->groupId === Group::ROOT_ID) 
+        if ($this->groupId === UserGroup::ROOT_ID) 
             throw new \Exception('The root rights cannot be modified.');
         
         if ($this->rights === 0) $this->record->delete();

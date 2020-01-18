@@ -1,6 +1,6 @@
 <?php namespace frame\modules;
 
-use engine\users\User;
+use frame\modules\GroupUser;
 
 abstract class RightsDesc
 {
@@ -9,7 +9,7 @@ abstract class RightsDesc
      */
     public abstract function listRights(): array;
 
-    public function listAdditionChecks(User $user): array { return []; }
+    public function listAdditionChecks(GroupUser $user): array { return []; }
 
     /**
      * Для каждого права расчитывается степень двойки, соответствующий индексу права

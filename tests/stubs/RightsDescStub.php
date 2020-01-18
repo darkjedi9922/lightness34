@@ -1,7 +1,7 @@
 <?php namespace tests\stubs;
 
 use frame\modules\RightsDesc;
-use engine\users\User;
+use frame\modules\GroupUser;
 
 class RightsDescStub extends RightsDesc
 {
@@ -16,7 +16,7 @@ class RightsDescStub extends RightsDesc
         ];
     }
 
-    public function listAdditionChecks(User $user): array
+    public function listAdditionChecks(GroupUser $user): array
     {
         return [
             'see-own' => function (int $userId) use ($user) {
