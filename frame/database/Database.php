@@ -22,6 +22,7 @@ class Database
         string $password,
         string $database
     ) {
+        if (ini_get('mysqli.allow_persistent')) $host = "p:$host";
         $this->mysqli = new \mysqli($host, $login, $password, $database);
         $this->mysqli->query('SET NAMES UTF8'); // Фикс кодировки
         if ($this->mysqli->connect_errno) 
