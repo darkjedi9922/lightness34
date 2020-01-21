@@ -1,3 +1,23 @@
 <?php namespace frame\database;
 
-class QueryException extends \Exception {}
+use Throwable;
+
+class QueryException extends \Exception
+{
+    private $query;
+
+    public function __construct(
+        string $query,
+        string $message = '',
+        int $code = '',
+        Throwable $previous
+    ) {
+        parent::__construct($message, $code, $previous);
+        $this->query = $query;
+    }
+
+    public function getQuery(): string
+    {
+        return $this->query;
+    }
+}

@@ -40,8 +40,13 @@ class Database
         Core::$app->emit(self::EVENT_QUERY_START, $sql);
         $result = $this->mysqli->query($sql);
         Core::$app->emit(self::EVENT_QUERY_END, $sql);
-        if ($this->mysqli->errno) 
-            throw new QueryException($this->mysqli->error, $this->mysqli->errno);
+        if ($this->mysqli->errno) {
+            throw new QueryException(
+                $sql,
+                $this->mysqli->error,
+                $this->mysqli->errno
+            );
+        }
         return is_bool($result) ? $result : new QueryResult($result);
     }
 
