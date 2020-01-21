@@ -2,6 +2,7 @@
 
 use frame\cash\prev_router;
 use engine\admin\Auth;
+use engine\users\Encoder;
 use frame\actions\ActionBody;
 use frame\config\Json;
 use frame\tools\Init;
@@ -36,7 +37,7 @@ class LoginAction extends ActionBody
         $errors = [];
         $config = new Json('config/admin.json');
 
-        $password = $post['password'] ?? '';
+        $password = Encoder::getPassword($post['password']);
 
         if ($password !== $config->password) $errors[] = static::E_WRONG_PASSWORD;
 
