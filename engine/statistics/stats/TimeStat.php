@@ -6,14 +6,35 @@ class TimeStat
 
     public static function pauseAll()
     {
-        for ($i = 0, $c = count(self::$timers); $i < $c; ++$i) 
-            self::$timers[$i]->pause();
+        $pause = self::getMicrotime();
+        for ($i = 0, $c = count(self::$timers); $i < $c; ++$i) {
+            /** @var self $timer */
+            $timer = self::$timers[$i];
+            if ($timer->start === null || $timer->pause !== null) continue;
+            $timer->pause = $pause;
+        }
     }
 
     public static function resumeAll()
     {
-        for ($i = 0, $c = count(self::$timers); $i < $c; ++$i)
-            self::$timers[$i]->resume();
+        $now = self::getMicrotime();
+        for ($i = 0, $c = count(self::$timers); $i < $c; ++$i) {
+            /** @var self $timer */
+            $timer = self::$timers[$i];
+            if ($timer->pause === null) continue;
+            $timer->start += $now - $timer->pause;
+            $timer->pause = null;
+        }
+    }
+
+    private static function getMicrotime()
+    {
+        return round(
+            extension_loaded('posixrealtime')
+                ? posix_clock_gettime(PSXRT_CLK_REALTIME, PSXRT_AS_STRING)
+                : microtime(true),
+            6
+        );
     }
 
     private $start = null;
@@ -27,26 +48,14 @@ class TimeStat
     public function start()
     {
         if ($this->start !== null) return;
-        $this->start = microtime(true);
+        $this->start = self::getMicrotime();
     }
 
-    public function pause()
-    {
-        if ($this->start === null || $this->pause !== null) return;
-        $this->pause = microtime(true);
-    }
-
-    public function resume()
-    {
-        if ($this->pause === null) return;
-        $this->start += microtime(true) - $this->pause;
-        $this->pause = null;
-    }
-
-    public function resultInSeconds(): float
+    public function resultInSeconds()
     {
         if ($this->start === null) return 0;
-        $diff = microtime(true) - $this->start;
+        $current = self::getMicrotime();
+        $diff = round($current - $this->start, 6);
         $this->start = null;
         $this->pause = null;
         return $diff;
