@@ -24,6 +24,17 @@ class File
         return $return ? new self($path) : null;
     }
 
+    /**
+     * Аналогично File::create(), но также создает директории в пути к файлу, если
+     * они не существуют.
+     */
+    public static function createFullPath(string $path, bool $return = false): ?self
+    {
+        $dir = implode('/', explode('/', $path, -1));
+        if ($dir !== '' && !file_exists($dir)) mkdir($dir, 0777, true);
+        return self::create($path, $return);
+    }
+
     public static function delete(string $path)
     {
         unlink($path);
