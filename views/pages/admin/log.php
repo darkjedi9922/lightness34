@@ -6,13 +6,12 @@ use engine\users\cash\my_rights;
 use engine\users\cash\user_me;
 use frame\tools\Init;
 use frame\lists\base\FileLineList;
+use frame\tools\File;
 use frame\tools\trackers\read\FileReadTracker;
-
-use function lightlib\mkfile;
 
 Init::accessRight('admin', 'see-logs');
 
-if (!file_exists('log.txt')) mkfile('log.txt');
+if (!file_exists('log.txt')) File::create('log.txt');
 
 $me = user_me::get();
 $log = new FileLineList('log.txt');

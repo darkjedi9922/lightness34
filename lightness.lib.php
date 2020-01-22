@@ -193,19 +193,6 @@ function last(array $arr)
 // ============================================================================
 
 /**
- * Создает файл (!не папку). Если файл уже существует, не трогает его.
- */
-function mkfile(string $file)
-{
-    if (!file_exists($file)) {
-        $handle = fopen($file, 'a');
-        fclose($handle);
-    }
-}
-
-// ============================================================================
-
-/**
  * Собирает одномерный массив в строку.
  */
 function array_assemble(array $arr, string $outer_separator, string $inner_separator): string
