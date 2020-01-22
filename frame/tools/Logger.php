@@ -18,7 +18,7 @@ class Logger
 
     public function __construct($filename)
     {
-        File::createFullPath($filename);
+        if (!File::exists($filename)) File::createFullPath($filename);
         $this->handle = fopen($filename, 'at');
         $this->filename = $filename;
     }
