@@ -56,6 +56,7 @@ class TimeStat
         if ($this->start === null) return 0;
         $current = self::getMicrotime();
         $diff = round($current - $this->start, 6);
+        if ($diff < 0) $diff = 0;
         $this->start = null;
         $this->pause = null;
         return $diff;
