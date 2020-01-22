@@ -24,6 +24,11 @@ class File
         return $return ? new self($path) : null;
     }
 
+    public static function delete(string $path)
+    {
+        unlink($path);
+    }
+
     public function __construct(string $path)
     {
         $this->path = $path;

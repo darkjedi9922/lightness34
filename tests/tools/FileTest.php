@@ -18,4 +18,15 @@ class FileTest extends TestCase
         $this->assertFileExists($path);
         unlink($path);
     }
+
+    public function testDeletesAFile()
+    {
+        $path = ROOT_DIR . '/tests/tools/examples/to-delete.txt';
+        $handle = fopen($path, 'w');
+        fclose($handle);
+        $this->assertFileExists($path);
+        
+        File::delete($path);
+        $this->assertFileNotExists($path);
+    }
 }
