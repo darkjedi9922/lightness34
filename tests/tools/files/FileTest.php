@@ -1,6 +1,6 @@
 <?php
 
-use frame\tools\File;
+use frame\tools\files\File;
 use frame\tools\files\Directory;
 use PHPUnit\Framework\TestCase;
 

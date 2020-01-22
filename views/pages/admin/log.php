@@ -6,7 +6,7 @@ use engine\users\cash\my_rights;
 use engine\users\cash\user_me;
 use frame\tools\Init;
 use frame\lists\base\FileLineList;
-use frame\tools\File;
+use frame\tools\files\File;
 use frame\tools\trackers\read\FileReadTracker;
 
 Init::accessRight('admin', 'see-logs');

@@ -1,6 +1,6 @@
 <?php namespace frame\actions;
 
-use frame\tools\File;
+use frame\tools\files\File;
 use function lightlib\generate_unique_filename;
 use function lightlib\translit;
 use function lightlib\last;

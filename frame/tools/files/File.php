@@ -1,4 +1,4 @@
-<?php namespace frame\tools;
+<?php namespace frame\tools\files;
 
 use finfo;
 
