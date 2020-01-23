@@ -22,6 +22,7 @@ setupReactComponent('dialog-list', DialogList);
 setupReactComponent('articles', ArticlesTable);
 setupReactComponent('admin-config-form', Form);
 setupReactComponent('profile-edit-form', Form);
+setupReactComponent('stat-config-form', Form);
 setupReactComponent('new-article-form', Form);
 setupReactComponent('admin-login-form', Form);
 setupReactComponent('group-edit-form', Form);

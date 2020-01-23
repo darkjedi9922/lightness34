@@ -67,6 +67,10 @@ if ($group->id === $group::ROOT_ID) $menu = array_merge_recursive($menu, [
             'icon' => 'commenting',
             'link' => '/admin/settings/comments'
         ], [
+            'name' => 'Мониторинг',
+            'icon' => 'chart-bar',
+            'link' => '/admin/settings/statistics'
+        ], [
             'name' => 'Админ-панель',
             'icon' => 'television',
             'link' => '/admin/settings/admin'
