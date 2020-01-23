@@ -2,7 +2,7 @@
 
 use frame\actions\UploadedFile;
 use frame\errors\HttpError;
-use frame\Core;
+use frame\core\Core;
 
 use function lightlib\encode_specials;
 

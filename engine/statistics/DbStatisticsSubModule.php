@@ -1,6 +1,6 @@
 <?php namespace engine\statistics;
 
-use frame\Core;
+use frame\core\Core;
 use frame\database\Records;
 use frame\database\Database;
 use engine\statistics\stats\QueryRouteStat;

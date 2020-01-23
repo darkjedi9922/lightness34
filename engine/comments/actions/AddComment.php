@@ -2,7 +2,7 @@
 
 use frame\actions\ActionBody;
 use engine\comments\Comment;
-use frame\Core;
+use frame\core\Core;
 use frame\tools\Init;
 use frame\modules\Module;
 use engine\comments\CommentsModule;

@@ -1,6 +1,6 @@
 <?php namespace frame\macros;
 
-use frame\Core;
+use frame\core\Core;
 
 abstract class GetMacro extends Macro
 {

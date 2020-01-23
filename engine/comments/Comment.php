@@ -1,6 +1,6 @@
 <?php namespace engine\comments;
 
-use frame\Core;
+use frame\core\Core;
 use frame\database\Identity;
 use frame\database\Records;
 

@@ -1,6 +1,6 @@
 <?php namespace frame\errors\handlers;
 
-use frame\Core;
+use frame\core\Core;
 use frame\errors\StrictException;
 
 use function lightlib\ob_end_clean_all;

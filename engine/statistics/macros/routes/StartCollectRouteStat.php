@@ -1,6 +1,6 @@
 <?php namespace engine\statistics\macros\routes;
 
-use frame\Core;
+use frame\core\Core;
 use frame\route\Request;
 use engine\statistics\stats\TimeStat;
 use engine\statistics\stats\RouteStat;

@@ -1,6 +1,6 @@
 <?php namespace frame\errors\handlers;
 
-use frame\Core;
+use frame\core\Core;
 use frame\route\Response;
 use frame\views\ErrorPage;
 

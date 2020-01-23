@@ -1,6 +1,6 @@
 <?php namespace engine\statistics;
 
-use frame\Core;
+use frame\core\Core;
 use frame\modules\Module;
 use frame\modules\RightsDesc;
 use engine\statistics\BaseStatisticsSubModule;

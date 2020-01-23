@@ -7,7 +7,7 @@ use tests\actions\examples\ValidatedActionExample;
 use tests\actions\examples\PostListActionExample;
 use tests\actions\examples\PasswordActionExample;
 use tests\actions\examples\AlwaysSucceedActionExample;
-use frame\Core;
+use frame\core\Core;
 use frame\route\Router;
 
 /**

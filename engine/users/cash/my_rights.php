@@ -1,6 +1,6 @@
 <?php namespace engine\users\cash;
 
-use frame\Core;
+use frame\core\Core;
 use frame\tools\Cash;
 use frame\modules\UserRights;
 use engine\users\cash\user_me;

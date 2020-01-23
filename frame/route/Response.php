@@ -1,6 +1,6 @@
 <?php namespace frame\route;
 
-use frame\Core;
+use frame\core\Core;
 
 use function lightlib\ob_end_clean_all;
 

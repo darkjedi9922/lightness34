@@ -1,6 +1,6 @@
 <?php namespace frame\database;
 
-use frame\Core;
+use frame\core\Core;
 use frame\database\QueryResult;
 
 /**

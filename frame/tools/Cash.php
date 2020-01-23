@@ -1,6 +1,6 @@
 <?php namespace frame\tools;
 
-use frame\Core;
+use frame\core\Core;
 
 /**
  * Не используй этот механизм во frame и engine классах и тогда классы будет проще 

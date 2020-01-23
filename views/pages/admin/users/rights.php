@@ -5,7 +5,7 @@ use frame\actions\ViewAction;
 use engine\users\cash\my_group;
 use engine\users\cash\user_me;
 use engine\users\Group;
-use frame\Core;
+use frame\core\Core;
 use frame\modules\GroupRights;
 use frame\modules\Module;
 use frame\tools\Init;

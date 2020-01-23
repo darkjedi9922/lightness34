@@ -1,6 +1,6 @@
 <?php namespace engine\statistics;
 
-use frame\Core;
+use frame\core\Core;
 use frame\actions\Action;
 
 use engine\statistics\stats\TimeStat;

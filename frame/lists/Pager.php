@@ -1,6 +1,6 @@
 <?php namespace frame\lists;
 
-use frame\Core;
+use frame\core\Core;
 use frame\errors\HttpError;
 use frame\views\Pager as PageView;
 

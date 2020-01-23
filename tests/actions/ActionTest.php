@@ -9,7 +9,7 @@ use tests\actions\examples\AlwaysFailActionExample;
 use frame\errors\HttpError;
 use frame\actions\ActionRouter;
 use frame\actions\Action;
-use frame\Core;
+use frame\core\Core;
 use frame\route\Router;
 
 class ActionTest extends TestCase

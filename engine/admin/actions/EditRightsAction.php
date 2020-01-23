@@ -4,7 +4,7 @@ use engine\users\cash\my_group;
 use frame\actions\ActionBody;
 use frame\tools\Init;
 use engine\users\Group;
-use frame\Core;
+use frame\core\Core;
 use frame\modules\GroupRights;
 use frame\modules\Module;
 

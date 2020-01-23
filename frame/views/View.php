@@ -1,6 +1,6 @@
 <?php namespace frame\views;
 
-use frame\Core;
+use frame\core\Core;
 
 function __show(View $self) 
 {

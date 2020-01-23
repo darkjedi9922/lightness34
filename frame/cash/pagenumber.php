@@ -1,6 +1,6 @@
 <?php namespace frame\cash;
 
-use frame\Core;
+use frame\core\Core;
 use frame\tools\Cash;
 
 /**

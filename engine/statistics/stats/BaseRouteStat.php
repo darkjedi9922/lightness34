@@ -1,7 +1,7 @@
 <?php namespace engine\statistics\stats;
 
 use frame\database\Identity;
-use frame\Core;
+use frame\core\Core;
 
 abstract class BaseRouteStat extends Identity
 {

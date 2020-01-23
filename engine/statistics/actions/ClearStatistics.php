@@ -2,7 +2,7 @@
 
 use frame\actions\ActionBody;
 use frame\tools\Init;
-use frame\Core;
+use frame\core\Core;
 use engine\statistics\BaseStatisticsSubModule;
 
 class ClearStatistics extends ActionBody

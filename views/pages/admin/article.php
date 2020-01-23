@@ -6,7 +6,7 @@ use engine\users\User;
 use frame\cash\pagenumber;
 use engine\users\cash\user_me;
 use engine\users\Group;
-use frame\Core;
+use frame\core\Core;
 use frame\views\Pager;
 use frame\actions\ViewAction;
 use engine\comments\actions\AddComment;

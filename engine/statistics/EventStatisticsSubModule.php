@@ -1,6 +1,6 @@
 <?php namespace engine\statistics;
 
-use frame\Core;
+use frame\core\Core;
 use engine\statistics\stats\EventRouteStat;
 use engine\statistics\stats\EventEmitStat;
 use engine\statistics\stats\EventSubscriberStat;

@@ -13,7 +13,7 @@ use frame\views\Layouted;
 use frame\views\View;
 use frame\cash\config;
 use frame\cash\database;
-use frame\Core;
+use frame\core\Core;
 
 class ViewStatisticsSubModule extends BaseStatisticsSubModule
 {

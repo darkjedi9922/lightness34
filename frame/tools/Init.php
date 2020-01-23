@@ -3,7 +3,7 @@
 use engine\users\cash\my_rights;
 use frame\errors\HttpError;
 use frame\auth\Auth;
-use frame\Core;
+use frame\core\Core;
 use engine\users\cash\user_me;
 
 class Init

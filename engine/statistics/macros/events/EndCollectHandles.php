@@ -2,7 +2,7 @@
 
 use engine\statistics\macros\BaseStatCollector;
 use engine\statistics\stats\TimeStat;
-use frame\Core;
+use frame\core\Core;
 
 class EndCollectHandles extends BaseStatCollector
 {

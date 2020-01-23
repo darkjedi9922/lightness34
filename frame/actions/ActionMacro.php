@@ -1,6 +1,6 @@
 <?php namespace frame\actions;
 
-use frame\Core;
+use frame\core\Core;
 use frame\actions\Action;
 use frame\actions\ActionRouter;
 use frame\actions\ActionTransmitter;

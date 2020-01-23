@@ -1,4 +1,4 @@
-<?php namespace frame;
+<?php namespace frame\core;
 
 use frame\route\Router;
 use frame\views\Page;
@@ -197,7 +197,9 @@ class Core
         register_shutdown_function(function () {
             $e = error_get_last();
             if ($e && in_array($e['type'], ErrorException::FATAL_ERRORS)) {
-                $this->handleError(new ErrorException($e['type'], $e['message'], $e['file'], $e['line']));
+                $this->handleError(new ErrorException(
+                    $e['type'], $e['message'], $e['file'], $e['line'])
+                );
             }
         });
         // exceptions
@@ -217,7 +219,8 @@ class Core
 
         if (!$this->events->isBlocked()) $this->emit(self::EVENT_APP_ERROR, $e);
 
-        if (isset($this->handlers[get_class($e)])) (new $this->handlers[get_class($e)])->handle($e);
+        if (isset($this->handlers[get_class($e)])) 
+            (new $this->handlers[get_class($e)])->handle($e);
         else if ($this->defaultHandler) (new $this->defaultHandler)->handle($e);
         else throw $e;
     }
