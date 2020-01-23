@@ -7,6 +7,8 @@ use engine\users\cash\user_me;
 use frame\tools\Init;
 use frame\lists\base\FileLineList;
 use frame\tools\files\File;
+use frame\tools\JsonEncoder;
+use frame\tools\Logger;
 use frame\tools\trackers\read\FileReadTracker;
 
 Init::accessRight('admin', 'see-logs');
@@ -24,7 +26,28 @@ $rights = my_rights::get('admin');
 $action = new ViewAction(EmptyLogAction::class, ['file' => 'log.txt']);
 
 $tracker->setReaded();
+
+$recordsProps = [];
+$records = (new Logger('log.txt'))->read();
+foreach ($records as $record) {
+    $isCli = $record['ip'] === 'CLI';
+    $recordsProps[] = [
+        'type' => $record['type'],
+        'ip' => !$isCli ? $record['ip'] : null,
+        'cli' => $isCli,
+        'date' => $record['date'],
+        'message' => $record['message']
+    ];
+}
+
+$logPageProps = [
+    'records' => $recordsProps,
+    'clearLogUrl' => $action->getUrl()
+];
+$logPageProps = JsonEncoder::forHtmlAttribute($logPageProps);
 ?>
+
+<div id="log-page" data-props="<?= $logPageProps ?>"></div>
 
 <div class="box">
     <div style="float:left">

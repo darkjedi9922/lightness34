@@ -1,0 +1,22 @@
+.log {
+    &__type {
+        width: 6rem;
+        
+        .mark2__icon:before {
+            margin-left: 0;
+            width: auto;
+        }
+    }
+    &__message {
+        margin: 0;
+        white-space: pre-line;
+
+        &--header {
+            font-weight: bold;
+            margin: 0;
+        }
+    }
+    &__date {
+        @extend .routes__duration;
+    }
+}
