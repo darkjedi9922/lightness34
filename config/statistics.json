@@ -1,4 +1,5 @@
 {
+    "enabled": true,
     "routes.history.limit": 20,
     "actions.history.limit": 20,
     "events.history.limit": 20,

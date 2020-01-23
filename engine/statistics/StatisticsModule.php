@@ -26,10 +26,12 @@ class StatisticsModule extends Module
             Core::$app->setModule($submodule);
         }
 
-        $router = Core::$app->router;
         $config = config::get('statistics');
-        if ($router->isInAnyNamespace($config->ignoreRouteNamespaces)) return;
-        $this->setupEventHandlers($submodules);
+        if ($config->enabled) {
+            $router = Core::$app->router;
+            if ($router->isInAnyNamespace($config->ignoreRouteNamespaces)) return;
+            $this->setupEventHandlers($submodules);
+        }
     }
 
     public function createRightsDescription(): ?RightsDesc
