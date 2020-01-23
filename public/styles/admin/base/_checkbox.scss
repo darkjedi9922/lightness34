@@ -1,0 +1,34 @@
+.checkbox {
+    &__input {
+        display: none;
+    }
+
+    &__box {
+        display: inline-block;
+        text-align: center;
+        width: 20px;
+        height: 20px;
+        background: #1e4469;
+        color: #c4c5c6;
+        margin-right: 5px;
+        border-radius: 7px;
+    }
+
+    &__icon {
+        font-size: 1rem;
+        
+        &:before {
+            margin: 0;
+        }
+    }
+
+    &__input:not(:checked) + &__box &__icon {
+        // Переключение display почему-то заставляет все вокруг всего
+        // компонента сдвигаться. 
+        opacity: 0;
+    }
+
+    &:hover {
+        cursor: pointer;
+    }
+}

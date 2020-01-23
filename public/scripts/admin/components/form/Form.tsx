@@ -7,6 +7,7 @@ import FormTextInput from './FormTextInput';
 import FormRadio from './FormRadio';
 import FormTextarea from './FormTextarea';
 import FormFileInput from './FormFileInput';
+import FormCheckbox from './FormCheckbox';
 
 export interface Field {
     type: string, // it is defined by descendants
@@ -20,6 +21,12 @@ export interface TextField extends Field
     type: 'text'|'password'|'textarea'
     placeholder?: string,
     defaultValue?: string,
+}
+
+export interface CheckboxField extends Field {
+    type: 'checkbox',
+    label?: string,
+    defaultChecked?: boolean
 }
 
 export interface RadioField extends Field {
@@ -83,6 +90,9 @@ class Form extends React.Component<FormProps> {
                             }
                             {field.type === 'textarea' &&
                                 <FormTextarea field={field as TextField} />
+                            }
+                            {field.type === 'checkbox' &&
+                                <FormCheckbox field={field as CheckboxField} />
                             }
                             {field.type === 'radio' &&
                                 <FormRadio field={field as RadioField} />
