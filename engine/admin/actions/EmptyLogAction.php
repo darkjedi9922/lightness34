@@ -1,9 +1,8 @@
 <?php namespace engine\admin\actions;
 
-use engine\users\cash\user_me;
 use frame\tools\Init;
 use frame\actions\ActionBody;
-use frame\tools\trackers\read\FileReadTracker;
+use frame\tools\trackers\read\ReadLimitedProgressTracker;
 
 /**
  * Права: очистка лога.
@@ -31,8 +30,8 @@ class EmptyLogAction extends ActionBody
     {
         if (file_exists($this->file)) {
             file_put_contents($this->file, '');
-            $tracker = new FileReadTracker($this->file, user_me::get()->id);
-            $tracker->setUnreadedForAll();
+            $tracker = new ReadLimitedProgressTracker('log', crc32($this->file), 0);
+            $tracker->reset();
         }
     }
 }

@@ -1,17 +1,19 @@
 <?php /** @var frame\views\Block $self */
 
-use frame\tools\trackers\read\FileReadTracker;
 use engine\articles\Article;
 use engine\users\cash\my_group;
 use engine\users\cash\user_me;
 use engine\messages\Message;
+use frame\tools\Logger;
+use frame\tools\trackers\read\ReadLimitedProgressTracker as Tracker;
 
 $me = user_me::get();
 $group = my_group::get();
 $unreadedMessages = Message::countUnreaded($me->id);
 $unreadedArticles = Article::countUnreaded($me->id);
-$logTracker = new FileReadTracker('log.txt', $me->id);
-$logUnreadedLines = $logTracker->countNewLines();
+$logger = new Logger('log.txt');
+$logTracker = new Tracker('log', crc32('log.txt'), count($logger->read()), $me->id);
+$logNewRecords = $logTracker->loadUnreaded();
 ?>
 
 <div class="head-bar__left">
@@ -22,8 +24,8 @@ $logUnreadedLines = $logTracker->countNewLines();
         <?php if ($unreadedArticles !== 0) : ?>
             <a href="/admin/new/articles"><i class="fontello icon-rss"></i> <?= $unreadedArticles ?></a>
         <?php endif ?>
-        <?php if ($logUnreadedLines !== 0) : ?>
-            <a href="/admin/log"><i class="fontello icon-attention"></i> <?= $logUnreadedLines ?></a>
+        <?php if ($logNewRecords !== 0) : ?>
+            <a href="/admin/log"><i class="fontello icon-attention"></i> <?= $logNewRecords ?></a>
         <?php endif ?>
     </div>
     <?php if ($group->id !== $group::GUEST_ID) : ?>

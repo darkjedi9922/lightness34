@@ -1,4 +1,22 @@
 .log {
+    &__new-count {
+        color: $clr-grey;
+        font-family: $global-font;
+        font-size: 1.5rem;
+        font-weight: bold;
+        display: inline-flex;
+        align-items: center;
+        margin-left: 0.2rem;
+
+        * {
+            line-height: 0;
+        }
+
+        &--new {
+            color: $box-yellow;
+        }
+    }
+
     &__type {
         width: 6rem;
         
@@ -7,6 +25,7 @@
             width: auto;
         }
     }
+
     &__message {
         margin: 0;
         white-space: pre-line;
@@ -16,6 +35,7 @@
             margin: 0;
         }
     }
+
     &__date {
         @extend .routes__duration;
     }
