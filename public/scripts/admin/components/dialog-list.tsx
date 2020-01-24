@@ -60,7 +60,12 @@ class DialogList extends React.Component<DialogListProps> {
                 </div>
                 <div className="box box--table">
                     <Table
-                        headers={['With user', 'Last message', 'Status', 'Last message date']}
+                        headers={[
+                            'User',
+                            'Last message',
+                            'Status',
+                            'Last message date'
+                        ]}
                         items={this.props.list.map((dialog) => ({
                             cells: [
                                 <a
@@ -90,7 +95,27 @@ class DialogList extends React.Component<DialogListProps> {
                                 <span className="table__date">
                                     {dialog.lastMessage.date}
                                 </span>
-                            ]
+                            ],
+                            details: [{
+                                content: (
+                                    <div className="box-actions dialogs__actions">
+                                        <a
+                                            href=""
+                                            className="box-actions__item"
+                                        >
+                                            <i className="box-actions__icon icon-email"></i>
+                                            Перейти к сообщениям
+                                        </a>
+                                        <a
+                                            href=""
+                                            className="box-actions__item box-actions__item--red"
+                                        >
+                                            <i className="box-actions__icon icon-trash"></i>
+                                            Очистить диалог
+                                        </a>
+                                    </div>
+                                )
+                            }]
                         }))}
                     />
                 </div>
