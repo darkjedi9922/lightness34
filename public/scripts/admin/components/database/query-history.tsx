@@ -1,6 +1,6 @@
 import React from 'react'
-import Table from '../table';
 import { TableItem, ItemDetails } from '../table/item';
+import Table from '../table/table';
 import Parameter from '../parameter';
 import RouteRequest from '../routes/request';
 import Status, { Type } from '../status';

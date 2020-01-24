@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import Item, { TableItem } from './table/item';
+import Item, { TableItem } from './item';
 
 interface TableProps {
     className?: string

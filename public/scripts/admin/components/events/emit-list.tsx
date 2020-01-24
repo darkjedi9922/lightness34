@@ -1,5 +1,5 @@
 import React from 'react';
-import Table from '../table';
+import Table from '../table/table';
 import { Handle, Emit, Subscriber } from 'scripts/admin/structures';
 import EmitParameters from './emit-list/emit-parameters';
 import ExecutedEmitSubscribers, { Execution } from './emit-list/executed-subscribers';

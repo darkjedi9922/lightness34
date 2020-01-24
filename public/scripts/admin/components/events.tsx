@@ -1,5 +1,5 @@
 import React from 'react';
-import Table from './table';
+import Table from './table/table';
 import SubscriberList from './events/subscriber-list';
 import RouteRequest from './routes/request';
 import EmitList from './events/emit-list';

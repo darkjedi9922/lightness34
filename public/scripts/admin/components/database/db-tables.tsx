@@ -1,5 +1,5 @@
 import React from 'react';
-import Table from '../table';
+import Table from '../table/table';
 import { TableItem } from '../table/item';
 import { isNil } from 'lodash';
 import Status, { Type } from '../status';

@@ -1,6 +1,6 @@
 import React from 'react'
-import Table from '../table'
 import { TableItem, ItemDetails } from '../table/item'
+import Table from '../table/table'
 import { isNil } from 'lodash'
 import Parameter from '../parameter'
 import Status, { Type } from '../status'

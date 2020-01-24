@@ -1,6 +1,6 @@
 import React from 'react';
 import Breadcrumbs from '../common/Breadcrumbs';
-import Table from '../table';
+import Table from '../table/table';
 import Status, { Type } from '../status';
 import Mark from '../mark';
 import { isNil } from 'lodash';
