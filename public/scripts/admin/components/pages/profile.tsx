@@ -122,30 +122,30 @@ class ProfilePage extends React.Component<ProfileProps> {
                             />
                         </div>
                     </div>
-                    <div className="profile__actions">
+                    <div className="box-actions">
                         {this.props.rights.canChangeGroup &&
                             <a
                                 href={`/admin/users/change/group?id=${this.props.user.id}`}
-                                className="profile__action"
+                                className="box-actions__item"
                             >
-                                <i className="button__icon icon-group"></i>
+                                <i className="box-actions__icon icon-group"></i>
                                 Изменить группу
                             </a>
                         }
                         {this.props.rights.canEdit && <>
                             <a
                                 href={`/admin/users/edit/profile?id=${this.props.user.id}`}
-                                className="profile__action"
+                                className="box-actions__item"
                             >
-                                <i className="button__icon icon-pencil"></i>
+                                <i className="box-actions__icon icon-pencil"></i>
                                 Редактировать профиль
                             </a>
                             {this.props.user.hasAvatar &&
                                 <a
                                     href={this.props.actions.deleteAvatarUrl}
-                                    className="profile__action profile__action--red"
+                                    className="box-actions__item box-actions__item--red"
                                 >
-                                    <i className="button__icon icon-trash"></i>
+                                    <i className="box-actions__icon icon-trash"></i>
                                     Удалить аватар
                                 </a>
                             }

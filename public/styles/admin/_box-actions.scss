@@ -1,0 +1,50 @@
+.box-actions {
+    & > * {
+        margin-right: 0.5rem;
+        margin-top: 0.5rem;
+    }
+
+    &__icon {
+        @extend .button__icon;
+        line-height: 0;
+        &:before {
+            line-height: 0;
+        }
+    }
+
+    &__item {
+        border-width: 2px;
+        border-style: solid;
+        color: $box-blue;
+        text-decoration: none;
+        padding: 0.2rem 0.4rem;
+        border-radius: 1rem;
+        font-weight: bold;
+        font-family: $global-font;
+        font-size: 1rem;
+        display: inline-flex;
+        align-items: center;
+        transition: 0.1s;
+
+        &:hover {
+            color: white;
+            background: $box-blue;
+            border-color: $box-blue;
+        }
+
+        &--red {
+            color: $box-red;
+            &:hover {
+                background: $box-red;
+                border-color: $box-red;
+            }
+        }
+        &--yellow {
+            color: $box-yellow;
+            &:hover {
+                background: $box-yellow;
+                border-color: $box-yellow;
+            }
+        }
+    }
+}
