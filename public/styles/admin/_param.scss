@@ -13,9 +13,16 @@
     }
 
     &__name {
-        &:after {
-            content: ' => ';
-            color: $clr-grey;
+        &--strong {
+            font-weight: bold;
+        }
+    }
+
+    &__divisor {
+        color: $clr-grey;
+        
+        &--strong-name {
+            font-weight: bold;
         }
     }
 

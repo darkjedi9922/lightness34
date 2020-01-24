@@ -61,11 +61,72 @@ class ProfilePage extends React.Component<ProfileProps> {
                             />
                         }
                     </div>
-                    <div className="actions">
+                </div>
+                <div className="box">
+                    <div className="profile__box">
+                        <img src={this.props.user.avatarUrl} className="profile__avatar" />
+                        <div className="profile__data">
+                            <Parameter
+                                name="Логин"
+                                value={this.props.user.login}
+                                nameIsStrong={true}
+                                divisor=": "
+                            />
+                            <Parameter
+                                name="Имя"
+                                value={this.props.user.name}
+                                nameIsStrong={true}
+                                divisor=": "
+                            />
+                            <Parameter
+                                name="Фамилия"
+                                value={this.props.user.surname}
+                                nameIsStrong={true}
+                                divisor=": "
+                            />
+                            <Parameter
+                                name="Пол"
+                                value={this.props.user.gender}
+                                nameIsStrong={true}
+                                divisor=": "
+                            />
+                            <Parameter
+                                name="Email"
+                                value={this.props.user.email}
+                                nameIsStrong={true}
+                                divisor=": "
+                            />
+                            <Parameter
+                                name="Дата регистрации"
+                                value={this.props.user.registrationDate}
+                                nameIsStrong={true}
+                                divisor=": "
+                            />
+                            <Parameter
+                                name="Последний раз онлайн"
+                                value={this.props.user.lastOnlineTime || 'Никогда'}
+                                nameIsStrong={true}
+                                divisor=": "
+                            />
+                            <Parameter
+                                name="Последнее устройство"
+                                value={this.props.user.lastUserAgent}
+                                nameIsStrong={true}
+                                divisor=": "
+                            />
+                            <Parameter
+                                name="Группа"
+                                value={this.props.user.group}
+                                nameIsStrong={true}
+                                divisor=": "
+                            />
+                        </div>
+                    </div>
+                    <div className="profile__actions">
                         {this.props.rights.canChangeGroup &&
                             <a
                                 href={`/admin/users/change/group?id=${this.props.user.id}`}
-                                className="button actions__item"
+                                className="profile__action"
                             >
                                 <i className="button__icon icon-group"></i>
                                 Изменить группу
@@ -74,60 +135,21 @@ class ProfilePage extends React.Component<ProfileProps> {
                         {this.props.rights.canEdit && <>
                             <a
                                 href={`/admin/users/edit/profile?id=${this.props.user.id}`}
-                                className="button actions__item"
+                                className="profile__action"
                             >
                                 <i className="button__icon icon-pencil"></i>
-                                Редактировать
+                                Редактировать профиль
                             </a>
                             {this.props.user.hasAvatar &&
                                 <a
-                                    className="button button--red actions__item"
                                     href={this.props.actions.deleteAvatarUrl}
+                                    className="profile__action profile__action--red"
                                 >
                                     <i className="button__icon icon-trash"></i>
                                     Удалить аватар
                                 </a>
                             }
                         </>}
-                    </div>
-                </div>
-                <div className="box profile__box">
-                    <img src={this.props.user.avatarUrl} className="profile__avatar"/>
-                    <div className="profile__data">
-                        <Parameter 
-                            name="Логин"
-                            value={this.props.user.login}
-                        />
-                        <Parameter
-                            name="Имя"
-                            value={this.props.user.name}
-                        />
-                        <Parameter
-                            name="Фамилия"
-                            value={this.props.user.surname}
-                        />
-                        <Parameter 
-                            name="Пол"
-                            value={this.props.user.gender}
-                        />
-                        <Parameter
-                            name="Email"
-                            value={this.props.user.email}
-                        />
-                        <Parameter
-                            name="Дата регистрации"
-                            value={this.props.user.registrationDate}
-                        />
-                        <Parameter
-                            name="Последний раз онлайн"
-                            value={this.props.user.lastOnlineTime || 'Никогда'}/>
-                        <Parameter name="Последнее устройство"
-                            value={this.props.user.lastUserAgent}
-                        />
-                        <Parameter
-                            name="Группа"
-                            value={this.props.user.group}
-                        />
                     </div>
                 </div>
             </div>

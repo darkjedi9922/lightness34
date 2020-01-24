@@ -6,7 +6,9 @@ interface Props {
     number?: number,
     name?: string,
     value: string,
-    type?: string
+    type?: string,
+    nameIsStrong?: boolean,
+    divisor?: string
 }
 
 class Parameter extends React.Component<Props> {
@@ -15,21 +17,27 @@ class Parameter extends React.Component<Props> {
         const hasName = !isNil(this.props.name);
         return <div className="param">
             {hasNumber && <span className="param__number">{this.props.number}</span>}
-            {hasName && <span className="param__name">{this.props.name}</span>}
+            {hasName && <>
+                <span className={classNames(
+                    "param__name",
+                    {"param__name--strong": this.props.nameIsStrong}
+                )}>{this.props.name}</span>
+                <span className={classNames(
+                    "param__divisor",
+                    {"param__name--strong-name": this.props.nameIsStrong}
+                )}>{!isNil(this.props.divisor)
+                    ? this.props.divisor
+                    : ' => '
+                }</span>
+            </>}
             {!isNil(this.props.type) &&
                 <span className="param__type">{this.props.type}</span>
             }
-            <span className={this.getParamValueClasses()}>{
-                this.props.value !== '' ? this.props.value : 'empty'
-            }</span>
+            <span className={classNames(
+                'param__value',
+                { 'param__value--empty': this.props.value === '' }
+            )}>{this.props.value !== '' ? this.props.value : 'empty'}</span>
         </div>
-    }
-
-    private getParamValueClasses(): string {
-        return classNames(
-            'param__value', 
-            {'param__value--empty': this.props.value === ''}
-        )
     }
 }
 
