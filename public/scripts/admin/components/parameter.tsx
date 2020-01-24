@@ -19,7 +19,9 @@ class Parameter extends React.Component<Props> {
             {!isNil(this.props.type) &&
                 <span className="param__type">{this.props.type}</span>
             }
-            <span className={this.getParamValueClasses()}>{this.props.value}</span>
+            <span className={this.getParamValueClasses()}>{
+                this.props.value !== '' ? this.props.value : 'empty'
+            }</span>
         </div>
     }
 
