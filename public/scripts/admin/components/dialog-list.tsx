@@ -2,6 +2,8 @@ import React from 'react';
 import MessageList from './message-list';
 import { decodeHTML } from 'buk';
 import Breadcrumbs from './common/Breadcrumbs';
+import Table from './table/table';
+import Mark from './mark';
 
 interface Message {
     text: string,
@@ -47,55 +49,53 @@ class DialogList extends React.Component<DialogListProps> {
 
     public render(): React.ReactNode {
         return (
-        <div className="content__row">
-            <div className="content__column">
+            <div className="dialogs">
                 <div className="content__header">
                     <Breadcrumbs items={[{
                         'name': 'Профиль',
                         'link': `/admin/users/profile/${this.props.userMe.login}`
                     }, {
-                        'name': 'Диалоги'
+                        'name': `Диалоги (${this.props.list.length})`
                     }]} />
                 </div>
-                <div className="box">
-                    {this.props.countAll === 0 &&
-                        <span className="warning">Сообщений пока нет</span>
-                    }
-                    <div className="dialogs" ref={this.dialogsRef}>
-                        <div className="dialogs__list">
-                            {this.props.list.map((dialog, index) => 
-                            <div key={index} className="dialogs__item dialog" 
-                                onClick={() => this.handleDialogClick(dialog.whoId)}
-                            >
-                                <div className="dialog__header">
-                                    <span className="dialog__date">{dialog.lastMessage.date}</span>
-                                    <span className="dialog__text">{decodeHTML(dialog.lastMessage.text)}</span>
-                                </div>
-                                <div className="dialog__info">
-                                    <div className={"dialog__status" + 
-                                        (dialog.newCount !== 0 ? " dialog__status--new" : 
-                                        (dialog.activeCount != 0 ? " dialog__status--active" :
-                                        ""))}
-                                    >
-                                        <i className={"dialog__status-icon fontello" + 
-                                            (dialog.newCount !== 0 ? " icon-email" : " icon-ok")}
-                                        ></i>
-                                        <span className="dialog__status-text">
-                                            {dialog.newCount !== 0 ? "Новых: " + dialog.newCount : 
-                                                (dialog.activeCount != 0 ? "Непрочитанных: " + dialog.activeCount :
-                                                "Все сообщения прочитаны")
-                                            }
-                                        </span>
-                                    </div>
-                                    <span className="dialog__who">{dialog.whoLogin}</span>
-                                </div>
-                            </div>)}
-                        </div>
-                    </div>
+                <div className="box box--table">
+                    <Table
+                        headers={['With user', 'Last message', 'Status', 'Last message date']}
+                        items={this.props.list.map((dialog) => ({
+                            cells: [
+                                <a
+                                    href={`/admin/users/profile/${dialog.whoLogin}`}
+                                    className="table__link"
+                                >{dialog.whoLogin}</a>,
+                                decodeHTML(dialog.lastMessage.text),
+                                dialog.newCount !== 0
+                                    ? <Mark
+                                        color="red"
+                                        label={`${dialog.newCount} new`}
+                                        className="dialogs__status"
+                                    />
+                                    : (
+                                        dialog.activeCount !== 0
+                                            ? <Mark
+                                                color="green"
+                                                label={`${dialog.activeCount} sent`}
+                                                className="dialogs__status"
+                                            />
+                                            : <Mark
+                                                color="grey"
+                                                label="Readed"
+                                                className="dialogs__status"
+                                            />
+                                    ),
+                                <span className="table__date">
+                                    {dialog.lastMessage.date}
+                                </span>
+                            ]
+                        }))}
+                    />
                 </div>
             </div>
-            <MessageList ref={this.messageListRef} />
-        </div>);
+        );
     }
 
     private handleDialogClick(withWhoId: number) {
