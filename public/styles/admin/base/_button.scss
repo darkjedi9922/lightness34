@@ -13,6 +13,12 @@ button, .button, .button-hovered {
     cursor:default;
     outline: none;
 
+    &__icon:before {
+        margin-left: 0;
+        margin-right: 0.5rem;
+        width: auto;
+    }
+
     &:hover {
         background: none;
         color: $clr-color;

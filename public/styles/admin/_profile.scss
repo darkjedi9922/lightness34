@@ -1,0 +1,17 @@
+.profile {
+    font-size: 1.1rem;
+    font-family: $global-font;
+
+    &__status {
+        margin-left: 0.5rem;
+    }
+
+    &__box {
+        display: flex;
+    }
+
+    &__avatar {
+        height: 14rem;
+        margin-right: 0.5rem;
+    }
+}

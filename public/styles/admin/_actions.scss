@@ -1,8 +1,6 @@
 @import './box';
 
 .actions {
-    @extend .box;
-
     display: flex;
     flex-grow: 0 !important;
     margin: 0 !important;
