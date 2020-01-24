@@ -35,7 +35,7 @@ $pageProps = [
         'gender' => $gender->name,
         'email' => $profile->email,
         'group' => $group->name,
-        'registrationDate' => $profile->registration_date,
+        'registrationDate' => date('d.m.Y H:i', $profile->registration_date),
         'lastOnlineTime' => $profile->last_online_time
             ? date('d.m.Y H:i', $profile->last_online_time)
             : null,
@@ -50,7 +50,9 @@ $pageProps = [
         'canChangeGroup' => $me->group_id === Group::ROOT_ID 
             && $group->id !== Group::ROOT_ID
     ],
-    'actions' => $deleteAvatar->getUrl()
+    'actions' => [
+        'deleteAvatarUrl' => $deleteAvatar->getUrl()
+    ]
 ];
 $pageProps = JsonEncoder::forHtmlAttribute($pageProps);
 ?>
