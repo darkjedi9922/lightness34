@@ -4,9 +4,9 @@
 }
 
 /* подключение fontello */
-@font-face {font-family: "fontello";src: url("/public/fonts/fontello.ttf");font-style: normal;font-weight: normal;}
+@font-face {font-family: "fontello";src: url("/public/fonts/fontello/font/fontello.ttf");font-style: normal;font-weight: normal;}
 .fontello{font-family:fontello;font-style:normal}
-.icon-ok:before { content: '\e80b'; } /* '' */
+.icon-ok:before { content: '\e808'; } /* '' */
 
 html {
     font-size: 20px;

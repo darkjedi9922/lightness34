@@ -28,7 +28,9 @@ foreach ($users as $user) {
 
 <div class="content__header">
     <div class="breadcrumbs">
-        <span class="breadcrumbs__item breadcrumbs__item--current">Пользователи</span>
+        <span class="breadcrumbs__item breadcrumbs__item--current">
+            Пользователи (<?= $users->countOnPage() ?>)
+        </span>
     </div>
     <div class="actions">
         <div class="actions__item">
