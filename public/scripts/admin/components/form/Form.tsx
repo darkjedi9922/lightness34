@@ -62,7 +62,9 @@ class Form extends React.Component<FormProps> {
     }
 
     public componentDidMount(): void {
-        this.maximizeKeysWidth();
+        window.addEventListener('load', () => {
+            this.maximizeKeysWidth();
+        });
     }
 
     public render(): React.ReactNode {
