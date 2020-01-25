@@ -32,13 +32,17 @@ interface APINewMessageResult {
     }
 }
 
+interface MessageListProps {
+    userId: number
+}
+
 interface MessageListState {
     users: { [id: number]: User },
     list: Message[],
     loadedPages: number
 }
 
-class MessageList extends React.Component<{}, MessageListState> {
+class MessageList extends React.Component<MessageListProps, MessageListState> {
     private withWhoId: number;
     private addMessageUrl: string;
     
@@ -55,7 +59,7 @@ class MessageList extends React.Component<{}, MessageListState> {
     }
 
     public componentDidMount() {
-        this.close();
+        this.open(this.props.userId);
     }
 
     public open(withWhoId: number) {
@@ -73,14 +77,8 @@ class MessageList extends React.Component<{}, MessageListState> {
         this.loadDialogMessages(this.state.loadedPages + 1);
     }
 
-    public close() {
-        const rootEl = $(ReactDOM.findDOMNode(this) as HTMLDivElement);
-        rootEl.hide();
-    }
-
     public render(): React.ReactNode {
-        return (
-        <div className="content__column">
+        return (<>
             <span className="content__title">Новое сообщение</span>
             <div className="box">
                 <Form 
@@ -139,7 +137,7 @@ class MessageList extends React.Component<{}, MessageListState> {
                     </div>
                 </>
             }
-        </div>);
+        </>);
     }
 
     private handleSendClick(event: React.FormEvent<HTMLFormElement>): void {

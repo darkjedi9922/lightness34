@@ -33,13 +33,10 @@ interface DialogListProps {
 }
 
 class DialogList extends React.Component<DialogListProps> {
-    private messageListRef = React.createRef<MessageList>();
     private dialogsRef = React.createRef<HTMLDivElement>();
 
     constructor(props: DialogListProps) {
         super(props);
-
-        this.handleDialogClick = this.handleDialogClick.bind(this);
     }
 
     public componentDidMount() {
@@ -106,7 +103,7 @@ class DialogList extends React.Component<DialogListProps> {
                                 content: (
                                     <div className="box-actions dialogs__actions">
                                         <a
-                                            href=""
+                                            href={`/admin/profile/dialog?uid=${dialog.whoId}`}
                                             className="box-actions__item"
                                         >
                                             <i className="box-actions__icon icon-email"></i>
@@ -127,10 +124,6 @@ class DialogList extends React.Component<DialogListProps> {
                 </div>
             </div>
         );
-    }
-
-    private handleDialogClick(withWhoId: number) {
-        this.messageListRef.current.open(withWhoId);
     }
 }
 

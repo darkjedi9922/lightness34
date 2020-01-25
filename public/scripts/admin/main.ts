@@ -4,6 +4,7 @@ import DatabaseTables from './components/database/db-tables';
 import ViewsHistory from './components/views/views-history';
 import CashUseHistory from './components/cash/use-history';
 import ArticlesTable from './components/articles-table';
+import MessagesPage from './components/pages/messages';
 import ProfilePage from './components/pages/profile';
 import ModulesList from './components/modules/list';
 import DialogList from './components/dialog-list';
@@ -16,6 +17,7 @@ import Menu from './components/menu';
 
 setupReactComponent('cash-use-history', CashUseHistory);
 setupReactComponent('views-stat-page', ViewsHistory);
+setupReactComponent('messages-page', MessagesPage);
 setupReactComponent('query-history', QueryHistory);
 setupReactComponent('article-comments', Comments);
 setupReactComponent('profile-page', ProfilePage);
