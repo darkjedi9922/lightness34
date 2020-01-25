@@ -68,10 +68,16 @@ class DialogList extends React.Component<DialogListProps> {
                         ]}
                         items={this.props.list.map((dialog) => ({
                             cells: [
-                                <a
-                                    href={`/admin/users/profile/${dialog.whoLogin}`}
-                                    className="table__link"
-                                >{dialog.whoLogin}</a>,
+                                <div className="dialogs__user-cell">
+                                    <img
+                                        className="dialogs__avatar"
+                                        src={dialog.whoAvatar}
+                                    />
+                                    <a
+                                        href={`/admin/users/profile/${dialog.whoLogin}`}
+                                        className="table__link"
+                                    >{dialog.whoLogin}</a>
+                                </div>,
                                 decodeHTML(dialog.lastMessage.text),
                                 dialog.newCount !== 0
                                     ? <Mark

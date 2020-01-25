@@ -49,7 +49,7 @@ foreach ($dialogs as $dialog) {
         'whoAvatar' => '/' . $who->getAvatarUrl(),
         'whoLogin' => $who->login,
         'lastMessage' => [
-            'text' => shorten($last->loadText(), 80, '...'),
+            'text' => shorten($last->loadText(), 50, '...'),
             'date' => date('d.m.Y H:i', $last->date)
         ]
     ];

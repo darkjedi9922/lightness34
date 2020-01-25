@@ -1,4 +1,15 @@
 .dialogs {
+    &__user-cell {
+        display: flex;
+        align-items: center;
+    }
+    
+    &__avatar {
+        height: 2rem;
+        border-radius: 10rem;
+        margin-right: 0.5rem;
+    }
+
     &__status {
         width: 5rem;
     }
