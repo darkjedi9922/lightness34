@@ -1,6 +1,6 @@
 import React from 'react'
-import { TableItem, ItemDetails } from '../table/item';
 import Table from '../table/table';
+import { TableItem } from '../table/item';
 import Parameter from '../parameter';
 import RouteRequest from '../routes/request';
 import Status, { Type } from '../status';
@@ -35,7 +35,7 @@ class QueryHistory extends React.Component<QueryHistoryProps> {
             else
                 status = <span className="mark2 mark2--green">All OK</span>;
 
-            const details: ItemDetails[] = [];
+            const details = [];
             if (route.queries.length) {
                 const queryList = (
                     <>

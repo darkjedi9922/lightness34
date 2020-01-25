@@ -1,6 +1,6 @@
 import React from 'react'
-import { TableItem, ItemDetails } from '../table/item'
 import Table from '../table/table'
+import { TableItem } from '../table/item'
 import { isNil } from 'lodash'
 import Parameter from '../parameter'
 import Status, { Type } from '../status'
@@ -31,7 +31,7 @@ class ModulesList extends React.Component<ModulesListProps> {
     public render(): React.ReactNode {
         const items: TableItem[] = [];
         this.props.list.map((module) => {
-            const details: ItemDetails[] = [];
+            const details = [];
             const hasRights = !isNil(module.rights) && module.rights.list.length;
             details.push({
                 title: 'Rights',

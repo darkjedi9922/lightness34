@@ -4,8 +4,8 @@ import Table from '../table/table';
 import RouteRequest from '../routes/request';
 import { isNil } from 'lodash';
 import Status, { Type } from '../status';
-import { ItemDetails } from '../table/item';
 import Parameter from '../parameter';
+import { DetailsProps } from '../details';
 
 interface MetaData {
     name: string,
@@ -146,7 +146,7 @@ class ViewsHistory extends React.Component<ViewsHistoryProps> {
                                                 </span>
                                             ],
                                             details: (() => {
-                                                const details: ItemDetails[] = [{
+                                                const details: DetailsProps[] = [{
                                                     title: 'File',
                                                     content: view.file
                                                 }, {

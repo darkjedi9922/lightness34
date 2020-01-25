@@ -1,14 +1,10 @@
 import React from 'react'
 import classNames from 'classnames'
-
-export interface ItemDetails {
-    title?: string,
-    content: any
-}
+import Details, { DetailsProps } from '../details';
 
 export interface TableItem {
     cells: any[]
-    details?: ItemDetails[]
+    details?: DetailsProps[]
 }
 
 interface Props {
@@ -68,16 +64,11 @@ class Item extends React.Component<Props, State> {
                             }}
                         >
                             {this.props.item.details.map((details, index) =>
-                                <div key={index} className="details">
-                                    {details.title &&
-                                        <span className="details__header">
-                                            {details.title}
-                                        </span>
-                                    }
-                                    <div className="details__content">
-                                        {details.content}
-                                    </div>
-                                </div>
+                                <Details
+                                    key={index}
+                                    title={details.title}
+                                    content={details.content}
+                                />
                             )}
                         </div>
                     </td>

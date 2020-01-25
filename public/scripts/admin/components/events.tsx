@@ -4,7 +4,7 @@ import SubscriberList from './events/subscriber-list';
 import RouteRequest from './routes/request';
 import EmitList from './events/emit-list';
 import { Subscriber, Emit, Handle } from '../structures';
-import { TableItem, ItemDetails } from './table/item';
+import { TableItem } from './table/item';
 
 interface Route {
     route: string,
@@ -36,7 +36,7 @@ class Events extends React.Component<EventsProps> {
                     route.time
                 ];
                 
-                const details: ItemDetails[] = [{
+                const details = [{
                     title: 'Subscribers',
                     content: <SubscriberList 
                         subscribers={route.subscribers}

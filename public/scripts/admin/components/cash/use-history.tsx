@@ -1,6 +1,6 @@
 import React from 'react';
-import { TableItem, ItemDetails } from '../table/item';
 import Table from '../table/table';
+import { TableItem } from '../table/item';
 import { isNil } from 'lodash';
 import Status, { Type } from '../status';
 import RouteRequest from '../routes/request';
@@ -97,12 +97,12 @@ class CashUseHistory extends React.Component<CashUseHistoryProps> {
                                                             message={cash.initError}
                                                         />
                                                     )
-                                                } as ItemDetails]
+                                                }]
                                             })()
                                         }))}
                                     />
                                 )
-                            } as ItemDetails]
+                            }]
                         })()
                     }) as TableItem)}
                 />
