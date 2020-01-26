@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom'
 import $ from 'jquery'
 import { encodeHTML, decodeHTML } from 'buk';
 import Form, { TextField } from './form/Form';
+import Table from './table/table';
+import Mark from './mark';
 
 interface Message {
     id: number,
@@ -93,50 +95,49 @@ class MessageList extends React.Component<MessageListProps, MessageListState> {
                     onSubmit={this.handleSendClick}
                 />
             </div>
-            {this.state.loadedPages > 0 &&
-                <>
-                    <span className="content__title">Сообщения</span>
-                    <div className="box">
-                        {this.state.list.length === 0 && this.state.users[this.withWhoId] &&
-                            <span className="notice notice--warning notice--fulled">Сообщений с пользователем
-                                <span className="notice__strong">{this.state.users[this.withWhoId].login}</span>
-                                пока нет</span>
-                        }
-                        {this.state.list.length !== 0 && 
-                            <div className="messages">
-                                {this.state.list.map((message, index) => 
-                                    <div key={index} className="messages__item message">
-                                        <div className="message__header">
-                                            <img src={this.state.users[message.from_id].avatarUrl} 
-                                                className="message__from-avatar"
-                                            />
-                                                <div className="message__info">
-                                                    <span className="message__from-login">{
-                                                        this.state.users[message.from_id].login
-                                                    }</span>
-                                                    <span className="message__date">{message.date}</span>
-                                                </div>
-                                                {!message.readed &&
-                                                    <div className={"message__status" + (message.to_id === this.withWhoId ?
-                                                        " message__status--active" : " message__status--new"
-                                                    )}>
-                                                        <i className={"message__status-icon fontello " + (message.to_id === this.withWhoId ?
-                                                            " icon-ok" : " icon-email"
-                                                        )}></i>
-                                                        <span className="message__status-text">{
-                                                            message.to_id === this.withWhoId ? "Отправлено" : "Новое"
-                                                        }</span>
-                                                    </div>
-                                                }
-                                        </div>
-                                        <span className="message__text">{decodeHTML(message.text)}</span>
-                                    </div>
+            <span className="content__title">
+                Сообщения ({this.state.list.length})
+            </span>
+            <div className="box box--table">
+                <Table
+                    className="dialogs"
+                    headers={['User', 'Date']}
+                    items={this.state.list.map((message) => ({
+                        cells: [
+                            <div className="dialogs__user-cell">
+                                <img
+                                    className="dialogs__avatar"
+                                    src={this.state.users[message.from_id].avatarUrl}
+                                />
+                                <a
+                                    href={`/admin/users/profile/${
+                                        this.state.users[message.from_id].login
+                                    }`}
+                                    className="table__link"
+                                >{this.state.users[message.from_id].login}</a>
+                            </div>,
+                            <>
+                                <span className="table__date">{message.date}</span>
+                                &nbsp;
+                                {message.readed
+                                ? <span className="mark mark--grey">Readed</span>
+                                : (
+                                    message.to_id === this.withWhoId
+                                    ? <span className="mark mark--green">Sent</span>
+                                    : <span className="mark mark--red">New</span>
                                 )}
-                            </div>
-                        }
-                    </div>
-                </>
-            }
+                            </>
+                        ],
+                        details: [{
+                            content: (
+                                <span className="message__text">
+                                    {decodeHTML(message.text)}
+                                </span>
+                            )
+                        }]
+                    }))}
+                />
+            </div>
         </>);
     }
 
