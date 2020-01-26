@@ -1,9 +1,8 @@
 import React from 'react';
-import MessageList from './message-list';
 import { decodeHTML } from 'buk';
-import Breadcrumbs from './common/Breadcrumbs';
-import Table from './table/table';
-import Mark from './mark';
+import Breadcrumbs from '../common/Breadcrumbs';
+import Table from '../table/table';
+import Mark from '../mark';
 
 interface Message {
     text: string,
@@ -24,7 +23,7 @@ interface User {
     login: string
 }
 
-interface DialogListProps {
+interface DialogsPageProps {
     countAll: number,
     list: Dialog[],
     pageCount: number,
@@ -32,10 +31,10 @@ interface DialogListProps {
     userMe: User
 }
 
-class DialogList extends React.Component<DialogListProps> {
+class DialogsPage extends React.Component<DialogsPageProps> {
     private dialogsRef = React.createRef<HTMLDivElement>();
 
-    constructor(props: DialogListProps) {
+    constructor(props: DialogsPageProps) {
         super(props);
     }
 
@@ -77,24 +76,24 @@ class DialogList extends React.Component<DialogListProps> {
                                 </div>,
                                 decodeHTML(dialog.lastMessage.text),
                                 dialog.newCount !== 0
+                                ? <Mark
+                                    color="red"
+                                    label={`${dialog.newCount} new`}
+                                    className="dialogs__status"
+                                />
+                                : (
+                                    dialog.activeCount !== 0
                                     ? <Mark
-                                        color="red"
-                                        label={`${dialog.newCount} new`}
+                                        color="green"
+                                        label={`${dialog.activeCount} sent`}
                                         className="dialogs__status"
                                     />
-                                    : (
-                                        dialog.activeCount !== 0
-                                            ? <Mark
-                                                color="green"
-                                                label={`${dialog.activeCount} sent`}
-                                                className="dialogs__status"
-                                            />
-                                            : <Mark
-                                                color="grey"
-                                                label="Readed"
-                                                className="dialogs__status"
-                                            />
-                                    ),
+                                    : <Mark
+                                        color="grey"
+                                        label="Readed"
+                                        className="dialogs__status"
+                                    />
+                                ),
                                 <span className="table__date">
                                     {dialog.lastMessage.date}
                                 </span>
@@ -127,4 +126,4 @@ class DialogList extends React.Component<DialogListProps> {
     }
 }
 
-export default DialogList;
+export default DialogsPage;
