@@ -122,7 +122,14 @@ class ProfilePage extends React.Component<ProfileProps> {
                             />
                         </div>
                     </div>
-                    <div className="box-actions">
+                    <div className="box__actions box-actions">
+                        <a
+                            href={`/admin/profile/dialog?uid=${this.props.user.id}`}
+                            className="box-actions__item"
+                        >
+                            <i className="box-actions__icon icon-email"></i>
+                            Новое сообщение
+                            </a>
                         {this.props.rights.canChangeGroup &&
                             <a
                                 href={`/admin/users/change/group?id=${this.props.user.id}`}
