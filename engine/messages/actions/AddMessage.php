@@ -48,7 +48,19 @@ class AddMessage extends ActionBody
     public function succeed(array $post, array $files)
     {
         $date = time();
+        $member1Id = null;
+        $member2Id = null;
+        if ($this->me->id < $this->who->id) {
+            $member1Id = $this->me->id;
+            $member2Id = $this->who->id;
+        } else {
+            $member1Id = $this->who->id;
+            $member2Id = $this->me->id;
+        }
+
         $id = Records::from('messages')->insert([
+            'member1_sorted_id' => $member1Id,
+            'member2_sorted_id' => $member2Id,
             'from_id' => $this->me->id,
             'to_id' => $this->who->id,
             'date' => $date
