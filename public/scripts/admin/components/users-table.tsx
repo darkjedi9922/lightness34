@@ -2,6 +2,7 @@ import React from 'react';
 import Table from './table/table';
 import { TableItem } from './table/item';
 import { isNil } from 'lodash';
+import Status, { Type } from './status';
 
 interface User {
     id: number,
@@ -10,7 +11,8 @@ interface User {
     surname?: string
     group: string,
     gender: string,
-    email?: string
+    email?: string,
+    avatarUrl: string
 }
 
 interface Props {
@@ -28,14 +30,24 @@ class UsersTable extends React.Component<Props> {
             items.push({
                 cells: [
                     user.id,
-                    <a
-                        href={`/admin/users/profile/${user.login}`} 
-                        className="table__link"
-                    >{user.login}</a>,
-                    `${name} ${surname}`,
+                    <div className="users__user-cell">
+                        <img
+                            className="users__avatar"
+                            src={user.avatarUrl}
+                        />
+                        <a
+                            href={`/admin/users/profile/${user.login}`} 
+                            className="table__link"
+                        >{user.login}</a>
+                    </div>,
+                    (name || surname)
+                        ? `${name} ${surname}`
+                        : <Status type={Type.NONE} message="None" />,
                     user.group,
                     user.gender,
-                    !isNil(user.email) ? user.email : ''
+                    user.email 
+                        ? user.email
+                        : <Status type={Type.NONE} message="None" />
                 ]
             })
         }
@@ -43,6 +55,7 @@ class UsersTable extends React.Component<Props> {
         return (
             <div className="box box--table">
                 <Table
+                    className="users"
                     headers={['Id', 'Логин', 'Имя', 'Группа', 'Пол', 'Email']}
                     items={items}
                 ></Table>

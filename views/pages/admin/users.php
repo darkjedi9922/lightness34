@@ -21,7 +21,8 @@ foreach ($users as $user) {
         'surname' => $user->surname,
         'group' => $group->name,
         'gender' => $gender->name,
-        'email' => $user->email
+        'email' => $user->email,
+        'avatarUrl' => '/' . $user->getAvatarUrl()
     ];
 }
 ?>
