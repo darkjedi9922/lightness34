@@ -1,0 +1,18 @@
+.users {
+    &__user-cell {
+        display: flex;
+        align-items: center;
+        margin: -0.2rem 0;
+    }
+    
+    &__avatar-link {
+        display: flex;
+    }
+
+    &__avatar {
+        height: 2rem;
+        width: 2rem;
+        border-radius: 10rem;
+        margin-right: 0.5rem;
+    }
+}

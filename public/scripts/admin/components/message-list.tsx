@@ -101,13 +101,13 @@ class MessageList extends React.Component<MessageListProps, MessageListState> {
             </span>
             <div className="box box--table">
                 <Table
-                    className="dialogs"
+                    className="dialogs users"
                     headers={['User', 'Date']}
                     items={this.state.list.map((message) => ({
                         cells: [
-                            <div className="dialogs__user-cell">
+                            <div className="users__user-cell">
                                 <img
-                                    className="dialogs__avatar"
+                                    className="users__avatar"
                                     src={this.state.users[message.from_id].avatarUrl}
                                 />
                                 <a

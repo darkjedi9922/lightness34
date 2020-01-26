@@ -50,25 +50,42 @@ class DialogsPage extends React.Component<DialogsPageProps> {
                 </div>
                 <div className="box box--table">
                     <Table
+                        className="users"
                         headers={[
                             'User',
                             'Last message',
                             'Status',
-                            'Last message date'
+                            'Last message date',
+                            ''
                         ]}
                         items={this.props.list.map((dialog) => ({
                             cells: [
-                                <div className="dialogs__user-cell">
-                                    <img
-                                        className="dialogs__avatar"
-                                        src={dialog.whoAvatar}
-                                    />
+                                <div className="users__user-cell">
+                                    <a 
+                                        href={`/admin/users/profile/${dialog.whoLogin}`}
+                                        className="users__avatar-link"
+                                    >
+                                        <img
+                                            className="users__avatar"
+                                            src={dialog.whoAvatar}
+                                        />
+                                    </a>
                                     <a
                                         href={`/admin/users/profile/${dialog.whoLogin}`}
                                         className="table__link"
                                     >{dialog.whoLogin}</a>
                                 </div>,
-                                decodeHTML(dialog.lastMessage.text),
+                                <span className="dialogs__message-preview">
+                                    {decodeHTML(dialog.lastMessage.text)}
+                                    &nbsp;
+                                    <a
+                                        href={`/admin/profile/dialog?uid=${dialog.whoId}`}
+                                        className="box-actions__item"
+                                    >
+                                        <i className="box-actions__icon icon-email"></i>
+                                        Перейти
+                                    </a>
+                                </span>,
                                 dialog.newCount !== 0
                                 ? <Mark
                                     color="red"
@@ -90,29 +107,15 @@ class DialogsPage extends React.Component<DialogsPageProps> {
                                 ),
                                 <span className="table__date">
                                     {dialog.lastMessage.date}
-                                </span>
-                            ],
-                            details: [{
-                                content: (
-                                    <div className="box-actions">
-                                        <a
-                                            href={`/admin/profile/dialog?uid=${dialog.whoId}`}
-                                            className="box-actions__item"
-                                        >
-                                            <i className="box-actions__icon icon-email"></i>
-                                            Перейти к сообщениям
-                                    </a>
-                                        <a
-                                            href=""
-                                            className="box-actions__item box-actions__item--red"
-                                        >
-                                            <i className="box-actions__icon icon-trash"></i>
-                                            Очистить диалог
-                                    </a>
-                                    </div>
-                                )
-                            }],
-                            detailsIndent: false
+                                </span>,
+                                <a
+                                    href=""
+                                    className="box-actions__item box-actions__item--red"
+                                >
+                                    <i className="box-actions__icon icon-trash"></i>
+                                    Очистить
+                                </a>
+                            ]
                         }))}
                     />
                 </div>
