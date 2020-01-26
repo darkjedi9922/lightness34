@@ -32,17 +32,6 @@ interface DialogsPageProps {
 }
 
 class DialogsPage extends React.Component<DialogsPageProps> {
-    private dialogsRef = React.createRef<HTMLDivElement>();
-
-    constructor(props: DialogsPageProps) {
-        super(props);
-    }
-
-    public componentDidMount() {
-        if (this.props.pageCount > 1)
-            this.dialogsRef.current.innerHTML += this.props.pagerHtml;
-    }
-
     public render(): React.ReactNode {
         return (
             <div className="dialogs">
@@ -53,6 +42,11 @@ class DialogsPage extends React.Component<DialogsPageProps> {
                     }, {
                         'name': `Диалоги (${this.props.list.length})`
                     }]} />
+                    {this.props.pageCount > 1 &&
+                        <div 
+                            dangerouslySetInnerHTML={{__html: this.props.pagerHtml}}
+                        ></div>
+                    }
                 </div>
                 <div className="box box--table">
                     <Table
