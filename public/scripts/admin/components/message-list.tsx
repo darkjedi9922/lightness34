@@ -35,7 +35,8 @@ interface APINewMessageResult {
 }
 
 interface MessageListProps {
-    userId: number
+    userId: number,
+    myId: number
 }
 
 interface MessageListState {
@@ -157,7 +158,7 @@ class MessageList extends React.Component<MessageListProps, MessageListState> {
                     list: [
                         {
                             id: result.result.id,
-                            from_id: this.getMyId(),
+                            from_id: this.props.myId,
                             to_id: this.withWhoId,
                             date: result.result.date,
                             readed: false,
@@ -184,15 +185,6 @@ class MessageList extends React.Component<MessageListProps, MessageListState> {
                 }));
            }
         });
-    }
-
-    private getMyId(): number {
-        for (const id in this.state.users) {
-            if (this.state.users.hasOwnProperty(id)) {
-                const idNumber = id as unknown as number;
-                if (idNumber != this.withWhoId) return idNumber;
-            }
-        }
     }
 }
 

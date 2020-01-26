@@ -28,7 +28,7 @@ class MessagesPage extends React.Component<MessagesPageProps> {
                     link: `/admin/users/profile/${this.props.user.login}`
                 }]} />
             </div>
-            <MessageList userId={this.props.user.id} />
+            <MessageList userId={this.props.user.id} myId={this.props.me.id} />
         </>);
     }
 }
