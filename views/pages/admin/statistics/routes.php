@@ -74,7 +74,7 @@ $clear = new ViewAction(ClearStatistics::class, ['module' => 'stat/routes']);
                     </td>
                 </tr>
                 <tr class="table__details-wrapper">
-                    <td class="table__details" colspan="100">
+                    <td class="table__details table__details--indent" colspan="100">
                         <?php if ($route->viewfile) : ?>
                             <div class="details">
                                 <span class="details__header">View file</span>

@@ -66,7 +66,7 @@ $clear = new ViewAction(ClearStatistics::class, ['module' => 'stat/actions']);
                     <td class="table__cell"><?= date('d.m.Y H:i', $action->time) ?></td>
                 </tr>
                 <tr class="table__details-wrapper">
-                    <td class="table__details" colspan="100">
+                    <td class="table__details table__details--indent" colspan="100">
                         <div class="details">
                             <span class="details__header">Get Data</span>
                             <?php if (empty($data['data']['get'])) : ?>
@@ -255,7 +255,7 @@ $clear = new ViewAction(ClearStatistics::class, ['module' => 'stat/actions']);
                     </td>
                 </tr>
                 <tr class="table__details-wrapper">
-                    <td class="table__details" colspan="100">
+                    <td class="table__details table__details--indent" colspan="100">
                         <?php foreach ($parameters as $type => $list) : ?>
                             <?php if (!empty($list)) : ?>
                                 <div class="details">

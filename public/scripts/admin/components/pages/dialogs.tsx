@@ -94,24 +94,25 @@ class DialogsPage extends React.Component<DialogsPageProps> {
                             ],
                             details: [{
                                 content: (
-                                    <div className="box-actions dialogs__actions">
+                                    <div className="box-actions">
                                         <a
                                             href={`/admin/profile/dialog?uid=${dialog.whoId}`}
                                             className="box-actions__item"
                                         >
                                             <i className="box-actions__icon icon-email"></i>
                                             Перейти к сообщениям
-                                        </a>
+                                    </a>
                                         <a
                                             href=""
                                             className="box-actions__item box-actions__item--red"
                                         >
                                             <i className="box-actions__icon icon-trash"></i>
                                             Очистить диалог
-                                        </a>
+                                    </a>
                                     </div>
                                 )
-                            }]
+                            }],
+                            detailsIndent: false
                         }))}
                     />
                 </div>

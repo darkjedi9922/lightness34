@@ -1,10 +1,12 @@
 import React from 'react'
 import classNames from 'classnames'
 import Details, { DetailsProps } from '../details';
+import { isNil } from 'lodash';
 
 export interface TableItem {
     cells: any[]
-    details?: DetailsProps[]
+    details?: DetailsProps[],
+    detailsIndent?: boolean
 }
 
 interface Props {
@@ -54,7 +56,14 @@ class Item extends React.Component<Props, State> {
             </tr>
             {this.props.item.details &&
                 <tr className="table__details-wrapper">
-                    <td className="table__details" colSpan={100}>
+                    <td className={classNames(
+                        "table__details",
+                        {'table__details--indent':
+                            !isNil(this.props.item.detailsIndent)
+                                ? this.props.item.detailsIndent
+                                : true
+                        }
+                    )} colSpan={100}>
                         <div
                             className="table__details-content" 
                             style={{

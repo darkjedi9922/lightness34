@@ -63,7 +63,11 @@
     }
 
     &__details {
-        padding: 0 2rem;
+        padding: 0 1rem;
         overflow: hidden;
+
+        &--indent {
+            padding-left: 2rem;
+        }
     }
 }
