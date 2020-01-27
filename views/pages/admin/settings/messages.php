@@ -5,37 +5,46 @@ use engine\users\Group;
 use frame\cash\config;
 use frame\actions\ViewAction;
 use engine\admin\actions\EditConfigAction;
+use frame\tools\JsonEncoder;
 
 Init::accessGroup(Group::ROOT_ID);
 
 $config = config::get('messages');
 $edit = new ViewAction(EditConfigAction::class, ['name' => 'messages']);
+
+$formProps = [
+    'actionUrl' => $edit->getUrl(),
+    'method' => 'post',
+    'fields' => [[
+        'type' => 'text',
+        'title' => 'Диалогов на странице списка',
+        'name' => 'dialogs->list->amount',
+        'defaultValue' => $edit->getPost(
+            'dialogs->list->amount',
+            (string) $config->{'dialogs.list.amount'}
+        )
+    ], [
+        'type' => 'text',
+        'title' => 'Сообщений на странице диалога',
+        'name' => 'messages->list->amount',
+        'defaultValue' => $edit->getPost(
+            'messages->list->amount',
+            (string) $config->{'messages.list.amount'}
+        )
+    ]],
+    'buttonText' => 'Сохранить',
+    'short' => true
+];
+$formProps = JsonEncoder::forHtmlAttribute($formProps);
 ?>
 
+<div class="content__header">
+    <div class="breadcrumbs">
+        <span class="breadcrumbs__item">Настройки</span>
+        <span class="breadcrumbs__divisor"></span>
+        <span class="breadcrumbs__item breadcrumbs__item--current">Сообщения</span>
+    </div>
+</div>
 <div class="box">
-    <form action="<?= $edit->getUrl() ?>" method="post">
-        <table>
-            <tr>
-                <td>Диалогов на странице списка:</td>
-                <td>
-                    <input name="dialogs->list->amount" type="text" 
-                        value="<?= $edit->getPost(
-                            'dialogs->list->amount', 
-                            $config->{'dialogs.list.amount'}
-                        ) ?>">
-                </td>
-            </tr>
-            <tr>
-                <td>Сообщений на странице диалога:</td>
-                <td>
-                    <input name="messages->list->amount" type="text" 
-                        value="<?= $edit->getPost(
-                            'messages->list->amount', 
-                            $config->{'messages.list.amount'}
-                        ) ?>">
-                </td>
-            </tr>
-        </table>
-        <button>Сохранить</button>
-    </form>
+    <div id="messages-config-form" data-props="<?= $formProps ?>"></div>
 </div>

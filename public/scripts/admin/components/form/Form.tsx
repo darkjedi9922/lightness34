@@ -50,6 +50,7 @@ interface FormProps {
     multipart?: boolean,
     fields: Field[],
     errors?: string[],
+    short?: boolean,
     buttonText: string,
     className?: string,
     onSubmit?: (event: React.FormEvent<HTMLFormElement>) => void
@@ -70,7 +71,11 @@ class Form extends React.Component<FormProps> {
     public render(): React.ReactNode {
         return (
             <form
-                className={classNames("form", this.props.className)}
+                className={classNames(
+                    "form",
+                    this.props.className,
+                    {'form--short': this.props.short}
+                )}
                 action={!isNil(this.props.actionUrl) ? this.props.actionUrl : null}
                 method={this.props.method}
                 encType={this.props.multipart ? 'multipart/form-data' : null}

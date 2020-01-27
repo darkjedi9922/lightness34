@@ -19,6 +19,7 @@ setupReactComponent('cash-use-history', CashUseHistory);
 setupReactComponent('views-stat-page', ViewsHistory);
 setupReactComponent('messages-page', MessagesPage);
 setupReactComponent('query-history', QueryHistory);
+setupReactComponent('messages-config-form', Form);
 setupReactComponent('article-comments', Comments);
 setupReactComponent('profile-page', ProfilePage);
 setupReactComponent('db-tables', DatabaseTables);
