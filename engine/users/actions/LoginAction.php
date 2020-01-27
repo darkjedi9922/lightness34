@@ -18,7 +18,8 @@ class LoginAction extends ActionBody
     {
         return [
             'login' => [self::POST_TEXT, 'The login to enter'],
-            'password' => [self::POST_PASSWORD, 'The password to enter']
+            'password' => [self::POST_PASSWORD, 'The password to enter'],
+            'remember' => [self::POST_BOOL, 'Do remember']
         ];
     }
 
@@ -51,8 +52,7 @@ class LoginAction extends ActionBody
 
     public function succeed(array $post, array $files)
     {
-        $remember = (bool) ($post['remember'] ?? false);
-        (new Auth)->login($this->sid, $remember);
+        (new Auth)->login($this->sid, $post['remember']);
     }
 
     public function getSuccessRedirect(): ?string

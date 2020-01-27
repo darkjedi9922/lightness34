@@ -5,10 +5,6 @@ use frame\route\Request;
 /**
  * Ошибки, возникшие во время обработки, определены константами
  * вида E_NAME_OF_ERROR.
- * 
- * Корректная работа checkbox:
- * <input type="hidden" name="property" value="0">
- * <input type="checkbox" name="property" value="1">
  */
 abstract class ActionBody
 {
@@ -18,6 +14,8 @@ abstract class ActionBody
 
     /** Type of a POST field. */
     const POST_INT = 'int';
+    /** Bool is usually represented by a checkbox input. */
+    const POST_BOOL = 'bool';
     const POST_TEXT = 'string';
     const POST_PASSWORD = 'password';
 

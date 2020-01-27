@@ -62,6 +62,7 @@ class Action
     {
         $this->body = $body;
         $this->setDataAll(self::ARGS, $args);
+        $this->setDataAll(self::POST, []);
     }
 
     public function getBody(): ActionBody
@@ -76,6 +77,14 @@ class Action
      */
     public function setDataAll(string $type, array $data)
     {
+        if ($type === self::POST) {
+            $postDesc = $this->body->listPost();
+            foreach ($postDesc as $field => $desc) {
+                if ($desc[0] === ActionBody::POST_BOOL && !isset($data[$field])) {
+                    $data[$field] = false;
+                }
+            }
+        }
         foreach ($data as $key => $value) $this->setData($type, $key, $value);
     }
 
@@ -90,8 +99,11 @@ class Action
             settype($value, $this->body->listGet()[$name][0]);
         else if ($type === self::POST && isset($this->body->listPost()[$name])) {
             $postType = $this->body->listPost()[$name][0];
-            if ($postType === ActionBody::POST_PASSWORD) 
-                $postType = ActionBody::POST_TEXT;
+            switch ($postType) {
+                case ActionBody::POST_PASSWORD: 
+                    $postType = ActionBody::POST_TEXT;
+                    break; 
+            }
             settype($value, $postType);
         }
 

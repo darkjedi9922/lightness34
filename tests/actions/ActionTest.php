@@ -4,6 +4,7 @@ use PHPUnit\Framework\TestCase;
 use tests\engine\UserDeleteAction;
 use tests\actions\examples\GetListActionExample;
 use tests\actions\examples\PostListActionExample;
+use tests\actions\examples\BoolPostListActionExample;
 use tests\actions\examples\AlwaysSucceedActionExample;
 use tests\actions\examples\AlwaysFailActionExample;
 use frame\errors\HttpError;
@@ -75,13 +76,44 @@ class ActionTest extends TestCase
         $this->assertFalse($action->hasErrors());
     }
 
-    public function testConvertsPostArgsToSpecifiedType()
+    public function testConvertsSpecifiedIntegerPostArgsToInteger()
     {
         $action = new Action(new PostListActionExample);
         $action->setData('post', 'sum', '66');
         
         $value = $action->getData('post', 'sum');
         $this->assertIsInt($value);
+    }
+
+    /**
+     * @dataProvider boolPostProvider
+     */
+    public function testConvertsSpecifiedPostArgsToBool($value, bool $boolValue)
+    {
+        $action = new Action(new BoolPostListActionExample);
+        $action->setData('post', 'checked', $value);
+
+        $convertedValue = $action->getData('post', 'checked');
+        $this->assertEquals($boolValue, $convertedValue);
+    }
+
+    public function testIfSpecifiedBoolValueWasNotRecievedThenItEqualsFalse()
+    {
+        $action = new Action(new BoolPostListActionExample);
+        $value = $action->getData('post', 'checked');
+        $this->assertIsBool($value);
+    }
+
+    public function boolPostProvider() {
+        return [
+            [true, true],
+            [false, false],
+            [null, false],
+            ['0', false],
+            ['1', true],
+            ['', false],
+            ['some-text', true]
+        ];
     }
 
     public function testNoExecutedActionHasEmptyResult()

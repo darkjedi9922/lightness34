@@ -23,8 +23,7 @@ $self->setMeta('title', 'Вход');
     <input class="login-form__input login-form__input--login" name="login" type="text" placeholder="Логин" value="<?= $action->getPost('login') ?>">
     <input class="login-form__input login-form__input--password" name="password" type="password" placeholder="Пароль">
     <div class="login-form__checkbox" style="margin-bottom:10px">
-        <input type="hidden" name="remember" value="0">
-        <input type="checkbox" name="remember" id="remember-checkbox" <?= $action->getPost('remember') === '1' ? 'checked' : '' ?> value="1">
+        <input type="checkbox" name="remember" id="remember-checkbox" <?= $action->getPost('remember') ? 'checked' : '' ?>>
         <label for="remember-checkbox"><i class="fontello icon-ok"></i></label><span>Запомнить меня</span>
     </div>
     <button class="form__button">Войти</button>
