@@ -40,7 +40,7 @@ class DialogsPage extends React.Component<DialogsPageProps> {
                         'name': 'Профиль',
                         'link': `/admin/users/profile/${this.props.userMe.login}`
                     }, {
-                        'name': `Диалоги (${this.props.list.length})`
+                        'name': `Диалоги (${this.props.countAll})`
                     }]} />
                     {this.props.pageCount > 1 &&
                         <div 
