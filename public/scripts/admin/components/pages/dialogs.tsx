@@ -15,7 +15,8 @@ interface Dialog {
     whoId: number,
     whoAvatar: string,
     whoLogin: string,
-    lastMessage: Message
+    lastMessage: Message,
+    deleteUrl: string
 }
 
 interface User {
@@ -109,7 +110,7 @@ class DialogsPage extends React.Component<DialogsPageProps> {
                                     {dialog.lastMessage.date}
                                 </span>,
                                 <a
-                                    href=""
+                                    href={dialog.deleteUrl}
                                     className="box-actions__item box-actions__item--red"
                                 >
                                     <i className="box-actions__icon icon-trash"></i>

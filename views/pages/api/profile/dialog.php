@@ -39,7 +39,7 @@ $result = [
     'addMessageUrl' => $send->getUrl()
 ];
 
-$list = new MessagePagedList($page, $me->id, $withWhoId);
+$list = new MessagePagedList($page, $withWhoId);
 $anyMessage = null;
 foreach ($list as $message) {
     /** @var Message $message */

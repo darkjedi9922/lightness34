@@ -14,7 +14,8 @@ class Dialog
     {
         return (int)database::get()->query(
             "SELECT COUNT(DISTINCT from_id) FROM messages
-            WHERE to_id = $userId AND readed = 0"
+            WHERE to_id = $userId AND readed = 0
+                AND (removed_by_id IS NULL OR removed_by_id <> {$userId})"
         )->readScalar();
     }
 
@@ -40,7 +41,8 @@ class Dialog
             "SELECT COUNT(id) FROM messages
             WHERE to_id = $userId 
                 AND from_id = {$this->getWhoId($userId)} 
-                AND readed = 0"
+                AND readed = 0
+                AND (removed_by_id IS NULL OR removed_by_id <> {$userId})"
         )->readScalar();
     }
 

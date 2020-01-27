@@ -16,7 +16,9 @@ class DialogPagedList extends PagedList
         $countAll = (int) database::get()->query(
             "SELECT COUNT(`COUNT(id)`) FROM (
                 SELECT COUNT(id) FROM `messages`
-                WHERE member1_sorted_id = 1 OR member2_sorted_id = 1
+                WHERE (member1_sorted_id = {$me->id} 
+                    OR member2_sorted_id = {$me->id}
+                ) AND (removed_by_id IS NULL OR removed_by_id <> {$me->id})
                 GROUP BY member1_sorted_id, member2_sorted_id
             ) AS dialogs"
         )->readScalar();
@@ -34,7 +36,9 @@ class DialogPagedList extends PagedList
         $this->result = database::get()->query(
             "SELECT * FROM messages INNER JOIN (
                 SELECT MAX(id) AS max_id FROM messages
-                WHERE member1_sorted_id = {$me->id} OR member2_sorted_id = {$me->id}
+                WHERE (member1_sorted_id = {$me->id} 
+                    OR member2_sorted_id = {$me->id}
+                ) AND (removed_by_id IS NULL OR removed_by_id <> {$me->id})
                 GROUP BY member1_sorted_id, member2_sorted_id
             ) AS lasts ON id = lasts.max_id
             ORDER BY id DESC

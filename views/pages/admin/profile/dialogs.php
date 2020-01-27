@@ -3,11 +3,13 @@
 use frame\tools\Init;
 use engine\users\cash\user_me;
 use engine\users\Group;
+use engine\messages\actions\DeleteDialog;
 use engine\messages\DialogPagedList;
 use engine\messages\Dialog;
 use frame\cash\pagenumber;
 use function lightlib\shorten;
 use engine\users\User;
+use frame\actions\ViewAction;
 use frame\views\Pager;
 use frame\tools\JsonEncoder;
 
@@ -30,6 +32,8 @@ $dialogListData = [
     ]
 ];
 
+$delete = new ViewAction(DeleteDialog::class);
+
 foreach ($dialogs as $dialog) {
     /** @var Dialog $dialog */
     $last = $dialog->getLastMessage();
@@ -41,6 +45,7 @@ foreach ($dialogs as $dialog) {
         else $activeCount = $dialog->countNewMessages($toId);
     }
     $who = User::selectIdentity($toId !== $me->id ? $toId : (int)$last->from_id);
+    $delete->setArg('uid', $who->id);
 
     $dialogListData['list'][] = [
         'newCount' => $newCount,
@@ -51,7 +56,8 @@ foreach ($dialogs as $dialog) {
         'lastMessage' => [
             'text' => shorten($last->loadText(), 50, '...'),
             'date' => date('d.m.Y H:i', $last->date)
-        ]
+        ],
+        'deleteUrl' => $delete->getUrl()
     ];
 }
 

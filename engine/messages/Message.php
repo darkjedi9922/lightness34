@@ -15,7 +15,8 @@ class Message extends Identity
     {
         return (int) database::get()->query(
             "SELECT COUNT(id) FROM messages
-            WHERE to_id = $userId AND readed = 0"
+            WHERE to_id = $userId AND readed = 0
+                AND (removed_by_id IS NULL OR removed_by_id <> {$userId})"
         )->readScalar();
     }
 
