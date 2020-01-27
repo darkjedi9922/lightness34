@@ -10,7 +10,8 @@ interface User {
 
 interface MessagesPageProps {
     me: User,
-    user: User
+    user: User,
+    pagenumber: number
 }
 
 class MessagesPage extends React.Component<MessagesPageProps> {
@@ -28,7 +29,11 @@ class MessagesPage extends React.Component<MessagesPageProps> {
                     link: `/admin/users/profile/${this.props.user.login}`
                 }]} />
             </div>
-            <MessageList userId={this.props.user.id} myId={this.props.me.id} />
+            <MessageList
+                userId={this.props.user.id}
+                myId={this.props.me.id}
+                pagenumber={this.props.pagenumber}
+            />
         </>);
     }
 }

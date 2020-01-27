@@ -4,7 +4,7 @@ import $ from 'jquery'
 import { encodeHTML, decodeHTML } from 'buk';
 import Form, { TextField } from './form/Form';
 import Table from './table/table';
-import Mark from './mark';
+import { isNil } from 'lodash';
 
 interface Message {
     id: number,
@@ -23,7 +23,8 @@ interface User {
 interface APIListResult {
     users: { [id: number]: User },
     list: Message[],
-    addMessageUrl: string;
+    pagerHtml?: string,
+    addMessageUrl: string
 }
 
 interface APINewMessageResult {
@@ -36,13 +37,14 @@ interface APINewMessageResult {
 
 interface MessageListProps {
     userId: number,
-    myId: number
+    myId: number,
+    pagenumber: number
 }
 
 interface MessageListState {
     users: { [id: number]: User },
     list: Message[],
-    loadedPages: number
+    pagerHtml?: string
 }
 
 class MessageList extends React.Component<MessageListProps, MessageListState> {
@@ -55,7 +57,7 @@ class MessageList extends React.Component<MessageListProps, MessageListState> {
         this.state = {
             users: [],
             list: [],
-            loadedPages: 0
+            pagerHtml: null
         };
 
         this.handleSendClick = this.handleSendClick.bind(this);
@@ -70,14 +72,13 @@ class MessageList extends React.Component<MessageListProps, MessageListState> {
 
         this.setState({
             users: [],
-            list: [],
-            loadedPages: 0
+            list: []
         });
 
         this.withWhoId = withWhoId;
         const rootEl = $(ReactDOM.findDOMNode(this) as HTMLDivElement);
         rootEl.show();
-        this.loadDialogMessages(this.state.loadedPages + 1);
+        this.loadDialogMessages();
     }
 
     public render(): React.ReactNode {
@@ -96,9 +97,16 @@ class MessageList extends React.Component<MessageListProps, MessageListState> {
                     onSubmit={this.handleSendClick}
                 />
             </div>
-            <span className="content__title">
-                Сообщения ({this.state.list.length})
-            </span>
+            <div className="content__header">
+                <span className="content__title">
+                        Сообщения ({this.state.list.length})
+                </span>
+                {!isNil(this.state.pagerHtml) &&
+                    <div className="content__pager" dangerouslySetInnerHTML={{
+                        __html: decodeHTML(this.state.pagerHtml)
+                    }}></div>
+                }
+            </div>
             <div className="box box--table">
                 <Table
                     className="dialogs users"
@@ -172,16 +180,17 @@ class MessageList extends React.Component<MessageListProps, MessageListState> {
         });
     }
 
-    private loadDialogMessages(page: number) {
+    private loadDialogMessages() {
         $.ajax({
-            url: '/api/profile/dialog?withId=' + this.withWhoId + '&p=' + page,
+            url: '/api/profile/dialog?withId=' + this.withWhoId 
+                + '&p=' + this.props.pagenumber,
             success: (data: string) => {
                 const result: APIListResult = JSON.parse(data);
                 this.addMessageUrl = result.addMessageUrl;
                 this.setState((state) => ({
                     users: result.users,
                     list: result.list,
-                    loadedPages: state.loadedPages + 1
+                    pagerHtml: result.pagerHtml
                 }));
            }
         });

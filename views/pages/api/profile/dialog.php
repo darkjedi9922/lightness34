@@ -10,7 +10,9 @@ use engine\users\User;
 use frame\actions\ViewAction;
 use engine\messages\actions\AddMessage;
 use engine\messages\Dialog;
+use frame\cash\prev_router;
 use frame\tools\JsonEncoder;
+use frame\views\Pager;
 
 $me = user_me::get();
 
@@ -24,6 +26,29 @@ Init::require($who !== null);
 $page = pagenumber::get();
 $send = new ViewAction(AddMessage::class, ['to_uid' => $withWhoId]);
 
+$list = new MessagePagedList($page, $withWhoId);
+$listProps = [];
+$anyMessage = null;
+foreach ($list as $message) {
+    /** @var Message $message */
+    $listProps[] = [
+        'id' => $message->id,
+        'from_id' => (int) $message->from_id,
+        'to_id' => (int) $message->to_id,
+        'date' => date('d.m.Y H:i', $message->date),
+        'readed' => (bool) $message->readed,
+        'text' => $message->loadText()
+    ];
+    $anyMessage = $message;
+}
+
+$pagerHtml = null;
+if ($list->getPager()->countPages() > 1) {
+    $viewPager = new Pager($list->getPager(), 'admin');
+    $viewPager->setMeta('route', prev_router::get()->toUrl());
+    $pagerHtml = $viewPager->getHtml();
+}
+
 $result = [
     'users' => [
         $me->id => [
@@ -35,24 +60,10 @@ $result = [
             'avatarUrl' => '/' . $who->getAvatarUrl()
         ],
     ],
-    'list' => [],
+    'list' => $listProps,
+    'pagerHtml' => $pagerHtml,
     'addMessageUrl' => $send->getUrl()
 ];
-
-$list = new MessagePagedList($page, $withWhoId);
-$anyMessage = null;
-foreach ($list as $message) {
-    /** @var Message $message */
-    $result['list'][] = [
-        'id' => $message->id,
-        'from_id' => (int) $message->from_id,
-        'to_id' => (int) $message->to_id,
-        'date' => date('d.m.Y H:i', $message->date),
-        'readed' => (bool) $message->readed,
-        'text' => $message->loadText()
-    ];
-    $anyMessage = $message;
-}
 
 if ($anyMessage) {
     $dialog = new Dialog($anyMessage);

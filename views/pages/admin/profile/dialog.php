@@ -4,6 +4,7 @@ use frame\tools\Init;
 use engine\users\Group;
 use engine\users\cash\user_me;
 use engine\users\User;
+use frame\cash\pagenumber;
 use frame\tools\JsonEncoder;
 
 $withId = (int) Init::requireGet('uid');
@@ -20,7 +21,8 @@ $pageProps = [
     'user' => [
         'id' => $with->id,
         'login' => $with->login
-    ]
+    ],
+    'pagenumber' => pagenumber::get()
 ];
 $pageProps = JsonEncoder::forHtmlAttribute($pageProps);
 ?>

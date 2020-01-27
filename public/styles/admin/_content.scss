@@ -36,4 +36,8 @@
         font-size: 1.5rem;
         margin-bottom: 1rem;
     }
+
+    &__header > &__title {
+        margin-bottom: 0;
+    }
 }
