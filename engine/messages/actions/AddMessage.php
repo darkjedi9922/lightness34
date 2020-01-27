@@ -63,7 +63,8 @@ class AddMessage extends ActionBody
             'member2_sorted_id' => $member2Id,
             'from_id' => $this->me->id,
             'to_id' => $this->who->id,
-            'date' => $date
+            'date' => $date,
+            'readed' => $this->who->id === $this->me->id
         ]);
 
         Records::from('message_texts')->insert([

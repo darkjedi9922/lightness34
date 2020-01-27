@@ -161,7 +161,7 @@ class MessageList extends React.Component<MessageListProps, MessageListState> {
                             from_id: this.props.myId,
                             to_id: this.withWhoId,
                             date: result.result.date,
-                            readed: false,
+                            readed: this.withWhoId === this.props.myId,
                             text: encodeHTML(text)
                         },
                         ...state.list
