@@ -14,6 +14,8 @@ class Auth
     public function login(string $key, bool $remember = false)
     {
         $key = $remember ? '1'.$key : '0'.$key;
+        // If do remember then the expire is 10 years.
+        $this->transmitter->setExpire($remember ? 60*60*24*30*12*10 : 0);
         $this->transmitter->setData('sid', $key);
     }
 
