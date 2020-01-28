@@ -18,9 +18,14 @@ export interface Field {
 
 export interface TextField extends Field
 {
-    type: 'text'|'password'|'textarea'
+    type: 'text'|'password'|'textarea',
     placeholder?: string,
     defaultValue?: string,
+}
+
+export interface TextareaField extends TextField {
+    type: 'textarea',
+    minRows?: number
 }
 
 export interface CheckboxField extends Field {
@@ -96,7 +101,7 @@ class Form extends React.Component<FormProps> {
                                 <FormTextInput field={field as TextField} />
                             }
                             {field.type === 'textarea' &&
-                                <FormTextarea field={field as TextField} />
+                                <FormTextarea field={field as TextareaField} />
                             }
                             {field.type === 'checkbox' &&
                                 <FormCheckbox field={field as CheckboxField} />

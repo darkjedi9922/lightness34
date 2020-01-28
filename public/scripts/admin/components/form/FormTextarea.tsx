@@ -1,10 +1,10 @@
 import React from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
-import { TextField } from './Form';
+import { TextareaField } from './Form';
 import { decodeHTML } from 'buk';
 
 interface FormTextareaProps {
-    field: TextField
+    field: TextareaField
 }
 
 class FormTextarea extends React.Component<FormTextareaProps> {
@@ -29,7 +29,7 @@ class FormTextarea extends React.Component<FormTextareaProps> {
                 className="form__textarea"
                 placeholder={this.props.field.placeholder}
                 defaultValue={decodeHTML(this.props.field.defaultValue || '')}
-                minRows={3}
+                minRows={this.props.field.minRows || 3}
             />
         )
     }

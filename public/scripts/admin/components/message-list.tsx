@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import $ from 'jquery'
 import { encodeHTML, decodeHTML } from 'buk';
-import Form, { TextField } from './form/Form';
+import Form, { TextareaField } from './form/Form';
 import Table from './table/table';
 import { isNil } from 'lodash';
 
@@ -91,8 +91,9 @@ class MessageList extends React.Component<MessageListProps, MessageListState> {
                         type: 'textarea',
                         name: 'text',
                         placeholder: 'Текст сообщения',
-                        defaultValue: ''
-                    } as TextField]}
+                        defaultValue: '',
+                        minRows: 2
+                    } as TextareaField]}
                     buttonText="Отправить"
                     onSubmit={this.handleSendClick}
                 />
