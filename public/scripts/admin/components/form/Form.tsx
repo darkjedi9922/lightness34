@@ -31,7 +31,8 @@ export interface TextareaField extends TextField {
 export interface CheckboxField extends Field {
     type: 'checkbox',
     label?: string,
-    defaultChecked?: boolean
+    defaultChecked?: boolean,
+    disabled?: boolean
 }
 
 export interface RadioField extends Field {
@@ -44,6 +45,12 @@ export interface FileField extends Field {
     type: 'file'
 }
 
+export interface Group {
+    type: 'group',
+    title: string,
+    fields: Field[]
+}
+
 export interface RadioValue {
     label: string,
     value: string
@@ -53,7 +60,7 @@ interface FormProps {
     actionUrl?: string,
     method: 'get'|'post',
     multipart?: boolean,
-    fields: Field[],
+    fields: (Field|Group)[],
     errors?: string[],
     short?: boolean,
     buttonText: string,
@@ -91,36 +98,49 @@ class Form extends React.Component<FormProps> {
                         {error}
                     </span>
                 ))}
-                {this.props.fields.map((field, i) => (
-                    <div key={i} className="form__row">
-                        {!isNil(field.title) &&
-                            <span className="form__key">{field.title}</span>
-                        }
-                        <div className="form__field-container">
-                            {(field.type === 'text' || field.type === 'password') &&
-                                <FormTextInput field={field as TextField} />
-                            }
-                            {field.type === 'textarea' &&
-                                <FormTextarea field={field as TextareaField} />
-                            }
-                            {field.type === 'checkbox' &&
-                                <FormCheckbox field={field as CheckboxField} />
-                            }
-                            {field.type === 'radio' &&
-                                <FormRadio field={field as RadioField} />
-                            }
-                            {field.type === 'file' &&
-                                <FormFileInput field={field as FileField} />
-                            }
-                        </div>
-                        {!isNil(field.errors) && field.errors.map((error, i) => (
-                            <span key={i} className="form__error">{error}</span>
-                        ))}
-                    </div>
-                ))}
+                {this.renderFields(this.props.fields)}
                 <button className="form__button">{this.props.buttonText}</button>
             </form>
         );
+    }
+
+    private renderFields(fields: (Field|Group)[]) {
+        return fields.map((field, i) => (
+            field.type === 'group'
+            ? <div key={i} className="form__row form__row--group">
+                <span className="form__title">{field.title}</span>
+                {this.renderFields((field as Group).fields)}
+            </div>
+            :<div key={i} className="form__row">
+                {!isNil(field.title) &&
+                    <span className={classNames(
+                        "form__key",
+                        {'form__key--empty': !field.title.length}
+                    )}>{field.title}</span>
+                }
+                <div className="form__field-container">
+                    {(field.type === 'text' || field.type === 'password') &&
+                        <FormTextInput field={field as TextField} />
+                    }
+                    {field.type === 'textarea' &&
+                        <FormTextarea field={field as TextareaField} />
+                    }
+                    {field.type === 'checkbox' &&
+                        <FormCheckbox field={field as CheckboxField} />
+                    }
+                    {field.type === 'radio' &&
+                        <FormRadio field={field as RadioField} />
+                    }
+                    {field.type === 'file' &&
+                        <FormFileInput field={field as FileField} />
+                    }
+                </div>
+                {!isNil((field as Field).errors) && (field as Field).errors
+                .map((error, i) =>
+                    <span key={i} className="form__error">{error}</span>
+                )}
+            </div>
+        ))
     }
 
     private maximizeKeysWidth(): void {

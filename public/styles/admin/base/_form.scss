@@ -5,20 +5,23 @@
     font-family: $global-font;
     font-size: 1.1rem;
 
-    &__table {
-        &--full {
-            width: 100%;
-        }
+    &__title {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: $clr-color;
+        display: inline-block;
+        margin-bottom: 0.2rem;
     }
 
     &__row {
         display: flex;
         align-items: baseline;
         margin-bottom: 0.35rem;
-    }
 
-    &__table &__row {
-        display: table-row;
+        &--group {
+            flex-direction: column;
+            margin-bottom: 0.5rem;
+        }
     }
 
     &__cell {
@@ -36,6 +39,10 @@
         &:after {
             content: ': ';
             white-space: pre;
+        }
+
+        &--empty:after {
+            content: '';
         }
     }
 

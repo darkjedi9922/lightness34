@@ -31,4 +31,14 @@
     &:hover {
         cursor: pointer;
     }
+
+    &--disabled &__box {
+        color: $clr-grey;
+    }
+    &--disabled &__label {
+        color: $clr-grey;
+    }
+    &--disabled:hover {
+        cursor:default;
+    }
 }

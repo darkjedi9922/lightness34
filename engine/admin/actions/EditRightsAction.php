@@ -58,7 +58,7 @@ class EditRightsAction extends ActionBody
             $rightList = $desc->listRights();
             $groupRights = new GroupRights($desc, $module->getId(), $this->id);
             foreach ($rightList as $rightName => $rightDesc) {
-                $canValue = isset($rights[$moduleName][$rightName]); 
+                $canValue = ($rights[$moduleName][$rightName] ?? '0') === '1'; 
                 $groupRights->set($rightName, $canValue);
             }
             $groupRights->save();

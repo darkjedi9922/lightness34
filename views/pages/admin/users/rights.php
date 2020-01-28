@@ -2,8 +2,8 @@
 
 use engine\admin\actions\EditRightsAction;
 use frame\actions\ViewAction;
+use frame\tools\JsonEncoder;
 use engine\users\cash\my_group;
-use engine\users\cash\user_me;
 use engine\users\Group;
 use frame\core\Core;
 use frame\modules\GroupRights;
@@ -20,8 +20,42 @@ $group = Group::selectIdentity($id);
 Init::require((bool) $group);
 
 $modules = Core::$app->getModules();
-$action = new ViewAction(EditRightsAction::class, ['id' => $id]);
-$me = user_me::get();
+$edit = new ViewAction(EditRightsAction::class, ['id' => $id]);
+
+$fieldGroups = [];
+foreach ($modules as $module) {
+    /** @var Module $module */
+    $rightsDesc = $module->createRightsDescription();
+    if (!$rightsDesc) continue;
+    $rightList = $rightsDesc->listRights();
+    $rights = new GroupRights($rightsDesc, $module->getId(), $group->id);
+    
+    $rightFields = [];
+    foreach ($rightList as $right => $desc) {
+        $rightFields[] = [
+            'type' => 'checkbox',
+            'name' => "rights[{$module->getName()}][$right]",
+            'label' => $desc,
+            'defaultChecked' => $rights->can($right),
+            'disabled' => $group->id === $group::ROOT_ID
+        ];
+    }
+
+    $fieldGroups[] = [
+        'type' => 'group',
+        'title' => 'Модуль ' . $module->getName(),
+        'fields' => $rightFields
+    ];
+}
+
+$formProps = [
+    'actionUrl' => $edit->getUrl(),
+    'method' => 'post',
+    'fields' => $fieldGroups,
+    'short' => true,
+    'buttonText' => 'Сохранить'
+];
+$formProps = JsonEncoder::forHtmlAttribute($formProps);
 ?>
 
 <div class="content__header">
@@ -32,28 +66,5 @@ $me = user_me::get();
     </div>
 </div>
 <div class="box">
-    <form action="<?= $action->getUrl() ?>" method="post">
-        <div class="checkbox">
-            <?php foreach ($modules as $module):
-            /** @var Module $module */
-            $rightsDesc = $module->createRightsDescription();
-            if (!$rightsDesc) continue;
-            $rightList = $rightsDesc->listRights();
-            $rights = new GroupRights($rightsDesc, $module->getId(), $group->id);
-            ?>
-                <h3>Модуль <?= $module->getName() ?>
-                </h3>
-                <?php foreach ($rightList as $right => $desc): ?>
-                    <input type="checkbox" id="rights-<?= $module->getId() ?>-<?= $right ?>" 
-                        name="rights[<?= $module->getName() ?>][<?= $right ?>]" 
-                        <?php if ($rights->can($right)) echo 'checked' ?>
-                        <?php if ($group->id === $group::ROOT_ID) echo 'disabled'?>>
-                    <label for="rights-<?= $module->getId() ?>-<?= $right ?>"><i class="fontello icon-ok"></i></label>
-                    <span><?= $desc ?></span><br/>
-                <?php endforeach ?>
-                <br>
-            <?php endforeach ?>
-        </div>
-        <button <?php if ($group->id === $group::ROOT_ID) echo 'disabled'?>>Сохранить</button>
-    </form>
+    <div id="rights-config-form" data-props="<?= $formProps ?>"></div>
 </div>

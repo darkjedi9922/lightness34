@@ -24,6 +24,7 @@ setupReactComponent('article-comments', Comments);
 setupReactComponent('profile-page', ProfilePage);
 setupReactComponent('db-tables', DatabaseTables);
 setupReactComponent('dialog-list', DialogsPage);
+setupReactComponent('rights-config-form', Form);
 setupReactComponent('articles', ArticlesTable);
 setupReactComponent('admin-config-form', Form);
 setupReactComponent('profile-edit-form', Form);
