@@ -31,8 +31,8 @@ class LogPage extends React.Component<LogPageProps> {
                             name: `Лог (${this.props.records.length})`
                         }]} />
                         <span className={classNames(
-                            "log__new-count",
-                            {"log__new-count--new": unreadedRecords}
+                            "content__count",
+                            {"content__count--yellow": unreadedRecords}
                         )}>
                             <i className="icon-flash-1"></i>
                             {unreadedRecords}

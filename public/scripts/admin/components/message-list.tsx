@@ -5,6 +5,7 @@ import { encodeHTML, decodeHTML } from 'buk';
 import Form, { TextareaField } from './form/Form';
 import Table from './table/table';
 import { isNil } from 'lodash';
+import classNames from 'classnames';
 
 interface Message {
     id: number,
@@ -82,6 +83,9 @@ class MessageList extends React.Component<MessageListProps, MessageListState> {
     }
 
     public render(): React.ReactNode {
+        const newCount = this.state.list.filter((message) => 
+            message.from_id !== this.props.myId && !message.readed
+        ).length;
         return (<>
             <span className="content__title">Новое сообщение</span>
             <div className="box">
@@ -99,9 +103,18 @@ class MessageList extends React.Component<MessageListProps, MessageListState> {
                 />
             </div>
             <div className="content__header">
-                <span className="content__title">
+                <div className="breadcrumbs-wrapper">
+                    <span className="content__title">
                         Сообщения ({this.state.list.length})
-                </span>
+                    </span>
+                    <span className={classNames(
+                        "content__count",
+                        { "content__count--red": newCount !== 0 }
+                    )}>
+                        <i className="icon-flash-1"></i>
+                        {newCount}
+                    </span>
+                </div>
                 {!isNil(this.state.pagerHtml) &&
                     <div className="content__pager" dangerouslySetInnerHTML={{
                         __html: decodeHTML(this.state.pagerHtml)

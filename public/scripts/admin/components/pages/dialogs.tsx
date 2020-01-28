@@ -1,6 +1,7 @@
 import React from 'react';
 import { decodeHTML } from 'buk';
 import Breadcrumbs from '../common/Breadcrumbs';
+import classNames from 'classnames';
 import Table from '../table/table';
 import Mark from '../mark';
 
@@ -11,7 +12,7 @@ interface Message {
 
 interface Dialog {
     newCount: number,
-    activeCount: number
+    sentCount: number
     whoId: number,
     whoAvatar: string,
     whoLogin: string,
@@ -34,15 +35,27 @@ interface DialogsPageProps {
 
 class DialogsPage extends React.Component<DialogsPageProps> {
     public render(): React.ReactNode {
+        const newCount = this.props.list
+            .filter((dialog) => dialog.newCount !== 0)
+            .length;
         return (
             <div className="dialogs">
                 <div className="content__header">
-                    <Breadcrumbs items={[{
-                        'name': 'Профиль',
-                        'link': `/admin/users/profile/${this.props.userMe.login}`
-                    }, {
-                        'name': `Диалоги (${this.props.countAll})`
-                    }]} />
+                    <div className="breadcrumbs-wrapper">
+                        <Breadcrumbs items={[{
+                            'name': 'Профиль',
+                            'link': `/admin/users/profile/${this.props.userMe.login}`
+                        }, {
+                            'name': `Диалоги (${this.props.countAll})`
+                        }]} />
+                        <span className={classNames(
+                            "content__count",
+                            { "content__count--red": newCount !== 0 }
+                        )}>
+                            <i className="icon-flash-1"></i>
+                            {newCount}
+                        </span>
+                    </div>
                     {this.props.pageCount > 1 &&
                         <div 
                             dangerouslySetInnerHTML={{__html: this.props.pagerHtml}}
@@ -94,10 +107,10 @@ class DialogsPage extends React.Component<DialogsPageProps> {
                                     className="dialogs__status"
                                 />
                                 : (
-                                    dialog.activeCount !== 0
+                                    dialog.sentCount !== 0
                                     ? <Mark
                                         color="green"
-                                        label={`${dialog.activeCount} sent`}
+                                        label={`${dialog.sentCount} sent`}
                                         className="dialogs__status"
                                     />
                                     : <Mark

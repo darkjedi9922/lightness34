@@ -38,18 +38,18 @@ foreach ($dialogs as $dialog) {
     /** @var Dialog $dialog */
     $last = $dialog->getLastMessage();
     $newCount = 0;
-    $activeCount = 0;
+    $sentCount = 0;
     $toId = (int)$last->to_id;
     if (!$last->readed) {
         if ($toId === $me->id) $newCount = $dialog->countNewMessages($toId);
-        else $activeCount = $dialog->countNewMessages($toId);
+        else $sentCount = $dialog->countNewMessages($toId);
     }
     $who = User::selectIdentity($toId !== $me->id ? $toId : (int)$last->from_id);
     $delete->setArg('uid', $who->id);
 
     $dialogListData['list'][] = [
         'newCount' => $newCount,
-        'activeCount' => $activeCount,
+        'sentCount' => $sentCount,
         'whoId' => $who->id,
         'whoAvatar' => '/' . $who->getAvatarUrl(),
         'whoLogin' => $who->login,
