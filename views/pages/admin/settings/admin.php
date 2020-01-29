@@ -41,6 +41,13 @@ $formProps = [
 $formProps = JsonEncoder::forHtmlAttribute($formProps);
 ?>
 
+<div class="content__header">
+    <div class="breadcrumbs">
+        <span class="breadcrumbs__item">Настройки</span>
+        <span class="breadcrumbs__divisor"></span>
+        <span class="breadcrumbs__item breadcrumbs__item--current">Админ-панель</span>
+    </div>
+</div>
 <div class="box">
     <div class="react-form" data-props="<?= $formProps ?>"></div>
 </div>

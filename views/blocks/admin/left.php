@@ -44,7 +44,7 @@ if ($group->id === $group::ROOT_ID) $menu = array_merge_recursive($menu, [
             'submenu' => [[
                 'name' => 'Общие',
                 'icon' => 'cog',
-                'link' => '/admin/settings/user'
+                'link' => '/admin/settings/users'
             ], [
                 'name' => 'Группы',
                 'icon' => 'id-card-o',

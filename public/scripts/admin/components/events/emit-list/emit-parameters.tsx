@@ -42,6 +42,7 @@ class EmitParameters extends React.Component<Props> {
                 parameters.push(
                     <div key={key} className="param">
                         <span className="param__name">{key}</span>
+                        <span className="param__divisor"> => </span>
                         <span className={paramValueClasses}>
                             {isEmpty 
                             ? ('empty' + (isObject(arg) ? ' array' : ''))
