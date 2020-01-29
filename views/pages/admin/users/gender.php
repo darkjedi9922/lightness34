@@ -5,6 +5,7 @@ use engine\users\Group;
 use engine\users\Gender;
 use frame\actions\ViewAction;
 use engine\admin\actions\EditGender;
+use frame\tools\JsonEncoder; 
 
 Init::accessGroup(Group::ROOT_ID);
 
@@ -14,6 +15,25 @@ $gender = Gender::selectIdentity($id);
 Init::require($gender !== null);
 
 $edit = new ViewAction(EditGender::class, ['id' => $id]);
+
+$nameErrors = [];
+if ($edit->hasError(EditGender::E_NO_NAME))
+    $nameErrors[] = 'Название не указано';
+
+$formProps = [
+    'actionUrl' => $edit->getUrl(),
+    'method' => 'post',
+    'fields' => [[
+        'type' => 'text',
+        'title' => 'Название',
+        'name' => 'name',
+        'defaultValue' => $edit->getPost('name', $gender->name),
+        'errors' => $nameErrors
+    ]],
+    'buttonText' => 'Сохранить',
+    'short' => true
+];
+$formProps = JsonEncoder::forHtmlAttribute($formProps);
 ?>
 
 <div class="content__header">
@@ -24,18 +44,5 @@ $edit = new ViewAction(EditGender::class, ['id' => $id]);
     </div>
 </div>
 <div class="box">
-    <form action="<?= $edit->getUrl() ?>" method="post">
-        <table>
-            <tr>
-                <td>Название:</td>
-                <td>
-                    <input name="name" type="text" value="<?= $edit->getPost('name', $gender->name) ?>">
-                    <?php if ($edit->hasError(EditGender::E_NO_NAME)) : ?>
-                        <span class="error">Название не указано</span>
-                    <?php endif ?>
-                </td>
-            </tr>
-        </table>
-        <button>Сохранить</button>
-    </form>
+    <div class="react-form" data-props="<?= $formProps ?>"></div>
 </div>

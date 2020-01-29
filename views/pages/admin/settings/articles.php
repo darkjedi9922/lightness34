@@ -5,37 +5,46 @@ use engine\users\Group;
 use frame\cash\config;
 use frame\actions\ViewAction;
 use engine\admin\actions\EditConfigAction;
+use frame\tools\JsonEncoder;
 
 Init::accessGroup(Group::ROOT_ID);
 
 $config = config::get('articles');
 $edit = new ViewAction(EditConfigAction::class, ['name' => 'articles']);
+
+$formProps = [
+    'actionUrl' => $edit->getUrl(),
+    'method' => 'post',
+    'fields' => [[
+        'type' => 'text',
+        'title' => 'Максимальная длина названия',
+        'name' => 'title->maxLength',
+        'defaultValue' => $edit->getPost(
+            'title->maxLength',
+            (string) $config->{'title.maxLength'}
+        )
+    ], [
+        'type' => 'text',
+        'title' => 'Количество на странице списка',
+        'name' => 'list->amount',
+        'defaultValue' => $edit->getPost(
+            'list->amount',
+            (string) $config->{'list.amount'}
+        )
+    ]],
+    'buttonText' => 'Сохранить',
+    'short' => true
+];
+$formProps = JsonEncoder::forHtmlAttribute($formProps);
 ?>
 
+<div class="content__header">
+    <div class="breadcrumbs">
+        <span class="breadcrumbs__item">Настройки</span>
+        <span class="breadcrumbs__divisor"></span>
+        <span class="breadcrumbs__item breadcrumbs__item--current">Статьи</span>
+    </div>
+</div>
 <div class="box">
-    <form action="<?= $edit->getUrl() ?>" method="post">
-        <table>
-            <tr>
-                <td>Максимальная длина названия:</td>
-                <td>
-                    <input name="title->maxLength" type="text" 
-                        value="<?= $edit->getPost(
-                            'title->maxLength', 
-                            $config->{'title.maxLength'}
-                        ) ?>">
-                </td>
-            </tr>
-            <tr>
-                <td>Количество на странице списка:</td>
-                <td>
-                    <input name="list->amount" type="text" 
-                        value="<?= $edit->getPost(
-                            'list->amount', 
-                            $config->{'list.amount'}
-                        ) ?>">
-                </td>
-            </tr>
-        </table>
-        <button>Сохранить</button>
-    </form>
+    <div class="react-form" data-props="<?= $formProps ?>"></div>
 </div>

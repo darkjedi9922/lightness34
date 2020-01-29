@@ -7,14 +7,41 @@ use engine\users\Gender;
 use frame\actions\ViewAction;
 use engine\admin\actions\AddGender;
 use engine\admin\actions\DeleteGender;
+use frame\tools\JsonEncoder;
 
 Init::accessGroup(Group::ROOT_ID);
 
 $genders = new IdentityList(Gender::class);
 $addGender = new ViewAction(AddGender::class);
 $deleteGender = new ViewAction(DeleteGender::class);
+
+$nameErrors = [];
+if ($addGender->hasError(AddGender::E_NO_NAME))
+    $nameErrors[] = 'Название не указано';
+
+$formProps = [
+    'actionUrl' => $addGender->getUrl(),
+    'method' => 'post',
+    'fields' => [[
+        'type' => 'text',
+        'title' => 'Название',
+        'name' => 'name',
+        'defaultValue' => $addGender->getPost('name', ''),
+        'errors' => $nameErrors
+    ]],
+    'buttonText' => 'Добавить',
+    'short' => true
+];
+$formProps = JsonEncoder::forHtmlAttribute($formProps);
 ?>
 
+<div class="content__header">
+    <div class="breadcrumbs">
+        <span class="breadcrumbs__item">Пользователи</span>
+        <span class="breadcrumbs__divisor"></span>
+        <span class="breadcrumbs__item breadcrumbs__item--current">Пол</span>
+    </div>
+</div>
 <div class="box">
     <table width="100%">
         <?php foreach ($genders as $gender): /** @var Gender $gender */ ?>
@@ -30,18 +57,7 @@ $deleteGender = new ViewAction(DeleteGender::class);
         <?php endforeach ?>
     </table>
 </div>
+<span class="content__title">Добавить</span>
 <div class="box">
-    <h3>Добавить</h3><br>
-    <?php if ($addGender->hasError(AddGender::E_NO_NAME)) : ?>
-        <span class="error" style="margin-bottom:7px">Название не указано</span>
-    <?php endif ?>
-    <form action="<?= $addGender->getUrl() ?>" method="post">
-        <table>
-            <tr>
-                <td>Название:</td>
-                <td><input name="name" type="text"></td>
-            </tr>
-        </table>
-        <button>Добавить</button>
-    </form>
+    <div class="react-form" data-props="<?= $formProps ?>"></div>
 </div>

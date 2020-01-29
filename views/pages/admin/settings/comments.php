@@ -5,42 +5,53 @@ use engine\users\Group;
 use frame\cash\config;
 use frame\actions\ViewAction;
 use engine\admin\actions\EditConfigAction;
+use frame\tools\JsonEncoder;
 
 Init::accessGroup(Group::ROOT_ID);
 
 $config = config::get('comments');
 $edit = new ViewAction(EditConfigAction::class, ['name' => 'comments']);
+
+$formProps = [
+    'actionUrl' => $edit->getUrl(),
+    'method' => 'post',
+    'fields' => [[
+        'type' => 'text',
+        'title' => 'Количество на странице списка',
+        'name' => 'list->amount',
+        'defaultValue' => $edit->getPost(
+            'list->amount',
+            (string) $config->{'list.amount'}
+        )
+    ], [
+        'type' => 'radio',
+        'title' => 'Порядок',
+        'name' => 'list->order',
+        'values' => [[
+            'label' => 'Сначала старые',
+            'value' => 'ASC'
+        ], [
+            'label' => 'Сначала новые',
+            'value' => 'DESC'
+        ]],
+        'currentValue' => $edit->getPost(
+            'list->order',
+            $config->get('list.order')
+        )
+    ]],
+    'buttonText' => 'Сохранить',
+    'short' => true
+];
+$formProps = JsonEncoder::forHtmlAttribute($formProps);
 ?>
 
+<div class="content__header">
+    <div class="breadcrumbs">
+        <span class="breadcrumbs__item">Настройки</span>
+        <span class="breadcrumbs__divisor"></span>
+        <span class="breadcrumbs__item breadcrumbs__item--current">Комментарии</span>
+    </div>
+</div>
 <div class="box">
-    <form action="<?= $edit->getUrl() ?>" method="post">
-        <table>
-            <tr>
-                <td>Количество на странице списка:</td>
-                <td>
-                    <input name="list->amount" type="text" 
-                        value="<?= $edit->getPost(
-                            'list->amount', 
-                            $config->{'list.amount'}
-                        ) ?>">
-                </td>
-            </tr>
-            <tr>
-                <td>Порядок:</td>
-                <td>
-                    <div class="radio">
-                        <input id="ASC" type="radio" name="list->order" value="ASC" 
-                            <?php if ($edit->getPost('list->order', $config->{'list.order'} === 'ASC') )
-                                echo 'checked' ?>>
-                        <label for="ASC">Сначала старые</label>
-                        <input id="DESC" type="radio" name="list->order" value="DESC" 
-                            <?php if ($edit->getPost('list->order', $config->{'list.order'} === 'DESC'))
-                                echo 'checked' ?>>
-                        <label for="DESC">Сначала новые</label>
-                    </div>
-                </td>
-            </tr>
-        </table>
-        <button>Сохранить</button>
-    </form>
+    <div class="react-form" data-props="<?= $formProps ?>"></div>
 </div>
