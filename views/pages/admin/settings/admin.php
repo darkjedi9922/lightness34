@@ -42,5 +42,5 @@ $formProps = JsonEncoder::forHtmlAttribute($formProps);
 ?>
 
 <div class="box">
-    <div id="admin-config-form" data-props="<?= $formProps ?>"></div>
+    <div class="react-form" data-props="<?= $formProps ?>"></div>
 </div>

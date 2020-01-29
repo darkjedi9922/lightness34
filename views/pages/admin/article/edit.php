@@ -61,5 +61,5 @@ $formProps = JsonEncoder::forHtmlAttribute([
 </div>
 
 <div class="box">
-    <div id="new-article-form" data-props="<?= $formProps ?>"></div>
+    <div class="react-form" data-props="<?= $formProps ?>"></div>
 </div>

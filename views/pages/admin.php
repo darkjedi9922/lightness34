@@ -35,7 +35,7 @@ $formProps = JsonEncoder::forHtmlAttribute([
 <div class="centered-wrapper">
     <div class="box box--login">
         <center><h2>Вход в админ-панель</h2></center>
-        <div id="admin-login-form" data-props="<?= $formProps ?>"></div>
+        <div class="react-form" data-props="<?= $formProps ?>"></div>
     </div>
 </div>
 

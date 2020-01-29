@@ -128,5 +128,5 @@ $formProps = JsonEncoder::forHtmlAttribute($formProps);
 </div>
 
 <div class="box">
-    <div id="profile-edit-form" data-props="<?= $formProps ?>"></div>
+    <div class="react-form" data-props="<?= $formProps ?>"></div>
 </div>

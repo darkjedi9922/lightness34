@@ -61,5 +61,5 @@ $formProps = JsonEncoder::forHtmlAttribute($formProps);
 </div>
 <span class="content__title">Добавить группу</span>
 <div class="box">
-    <div id="group-add-form" data-props="<?= $formProps ?>"></div>
+    <div class="react-form" data-props="<?= $formProps ?>"></div>
 </div>
