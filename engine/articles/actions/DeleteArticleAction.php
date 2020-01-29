@@ -13,7 +13,7 @@ class DeleteArticleAction extends ActionBody
     public function listGet(): array
     {
         return [
-            'id' => [self::GET_INT, 'The id of the article']
+            'id' => self::GET_INT
         ];
     }
 

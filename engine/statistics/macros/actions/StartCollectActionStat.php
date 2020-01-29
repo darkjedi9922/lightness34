@@ -62,7 +62,7 @@ class StartCollectActionStat extends BaseStatCollector
         $data = $action->getDataArray()['post'];
         foreach ($data as $field => $value) {
             $newValue = $value;
-            if (($desc[$field][0] ?? null) === ActionBody::POST_PASSWORD)
+            if (($desc[$field] ?? null) === ActionBody::POST_PASSWORD)
                 $newValue = ($newValue !== '' ? 'secret' : '');
             else if (is_string($value)) {
                 $newValue = shorten(decode_specials($value), 50, '...');

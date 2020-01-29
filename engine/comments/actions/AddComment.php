@@ -18,15 +18,15 @@ class AddComment extends ActionBody
     public function listGet(): array
     {
         return [
-            'module_id' => [self::GET_INT, 'A module id of the CommentsModule type'],
-            'material_id' => [self::GET_INT, 'A material id to which the comment is added']
+            'module_id' => self::GET_INT,
+            'material_id' => self::GET_INT
         ];
     }
 
     public function listPost(): array
     {
         return [
-            'text' => [self::POST_TEXT, 'A text of the new comment']
+            'text' => self::POST_TEXT
         ];
     }
 

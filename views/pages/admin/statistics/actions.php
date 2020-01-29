@@ -98,7 +98,7 @@ $clear = new ViewAction(ClearStatistics::class, ['module' => 'stat/actions']);
                             <?php else : ?>
                                 <?php foreach ($data['data']['post'] as $field => $value) :
                                     $empty = $value === '';
-                                    $secret = ($postDesc[$field][0] ?? null) === ActionBody::POST_PASSWORD;
+                                    $secret = ($postDesc[$field] ?? null) === ActionBody::POST_PASSWORD;
                                     ?>
                                     <div class="param">
                                         <span class="param__name"><?= $field ?></span>
@@ -260,11 +260,10 @@ $clear = new ViewAction(ClearStatistics::class, ['module' => 'stat/actions']);
                             <?php if (!empty($list)) : ?>
                                 <div class="details">
                                     <span class="details__header"><?= $type ?> Parameters</span>
-                                    <?php foreach ($list as $name => $desc) : ?>
+                                    <?php foreach ($list as $name => $fieldType) : ?>
                                         <div class="param action-param">
                                             <span class="param__name"><?= $name ?></span>
-                                            <span class="param__value action-param__type action-param__type--<?= $desc[0] ?>"><?= $desc[0] ?></span>
-                                            <span class="action-param__desc"><?= $desc[1] ?></span>
+                                            <span class="param__value action-param__type action-param__type--<?= $fieldType ?>"><?= $fieldType ?></span>
                                         </div>
                                     <?php endforeach ?>
                                 </div>

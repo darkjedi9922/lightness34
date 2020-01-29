@@ -13,10 +13,7 @@ class ClearStatistics extends ActionBody
     public function listGet(): array
     {
         return [
-            'module' => [
-                self::GET_STRING,
-                'Name of the statistics submodule under which it was setup'
-            ],
+            'module' => self::GET_STRING
         ];
     }
 

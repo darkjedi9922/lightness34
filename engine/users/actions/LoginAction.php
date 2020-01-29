@@ -17,9 +17,9 @@ class LoginAction extends ActionBody
     public function listPost(): array
     {
         return [
-            'login' => [self::POST_TEXT, 'The login to enter'],
-            'password' => [self::POST_PASSWORD, 'The password to enter'],
-            'remember' => [self::POST_BOOL, 'Do remember']
+            'login' => self::POST_TEXT,
+            'password' => self::POST_PASSWORD,
+            'remember' => self::POST_BOOL
         ];
     }
 

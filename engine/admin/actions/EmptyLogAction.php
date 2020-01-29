@@ -16,7 +16,7 @@ class EmptyLogAction extends ActionBody
     public function listGet(): array
     {
         return [
-            'file' => [self::GET_STRING, 'A log file']
+            'file' => self::GET_STRING
         ];
     }
 

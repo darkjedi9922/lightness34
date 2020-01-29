@@ -18,15 +18,15 @@ class EditArticleAction extends ActionBody
     public function listGet(): array
     {
         return [
-            'id' => [self::GET_INT, 'The id of the article']
+            'id' => self::GET_INT
         ];
     }
 
     public function listPost(): array
     {
         return [
-            'title' => [self::POST_TEXT, 'The title of the article'],
-            'text' => [self::POST_TEXT, 'The text of the article']
+            'title' => self::POST_TEXT,
+            'text' => self::POST_TEXT
         ];
     }
 

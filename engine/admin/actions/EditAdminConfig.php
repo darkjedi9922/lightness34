@@ -18,11 +18,8 @@ class EditAdminConfig extends ActionBody
     public function listPost(): array
     {
         return [
-            'current-password' => [
-                self::POST_PASSWORD,
-                'Current password of admin panel to validate access of editing'
-            ],
-            'new-password' => [self::POST_PASSWORD, 'A new password of admin panel']
+            'current-password' => self::POST_PASSWORD,
+            'new-password' => self::POST_PASSWORD
         ];
     }
 

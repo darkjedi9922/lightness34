@@ -7,7 +7,7 @@ class PostListActionExample extends ActionBody
     public function listPost(): array
     {
         return [
-            'sum' => [self::POST_INT, 'Some integer arg']
+            'sum' => self::POST_INT
         ];
     }
 

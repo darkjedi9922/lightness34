@@ -7,8 +7,8 @@ class GetListActionExample extends ActionBody
     public function listGet(): array
     {
         return [
-            'name' => [self::GET_STRING, 'This is a description of the get arg'],
-            'amount' => [self::GET_INT, 'Some integer arg']
+            'name' => self::GET_STRING,
+            'amount' => self::GET_INT
         ];
     }
 

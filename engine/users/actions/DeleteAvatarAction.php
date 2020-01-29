@@ -17,10 +17,7 @@ class DeleteAvatarAction extends ActionBody
     public function listGet(): array
     {
         return [
-            'uid' => [
-                self::GET_INT,
-                'The id of the user for which the avatar has being deleted'
-            ]
+            'uid' => self::GET_INT
         ];
     }
 

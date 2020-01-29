@@ -47,8 +47,8 @@ class ActionTransmitter
         $result = [];
         $post = $action->getDataArray()['post'];
         $list = $action->getBody()->listPost();
-        foreach ($list as $field => $desc) {
-            if (isset($post[$field]) && $desc[0] != ActionBody::POST_PASSWORD)
+        foreach ($list as $field => $type) {
+            if (isset($post[$field]) && $type != ActionBody::POST_PASSWORD)
                 $result[$field] = $post[$field];
         }
         return $result;

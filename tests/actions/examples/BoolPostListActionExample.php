@@ -7,7 +7,7 @@ class BoolPostListActionExample extends ActionBody
     public function listPost(): array
     {
         return [
-            'checked' => [self::POST_BOOL, 'Some boolean value']
+            'checked' => self::POST_BOOL
         ];
     }
 

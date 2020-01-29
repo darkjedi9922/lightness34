@@ -25,8 +25,8 @@ class NewArticleAction extends ActionBody
     public function listPost(): array
     {
         return [
-            'title' => [self::POST_TEXT, 'The title of the article'],
-            'text' => [self::POST_TEXT, 'The text of the article']
+            'title' => self::POST_TEXT,
+            'text' => self::POST_TEXT
         ];
     }
 

@@ -79,8 +79,8 @@ class Action
     {
         if ($type === self::POST) {
             $postDesc = $this->body->listPost();
-            foreach ($postDesc as $field => $desc) {
-                if ($desc[0] === ActionBody::POST_BOOL && !isset($data[$field])) {
+            foreach ($postDesc as $field => $fieldType) {
+                if ($fieldType === ActionBody::POST_BOOL && !isset($data[$field])) {
                     $data[$field] = false;
                 }
             }
@@ -96,9 +96,9 @@ class Action
     public function setData(string $type, string $name, $value)
     {
         if ($type === self::ARGS && isset($this->body->listGet()[$name]))
-            settype($value, $this->body->listGet()[$name][0]);
+            settype($value, $this->body->listGet()[$name]);
         else if ($type === self::POST && isset($this->body->listPost()[$name])) {
-            $postType = $this->body->listPost()[$name][0];
+            $postType = $this->body->listPost()[$name];
             switch ($postType) {
                 case ActionBody::POST_PASSWORD: 
                     $postType = ActionBody::POST_TEXT;
@@ -192,7 +192,7 @@ class Action
     private function validateGet(array $get)
     {
         $list = $this->body->listGet();
-        foreach ($list as $field => $desc) {
+        foreach ($list as $field => $type) {
             if (!isset($get[$field])) throw new HttpError(
                 HttpError::NOT_FOUND,
                 "Get field '$field' is not set." 
@@ -206,7 +206,7 @@ class Action
     private function validatePost(array $post)
     {
         $list = $this->body->listPost();
-        foreach ($list as $field => $desc) {
+        foreach ($list as $field => $type) {
             if (!isset($post[$field])) throw new HttpError(
                 HttpError::NOT_FOUND,
                 "Post field '$field' is not set."

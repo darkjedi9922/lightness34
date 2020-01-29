@@ -28,7 +28,7 @@ class EditRightsAction extends ActionBody
     public function listGet(): array
     {
         return [
-            'id' => [self::GET_INT, 'The id of the user group']
+            'id' => self::GET_INT
         ];
     }
 

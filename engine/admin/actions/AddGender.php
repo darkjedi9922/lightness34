@@ -17,7 +17,7 @@ class AddGender extends ActionBody
     public function listPost(): array
     {
         return [
-            'name' => [self::POST_TEXT, 'The name of the new gender']
+            'name' => self::POST_TEXT
         ];
     }
 

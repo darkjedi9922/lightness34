@@ -33,19 +33,19 @@ class ProfileEditAction extends ProfileAction
     public function listGet(): array
     {
         return [
-            'id' => [self::GET_INT, 'Id of the user']
+            'id' => self::GET_INT
         ];
     }
 
     public function listPost(): array
     {
         return [
-            'login' => [self::POST_TEXT, 'New login'],
-            'password' => [self::POST_PASSWORD, 'New password or empty string'],
-            'email' => [self::POST_TEXT, 'New email'],
-            'name' => [self::POST_TEXT, 'New name'],
-            'surname' => [self::POST_TEXT, 'New name'],
-            'gender_id' => [self::POST_INT, 'Id of new gender']
+            'login' => self::POST_TEXT,
+            'password' => self::POST_PASSWORD, // can be empty to left the old value
+            'email' => self::POST_TEXT,
+            'name' => self::POST_TEXT,
+            'surname' => self::POST_TEXT,
+            'gender_id' => self::POST_INT
         ];
     }
 

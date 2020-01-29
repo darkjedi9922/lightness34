@@ -22,14 +22,14 @@ class EditGender extends ActionBody
     public function listGet(): array
     {
         return [
-            'id' => [self::GET_INT, 'The id of the gender']
+            'id' => self::GET_INT
         ];
     }
 
     public function listPost(): array
     {
         return [
-            'name' => [self::POST_TEXT, 'A new name of the gender']
+            'name' => self::POST_TEXT
         ];
     }
 

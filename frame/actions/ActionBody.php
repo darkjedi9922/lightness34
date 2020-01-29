@@ -24,8 +24,8 @@ abstract class ActionBody
      * listed in this method is not set when executing an action, then an error
      * HttpError:NOT_FOUND raised.
      * 
-     * Returns an array of the form ['param_name' => [GET_TYPE, 'description']]
-     * The GET_TYPE is Action constants declaring the type of a parameter such as
+     * Returns an array of the form ['param_name' => <GET_TYPE>]
+     * The <GET_TYPE> is Action constants declaring the type of a parameter such as
      * GET_INT, GET_TEXT etc.
      */
     public function listGet(): array { return []; }

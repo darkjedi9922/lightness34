@@ -21,15 +21,15 @@ class EditUserGroupAction extends ActionBody
     public function listGet(): array
     {
         return [
-            'id' => [self::GET_INT, 'Id of the group']
+            'id' => self::GET_INT
         ];
     }
 
     public function listPost(): array
     {
         return [
-            'name' => [self::POST_TEXT, 'New name of the group'],
-            'icon' => [self::POST_TEXT, 'Path to new icon of the group']
+            'name' => self::POST_TEXT,
+            'icon' => self::POST_TEXT
         ];
     }
 

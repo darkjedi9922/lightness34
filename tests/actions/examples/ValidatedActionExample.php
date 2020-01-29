@@ -9,7 +9,7 @@ class ValidatedActionExample extends ActionBody
     public function listPost(): array
     {
         return [
-            'name' => [self::POST_TEXT, 'A name must not begin from _ symbol']
+            'name' => self::POST_TEXT // Must not begin from _ symbol to pass tests
         ];
     }
 

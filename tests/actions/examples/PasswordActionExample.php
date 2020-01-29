@@ -7,8 +7,8 @@ class PasswordActionExample extends ActionBody
     public function listPost(): array
     {
         return [
-            'login' => [self::POST_TEXT, 'A simple text'],
-            'password' => [self::POST_PASSWORD, 'A password']
+            'login' => self::POST_TEXT,
+            'password' => self::POST_PASSWORD
         ];
     }
 

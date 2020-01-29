@@ -15,7 +15,7 @@ class DeleteDialog extends ActionBody
     public function listGet(): array
     {
         return [
-            'uid' => [self::GET_INT, 'User id with whom dialog is']
+            'uid' => self::GET_INT
         ];
     }
 

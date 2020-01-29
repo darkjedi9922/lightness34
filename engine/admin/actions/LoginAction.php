@@ -22,7 +22,7 @@ class LoginAction extends ActionBody
     public function listPost(): array
     {
         return [
-            'password' => [self::POST_PASSWORD, 'The password to admin panel']
+            'password' => self::POST_PASSWORD
         ];
     }
 

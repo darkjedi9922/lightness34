@@ -19,14 +19,14 @@ class AddMessage extends ActionBody
     public function listGet(): array
     {
         return [
-            'to_uid' => [self::GET_INT, 'User id to whom send a message']
+            'to_uid' => self::GET_INT
         ];
     }
 
     public function listPost(): array
     {
         return [
-            'text' => [self::POST_TEXT, 'The text of the new message']
+            'text' => self::POST_TEXT
         ];
     }
 
