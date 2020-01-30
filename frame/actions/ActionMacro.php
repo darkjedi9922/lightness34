@@ -36,14 +36,18 @@ class ActionMacro extends GetMacro
 
     private function jsonify()
     {
+        $redirect = $this->getRedirect();
         Response::setText(json_encode([
             'errors' => $this->action->getErrors(),
-            'result' => $this->action->getResult()
+            'result' => $this->action->getResult(),
+            'redirect' => !$this->isDefaultRedirect($redirect) ? $redirect : null
         ]));
     }
 
     private function redirect(string $redirect)
     {
+        if ($this->isDefaultRedirect($redirect))
+            $redirect = Request::hasReferer() ? Request::getReferer() : '/';
         $transmitter = new ActionTransmitter;
         $transmitter->save($this->action);
         Response::setUrl(Router::toUrlOf($redirect));
@@ -54,5 +58,10 @@ class ActionMacro extends GetMacro
         $body = $this->action->getBody();
         if (!$this->action->hasErrors()) return $body->getSuccessRedirect();
         else return $body->getFailRedirect();
+    }
+
+    private function isDefaultRedirect(?string $redirect): bool
+    {
+        return $redirect === $this->action->getBody()::DEFAULT_REDIRECT;
     }
 }

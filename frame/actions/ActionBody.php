@@ -19,6 +19,8 @@ abstract class ActionBody
     const POST_TEXT = 'string';
     const POST_PASSWORD = 'password';
 
+    const DEFAULT_REDIRECT = '__DEFAULT_REDIRECT__';
+
     /**
      * Declares the list of get parameters that Action required. If a parameter
      * listed in this method is not set when executing an action, then an error
@@ -76,8 +78,7 @@ abstract class ActionBody
      */
     public function getSuccessRedirect(): ?string
     {
-        if (Request::hasReferer()) return Request::getReferer();
-        else return '/';
+        return static::DEFAULT_REDIRECT;
     }
 
     /**
@@ -88,7 +89,6 @@ abstract class ActionBody
      */
     public function getFailRedirect(): ?string
     {
-        if (Request::hasReferer()) return Request::getReferer();
-        else return '/';
+        return static::DEFAULT_REDIRECT;
     }
 }
