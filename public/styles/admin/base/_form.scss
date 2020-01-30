@@ -104,5 +104,11 @@
     &--short &__field-container {
         flex-grow: 0;
         width: 15rem;
+
+        // Костыль, потому что в Firefox input у файла вылезает за ширину родителя.
+        // Поставим фиксированный размер вручную.
+        .file-input .form__input {
+            width: 132px;
+        }        
     }
 }

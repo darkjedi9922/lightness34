@@ -3,6 +3,7 @@
         &--string { color: $box-blue; }
         &--int { color: $box-green; }
         &--password { color: $box-red; }
+        &--bool { color: $box-purple; }
 
         &:before {
             content: '(';
