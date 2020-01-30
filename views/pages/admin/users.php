@@ -33,9 +33,14 @@ foreach ($users as $user) {
             Пользователи (<?= $users->countOnPage() ?>)
         </span>
     </div>
+    <?php if ($users->getPager()->countPages() > 1): ?>
+    <div class="content__pager">
+        <?php $users->getPager()->show('admin') ?>
+    </div>
+    <?php endif ?>
     <div class="actions">
         <div class="actions__item">
-            <?php $users->getPager()->show('admin') ?>
+            <a href="/admin/users/add" class="button">Добавить пользователя</a>
         </div>
     </div>
 </div>
