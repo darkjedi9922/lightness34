@@ -1,5 +1,7 @@
 <?php namespace engine\users\actions\fields;
 
+use frame\actions\fields\StringField;
+
 class EmailField extends StringField
 {
     public function isIncorrect(): bool

@@ -1,5 +1,6 @@
 <?php namespace engine\users\actions\fields;
 
+use frame\actions\fields\StringField;
 use frame\cash\config;
 use engine\users\User;
 
@@ -25,6 +26,6 @@ class UserLogin extends StringField
 
     public function isTaken(): bool
     {
-        return User::select(['login' => $this->value]) !== null;
+        return User::select(['login' => $this->get()]) !== null;
     }
 }
