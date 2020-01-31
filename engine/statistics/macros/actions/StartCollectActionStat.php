@@ -7,6 +7,7 @@ use frame\actions\UploadedFile;
 use engine\statistics\stats\ActionStat;
 use engine\statistics\stats\TimeStat;
 use engine\statistics\macros\BaseStatCollector;
+use frame\actions\fields\PasswordField;
 
 use function lightlib\shorten;
 use function lightlib\decode_specials;
@@ -62,9 +63,12 @@ class StartCollectActionStat extends BaseStatCollector
         $data = $action->getDataArray()['post'];
         foreach ($data as $field => $value) {
             $newValue = $value;
-            if (($desc[$field] ?? null) === ActionBody::POST_PASSWORD)
+            $type = ($desc[$field] ?? null);
+            if (   $type === PasswordField::class
+                || is_subclass_of($type, PasswordField::class)
+            ) {
                 $newValue = ($newValue !== '' ? 'secret' : '');
-            else if (is_string($value)) {
+            } else if (is_string($value)) {
                 $newValue = shorten(decode_specials($value), 50, '...');
                 $newValue = encode_specials($newValue);
             }

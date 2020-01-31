@@ -5,6 +5,8 @@ use frame\tools\Init;
 use frame\config\Json;
 use engine\users\cash\user_me;
 use engine\users\Group;
+use frame\actions\fields\BaseField;
+use frame\actions\fields\StringField;
 
 /**
  * Параметр name: имя конфига (например, 'core').
@@ -23,9 +25,16 @@ class EditConfigAction extends ActionBody
     /** @var Json */
     private $config;
 
+    public function listGet(): array
+    {
+        return [
+            'name' => StringField::class
+        ];
+    }
+
     public function initialize(array $get)
     {
-        $name = $get['name'] ?? null;
+        $name = $get['name']->get();
         Init::require($name);
         $this->config = new Json(ROOT_DIR . '/config/' . $name . '.json');
         Init::require(!empty($this->config->getData()));

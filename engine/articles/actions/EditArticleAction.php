@@ -2,6 +2,8 @@
 
 use engine\articles\Article;
 use frame\actions\ActionBody;
+use frame\actions\fields\IntegerField;
+use frame\actions\fields\StringField;
 use frame\config\Json;
 use frame\tools\Init;
 use frame\cash\prev_router;
@@ -18,21 +20,21 @@ class EditArticleAction extends ActionBody
     public function listGet(): array
     {
         return [
-            'id' => self::GET_INT
+            'id' => IntegerField::class
         ];
     }
 
     public function listPost(): array
     {
         return [
-            'title' => self::POST_TEXT,
-            'text' => self::POST_TEXT
+            'title' => StringField::class,
+            'text' => StringField::class
         ];
     }
 
     public function initialize(array $get)
     {
-        $this->article = Article::selectIdentity($get['id']);
+        $this->article = Article::selectIdentity($get['id']->get());
         Init::accessOneRight('articles', [
             'edit-own' => [$this->article],
             'edit-all' => null
@@ -43,22 +45,22 @@ class EditArticleAction extends ActionBody
     {
         $errors = [];
         $config = new Json('config/articles.json');
-        $title = $post['title'];
-        $text = $post['text'];
+        /** @var StringField $title */ $title = $post['title'];
+        /** @var StringField $text */ $text = $post['text'];
 
-        if ($title === '') $errors[] = static::E_NO_TITLE;
-        else if (mb_strlen($title) > $config->{'title.maxLength'})
+        if ($title->isEmpty()) $errors[] = static::E_NO_TITLE;
+        else if ($title->isTooLong($config->{'title.maxLength'}))
             $errors[] = static::E_LONG_TITLE;
 
-        if ($text === '') $errors[] = static::E_NO_TEXT;
+        if ($text->isEmpty()) $errors[] = static::E_NO_TEXT;
 
         return $errors;
     }
 
     public function succeed(array $post, array $files)
     {
-        $this->article->title = $post['title'];
-        $this->article->content = $post['text'];
+        $this->article->title = $post['title']->get();
+        $this->article->content = $post['text']->get();
         $this->article->update();
     }
 

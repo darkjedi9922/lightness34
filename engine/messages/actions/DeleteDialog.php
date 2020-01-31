@@ -4,6 +4,7 @@ use engine\messages\Message;
 use engine\users\cash\user_me;
 use engine\users\Group;
 use frame\actions\ActionBody;
+use frame\actions\fields\IntegerField;
 use frame\cash\database;
 use frame\tools\Init;
 
@@ -15,7 +16,7 @@ class DeleteDialog extends ActionBody
     public function listGet(): array
     {
         return [
-            'uid' => self::GET_INT
+            'uid' => IntegerField::class
         ];
     }
 
@@ -23,7 +24,7 @@ class DeleteDialog extends ActionBody
     {
         $me = user_me::get();
         Init::access($me->group_id !== Group::GUEST_ID);
-        $this->uid = $get['uid'];
+        $this->uid = $get['uid']->get();
     }
 
     public function succeed(array $post, array $files)

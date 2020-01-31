@@ -25,7 +25,10 @@ class ActionRouter
     {
         return Router::toUrlOf(
             '/' . str_replace('\\', '/', get_class($action->getBody())),
-            array_merge([Action::ID => ''], $action->getDataArray()[Action::ARGS])
+            array_merge(
+                [Action::ID => ''],
+                $action->getDataArray(true)[Action::ARGS]
+            )
         );
     }
 }

@@ -2,6 +2,7 @@
 
 use frame\tools\Init;
 use frame\actions\ActionBody;
+use frame\actions\fields\StringField;
 use frame\tools\trackers\read\ReadLimitedProgressTracker;
 
 /**
@@ -16,14 +17,14 @@ class EmptyLogAction extends ActionBody
     public function listGet(): array
     {
         return [
-            'file' => self::GET_STRING
+            'file' => StringField::class
         ];
     }
 
     public function initialize(array $get)
     {
         Init::accessRight('admin', 'clear-logs');
-        $this->file = $get['file'];
+        $this->file = $get['file']->get();
     }
     
     public function succeed(array $post, array $files)

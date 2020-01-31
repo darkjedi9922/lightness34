@@ -4,6 +4,7 @@ use frame\actions\ActionBody;
 use frame\tools\Init;
 use engine\users\Group;
 use engine\users\Gender;
+use frame\actions\fields\StringField;
 
 /**
  * Права: root.
@@ -17,7 +18,7 @@ class AddGender extends ActionBody
     public function listPost(): array
     {
         return [
-            'name' => self::POST_TEXT
+            'name' => StringField::class
         ];
     }
 
@@ -29,14 +30,15 @@ class AddGender extends ActionBody
     public function validate(array $post, array $files): array
     {
         $errors = [];
-        if (!$post['name']) $errors[] = static::E_NO_NAME;
+        /** @var StringField $name */ $name = $post['name'];
+        if ($name->isEmpty()) $errors[] = static::E_NO_NAME;
         return $errors;
     }
 
     public function succeed(array $post, array $files)
     {
         $gender = new Gender;
-        $gender->name = $post['name'];
+        $gender->name = $post['name']->get();
         $gender->insert();
     }
 }

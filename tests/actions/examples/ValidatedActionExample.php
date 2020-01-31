@@ -1,6 +1,7 @@
 <?php namespace tests\actions\examples;
 
 use frame\actions\ActionBody;
+use frame\actions\fields\StringField;
 
 class ValidatedActionExample extends ActionBody
 {
@@ -9,13 +10,14 @@ class ValidatedActionExample extends ActionBody
     public function listPost(): array
     {
         return [
-            'name' => self::POST_TEXT // Must not begin from _ symbol to pass tests
+            // Must not begin from _ symbol to pass tests.
+            'name' => StringField::class
         ];
     }
 
     public function validate(array $post, array $files): array
     {
-        if ($post['name'][0] === '_') return [self::E_INVALID];
+        if ($post['name']->get()[0] === '_') return [self::E_INVALID];
         else return [];
     }
 

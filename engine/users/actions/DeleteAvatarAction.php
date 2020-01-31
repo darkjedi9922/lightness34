@@ -3,6 +3,7 @@
 use frame\actions\ActionBody;
 use frame\tools\Init;
 use engine\users\User;
+use frame\actions\fields\IntegerField;
 
 /**
  * Параметры:
@@ -17,13 +18,13 @@ class DeleteAvatarAction extends ActionBody
     public function listGet(): array
     {
         return [
-            'uid' => self::GET_INT
+            'uid' => IntegerField::class
         ];
     }
 
     public function initialize(array $get)
     {
-        $this->user = User::selectIdentity($get['uid']);
+        $this->user = User::selectIdentity($get['uid']->get());
         Init::require($this->user !== null);
         Init::accessOneRight('users', [
             'edit-all' => [$this->user], 

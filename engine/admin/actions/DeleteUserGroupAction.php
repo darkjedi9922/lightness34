@@ -3,6 +3,7 @@
 use engine\users\cash\user_me;
 use frame\actions\ActionBody;
 use engine\users\Group;
+use frame\actions\fields\IntegerField;
 use frame\database\Records;
 use frame\tools\Init;
 
@@ -18,11 +19,16 @@ class DeleteUserGroupAction extends ActionBody
     /** @var Group */
     private $group;
 
+    public function listGet(): array
+    {
+        return [
+            'id' => IntegerField::class
+        ];
+    }
+
     public function initialize(array $get)
     {
-        $id = $get['id'] ?? null;
-        Init::require($id !== null);
-        $this->group = Group::selectIdentity($id);
+        $this->group = Group::selectIdentity($get['id']->get());
         Init::require($this->group !== null);
         Init::require(!$this->group->isSystem());
         Init::access((int) user_me::get()->group_id === Group::ROOT_ID);

@@ -1,10 +1,12 @@
 <?php namespace frame\actions\fields;
 
+use function lightlib\encode_specials;
+
 class StringField extends BaseField
 {
     public function __construct(string $value)
     {
-        parent::__construct($value);
+        parent::__construct(encode_specials($value));
     }
 
     public function get(): string

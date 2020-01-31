@@ -8,17 +8,6 @@ use frame\route\Request;
  */
 abstract class ActionBody
 {
-    /** Type of a GET field. */
-    const GET_INT = 'int';
-    const GET_STRING = 'string';
-
-    /** Type of a POST field. */
-    const POST_INT = 'int';
-    /** Bool is usually represented by a checkbox input. */
-    const POST_BOOL = 'bool';
-    const POST_TEXT = 'string';
-    const POST_PASSWORD = 'password';
-
     const DEFAULT_REDIRECT = '__DEFAULT_REDIRECT__';
 
     /**

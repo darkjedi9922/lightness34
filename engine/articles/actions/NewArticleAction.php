@@ -3,6 +3,7 @@
 use engine\articles\Article;
 use engine\users\cash\user_me;
 use frame\actions\ActionBody;
+use frame\actions\fields\StringField;
 use frame\config\Json;
 use frame\tools\Init;
 use frame\cash\prev_router;
@@ -25,8 +26,8 @@ class NewArticleAction extends ActionBody
     public function listPost(): array
     {
         return [
-            'title' => self::POST_TEXT,
-            'text' => self::POST_TEXT
+            'title' => StringField::class,
+            'text' => StringField::class
         ];
     }
 
@@ -39,14 +40,14 @@ class NewArticleAction extends ActionBody
     {
         $errors = [];
         $config = new Json('config/articles.json');
-        $title = $post['title'];
-        $text = $post['text'];
+        /** @var StringField $title */ $title = $post['title'];
+        /** @var StringField $text */ $text = $post['text'];
 
-        if ($title === '') $errors[] = static::E_NO_TITLE;
-        else if (mb_strlen($title) > $config->{'title.maxLength'}) 
+        if ($title->isEmpty()) $errors[] = static::E_NO_TITLE;
+        else if ($title->isTooLong($config->{'title.maxLength'})) 
             $errors[] = static::E_LONG_TITLE;
 
-        if ($text === '') $errors[] = static::E_NO_TEXT;
+        if ($text->isEmpty()) $errors[] = static::E_NO_TEXT;
 
         return $errors;
     }
@@ -54,8 +55,8 @@ class NewArticleAction extends ActionBody
     public function succeed(array $post, array $files)
     {
         $article = new Article;
-        $article->title = $post['title'];
-        $article->content = $post['text'];
+        $article->title = $post['title']->get();
+        $article->content = $post['text']->get();
         $article->author_id = user_me::get()->id;
         $article->date = time();
         $this->id = $article->insert();

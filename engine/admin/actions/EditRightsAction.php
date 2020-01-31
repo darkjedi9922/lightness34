@@ -4,6 +4,8 @@ use engine\users\cash\my_group;
 use frame\actions\ActionBody;
 use frame\tools\Init;
 use engine\users\Group;
+use frame\actions\fields\BaseField;
+use frame\actions\fields\IntegerField;
 use frame\core\Core;
 use frame\modules\GroupRights;
 use frame\modules\Module;
@@ -28,7 +30,14 @@ class EditRightsAction extends ActionBody
     public function listGet(): array
     {
         return [
-            'id' => self::GET_INT
+            'id' => IntegerField::class
+        ];
+    }
+
+    public function listPost(): array
+    {
+        return [
+            'rights' => BaseField::class
         ];
     }
 
@@ -37,7 +46,7 @@ class EditRightsAction extends ActionBody
         $myGroup = my_group::get();
         Init::access($myGroup->id === $myGroup::ROOT_ID);
 
-        $this->id = $get['id'];
+        $this->id = $get['id']->get();
         Init::require($this->id !== Group::ROOT_ID);
 
         $this->group = Group::selectIdentity($this->id);
@@ -46,9 +55,7 @@ class EditRightsAction extends ActionBody
 
     public function succeed(array $post, array $files)
     {
-        // Если какой-либо модуль вообще не был передан, добавляем ему все
-        // права как off (пустой массив)
-        $rights = $post['rights'] ?? [];
+        $rights = $post['rights']->get();
         $modules = Core::$app->getModules();
         foreach ($modules as $moduleName => $module) {
             /** @var Module $module */

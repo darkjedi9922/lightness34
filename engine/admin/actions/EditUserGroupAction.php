@@ -3,6 +3,8 @@
 use frame\actions\ActionBody;
 use frame\tools\Init;
 use engine\users\Group;
+use frame\actions\fields\IntegerField;
+use frame\actions\fields\StringField;
 
 /**
  * Параметры:
@@ -21,29 +23,29 @@ class EditUserGroupAction extends ActionBody
     public function listGet(): array
     {
         return [
-            'id' => self::GET_INT
+            'id' => IntegerField::class
         ];
     }
 
     public function listPost(): array
     {
         return [
-            'name' => self::POST_TEXT,
-            'icon' => self::POST_TEXT
+            'name' => StringField::class,
+            'icon' => StringField::class
         ];
     }
 
     public function initialize(array $get)
     {
-        $this->group = Group::selectIdentity($get['id']);
+        $this->group = Group::selectIdentity($get['id']->get());
         Init::require($this->group !== null);
         Init::accessGroup(Group::ROOT_ID);
     }
 
     public function succeed(array $post, array $files)
     {
-        $this->group->name = $post['name'];
-        $this->group->icon = $post['icon'];
+        $this->group->name = $post['name']->get();
+        $this->group->icon = $post['icon']->get();
         $this->group->update();
     }
 }

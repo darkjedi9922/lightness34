@@ -1,5 +1,7 @@
 <?php namespace frame\actions;
 
+use frame\actions\fields\BaseField;
+use frame\actions\fields\BooleanField;
 use frame\actions\UploadedFile;
 use frame\errors\HttpError;
 use frame\core\Core;
@@ -77,15 +79,18 @@ class Action
      */
     public function setDataAll(string $type, array $data)
     {
-        if ($type === self::POST) {
-            $postDesc = $this->body->listPost();
-            foreach ($postDesc as $field => $fieldType) {
-                if ($fieldType === ActionBody::POST_BOOL && !isset($data[$field])) {
-                    $data[$field] = false;
-                }
-            }
+        $desc = $type === self::ARGS
+            ? $this->body->listGet() 
+            : $this->body->listPost();
+
+        foreach ($desc as $field => $fieldType) {
+            $this->setData($type, $field, $data[$field] ?? null);
+            unset($data[$field]);
         }
-        foreach ($data as $key => $value) $this->setData($type, $key, $value);
+
+        // Могли быть переданы данные, не включенные в описание, добавим их тоже. 
+        foreach ($data as $field => $value) 
+            $this->setData($type, $field, $value);
     }
 
     /**
@@ -95,20 +100,16 @@ class Action
      */
     public function setData(string $type, string $name, $value)
     {
-        if ($type === self::ARGS && isset($this->body->listGet()[$name]))
-            settype($value, $this->body->listGet()[$name]);
-        else if ($type === self::POST && isset($this->body->listPost()[$name])) {
-            $postType = $this->body->listPost()[$name];
-            switch ($postType) {
-                case ActionBody::POST_PASSWORD: 
-                    $postType = ActionBody::POST_TEXT;
-                    break; 
-            }
-            settype($value, $postType);
+        $fieldType = $type === self::ARGS
+            ? $this->body->listGet()[$name] ?? null
+            : $this->body->listPost()[$name] ?? null;
+
+        if ($fieldType !== null) {
+            if ($value === null) $value = $fieldType::createDefault();
+            else $value = new $fieldType($value);
         }
 
-        $safeValue = is_string($value) ? encode_specials($value) : $value;
-        $this->data[$type][$name] = $safeValue;
+        $this->data[$type][$name] = $value;
     }
 
     /**
@@ -121,12 +122,24 @@ class Action
      */
     public function getData(string $type, string $name, $default = null)
     {
-        return $this->data[$type][$name] ?? $default;
+        $value = $this->data[$type][$name] ?? null;
+        if ($value === null) return $default;
+        if ($value instanceof BaseField) return $value->get();
+        return $value;
     }
 
-    public function getDataArray(): array
+    public function getDataArray(bool $unpack = false): array
     {
-        return $this->data;
+        if (!$unpack) return $this->data;
+        
+        $result = [];
+        foreach ($this->data as $type => $typedData) {
+            foreach ($typedData as $field => $value)
+                $result[$type][$field] = $value instanceof BaseField
+                    ? $value->get()
+                    : $value;
+        }
+        return $result;
     }
 
     public final function getId(): string

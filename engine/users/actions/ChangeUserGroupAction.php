@@ -5,6 +5,7 @@ use frame\tools\Init;
 use engine\users\cash\user_me;
 use engine\users\Group;
 use engine\users\User;
+use frame\actions\fields\IntegerField;
 
 /**
  * Права: root.
@@ -18,20 +19,32 @@ class ChangeUserGroupAction extends ActionBody
     /** @var User */
     private $user;
 
+    public function listGet(): array
+    {
+        return [
+            'uid' => IntegerField::class
+        ];
+    }
+
+    public function listPost(): array
+    {
+        return [
+            'group_id' => IntegerField::class
+        ];
+    }
+
     public function initialize(array $get)
     {
         $me = user_me::get();
         Init::access((int) $me->group_id === Group::ROOT_ID);
-        $uid = $get['uid'] ?? null;
-        Init::require($uid !== null);
-        $this->user = User::selectIdentity($uid);
+        $this->user = User::selectIdentity($get['uid']->get());
         Init::require($this->user !== null);
         Init::require($this->user->group_id !== Group::ROOT_ID);
     }
 
     public function validate(array $post, array $files): array
     {
-        $id = (int) ($post['group_id'] ?? $this->user->group_id);
+        $id = $post['group_id']->get();
         if ($id !== $this->user->group_id) {
             $group = Group::selectIdentity($id);
             Init::require($group !== null);
@@ -44,7 +57,7 @@ class ChangeUserGroupAction extends ActionBody
 
     public function succeed(array $post, array $files)
     {
-        $id = (int) ($post['group_id'] ?? $this->user->group_id);
+        $id = $post['group_id']->get();
         if ($id !== $this->user->group_id) {
             $this->user->group_id = $id;
             $this->user->update();

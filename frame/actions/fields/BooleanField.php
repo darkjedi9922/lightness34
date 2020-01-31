@@ -2,7 +2,7 @@
 
 class BooleanField extends BaseField
 {
-    public function createDefault()
+    public static function createDefault()
     {
         return new static(false);
     }

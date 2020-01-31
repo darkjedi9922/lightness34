@@ -5,6 +5,8 @@ use engine\users\User;
 use frame\tools\Init;
 use engine\users\cash\user_me;
 use engine\users\Group;
+use frame\actions\fields\IntegerField;
+use frame\actions\fields\StringField;
 use frame\database\Records;
 
 class AddMessage extends ActionBody
@@ -19,14 +21,14 @@ class AddMessage extends ActionBody
     public function listGet(): array
     {
         return [
-            'to_uid' => self::GET_INT
+            'to_uid' => IntegerField::class
         ];
     }
 
     public function listPost(): array
     {
         return [
-            'text' => self::POST_TEXT
+            'text' => StringField::class
         ];
     }
 
@@ -34,14 +36,14 @@ class AddMessage extends ActionBody
     {
         $this->me = user_me::get();
         Init::access((int) $this->me->group_id !== Group::GUEST_ID);
-        $this->who = User::selectIdentity($get['to_uid']);
+        $this->who = User::selectIdentity($get['to_uid']->get());
         Init::require($this->who !== null);
     }
 
     public function validate(array $post, array $files)
     {
         $errors = [];
-        if (empty($post['text'])) $errors[] = self::E_TEXT_IS_EMPTY;
+        if ($post['text']->isEmpty()) $errors[] = self::E_TEXT_IS_EMPTY;
         return $errors;
     }
 
@@ -69,7 +71,7 @@ class AddMessage extends ActionBody
 
         Records::from('message_texts')->insert([
             'message_id' => $id,
-            'text' => $post['text']
+            'text' => $post['text']->get()
         ]);
 
         return [

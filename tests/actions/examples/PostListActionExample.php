@@ -1,13 +1,14 @@
 <?php namespace tests\actions\examples;
 
 use frame\actions\ActionBody;
+use frame\actions\fields\IntegerField;
 
 class PostListActionExample extends ActionBody
 {
     public function listPost(): array
     {
         return [
-            'sum' => self::POST_INT
+            'sum' => IntegerField::class
         ];
     }
 

@@ -4,6 +4,8 @@ use frame\actions\ActionBody;
 use engine\users\Gender;
 use frame\tools\Init;
 use engine\users\Group;
+use frame\actions\fields\IntegerField;
+use frame\actions\fields\StringField;
 
 /**
  * Параметры:
@@ -22,20 +24,20 @@ class EditGender extends ActionBody
     public function listGet(): array
     {
         return [
-            'id' => self::GET_INT
+            'id' => IntegerField::class
         ];
     }
 
     public function listPost(): array
     {
         return [
-            'name' => self::POST_TEXT
+            'name' => StringField::class
         ];
     }
 
     public function initialize(array $get)
     {
-        $this->gender = Gender::selectIdentity($get['id']);
+        $this->gender = Gender::selectIdentity($get['id']->get());
         Init::require($this->gender !== null);
         Init::accessGroup(Group::ROOT_ID);
     }
@@ -43,13 +45,14 @@ class EditGender extends ActionBody
     public function validate(array $post, array $files)
     {
         $errors = [];
-        if (!$post['name']) $errors[] = static::E_NO_NAME;
+        /** @var StringField $name */ $name = $post['name'];
+        if ($name->isEmpty()) $errors[] = static::E_NO_NAME;
         return $errors;
     }
 
     public function succeed(array $post, array $files)
     {
-        $this->gender->name = $post['name'];
+        $this->gender->name = $post['name']->get();
         $this->gender->update();
     }
 }

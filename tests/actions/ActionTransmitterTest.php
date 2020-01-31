@@ -54,7 +54,7 @@ class ActionTransmitterTest extends TestCase
         $srcAction = new Action(new PasswordActionExample);
         $srcAction->setDataAll('post', [
             'login' => 'Admin',
-            'password' => '0000' // This is a POST_PASSWORD in the action body
+            'password' => '0000' // This is a PasswordField in the action body
         ]);
 
         $transmitter = new ActionTransmitter;

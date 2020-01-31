@@ -12,6 +12,7 @@ use frame\actions\ActionRouter;
 use frame\actions\Action;
 use frame\core\Core;
 use frame\route\Router;
+use tests\actions\examples\EmptyActionExample;
 
 class ActionTest extends TestCase
 {
@@ -112,7 +113,9 @@ class ActionTest extends TestCase
             ['0', false],
             ['1', true],
             ['', false],
-            ['some-text', true]
+            ['some-text', true],
+            ['true', true],
+            ['false', false]
         ];
     }
 
@@ -134,5 +137,23 @@ class ActionTest extends TestCase
         $action = new Action(new AlwaysFailActionExample);
         $action->exec();
         $this->assertEquals(['doctor' => 'exterminate!'], $action->getResult());
+    }
+
+    /**
+     * @dataProvider commonTypeProvider
+     */
+    public function testNonDescribedCommonDataIsSetWithoutAnyModifying(string $type)
+    {
+        $action = new Action(new EmptyActionExample);
+        $action->setData(Action::ARGS, 'name', 'Jed');
+        $this->assertEquals('Jed', $action->getData(Action::ARGS, 'name'));
+    }
+
+    public function commonTypeProvider(): array
+    {
+        return [
+            [Action::ARGS],
+            [Action::POST]
+        ];
     }
 }

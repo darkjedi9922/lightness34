@@ -4,6 +4,9 @@ use engine\users\User;
 use engine\users\Encoder;
 use frame\tools\Init;
 use engine\users\cash\user_me;
+use frame\actions\fields\IntegerField;
+use frame\actions\fields\PasswordField;
+use frame\actions\fields\StringField;
 use frame\cash\database;
 use frame\auth\Auth;
 
@@ -33,19 +36,19 @@ class ProfileEditAction extends ProfileAction
     public function listGet(): array
     {
         return [
-            'id' => self::GET_INT
+            'id' => IntegerField::class
         ];
     }
 
     public function listPost(): array
     {
         return [
-            'login' => self::POST_TEXT,
-            'password' => self::POST_PASSWORD, // can be empty to left the old value
-            'email' => self::POST_TEXT,
-            'name' => self::POST_TEXT,
-            'surname' => self::POST_TEXT,
-            'gender_id' => self::POST_INT
+            'login' => StringField::class,
+            'password' => PasswordField::class, // can be empty to left the old value
+            'email' => StringField::class,
+            'name' => StringField::class,
+            'surname' => StringField::class,
+            'gender_id' => IntegerField::class
         ];
     }
 
@@ -53,11 +56,7 @@ class ProfileEditAction extends ProfileAction
     {
         parent::initialize($get);
 
-        $id = $get['id'] ?? null;
-
-        Init::require($id !== null);
-        
-        $this->user = User::selectIdentity($id);
+        $this->user = User::selectIdentity($get['id']->get());
         
         Init::require($this->user !== null);
         Init::accessOneRight('users', [
@@ -74,6 +73,7 @@ class ProfileEditAction extends ProfileAction
         $errors = [];
 
         foreach ($post as $key => $value) {
+            $value = $value->get();
             switch ($key) {
                 case 'login': 
                     $errors = array_merge(
@@ -119,8 +119,8 @@ class ProfileEditAction extends ProfileAction
             }
         }
 
-        $this->avatar = $files['avatar'] ?? null;
-        if ($this->avatar !== null && !$this->avatar->isEmpty()) {
+        $this->avatar = $files['avatar'];
+        if (!$this->avatar->isEmpty()) {
             $errors = array_merge(
                 $errors,
                 $this->validateAvatar($this->avatar)
@@ -133,6 +133,7 @@ class ProfileEditAction extends ProfileAction
     public function succeed(array $post, array $files)
     {
         foreach ($post as $key => $value) {
+            $value = $value->get();
             switch ($key) {
                 case 'login': 
                     $this->user->login = $value;
@@ -155,19 +156,18 @@ class ProfileEditAction extends ProfileAction
             }
         }
 
-        if (isset($post['login']) || isset($post['password'])) {
-            $this->user->sid = Encoder::getSid(
-                $this->user->login,
-                $this->user->password);
-            
-            if ($this->user->id === user_me::get()->id) {
-                $auth = new Auth;
-                $auth->login($this->user->sid, $auth->isRemembered());
-            }
+        $this->user->sid = Encoder::getSid(
+            $this->user->login,
+            $this->user->password
+        );
+        
+        if ($this->user->id === user_me::get()->id) {
+            $auth = new Auth;
+            $auth->login($this->user->sid, $auth->isRemembered());
         }
 
         $avatar = $files['avatar'];
-        if ($avatar !== null && !$avatar->isEmpty()) {
+        if (!$avatar->isEmpty()) {
             if ($this->user->hasAvatar()) unlink($this->user->getAvatarUrl());
             $this->user->avatar = $avatar->moveUnique(User::AVATAR_FOLDER);
         }

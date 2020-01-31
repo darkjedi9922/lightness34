@@ -3,6 +3,7 @@
 use engine\users\Encoder;
 use engine\users\Group;
 use frame\actions\ActionBody;
+use frame\actions\fields\PasswordField;
 use frame\cash\config;
 use frame\tools\Init;
 use frame\config\Json;
@@ -18,8 +19,8 @@ class EditAdminConfig extends ActionBody
     public function listPost(): array
     {
         return [
-            'current-password' => self::POST_PASSWORD,
-            'new-password' => self::POST_PASSWORD
+            'current-password' => PasswordField::class,
+            'new-password' => PasswordField::class
         ];
     }
 
@@ -33,19 +34,19 @@ class EditAdminConfig extends ActionBody
     {
         $errors = [];
 
-        $currentPassword = Encoder::getPassword($post['current-password']);
+        $currentPassword = Encoder::getPassword($post['current-password']->get());
         if ($currentPassword !== $this->config->password)
             $errors[] = self::E_WRONG_CURRENT_PASSWORD;
 
-        $newPassword = $post['new-password'];
-        if (empty($newPassword)) $errors[] = self::E_EMPTY_NEW_PASSWORD;
+        /** @var PasswordField $newPassword */ $newPassword = $post['new-password'];
+        if ($newPassword->isEmpty()) $errors[] = self::E_EMPTY_NEW_PASSWORD;
 
         return $errors;
     }
 
     public function succeed(array $post, array $files)
     {
-        $this->config->password = Encoder::getPassword($post['new-password']);
+        $this->config->password = Encoder::getPassword($post['new-password']->get());
         $this->config->save();
     }
 

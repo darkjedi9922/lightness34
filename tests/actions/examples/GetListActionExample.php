@@ -1,14 +1,16 @@
 <?php namespace tests\actions\examples;
 
 use frame\actions\ActionBody;
+use frame\actions\fields\IntegerField;
+use frame\actions\fields\StringField;
 
 class GetListActionExample extends ActionBody
 {
     public function listGet(): array
     {
         return [
-            'name' => self::GET_STRING,
-            'amount' => self::GET_INT
+            'name' => StringField::class,
+            'amount' => IntegerField::class
         ];
     }
 

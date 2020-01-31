@@ -36,12 +36,12 @@ class AddUser extends ActionBody
     public function listPost(): array
     {
         return [
-            'login' => self::POST_TEXT,
-            'password' => self::POST_PASSWORD,
-            'email' => self::POST_TEXT,
-            'name' => self::POST_TEXT,
-            'surname' => self::POST_TEXT,
-            'gender_id' => self::POST_INT
+            'login' => UserLogin::class,
+            'password' => UserPassword::class,
+            'email' => EmailField::class,
+            'name' => NameField::class,
+            'surname' => NameField::class,
+            'gender_id' => GenderField::class
         ];
     }
 
@@ -54,12 +54,12 @@ class AddUser extends ActionBody
 
     public function validate(array $post, array $files): array
     {
-        $gender = new GenderField($post['gender_id']);
+        /** @var GenderField $gender */ $gender = $post['gender_id'];
         $gender->requireDefined();
         
         $errors = [];
 
-        $login = new UserLogin($post['login']);
+        /** @var UserLogin $login */ $login = $post['login'];
         if ($login->isEmpty()) $errors[] = self::E_NO_LOGIN;
         else {
             if ($login->isTooLongByConfig()) $errors[] = self::E_LONG_LOGIN;
@@ -67,22 +67,22 @@ class AddUser extends ActionBody
             if ($errors == [] && $login->isTaken()) $errors[] = self::E_LOGIN_EXISTS;
         }
 
-        $password = new UserPassword($post['password']);
+        /** @var UserPassword $password */ $password = $post['password'];
         if ($password->isEmpty()) $errors[] = self::E_NO_PASSWORD;
         else {
             if ($password->isTooLongByConfig()) $errors[] = self::E_LONG_PASSWORD;
             if ($password->isIncorrect()) $errors[] = self::E_INCORRECT_PASSWORD;
         }
 
-        $email = new EmailField($post['email']);
+        /** @var EmailField $email */ $email = $post['email'];
         if (!$email->isEmpty()) {
             if ($email->isIncorrect()) $errors[] = self::E_INCORRECT_EMAIL;
         }
 
-        $name = new NameField($post['name']);
+        /** @var NameField $name */ $name = $post['name'];
         if ($name->isIncorrect()) $errors[] = self::E_INCORRECT_NAME;
 
-        $surname = new NameField($post['surname']);
+        /** @var NameField $surname */ $surname = $post['surname'];
         if ($surname->isIncorrect()) $errors[] = self::E_INCORRECT_SURNAME;
 
         $avatar = new UserAvatarField($files['avatar']);
@@ -97,13 +97,13 @@ class AddUser extends ActionBody
     public function succeed(array $post, array $files): array
     {
         $user = new User;
-        $user->login = $post['login'];
-        $user->password = Encoder::getPassword($post['password']);
+        $user->login = $post['login']->get();
+        $user->password = Encoder::getPassword($post['password']->get());
         $user->sid = Encoder::getSid($user->login, $user->password);
-        $user->email = $post['email'];
-        $user->name = $post['name'];
-        $user->surname = $post['surname'];
-        $user->gender_id = $post['gender_id'];
+        $user->email = $post['email']->get();
+        $user->name = $post['name']->get();
+        $user->surname = $post['surname']->get();
+        $user->gender_id = $post['gender_id']->get();
         $user->group_id = Group::USER_ID;
         $user->registration_date = time();
         $user->last_user_agent = Client::getUserAgent();

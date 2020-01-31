@@ -4,6 +4,7 @@ use engine\users\Gender;
 use frame\actions\ActionBody;
 use frame\tools\Init;
 use engine\users\Group;
+use frame\actions\fields\IntegerField;
 use frame\database\Records;
 
 /**
@@ -21,13 +22,13 @@ class DeleteGender extends ActionBody
     public function listGet(): array
     {
         return [
-            'id' => self::GET_INT
+            'id' => IntegerField::class
         ];
     }
 
     public function initialize(array $get)
     {
-        $this->gender = Gender::selectIdentity($get['id']);
+        $this->gender = Gender::selectIdentity($get['id']->get());
         Init::require($this->gender !== null);
         Init::require(!$this->gender->isDefault());
         Init::accessGroup(Group::ROOT_ID);

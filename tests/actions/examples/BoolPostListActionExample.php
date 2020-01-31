@@ -1,13 +1,14 @@
 <?php namespace tests\actions\examples;
 
 use frame\actions\ActionBody;
+use frame\actions\fields\BooleanField;
 
 class BoolPostListActionExample extends ActionBody
 {
     public function listPost(): array
     {
         return [
-            'checked' => self::POST_BOOL
+            'checked' => BooleanField::class
         ];
     }
 

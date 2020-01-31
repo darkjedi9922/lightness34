@@ -4,6 +4,9 @@ use frame\auth\Auth;
 use frame\database\Records;
 use engine\users\Encoder;
 use frame\actions\ActionBody;
+use frame\actions\fields\BooleanField;
+use frame\actions\fields\PasswordField;
+use frame\actions\fields\StringField;
 use frame\tools\Init;
 
 class LoginAction extends ActionBody
@@ -17,9 +20,9 @@ class LoginAction extends ActionBody
     public function listPost(): array
     {
         return [
-            'login' => self::POST_TEXT,
-            'password' => self::POST_PASSWORD,
-            'remember' => self::POST_BOOL
+            'login' => StringField::class,
+            'password' => PasswordField::class,
+            'remember' => BooleanField::class
         ];
     }
 
@@ -32,8 +35,8 @@ class LoginAction extends ActionBody
     {
         $errors = [];
 
-        $login = $post['login'];
-        $password = $post['password'];
+        $login = $post['login']->get();
+        $password = $post['password']->get();
 
         if (!$login) $errors[] = self::E_NO_LOGIN;
         if (!$password) $errors[] = self::E_NO_PASSWORD;
@@ -52,7 +55,7 @@ class LoginAction extends ActionBody
 
     public function succeed(array $post, array $files)
     {
-        (new Auth)->login($this->sid, $post['remember']);
+        (new Auth)->login($this->sid, $post['remember']->get());
     }
 
     public function getSuccessRedirect(): ?string

@@ -7,6 +7,8 @@ use frame\tools\Init;
 use frame\modules\Module;
 use engine\comments\CommentsModule;
 use engine\users\cash\user_me;
+use frame\actions\fields\IntegerField;
+use frame\actions\fields\StringField;
 
 class AddComment extends ActionBody
 {
@@ -18,25 +20,25 @@ class AddComment extends ActionBody
     public function listGet(): array
     {
         return [
-            'module_id' => self::GET_INT,
-            'material_id' => self::GET_INT
+            'module_id' => IntegerField::class,
+            'material_id' => IntegerField::class
         ];
     }
 
     public function listPost(): array
     {
         return [
-            'text' => self::POST_TEXT
+            'text' => StringField::class
         ];
     }
 
     public function initialize(array $get)
     {
-        $this->module = Core::$app->findModule($get['module_id']);
+        $this->module = Core::$app->findModule($get['module_id']->get());
         Init::require($this->module !== null);
         Init::require(get_class($this->module) === CommentsModule::class);
         Init::accessRight($this->module->getName(), 'add');
-        $this->materialId = $get['material_id'];
+        $this->materialId = $get['material_id']->get();
     }
 
     public function succeed(array $post, array $files): array
@@ -44,7 +46,7 @@ class AddComment extends ActionBody
         $date = time();
 
         $comment = new Comment;
-        $comment->text = str_replace('\\', '\\\\', $post['text']);
+        $comment->text = str_replace('\\', '\\\\', $post['text']->get());
         $comment->module_id = $this->module->getId();
         $comment->material_id = $this->materialId;
         $comment->author_id = user_me::get()->id;

@@ -4,6 +4,7 @@ use frame\actions\ActionBody;
 use frame\tools\Init;
 use frame\core\Core;
 use engine\statistics\BaseStatisticsSubModule;
+use frame\actions\fields\StringField;
 
 class ClearStatistics extends ActionBody
 {
@@ -13,13 +14,13 @@ class ClearStatistics extends ActionBody
     public function listGet(): array
     {
         return [
-            'module' => self::GET_STRING
+            'module' => StringField::class
         ];
     }
 
     public function initialize(array $get)
     {
-        $this->module = Core::$app->getModule($get['module']);
+        $this->module = Core::$app->getModule($get['module']->get());
         Init::require($this->module !== null);
         Init::require(is_subclass_of($this->module, BaseStatisticsSubModule::class));
     }

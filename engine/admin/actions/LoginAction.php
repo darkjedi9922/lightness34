@@ -4,6 +4,7 @@ use frame\cash\prev_router;
 use engine\admin\Auth;
 use engine\users\Encoder;
 use frame\actions\ActionBody;
+use frame\actions\fields\PasswordField;
 use frame\config\Json;
 use frame\tools\Init;
 
@@ -22,7 +23,7 @@ class LoginAction extends ActionBody
     public function listPost(): array
     {
         return [
-            'password' => self::POST_PASSWORD
+            'password' => PasswordField::class
         ];
     }
 
@@ -37,7 +38,7 @@ class LoginAction extends ActionBody
         $errors = [];
         $config = new Json('config/admin.json');
 
-        $password = Encoder::getPassword($post['password']);
+        $password = Encoder::getPassword($post['password']->get());
 
         if ($password !== $config->password) $errors[] = static::E_WRONG_PASSWORD;
 

@@ -2,6 +2,7 @@
 
 use engine\articles\Article;
 use frame\actions\ActionBody;
+use frame\actions\fields\IntegerField;
 use frame\tools\Init;
 use frame\cash\prev_router;
 
@@ -13,13 +14,13 @@ class DeleteArticleAction extends ActionBody
     public function listGet(): array
     {
         return [
-            'id' => self::GET_INT
+            'id' => IntegerField::class
         ];
     }
 
     public function initialize(array $get)
     {
-        $this->article = Article::selectIdentity($get['id']);
+        $this->article = Article::selectIdentity($get['id']->get());
         Init::accessOneRight('articles', [
             'delete-own' => [$this->article],
             'delete-all' => null

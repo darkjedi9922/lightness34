@@ -6,6 +6,7 @@ use frame\lists\base\IdentityList;
 use engine\statistics\lists\ActionList;
 use engine\statistics\stats\ActionStat;
 use engine\statistics\actions\ClearStatistics;
+use frame\actions\fields\PasswordField;
 use frame\actions\UploadedFile;
 use frame\actions\ViewAction;
 
@@ -98,7 +99,9 @@ $clear = new ViewAction(ClearStatistics::class, ['module' => 'stat/actions']);
                             <?php else : ?>
                                 <?php foreach ($data['data']['post'] as $field => $value) :
                                     $empty = $value === '';
-                                    $secret = ($postDesc[$field] ?? null) === ActionBody::POST_PASSWORD;
+                                    $type = $postDesc[$field] ?? null;
+                                    $secret = $type === PasswordField::class
+                                        || is_subclass_of($type, PasswordField::class);
                                     ?>
                                     <div class="param">
                                         <span class="param__name"><?= $field ?></span>
