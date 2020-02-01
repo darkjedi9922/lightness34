@@ -7,7 +7,10 @@ export interface ItemProps {
     name: string,
     link?: string,
     icon: string,
-    submenu?: ItemProps[]
+    submenu?: ItemProps[],
+    _collapsed: boolean,
+    _id: string,
+    _onToggle: (id: string, collapsed: boolean) => void
 }
 
 class Item extends React.Component<ItemProps> {
@@ -59,6 +62,9 @@ class Item extends React.Component<ItemProps> {
                                 name={subitem.name}
                                 link={subitem.link}
                                 submenu={subitem.submenu}
+                                _collapsed={subitem._collapsed}
+                                _id={`${this.props._id}-${index}`}
+                                _onToggle={this.props._onToggle}
                             ></Item>
                         )}
                     </ul>
@@ -68,7 +74,8 @@ class Item extends React.Component<ItemProps> {
     }
 
     private initCollapse() {
-        if (!this.submenuRef) return;
+
+        if (!this.submenuRef || !this.props._collapsed) return;
         this.lastSubmenuHeight = $(this.submenuRef.current).height();
         $(this.submenuRef.current).height(0);
         $(this.triangleRef.current).css('transform', 'rotate(-90deg)');
@@ -76,8 +83,13 @@ class Item extends React.Component<ItemProps> {
 
     public toggleCollapse(event: React.MouseEvent) {
         if (!this.submenuRef) return;
-        if ($(this.submenuRef.current).height()) this.collapse();
-        else this.expand();
+        if ($(this.submenuRef.current).height()) {
+            this.collapse();
+            this.props._onToggle(this.props._id, true);
+        } else {
+            this.expand();
+            this.props._onToggle(this.props._id, false);
+        }
         event.preventDefault();
         event.stopPropagation();
     }
