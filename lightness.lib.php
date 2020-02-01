@@ -258,18 +258,6 @@ function http_parse_query($query, $arg_separator)
 }
 
 /**
- * Полезная функция для отладки.
- * Выводит print_r или var_dump переменной, после чего полностью завершает скрипт.
- * @param mixed $value
- */
-function dump($value)
-{
-    if (is_array($value)) print_r($value);
-    else var_dump($value);
-    exit;
-}
-
-/**
  * Работает как empty(), но если значение является массивом, то рекурсивно проводит
  * ту же проверку на всех детей (и если они массивы на их детей и т.д.).
  * 

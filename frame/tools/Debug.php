@@ -1,29 +1,38 @@
 <?php namespace frame\tools;
 
-	class Debug {
-		
-		public function __destruct() {
-			unset($this->start);
-		}
-		
-		/**
-		* Устанавливает начальную точку времени
-		*/
-		public function setStart() {
-			$this->start = microtime(true);
-		}
-		
-		/**
-		* Показывает разницу между текущим временем и заданной начальной точкой
-		*/
-		public function echoTime() {
-			$time = microtime(true) - $this->start;
-			//echo '<p>Скрипт выполнялся ', $time, ' сек.</p>';
-			printf('Скрипт выполнялся %.4F сек.', $time);
-		}
-		
-		/**
-		* @var float начальная точка времени
-		*/
-		private $start = 0;
-	}
+class Debug
+{
+    /**
+     * @var float начальная точка времени
+     */
+    private $start = 0;
+
+    /**
+     * Выводит print_r или var_dump переменной, 
+     * после чего полностью завершает скрипт.
+     * @param mixed $value
+     */
+    public static function dump($value)
+    {
+        if (is_array($value)) print_r($value);
+        else var_dump($value);
+        exit;
+    }
+
+    /**
+     * Устанавливает начальную точку времени
+     */
+    public function setStart()
+    {
+        $this->start = microtime(true);
+    }
+    
+    /**
+     * Показывает разницу между текущим временем и заданной начальной точкой
+     */
+    public function echoTime()
+    {
+        $time = microtime(true) - $this->start;
+        printf('Скрипт выполнялся %.4F сек.', $time);
+    }
+}
