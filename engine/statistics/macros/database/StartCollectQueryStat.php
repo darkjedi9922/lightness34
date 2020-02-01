@@ -3,6 +3,7 @@
 use engine\statistics\stats\QueryStat;
 use engine\statistics\stats\TimeStat;
 use function lightlib\last;
+use function lightlib\shorten;
 
 class StartCollectQueryStat extends BaseDatabaseStatCollector
 {
@@ -45,7 +46,7 @@ class StartCollectQueryStat extends BaseDatabaseStatCollector
         };
 
         $queryStat = new QueryStat;
-        $queryStat->sql_text = $sql;
+        $queryStat->sql_text = shorten($sql, 80, '...');
 
         $this->queryStats[] = $queryStat;
         

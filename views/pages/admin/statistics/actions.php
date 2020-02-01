@@ -84,7 +84,7 @@ $clear = new ViewAction(ClearStatistics::class, ['module' => 'stat/actions']);
                                     <div class="param">
                                         <span class="param__name"><?= $field ?></span>
                                         <span class="param__value <?= $value === '' ? 'param__value--empty' : '' ?>">
-                                            <?= $value !== '' ? $value : 'empty' ?>
+                                            <?= empty($value) ? $value : 'empty' ?>
                                         </span>
                                     </div>
                                 <?php endforeach ?>
