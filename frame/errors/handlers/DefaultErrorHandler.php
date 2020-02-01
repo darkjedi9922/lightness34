@@ -6,6 +6,7 @@ use frame\errors\StrictException;
 use function lightlib\ob_end_clean_all;
 use frame\route\Response;
 use frame\errors\HttpError;
+use frame\tools\Debug;
 use frame\views\ErrorPage;
 
 class DefaultErrorHandler implements ErrorHandler
@@ -35,7 +36,7 @@ class DefaultErrorHandler implements ErrorHandler
              * на каждом из уровней, потом выводим ошибку и прекращаем выполнение скрипта.
              */
             ob_end_clean_all();
-            echo str_replace("\n", endl, $error);
+            echo str_replace("\n", endl, Debug::getErrorMessage($error));
             Response::finish();
         }
     }

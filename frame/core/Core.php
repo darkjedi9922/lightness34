@@ -9,6 +9,7 @@ use frame\config\Config;
 use frame\modules\Module;
 use frame\views\DynamicPage;
 use frame\macros\EventManager;
+use frame\tools\Debug;
 
 class Core
 {
@@ -215,7 +216,7 @@ class Core
     private function handleError(\Throwable $e)
     {
         $logging = $this->config->{'log.enabled'};
-        if ($logging) $this->writeInLog(Logger::ERROR, $e);
+        if ($logging) $this->writeInLog(Logger::ERROR, Debug::getErrorMessage($e));
 
         if (!$this->events->isBlocked()) $this->emit(self::EVENT_APP_ERROR, $e);
 

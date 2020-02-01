@@ -1,5 +1,7 @@
 <?php namespace frame\tools;
 
+use Throwable;
+
 class Debug
 {
     /**
@@ -19,6 +21,34 @@ class Debug
         exit;
     }
 
+    public static function getBackTrace(?array $backtrace = null): string
+    {
+        $trace = array_reverse($backtrace ?? debug_backtrace());
+        $result = "#0 {main}\n";
+        for ($i = 0, $c = count($trace); $i < $c; ++$i) {
+            $number = $i + 1;
+            $file = $trace[$i]['file'] ?? null;
+            $class = $trace[$i]['class'] ?? null;
+            $object = $trace[$i]['object'] ?? null;
+            $function = $trace[$i]['function'];
+            $callType = $trace[$i]['type'] ?? '';
+            $args = $trace[$i]['args'];
+            for ($j = 0, $jc = count($args); $j < $jc; ++$j) {
+                list($argStr, $argType) = static::getStringAndType($args[$j]);
+                $args[$j] = "($argType) $argStr";
+            }
+            $argsString = implode(', ', $args);
+            if ($class) {
+                $call = "{$class}{$callType}{$function}($argsString)";
+            } else $call = "$function($argsString)";
+            if ($file !== null) {
+                $line = $trace[$i]['line'] ?? null;
+                $result .= "#$number $file($line): $call\n";
+            } else $result .= "#$number $call\n";
+        }
+        return rtrim($result);
+    }
+
     /**
      * Returns an array of two strings:
      * 1 - string representation of the variable (if it 
@@ -35,6 +65,22 @@ class Debug
         else if (is_bool($var)) return [$var ? 'true' : 'false', 'boolean'];
         else if (is_null($var)) return ['null', 'null'];
         else return [strval($var), gettype($var)];
+    }
+
+    public static function getErrorMessage(Throwable $e): string
+    {
+        $result = '';
+        $type = get_class($e);
+        $code = $e->getCode();
+        $message = $e->getMessage();
+        $file = $e->getFile();
+        $line = $e->getLine();
+        if ($e->getPrevious()) {
+            $result .= static::getErrorMessage($e->getPrevious()) . "\nNext: ";
+        }
+        $result .= "$type #$code: $message in $file($line)";
+        $result .= "\nStack trace:\n" . static::getBackTrace($e->getTrace());
+        return $result;
     }
 
     /**
