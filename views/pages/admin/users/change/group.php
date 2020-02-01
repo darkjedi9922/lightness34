@@ -7,6 +7,7 @@ use engine\users\User;
 use engine\users\actions\ChangeUserGroupAction;
 use frame\actions\ViewAction;
 use engine\users\cash\user_me;
+use frame\tools\JsonEncoder;
 
 $me = user_me::get();
 
@@ -20,6 +21,29 @@ Init::require((int)$user->group_id !== Group::ROOT_ID);
 
 $groups = new IdentityList(Group::class);
 $action = new ViewAction(ChangeUserGroupAction::class, ['uid' => $id]);
+
+$groupsProps = [];
+foreach ($groups as $group) {
+    if ($group->id === GROUP::GUEST_ID || $group->id === Group::ROOT_ID) continue;
+    $groupsProps[] = [
+        'label' => $group->name,
+        'value' => (string) $group->id
+    ];
+}
+
+$formProps = [
+    'actionUrl' => $action->getUrl(),
+    'method' => 'post',
+    'fields' => [[
+        'type' => 'radio',
+        'name' => 'group_id',
+        'values' => $groupsProps,
+        'currentValue' => (string) $user->group_id,
+        'short' => true
+    ]],
+    'buttonText' => 'Сохранить'
+];
+$formProps = JsonEncoder::forHtmlAttribute($formProps);
 ?>
 
 <div class="content__header">
@@ -32,19 +56,5 @@ $action = new ViewAction(ChangeUserGroupAction::class, ['uid' => $id]);
     </div>
 </div>
 <div class="box">
-    <form action="<?= $action->getUrl() ?>" method="post">
-        <div class="radio-classic">
-            <?php foreach ($groups as $group) :
-                if (
-                    $group->id === GROUP::GUEST_ID
-                    || $group->id === Group::ROOT_ID
-                ) continue;
-                ?>
-                <input type="radio" name="group_id" value="<?= $group->id ?>" id="group-<?= $group->id ?>" <?php if ($user->group_id == $group->id) echo 'checked' ?>>
-                <label for="group-<?= $group->id ?>" class="radio"><i></i></label><?= $group->name ?>
-                <br />
-            <?php endforeach ?>
-        </div>
-        <br /><button>Сохранить</button>
-    </form>
+    <div class="react-form" data-props="<?= $formProps ?>"></div>
 </div>
