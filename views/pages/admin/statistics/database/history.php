@@ -9,7 +9,6 @@ use engine\statistics\stats\QueryStat;
 use frame\actions\ViewAction;
 use engine\statistics\actions\ClearStatistics;
 use frame\tools\JsonEncoder;
-use frame\cash\database;
 
 Init::accessRight('admin', 'see-logs');
 
@@ -44,44 +43,18 @@ foreach ($queryRoutes as $routeStat) {
 }
 $queryHistoryCount = count($queryHistoryProps['routes']);
 $queryHistoryProps = JsonEncoder::forHtmlAttribute($queryHistoryProps);
-
-$tablesProps = ['tables' => []];
-$tables = database::get()->query("SHOW TABLES")->readColumn(0);
-foreach ($tables as $table) {
-    $tableProps = [
-        'name' => $table,
-        'fields' => []
-    ];
-    $fields = database::get()->query("DESCRIBE `$table`")->readAll();
-    foreach ($fields as $field) {
-        $tableProps['fields'][] = [
-            'name' => $field['Field'],
-            'type' => $field['Type'],
-            'null' => $field['Null'] !== 'NO',
-            'primary' => $field['Key'] === 'PRI',
-            'default' => $field['Default']
-        ];
-    }
-    $tableProps['rowCount'] = database::get()
-        ->query("SELECT COUNT(*) FROM `$table`")
-        ->readScalar();
-    $tablesProps['tables'][] = $tableProps;
-}
-$tablesCount = count($tablesProps['tables']);
-$tablesProps = JsonEncoder::forHtmlAttribute($tablesProps);
 ?>
 
 <div class="content__header">
     <div class="breadcrumbs">
         <span class="breadcrumbs__item">Мониторинг</span>
         <span class="breadcrumbs__divisor"></span>
-        <span class="breadcrumbs__item breadcrumbs__item--current">База данных</span>
+        <span class="breadcrumbs__item">База данных</span>
+        <span class="breadcrumbs__divisor"></span>
+        <span class="breadcrumbs__item breadcrumbs__item--current">
+            История запросов (<?= $queryHistoryCount ?>)
+        </span>
     </div>
     <a href="<?= $clear->getUrl() ?>" class="button">Очистить статистику</a>
 </div>
-
-<span class="content__title">История запросов (<?= $queryHistoryCount ?>)</span>
 <div id="query-history" data-props="<?= $queryHistoryProps ?>"></div>
-
-<span class="content__title">Таблицы (<?= $tablesCount ?>)</span>
-<div id="db-tables" data-props="<?= $tablesProps ?>"></div>
