@@ -81,7 +81,11 @@ class Action
     {
         $desc = $type === self::ARGS
             ? $this->body->listGet() 
-            : $this->body->listPost();
+            : (
+                $type === self::POST
+                    ? $this->body->listPost()
+                    : []
+            );
 
         foreach ($desc as $field => $fieldType) {
             $this->setData($type, $field, $data[$field] ?? null);
@@ -134,6 +138,7 @@ class Action
         
         $result = [];
         foreach ($this->data as $type => $typedData) {
+            if (!isset($result[$type])) $result[$type] = [];
             foreach ($typedData as $field => $value)
                 $result[$type][$field] = $value instanceof BaseField
                     ? $value->get()

@@ -40,7 +40,7 @@ class StartCollectActionStat extends BaseStatCollector
 
     protected function jsonify(Action $action): string
     {
-        $data = $action->getDataArray();
+        $data = $action->getDataArray(true);
         $get = $data[Action::ARGS];
         $post = $this->shortenAndFilterPostData($action);
         $files = $this->toArrayFiles($data[Action::FILES]);
@@ -60,7 +60,7 @@ class StartCollectActionStat extends BaseStatCollector
     {
         $result = [];
         $desc = $action->getBody()->listPost();
-        $data = $action->getDataArray()['post'];
+        $data = $action->getDataArray(true)['post'];
         foreach ($data as $field => $value) {
             $newValue = $value;
             $type = ($desc[$field] ?? null);
