@@ -389,22 +389,3 @@ function remove_suffix(string $str, string $needle): string
         return substr($str, 0, -strlen($needle));
     return $str;
 }
-
-/**
- * Returns an array of two strings:
- * 1 - string representation of the variable (if it 
- * can be simply converted to it) or its type.
- * 2 - string representation of type of the variable.
- */
-function to_string_and_type($var): array
-{
-    if (is_object($var)) {
-        $reflection = new \ReflectionObject($var);
-        if ($reflection->isAnonymous()) return ['anonymous', 'object'];
-        return [get_class($var), 'object'];
-    }
-    else if (is_array($var)) return ['array', 'array'];
-    else if (is_bool($var)) return [$var ? 'true' : 'false', 'boolean'];
-    else if (is_null($var)) return ['null', 'null'];
-    else return [strval($var), gettype($var)];
-}

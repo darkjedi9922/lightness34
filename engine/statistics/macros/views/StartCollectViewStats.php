@@ -7,7 +7,7 @@ use engine\statistics\stats\TimeStat;
 use function lightlib\remove_prefix;
 use SplObjectStorage;
 use engine\statistics\stats\ViewMetaStat;
-use function lightlib\to_string_and_type;
+use frame\tools\Debug;
 
 class StartCollectViewStats extends BaseStatCollector
 {
@@ -47,7 +47,7 @@ class StartCollectViewStats extends BaseStatCollector
         foreach ($view->getMetaArray() as $name => $value) {
             $metaStat = new ViewMetaStat;
             $metaStat->name = $name;
-            list($valueStrRepr, $valueType) = to_string_and_type($value);
+            list($valueStrRepr, $valueType) = Debug::getStringAndType($value);
             $metaStat->value = $valueStrRepr;
             $metaStat->type = $valueType;
             $metaStats[] = $metaStat;
