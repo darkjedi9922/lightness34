@@ -52,11 +52,11 @@ $articleCommentsData = [
 
 foreach ($comments as $comment) {
     /** @var Comment $comment */
-    $author = User::selectIdentity($comment->author_id);
+    $commentAuthor = User::selectIdentity($comment->author_id);
     $articleCommentsData['list'][] = [
         'author' => [
-            'avatarUrl' => '/' . $author->getAvatarUrl(),
-            'login' => $author->login
+            'avatarUrl' => '/' . $commentAuthor->getAvatarUrl(),
+            'login' => $commentAuthor->login
         ],
         'date' => date('d.m.Y H:i', $comment->date),
         'text' => $comment->text
@@ -102,7 +102,7 @@ $article->setReaded(user_me::get());
             <div class="author__data">
                 <img src="/<?= $author->getAvatarUrl() ?>" class="author__avatar">
                 <div class="author__info">
-                    <a href="/admin/users/profile?login=<?= $author->login ?>" class="author__login"><?= $author->login ?></a>
+                    <a href="/admin/users/profile/<?= $author->login ?>" class="author__login"><?= $author->login ?></a>
                     <span class="author__group"><?= $group->name ?></span>
                 </div>
             </div>
