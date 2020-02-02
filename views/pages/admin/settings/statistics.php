@@ -4,13 +4,13 @@ use frame\tools\Init;
 use engine\users\Group;
 use frame\cash\config;
 use frame\actions\ViewAction;
-use engine\admin\actions\EditConfigAction;
+use engine\statistics\actions\EditConfig;
 use frame\tools\JsonEncoder;
 
 Init::accessGroup(Group::ROOT_ID);
 
 $config = config::get('statistics');
-$edit = new ViewAction(EditConfigAction::class, ['name' => 'statistics']);
+$edit = new ViewAction(EditConfig::class, ['name' => 'statistics']);
 
 $formProps = [
     'actionUrl' => $edit->getUrl(),
@@ -20,54 +20,35 @@ $formProps = [
         'title' => 'Собирать статистику',
         'name' => 'enabled',
         'label' => 'Собирать',
-        'defaultChecked' => $edit->getPost('enabled', (string)$config->{'enabled'})
+        'defaultChecked' => $edit->getPost('enabled', $config->{'enabled'})
     ], [
         'type' => 'text',
-        'title' => 'Лимит истории маршрутов',
-        'name' => 'routes->history->limit',
-        'defaultValue' => $edit->getPost(
-            'routes->history->limit',
-            (string)$config->{'routes.history.limit'}
+        'title' => 'Хранить данные за последние',
+        'name' => 'storeTimeValue',
+        'defaultValue' => (string)$edit->getPost(
+            'storeTimeValue',
+            EditConfig::calcStoreTimeFromSeconds(
+                $config->storeTimeInSeconds,
+                EditConfig::STORE_TIME_UNIT_HOURS
+            )
         )
     ], [
-        'type' => 'text',
-        'title' => 'Лимит истории событий',
-        'name' => 'events->history->limit',
-        'defaultValue' => $edit->getPost(
-            'events->history->limit',
-            (string)$config->{'events.history.limit'}
-        )
-    ], [
-        'type' => 'text',
-        'title' => 'Лимит истории видов',
-        'name' => 'views->history->limit',
-        'defaultValue' => $edit->getPost(
-            'views->history->limit',
-            (string)$config->{'views.history.limit'}
-        )
-    ], [
-        'type' => 'text',
-        'title' => 'Лимит истории действий',
-        'name' => 'actions->history->limit',
-        'defaultValue' => $edit->getPost(
-            'actions->history->limit',
-            (string)$config->{'actions.history.limit'}
-        )
-    ], [
-        'type' => 'text',
-        'title' => 'Лимит истории запросов БД',
-        'name' => 'queries->history->limit',
-        'defaultValue' => $edit->getPost(
-            'queries->history->limit',
-            (string)$config->{'queries.history.limit'}
-        )
-    ], [
-        'type' => 'text',
-        'title' => 'Лимит истории кеша',
-        'name' => 'cash->history->limit',
-        'defaultValue' => $edit->getPost(
-            'cash->history->limit',
-            (string)$config->{'cash.history.limit'}
+        'type' => 'radio',
+        'name' => 'storeTimeUnit',
+        'title' => '',
+        'values' => [[
+            'label' => 'Часы',
+            'value' => EditConfig::STORE_TIME_UNIT_HOURS
+        ], [
+            'label' => 'Дни',
+            'value' => EditConfig::STORE_TIME_UNIT_DAYS
+        ], [
+            'label' => 'Месяцы',
+            'value' => EditConfig::STORE_TIME_UNIT_MONTHS
+        ]],
+        'currentValue' => $edit->getPost(
+            'storeTimeUnit',
+            EditConfig::STORE_TIME_UNIT_HOURS
         )
     ]],
     'buttonText' => 'Сохранить',

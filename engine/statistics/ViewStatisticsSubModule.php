@@ -92,19 +92,14 @@ class ViewStatisticsSubModule extends BaseStatisticsSubModule
         $routeTable = ViewRouteStat::getTable();
         $viewTable = ViewStat::getTable();
         $metaTable = ViewMetaStat::getTable();
-        $limit = config::get('statistics')->{'views.history.limit'};
+        $time = time() - config::get('statistics')->storeTimeInSeconds;
         database::get()->query(
             "DELETE $routeTable
             FROM
                 $routeTable
                 LEFT JOIN $viewTable ON $routeTable.id = $viewTable.route_id
                 LEFT JOIN $metaTable ON $viewTable.id = $metaTable.view_id
-                INNER JOIN
-                (
-                    SELECT id FROM $routeTable 
-                    ORDER BY id DESC LIMIT $limit, 999999
-                ) AS cond_table
-                    ON $routeTable.id = cond_table.id"
+            WHERE $routeTable.time < $time"
         );
     }
 }

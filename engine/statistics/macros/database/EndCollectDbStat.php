@@ -40,19 +40,12 @@ class EndCollectDbStat extends BaseStatCollector
     {
         $routeTable = QueryRouteStat::getTable();
         $queryTable = QueryStat::getTable();
-        $limit = config::get('statistics')->{'queries.history.limit'};
+        $time = time() - config::get('statistics')->storeTimeInSeconds;
         database::get()->query(
             "DELETE $routeTable, $queryTable
-            FROM
-                $routeTable 
-                LEFT OUTER JOIN $queryTable 
-                    ON $routeTable.id = $queryTable.route_id
-                INNER JOIN
-                (
-                    SELECT id FROM $routeTable 
-                    ORDER BY id DESC LIMIT $limit, 999999
-                ) AS cond_table
-                    ON $routeTable.id = cond_table.id"
+            FROM $routeTable LEFT OUTER JOIN $queryTable 
+                ON $routeTable.id = $queryTable.route_id
+            WHERE $routeTable.time < $time"
         );
     }
 }

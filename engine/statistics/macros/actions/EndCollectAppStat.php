@@ -40,13 +40,10 @@ class EndCollectAppStat extends BaseStatCollector
     private function deleteOldStats()
     {
         $actionTable = ActionStat::getTable();
-        $config = config::get('statistics');
-        $limit = $config->{'actions.history.limit'};
+        $time = time() - config::get('statistics')->storeTimeInSeconds;
         database::get()->query(
             "DELETE $actionTable FROM $actionTable
-            INNER JOIN (
-                SELECT id FROM $actionTable ORDER BY id DESC LIMIT $limit, 999999
-            ) AS cond_table ON $actionTable.id = cond_table.id"
+            WHERE $actionTable.time < $time"
         );
     }
 }

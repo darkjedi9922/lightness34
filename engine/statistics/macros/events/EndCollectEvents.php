@@ -89,8 +89,7 @@ class EndCollectEvents extends BaseStatCollector
         $routeTable = EventRouteStat::getTable();
         $subscribersTable = EventSubscriberStat::getTable();
         $emitsTable = EventEmitStat::getTable();
-        $config = config::get('statistics');
-        $limit = $config->{'events.history.limit'};
+        $time = time() - config::get('statistics')->storeTimeInSeconds;
         database::get()->query(
             "DELETE $routeTable, $subscribersTable, $emitsTable, 
                 stat_event_emit_handles
@@ -102,12 +101,7 @@ class EndCollectEvents extends BaseStatCollector
                     ON $routeTable.id = $emitsTable.route_id 
                 LEFT OUTER JOIN stat_event_emit_handles
                     ON $emitsTable.id = stat_event_emit_handles.emit_id
-                INNER JOIN
-                (
-                    SELECT id FROM $routeTable 
-                    ORDER BY id DESC LIMIT $limit, 999999
-                ) AS cond_table
-                    ON $routeTable.id = cond_table.id"
+            WHERE $routeTable.time < $time"
         );
     }
 }

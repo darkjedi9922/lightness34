@@ -1,11 +1,6 @@
 {
     "enabled": true,
-    "routes.history.limit": 20,
-    "actions.history.limit": 20,
-    "events.history.limit": 20,
-    "queries.history.limit": 20,
-    "cash.history.limit": 20,
-    "views.history.limit": 20,
+    "storeTimeInSeconds": 604800,
     "ignoreRouteNamespaces": [
         "api/stats",
         "admin/statistics",
