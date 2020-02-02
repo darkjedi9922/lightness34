@@ -98,11 +98,17 @@ class ActionTest extends TestCase
         $this->assertEquals($boolValue, $convertedValue);
     }
 
-    public function testIfSpecifiedBoolValueWasNotRecievedThenItEqualsFalse()
+    public function testIfABoolValueWasNotRecievedThenItEqualsNullBeforeExec()
     {
         $action = new Action(new BoolPostListActionExample);
-        $value = $action->getData('post', 'checked');
-        $this->assertIsBool($value);
+        $this->assertNull($action->getData('post', 'checked'));
+    }
+
+    public function testIfABoolValueWasNotRecievedThenItEqualsFalseDuringExec()
+    {
+        $body = new BoolPostListActionExample;
+        (new Action($body))->exec();
+        $this->assertIsBool($body->checked);
     }
 
     public function boolPostProvider() {

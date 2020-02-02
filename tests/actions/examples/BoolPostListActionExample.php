@@ -5,6 +5,8 @@ use frame\actions\fields\BooleanField;
 
 class BoolPostListActionExample extends ActionBody
 {
+    public $checked;
+
     public function listPost(): array
     {
         return [
@@ -12,5 +14,8 @@ class BoolPostListActionExample extends ActionBody
         ];
     }
 
-    public function succeed(array $post, array $files) {}
+    public function succeed(array $post, array $files)
+    {
+        $this->checked = $post['checked']->get();
+    }
 }

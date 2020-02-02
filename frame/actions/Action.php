@@ -79,20 +79,7 @@ class Action
      */
     public function setDataAll(string $type, array $data)
     {
-        $desc = $type === self::ARGS
-            ? $this->body->listGet() 
-            : (
-                $type === self::POST
-                    ? $this->body->listPost()
-                    : []
-            );
-
-        foreach ($desc as $field => $fieldType) {
-            $this->setData($type, $field, $data[$field] ?? null);
-            unset($data[$field]);
-        }
-
-        // Могли быть переданы данные, не включенные в описание, добавим их тоже. 
+        $this->data[$type] = [];
         foreach ($data as $field => $value) 
             $this->setData($type, $field, $value);
     }
@@ -108,9 +95,8 @@ class Action
             ? $this->body->listGet()[$name] ?? null
             : $this->body->listPost()[$name] ?? null;
 
-        if ($fieldType !== null) {
-            if ($value === null) $value = $fieldType::createDefault();
-            else $value = new $fieldType($value);
+        if ($fieldType !== null && $value !== null) {
+            $value = new $fieldType($value);
         }
 
         $this->data[$type][$name] = $value;
@@ -159,8 +145,8 @@ class Action
     public final function exec()
     {
         Core::$app->emit(self::EVENT_START, $this);
-        $this->validateGet($this->data[self::ARGS]);
-        $this->validatePost($this->data[self::POST]);
+        $this->prepareData(self::ARGS, $this->body->listGet());
+        $this->prepareData(self::POST, $this->body->listPost());
         $this->body->initialize($this->data[self::ARGS]);
         $this->errors = $this->body->validate(
             $this->data[self::POST],
@@ -207,28 +193,18 @@ class Action
     /**
      * @throws HttpError NOT_FOUND
      */
-    private function validateGet(array $get)
+    private function prepareData(string $type, array $desc)
     {
-        $list = $this->body->listGet();
-        foreach ($list as $field => $type) {
-            if (!isset($get[$field])) throw new HttpError(
-                HttpError::NOT_FOUND,
-                "Get field '$field' is not set." 
-            );
-        }
-    }
-
-    /**
-     * @throws HttpError NOT_FOUND
-     */
-    private function validatePost(array $post)
-    {
-        $list = $this->body->listPost();
-        foreach ($list as $field => $type) {
-            if (!isset($post[$field])) throw new HttpError(
-                HttpError::NOT_FOUND,
-                "Post field '$field' is not set."
-            );
+        foreach ($desc as $field => $fieldType) {
+            $value = $this->data[$type][$field] ?? null;
+            if ($value === null) {
+                $default = $fieldType::createDefault();
+                if ($default !== null) $this->data[$type][$field] = $default;
+                else throw new HttpError(
+                    HttpError::NOT_FOUND,
+                    "$type field '$field' is not set" 
+                );
+            }
         }
     }
 }
