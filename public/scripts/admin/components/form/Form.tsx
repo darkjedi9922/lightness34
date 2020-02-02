@@ -131,7 +131,7 @@ class Form extends React.Component<FormProps> {
                         const addField = (ref: React.Component) =>
                             this.fields[(field as any).name] = ref;
                         switch (field.type) {
-                            case 'type':
+                            case 'text':
                             case 'password':
                                 el = <FormTextInput
                                     ref={addField}
