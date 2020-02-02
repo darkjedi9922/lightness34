@@ -2,6 +2,7 @@ import React from 'react';
 import $ from 'jquery';
 import { encodeHTML, decodeHTML } from 'buk';
 import Form, { TextField } from './form/Form';
+import FormTextarea from './form/FormTextarea';
 
 interface User {
     avatarUrl: string
@@ -124,7 +125,10 @@ class Comments extends React.Component<CommentsProps, CommentsState> {
     //     })
     // }
 
-    private handleAddCommentClick(event: React.FormEvent<HTMLFormElement>) {
+    private handleAddCommentClick(
+        event: React.FormEvent<HTMLFormElement>,
+        form: Form
+    ) {
         const textarea: HTMLTextAreaElement = event.currentTarget.elements['text'];
         const text = textarea.value;
         if (text === '') return; 
@@ -148,7 +152,7 @@ class Comments extends React.Component<CommentsProps, CommentsState> {
                         }
                     ]
                 }));
-                textarea.value = '';
+                form.getField<FormTextarea>('text').empty();
             }
         });
     }

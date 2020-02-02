@@ -6,6 +6,7 @@ import Form, { TextareaField } from './form/Form';
 import Table from './table/table';
 import { isNil } from 'lodash';
 import classNames from 'classnames';
+import FormTextarea from './form/FormTextarea';
 
 interface Message {
     id: number,
@@ -164,7 +165,10 @@ class MessageList extends React.Component<MessageListProps, MessageListState> {
         </>);
     }
 
-    private handleSendClick(event: React.FormEvent<HTMLFormElement>): void {
+    private handleSendClick(
+        event: React.FormEvent<HTMLFormElement>,
+        form: Form
+    ): void {
         const textInput: HTMLTextAreaElement = event.currentTarget.elements['text'];
         let text = textInput.value;
         if (text.length === 0) return;
@@ -174,7 +178,6 @@ class MessageList extends React.Component<MessageListProps, MessageListState> {
             method: "post",
             data: { text: text },
             success: (data) => {
-                console.log(data);
                 const result: APINewMessageResult = JSON.parse(data);
                 this.setState((state) => ({
                     list: [
@@ -189,7 +192,7 @@ class MessageList extends React.Component<MessageListProps, MessageListState> {
                         ...state.list
                     ]
                 }));
-                textInput.value = '';
+                form.getField<FormTextarea>('text').empty();
             }
         });
     }

@@ -9,6 +9,7 @@ interface FormTextareaProps {
 
 class FormTextarea extends React.Component<FormTextareaProps> {
     private textareaRef = React.createRef<TextareaAutosize>();
+    private inputRef = React.createRef<HTMLTextAreaElement>();
 
     public componentDidMount(): void {
         // Важно использовать именно при window load ибо оказалось, что реакт
@@ -25,6 +26,7 @@ class FormTextarea extends React.Component<FormTextareaProps> {
         return (
             <TextareaAutosize
                 ref={this.textareaRef}
+                inputRef={this.inputRef}
                 name={this.props.field.name}
                 className="form__textarea"
                 placeholder={this.props.field.placeholder}
@@ -32,6 +34,11 @@ class FormTextarea extends React.Component<FormTextareaProps> {
                 minRows={this.props.field.minRows || 3}
             />
         )
+    }
+
+    public empty(): void {
+        this.inputRef.current.value = '';
+        this.textareaRef.current._resizeComponent();
     }
 }
 

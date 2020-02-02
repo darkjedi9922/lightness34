@@ -65,10 +65,12 @@ interface FormProps {
     short?: boolean,
     buttonText: string,
     className?: string,
-    onSubmit?: (event: React.FormEvent<HTMLFormElement>) => void
+    onSubmit?: (event: React.FormEvent<HTMLFormElement>, form?: Form) => void
 }
 
 class Form extends React.Component<FormProps> {
+    private fields: {[name: string]: React.Component} = {};
+
     public constructor(props: FormProps) {
         super(props);
         this.onSubmit = this.onSubmit.bind(this);
@@ -81,6 +83,7 @@ class Form extends React.Component<FormProps> {
     }
 
     public render(): React.ReactNode {
+        this.fields = {};
         return (
             <form
                 className={classNames(
@@ -104,6 +107,10 @@ class Form extends React.Component<FormProps> {
         );
     }
 
+    public getField<T extends React.Component>(name: string): T {
+        return this.fields[name] as T;
+    }
+
     private renderFields(fields: (Field|Group)[]) {
         return fields.map((field, i) => (
             field.type === 'group'
@@ -119,21 +126,45 @@ class Form extends React.Component<FormProps> {
                     )}>{field.title}</span>
                 }
                 <div className="form__field-container">
-                    {(field.type === 'text' || field.type === 'password') &&
-                        <FormTextInput field={field as TextField} />
-                    }
-                    {field.type === 'textarea' &&
-                        <FormTextarea field={field as TextareaField} />
-                    }
-                    {field.type === 'checkbox' &&
-                        <FormCheckbox field={field as CheckboxField} />
-                    }
-                    {field.type === 'radio' &&
-                        <FormRadio field={field as RadioField} />
-                    }
-                    {field.type === 'file' &&
-                        <FormFileInput field={field as FileField} />
-                    }
+                    {(() => {
+                        let el: JSX.Element;
+                        const addField = (ref: React.Component) =>
+                            this.fields[(field as any).name] = ref;
+                        switch (field.type) {
+                            case 'type':
+                            case 'password':
+                                el = <FormTextInput
+                                    ref={addField}
+                                    field={field as TextField}
+                                />
+                                break;
+                            case 'textarea':
+                                el = <FormTextarea
+                                    ref={addField}
+                                    field={field as TextareaField}
+                                />
+                                break;
+                            case 'checkbox':
+                                el = <FormCheckbox
+                                    ref={addField}
+                                    field={field as CheckboxField}
+                                />
+                                break;
+                            case 'radio':
+                                el = <FormRadio
+                                    ref={addField}
+                                    field={field as RadioField}
+                                />
+                                break;
+                            case 'file':
+                                el = <FormFileInput
+                                    ref={addField}
+                                    field={field as FileField}
+                                />
+                                break;
+                        }
+                        return el;
+                    })()}
                 </div>
                 {!isNil((field as Field).errors) && (field as Field).errors
                 .map((error, i) =>
@@ -159,7 +190,7 @@ class Form extends React.Component<FormProps> {
             event.preventDefault();
             event.stopPropagation();
         }
-        if (!isNil(this.props.onSubmit)) this.props.onSubmit(event);
+        if (!isNil(this.props.onSubmit)) this.props.onSubmit(event, this);
     }
 }
 
