@@ -75,6 +75,7 @@ class StartCollectViewStats extends BaseStatCollector
         $stat->parent_id = $this->currentViewStat;
 
         $this->viewStats[$view] = $stat;
+        $this->viewMetaStats[$view] = [];
         $this->currentViewStat = $stat;
 
         $timer = new TimeStat;
