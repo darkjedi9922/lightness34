@@ -65,4 +65,11 @@
             color: $box-red;
         }
     }
+
+    &__loading {
+        color: white;
+        position: relative;
+        left: 0.5rem;
+        font-size: 1.25rem;
+    }
 }

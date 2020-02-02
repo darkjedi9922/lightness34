@@ -1,5 +1,6 @@
 import setupReactComponent from './setup-app';
 import QueryHistory from './components/database/query-history';
+import QueriesPage from './components/pages/database/queries';
 import DatabaseTables from './components/database/db-tables';
 import ViewsHistory from './components/views/views-history';
 import CashUseHistory from './components/cash/use-history';
@@ -27,6 +28,7 @@ setupReactComponent('#db-tables', DatabaseTables);
 setupReactComponent('#dialog-list', DialogsPage);
 setupReactComponent('#articles', ArticlesTable);
 setupReactComponent('#modules', ModulesList);
+setupReactComponent('#queries', QueriesPage);
 setupReactComponent('#log-page', LogPage);
 setupReactComponent('#users', UsersTable);
 setupReactComponent('#events', Events);

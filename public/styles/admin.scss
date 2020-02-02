@@ -16,6 +16,7 @@
 }
 
 @import '../fonts/fontello/css/fontello-embedded.css';
+@import '../fonts/fontello/css/animation.css';
 
 $clr-color: #249dcd;
 $clr-box: #e4e4e4;
@@ -65,6 +66,7 @@ $global-box-radius: 10px;
 @import 'admin/breadcrumbs-wrapper';
 @import 'admin/breadcrumbs';
 @import 'admin/centered-wrapper';
+@import 'admin/chart';
 @import 'admin/checkbox';
 @import 'admin/comment';
 @import 'admin/container';

@@ -110,6 +110,10 @@ if ($rights->can('see-logs')) $menu = array_merge_recursive($menu, [
                 'icon' => 'clock',
                 'link' => '/admin/statistics/database/history'
             ], [
+                'name' => 'Запросы',
+                'icon' => 'flag',
+                'link' => '/admin/statistics/database/queries'
+            ], [
                 'name' => 'Таблицы',
                 'icon' => 'folder',
                 'link' => '/admin/statistics/database/tables'

@@ -1,0 +1,10 @@
+.chart {
+    &__line path {
+        stroke: $clr-color;
+        stroke-width: 5;
+    }
+
+    &__dot {
+        // stroke-width: 2
+    }
+}
