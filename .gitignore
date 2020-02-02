@@ -21,7 +21,7 @@ vendor/phpunit
 # User avatars folder
 public/images/avatars
 
-# # fontello
+# fontello
 /public/fonts/fontello*.zip
 /public/fonts/fontello/*.json
 /public/fonts/fontello/*.txt
@@ -29,7 +29,8 @@ public/images/avatars
 !/public/fonts/fontello/css/animation.css
 !/public/fonts/fontello/css/fontello-embedded.css
 
-# npm build
+# npm
 node_modules
 public/build
 public/package-lock.json
+public/npm-debug.log
