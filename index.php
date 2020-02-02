@@ -1,6 +1,6 @@
 <?php require_once __DIR__ . '/bootstrap.php';
 
-use frame\Core;
+use frame\core\Core;
 use frame\route\Router;
 use frame\route\Request;
 use frame\errors\HttpError;
