@@ -23,11 +23,16 @@ class EndCollectAppStat extends BaseStatCollector
         // Действие не запускалось в этом процессе приложения
         if (!$this->stat->class) return;
 
+        // Если запускался errorCollector, он уже сам добавил response данные про
+        // ошибку. В данном случае добавляем только если ошибок не было.
         if (!$this->errorCollector->isExecuted()) {
+            // Экшн может завершится редиректом. Был ли установлен url на редирект,
+            // можно узнать в Response.
             if (Response::getUrl() !== null) {
                 $this->stat->response_type = ActionStat::RESPONSE_TYPE_REDIRECT;
                 $this->stat->response_info = Response::getUrl();
             } else {
+                // Если экшн завершается не редиректом, он выводит результат в json.
                 $this->stat->response_type = ActionStat::RESPONSE_TYPE_JSON;
                 $this->stat->response_info = null;
             }

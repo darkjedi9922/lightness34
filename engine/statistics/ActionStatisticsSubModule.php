@@ -14,7 +14,7 @@ use frame\modules\Module;
 
 class ActionStatisticsSubModule extends BaseStatisticsSubModule
 {
-    private $actionStat;
+    private $stat;
     private $timer;
     private $collectActionError;
 
@@ -24,7 +24,10 @@ class ActionStatisticsSubModule extends BaseStatisticsSubModule
 
         $this->stat = new ActionStat;
         $this->timer = new TimeStat;
-        $this->collectActionError = new CollectActionError($this->stat);
+        $this->collectActionError = new CollectActionError(
+            $this->stat,
+            $this->timer
+        );
     }
 
     public function clearStats()
