@@ -91,9 +91,18 @@ class Action
      */
     public function setData(string $type, string $name, $value)
     {
-        $fieldType = $type === self::ARGS
-            ? $this->body->listGet()[$name] ?? null
-            : $this->body->listPost()[$name] ?? null;
+        switch ($type) {
+            case self::ARGS: 
+                $fieldType = $this->body->listGet()[$name] ?? null;
+                break;
+            case self::POST:
+                $fieldType = $this->body->listPost()[$name] ?? null;
+                break;
+            case self::FILES:
+                $fieldType = $this->body->listFiles()[$name] ?? null;
+                break;
+            default: $fieldType = null;
+        }
 
         if ($fieldType !== null && $value !== null) {
             $value = new $fieldType($value);

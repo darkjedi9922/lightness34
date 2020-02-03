@@ -1,7 +1,5 @@
 <?php namespace frame\actions;
 
-use frame\route\Request;
-
 /**
  * Ошибки, возникшие во время обработки, определены константами
  * вида E_NAME_OF_ERROR.
@@ -15,16 +13,21 @@ abstract class ActionBody
      * listed in this method is not set when executing an action, then an error
      * HttpError:NOT_FOUND raised.
      * 
-     * Returns an array of the form ['param_name' => <GET_TYPE>]
-     * The <GET_TYPE> is Action constants declaring the type of a parameter such as
-     * GET_INT, GET_TEXT etc.
+     * Returns an array of the form ['param_name' => BaseField::class].
+     * All derived from BaseField classes also can be used here.
      */
     public function listGet(): array { return []; }
 
     /**
-     * The same as listGet() but for the post data with POST_TYPE field types.
+     * The same as listGet() but for the post data.
      */
     public function listPost(): array { return []; }
+
+    /**
+     * The same as listGet() but for the files data.
+     * For files only FileField and its derived classes can be used.
+     */
+    public function listFiles(): array { return []; }
 
     /**
      * Is run first

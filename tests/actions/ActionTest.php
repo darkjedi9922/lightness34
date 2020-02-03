@@ -10,12 +10,23 @@ use tests\actions\examples\AlwaysFailActionExample;
 use frame\errors\HttpError;
 use frame\actions\ActionRouter;
 use frame\actions\Action;
+use frame\actions\fields\FileField;
+use frame\actions\UploadedFile;
 use frame\core\Core;
 use frame\route\Router;
 use tests\actions\examples\EmptyActionExample;
+use tests\actions\examples\FileFieldActionExample;
 
 class ActionTest extends TestCase
 {
+    private $fileExampleData = [
+        'name' => 'some-file.txt',
+        'type' => 'image/jpeg',
+        'size' => 3600,
+        'tmp_name' => 'some-tmp-name.txt',
+        'error' => UploadedFile::UPLOAD_ERR_OK
+    ];
+
     public static function setUpBeforeClass(): void
     {
         $app = new Core(new Router);
@@ -126,6 +137,19 @@ class ActionTest extends TestCase
         ];
     }
 
+    public function testConvertsSpecifiedFilesToAFileFieldClass()
+    {
+        $file = new UploadedFile($this->fileExampleData);
+        $body = new FileFieldActionExample;
+        $action = new Action($body);
+        $action->setData(Action::FILES, 'avatar', $file);
+
+        $action->exec();
+
+        $this->assertInstanceOf(FileField::class, $body->avatarField);
+        $this->assertEquals($file, $body->avatarField->get());
+    }
+
     public function testNoExecutedActionHasEmptyResult()
     {
         $action = new Action(new AlwaysSucceedActionExample);
@@ -149,18 +173,22 @@ class ActionTest extends TestCase
     /**
      * @dataProvider commonTypeProvider
      */
-    public function testNonDescribedCommonDataIsSetWithoutAnyModifying(string $type)
-    {
+    public function testNonDescribedCommonDataIsSetWithoutAnyModifying(
+        string $type,
+        string $name,
+        $value
+    ) {
         $action = new Action(new EmptyActionExample);
-        $action->setData($type, 'name', 'Jed');
-        $this->assertEquals('Jed', $action->getData($type, 'name'));
+        $action->setData($type, $name, $value);
+        $this->assertEquals($value, $action->getData($type, $name));
     }
 
     public function commonTypeProvider(): array
     {
         return [
-            [Action::ARGS],
-            [Action::POST]
+            [Action::ARGS, 'name', 'Jed'],
+            [Action::POST, 'name', 'Kostyak'],
+            [Action::FILES, 'avatar', new UploadedFile($this->fileExampleData)]
         ];
     }
 }
