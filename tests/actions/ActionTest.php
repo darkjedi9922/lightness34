@@ -111,7 +111,8 @@ class ActionTest extends TestCase
         $this->assertIsBool($body->checked);
     }
 
-    public function boolPostProvider() {
+    public function boolPostProvider()
+    {
         return [
             [true, true],
             [false, false],
@@ -151,8 +152,8 @@ class ActionTest extends TestCase
     public function testNonDescribedCommonDataIsSetWithoutAnyModifying(string $type)
     {
         $action = new Action(new EmptyActionExample);
-        $action->setData(Action::ARGS, 'name', 'Jed');
-        $this->assertEquals('Jed', $action->getData(Action::ARGS, 'name'));
+        $action->setData($type, 'name', 'Jed');
+        $this->assertEquals('Jed', $action->getData($type, 'name'));
     }
 
     public function commonTypeProvider(): array
