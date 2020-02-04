@@ -1,5 +1,6 @@
 <?php
 
+use frame\tools\files\Directory;
 use frame\tools\Logger;
 use frame\tools\files\File;
 use PHPUnit\Framework\TestCase;
@@ -8,10 +9,10 @@ class LoggerTest extends TestCase
 {
     public function testCreatesLogFileIfItDoesNotExist()
     {
-        $file = ROOT_DIR . '/tests/tools/examples/not-existence-dir/log.txt';
+        $file = ROOT_DIR . '/tests/tools/examples/non-existence-dir/log.txt';
         $logger = new Logger($file);
         $this->assertFileExists($file);
-        File::delete($file);
+        Directory::deleteNonEmpty('non-existence-dir');
     }
 
     public function testWritesAndReadsRecords()
