@@ -6,6 +6,18 @@ use PHPUnit\Framework\TestCase;
 
 class DirectoryTest extends TestCase
 {
+    /**
+     * @dataProvider newDirPathsProvider
+     */
+    public function testCreatesWithRecursivePath($path, $root)
+    {
+        $path = ROOT_DIR . "/tests/tools/examples/$path";
+        $this->assertDirectoryNotExists($path);
+        Directory::createRecursive($path);
+        $this->assertDirectoryExists($path);
+        Directory::deleteNonEmpty(ROOT_DIR . "/tests/tools/examples/$root");
+    }
+
     public function testDeletesEmptyDirectory()
     {
         $path = ROOT_DIR . '/tests/tools/examples/new-dir';
@@ -26,5 +38,16 @@ class DirectoryTest extends TestCase
 
         Directory::deleteNonEmpty($path);
         $this->assertDirectoryNotExists($path);
+    }
+
+    public function newDirPathsProvider()
+    {
+        return [[
+            'new-dir1/new-subdir2/new-dir3',
+            'new-dir1'
+        ], [
+            'new-dir',
+            'new-dir'
+        ]];
     }
 }

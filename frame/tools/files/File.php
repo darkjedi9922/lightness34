@@ -26,12 +26,12 @@ class File
 
     /**
      * Аналогично File::create(), но также создает директории в пути к файлу, если
-     * они не существуют.
+     * они не существуют. Если файл уже создан, его содержимое будет очищено.
      */
     public static function createFullPath(string $path, bool $return = false): ?self
     {
         $dir = implode('/', explode('/', $path, -1));
-        if ($dir !== '' && !file_exists($dir)) mkdir($dir, 0777, true);
+        if ($dir !== '' && !file_exists($dir)) Directory::createRecursive($dir);
         return self::create($path, $return);
     }
 
