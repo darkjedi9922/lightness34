@@ -46,7 +46,8 @@ class StartCollectQueryStat extends BaseDatabaseStatCollector
         };
 
         $queryStat = new QueryStat;
-        $queryStat->sql_text = shorten($sql, 80, '...');
+        $queryStat->sql_text = shorten($sql, 750, '...');
+        $queryStat->sql_crc = crc32($sql);
 
         $this->queryStats[] = $queryStat;
         
