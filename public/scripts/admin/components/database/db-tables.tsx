@@ -73,6 +73,7 @@ class DatabaseTables extends React.Component<DatabaseTablesProps> {
                 <Table
                     headers={['Name', 'Fields', 'Rows']}
                     items={items}
+                    collapsable={true}
                 ></Table>
             </div>
         );

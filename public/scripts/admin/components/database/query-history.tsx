@@ -70,6 +70,11 @@ class QueryHistory extends React.Component<QueryHistoryProps> {
                 cells: [
                     <RouteRequest route={route.route}></RouteRequest>,
                     route.queries.length,
+                    <span className="table__duration">
+                        {Math.round(route.queries.reduce<number>(
+                            (sum, query) => sum + query.durationSec, 0
+                        ) * 1000000) / 1000000} sec
+                    </span>,
                     <div className="stat-status">{status}</div>,
                     route.time
                 ],
@@ -80,8 +85,9 @@ class QueryHistory extends React.Component<QueryHistoryProps> {
             <div className="box box--table">
                 <Table
                     className="routes queries"
-                    headers={['Route', 'Queries', 'Status', 'Time']}
+                    headers={['Route', 'Queries', 'Sum load', 'Status', 'Time']}
                     items={items}
+                    collapsable={true}
                 ></Table>
             </div>
         )

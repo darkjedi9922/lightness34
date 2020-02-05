@@ -37,6 +37,13 @@
                 border-color: $box-red;
             }
         }
+        &--green {
+            color: $box-green;
+            &:hover {
+                background: $box-green;
+                border-color: $box-green;
+            }
+        }
         &--yellow {
             color: $box-yellow;
             &:hover {
