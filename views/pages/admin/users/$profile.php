@@ -40,7 +40,7 @@ $pageProps = [
             ? date('d.m.Y H:i', $profile->last_online_time)
             : null,
         'lastUserAgent' => $profile->last_user_agent,
-        'isOnline' => $profile->online === '1'
+        'isOnline' => $profile->online === 1
     ],
     'rights' => [
         'canEdit' => $rights->canOneOf([

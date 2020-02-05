@@ -7,6 +7,7 @@ use frame\actions\ActionBody;
 use frame\actions\fields\BooleanField;
 use frame\actions\fields\PasswordField;
 use frame\actions\fields\StringField;
+use engine\users\cash\user_me;
 use frame\tools\Init;
 
 class LoginAction extends ActionBody
@@ -56,6 +57,9 @@ class LoginAction extends ActionBody
     public function succeed(array $post, array $files)
     {
         (new Auth)->login($this->sid, $post['remember']->get());
+        $me = user_me::get();
+        $me->online = true;
+        $me->update();
     }
 
     public function getSuccessRedirect(): ?string
