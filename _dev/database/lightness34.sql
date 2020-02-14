@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1
--- Время создания: Янв 18 2020 г., 10:52
+-- Время создания: Фев 14 2020 г., 15:10
 -- Версия сервера: 10.1.38-MariaDB
 -- Версия PHP: 7.3.3
 
@@ -55,49 +55,6 @@ CREATE TABLE `comments` (
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `deleted_dialogs`
---
-
-CREATE TABLE `deleted_dialogs` (
-  `dialog_id` int(10) UNSIGNED NOT NULL,
-  `deleted_user_id` int(10) UNSIGNED NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Структура таблицы `deleted_messages`
---
-
-CREATE TABLE `deleted_messages` (
-  `message_id` int(10) UNSIGNED NOT NULL,
-  `deleted_user_id` int(10) UNSIGNED NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Структура таблицы `dialogs`
---
-
-CREATE TABLE `dialogs` (
-  `id` int(10) UNSIGNED NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Структура таблицы `dialog_members`
---
-
-CREATE TABLE `dialog_members` (
-  `group_id` int(10) UNSIGNED NOT NULL,
-  `member_id` int(10) UNSIGNED NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
 -- Структура таблицы `group_rights`
 --
 
@@ -115,10 +72,13 @@ CREATE TABLE `group_rights` (
 
 CREATE TABLE `messages` (
   `id` int(10) UNSIGNED NOT NULL,
+  `member1_sorted_id` int(10) UNSIGNED NOT NULL,
+  `member2_sorted_id` int(10) UNSIGNED NOT NULL,
   `from_id` int(10) UNSIGNED NOT NULL,
   `to_id` int(10) UNSIGNED NOT NULL,
   `date` int(11) UNSIGNED NOT NULL,
-  `readed` tinyint(1) NOT NULL DEFAULT '0'
+  `readed` tinyint(1) NOT NULL DEFAULT '0',
+  `removed_by_id` int(10) UNSIGNED DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -276,6 +236,7 @@ CREATE TABLE `stat_queries` (
   `id` int(10) UNSIGNED NOT NULL,
   `route_id` int(10) UNSIGNED NOT NULL,
   `sql_text` varchar(1000) COLLATE utf8_bin NOT NULL,
+  `sql_crc` int(10) UNSIGNED NOT NULL,
   `error` varchar(1000) COLLATE utf8_bin DEFAULT NULL,
   `duration_sec` float UNSIGNED NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
@@ -368,17 +329,6 @@ CREATE TABLE `transmitting` (
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `unreaded_messages`
---
-
-CREATE TABLE `unreaded_messages` (
-  `message_id` int(10) UNSIGNED NOT NULL,
-  `member_id` int(10) UNSIGNED NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
 -- Структура таблицы `users`
 --
 
@@ -387,7 +337,7 @@ CREATE TABLE `users` (
   `login` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `password` varchar(50) NOT NULL,
   `email` varchar(50) NOT NULL DEFAULT '',
-  `avatar` varchar(50) NOT NULL DEFAULT '',
+  `avatar` varchar(50) DEFAULT '',
   `name` varchar(50) NOT NULL DEFAULT '',
   `surname` varchar(50) NOT NULL DEFAULT '',
   `gender_id` int(10) UNSIGNED NOT NULL,
@@ -404,8 +354,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `login`, `password`, `email`, `avatar`, `name`, `surname`, `gender_id`, `group_id`, `sid`, `registration_date`, `online`, `last_online_time`, `last_user_agent`) VALUES
-(1, 'Admin', '4a7d1ed414474e4033ac29ccb8653d9b', 'darkjedi9922@gmail.com', '3_jed2-blue.jpg', 'Джед', 'Дарк', 2, 6, 'f57e1436a9726c71b59aeb3d36cdd56e', 1527321064, 0, 1575646899, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36 OPR/65.0.3467.48'),
-(2, 'TestUser', '4a7d1ed414474e4033ac29ccb8653d9b', '', '', '', '', 1, 2, '58bd112d0459a1abc826b8024ce438e1', 1554873613, 0, 1575646561, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36 OPR/65.0.3467.48');
+(1, 'Admin', '4a7d1ed414474e4033ac29ccb8653d9b', '', '', '', '', 2, 6, 'f57e1436a9726c71b59aeb3d36cdd56e', 1527321064, 1, 1581660460, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36 OPR/66.0.3515.72');
 
 -- --------------------------------------------------------
 
@@ -475,39 +424,11 @@ ALTER TABLE `comments`
   ADD KEY `module_id` (`module_id`);
 
 --
--- Индексы таблицы `deleted_dialogs`
---
-ALTER TABLE `deleted_dialogs`
-  ADD KEY `dialog_id` (`dialog_id`),
-  ADD KEY `deleted_user_id` (`deleted_user_id`);
-
---
--- Индексы таблицы `deleted_messages`
---
-ALTER TABLE `deleted_messages`
-  ADD KEY `message_id` (`message_id`),
-  ADD KEY `deleted_user_id` (`deleted_user_id`);
-
---
--- Индексы таблицы `dialogs`
---
-ALTER TABLE `dialogs`
-  ADD PRIMARY KEY (`id`);
-
---
--- Индексы таблицы `dialog_members`
---
-ALTER TABLE `dialog_members`
-  ADD KEY `group_id` (`group_id`),
-  ADD KEY `member_id` (`member_id`);
-
---
 -- Индексы таблицы `messages`
 --
 ALTER TABLE `messages`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `group_id` (`from_id`),
-  ADD KEY `author_id` (`to_id`);
+  ADD KEY `group_id` (`from_id`);
 
 --
 -- Индексы таблицы `message_texts`
@@ -601,13 +522,6 @@ ALTER TABLE `stat_view_routes`
   ADD PRIMARY KEY (`id`);
 
 --
--- Индексы таблицы `unreaded_messages`
---
-ALTER TABLE `unreaded_messages`
-  ADD KEY `message_id` (`message_id`),
-  ADD KEY `member_id` (`member_id`);
-
---
 -- Индексы таблицы `users`
 --
 ALTER TABLE `users`
@@ -641,12 +555,6 @@ ALTER TABLE `articles`
 -- AUTO_INCREMENT для таблицы `comments`
 --
 ALTER TABLE `comments`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT для таблицы `dialogs`
---
-ALTER TABLE `dialogs`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
