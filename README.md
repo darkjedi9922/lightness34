@@ -27,7 +27,7 @@ The framework aims on strong component and code structuring. The first purpose i
 
 * Apache 2
 * MySQL
-* PHP 7
+* PHP 7.2
 
 ### Installation
 
@@ -65,6 +65,14 @@ Clone the git project and create a new virtual host like you usually do.
 
 *This file is ignored by default because developers can have their own database configurations on their local machines that is different between each other. It is easier to ignore this file at all.*
 
+**To work with default implemented modules, import database backup `_dev/database/lightness34.sql`**.
+
+### Default modules
+
+By defaut the module has one **root user** with login `Admin` and password `0000`.
+
+The same password `0000` is used to login into the **admin panel**.
+
 ### Running the tests
 
 [PHPUnit Framework](https://phpunit.de) is used for testing.
@@ -92,4 +100,4 @@ The part **major.minor.patch**:
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.  
-Copyright (c) 2019 Jed Dark
+Copyright (c) 2019-2020 Jed Dark
