@@ -30,7 +30,7 @@ abstract class Cash
      */
     protected static function cash(string $key, callable $creator)
     {
-        Core::$app->emit(self::EVENT_CALL, static::class, $key, $creator);
+        Core::$app->events->emit(self::EVENT_CALL, static::class, $key, $creator);
         return self::$storage[static::class][$key] ?? 
             self::$storage[static::class][$key] = $creator();
     }

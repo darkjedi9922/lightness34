@@ -100,11 +100,11 @@ class View
     protected function getContent()
     {
         if ($this->cachedContent === null) {
-            Core::$app->emit(self::EVENT_LOAD_START, $this);
+            Core::$app->events->emit(self::EVENT_LOAD_START, $this);
             ob_start();
             __show($this);
             $this->cachedContent = ob_get_clean();
-            Core::$app->emit(self::EVENT_LOAD_END, $this);
+            Core::$app->events->emit(self::EVENT_LOAD_END, $this);
         }
         return $this->cachedContent;
     }

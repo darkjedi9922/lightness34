@@ -38,6 +38,8 @@ class Core
      */
     public $config;
 
+    public $events;
+
     /**
      * @var array Ключ - имя класса исключения, 
      * значение - имя класса обработчика
@@ -51,7 +53,6 @@ class Core
     private $defaultHandler = null;
 
     private $modules = [];
-    private $events = null;
     private $executed = false;
 
     public function __construct(Router $router)
@@ -72,7 +73,7 @@ class Core
     public function __destruct()
     {
         try {
-            if ($this->executed) $this->emit(self::EVENT_APP_END);
+            if ($this->executed) $this->events->emit(self::EVENT_APP_END);
         } catch (\Throwable $error) {
             $this->handleError($error);
         }
@@ -116,7 +117,7 @@ class Core
      */
     public function on(string $event, callable $macro)
     {
-        $this->events->subscribe($event, $macro);
+        $this->events->on($event, $macro);
     }
 
     /**
@@ -124,7 +125,7 @@ class Core
      */
     public function off(string $event, callable $macro)
     {
-        $this->events->unsubscribe($event, $macro);
+        $this->events->off($event, $macro);
     }
 
     /**
@@ -133,7 +134,7 @@ class Core
      */
     public function emit(string $event, ...$args)
     {
-        $this->events->emit($event, ...$args);
+        $this->events->events->emit($event, ...$args);
     }
 
     /**
@@ -177,7 +178,7 @@ class Core
     public function exec()
     {
         $this->executed = true;
-        $this->emit(self::EVENT_APP_START);
+        $this->events->emit(self::EVENT_APP_START);
         $pagename = $this->router->pagename;
         $page = $this->findPage($pagename);
         if ($page) $page->show();
@@ -218,7 +219,7 @@ class Core
         $logging = $this->config->{'log.enabled'};
         if ($logging) $this->writeInLog(Logger::ERROR, Debug::getErrorMessage($e));
 
-        if (!$this->events->isBlocked()) $this->emit(self::EVENT_APP_ERROR, $e);
+        if (!$this->events->isBlocked()) $this->events->emit(self::EVENT_APP_ERROR, $e);
 
         if (isset($this->handlers[get_class($e)])) 
             (new $this->handlers[get_class($e)])->handle($e);

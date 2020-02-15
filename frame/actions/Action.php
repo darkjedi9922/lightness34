@@ -153,7 +153,7 @@ class Action
      */
     public final function exec()
     {
-        Core::$app->emit(self::EVENT_START, $this);
+        Core::$app->events->emit(self::EVENT_START, $this);
         $this->prepareData(self::ARGS, $this->body->listGet());
         $this->prepareData(self::POST, $this->body->listPost());
         $this->body->initialize($this->data[self::ARGS]);
@@ -172,7 +172,7 @@ class Action
                 $this->data[self::FILES]
             ) ?? [];
         }
-        Core::$app->emit(self::EVENT_END, $this);
+        Core::$app->events->emit(self::EVENT_END, $this);
     }
 
     public function getErrors(): array

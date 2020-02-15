@@ -37,12 +37,12 @@ $app->setModule(new UsersModule('users'));
 $app->setModule(new ArticlesModule('articles'));
 $app->setModule(new CommentsModule('comments', $app->getModule('articles')));
 
-$app->on(Core::EVENT_APP_START, new ActionMacro('action'));
-$app->on(Core::EVENT_APP_START, new ValueMacro('value'));
-$app->on(Core::EVENT_APP_START, new BlockMacro('block'));
-$app->on(Core::EVENT_APP_START, new WidgetMacro('widget'));
-$app->on(View::EVENT_LOAD_START, new ApplyDefaultLayout);
-$app->on(Core::EVENT_APP_START, new UpdateUserStatus);
-$app->on(Core::EVENT_APP_END, new UpdateOfflineUsers);
+$app->events->on(Core::EVENT_APP_START, new ActionMacro('action'));
+$app->events->on(Core::EVENT_APP_START, new ValueMacro('value'));
+$app->events->on(Core::EVENT_APP_START, new BlockMacro('block'));
+$app->events->on(Core::EVENT_APP_START, new WidgetMacro('widget'));
+$app->events->on(View::EVENT_LOAD_START, new ApplyDefaultLayout);
+$app->events->on(Core::EVENT_APP_START, new UpdateUserStatus);
+$app->events->on(Core::EVENT_APP_END, new UpdateOfflineUsers);
 
 $app->exec();

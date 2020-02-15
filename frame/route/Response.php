@@ -66,7 +66,7 @@ class Response
         if (self::$finish) return;
        
         self::$finish = true;
-        Core::$app->emit(self::EVENT_FINISH);
+        Core::$app->events->emit(self::EVENT_FINISH);
         exit;
     }
 }

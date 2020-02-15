@@ -44,7 +44,7 @@ class StatisticsModule extends Module
         foreach ($submodules as $submodule) {
             /** @var BaseStatisticsSubModule $submodule */
             $macros = $submodule->getAppEventHandlers();
-            foreach ($macros as $event => $macro) Core::$app->on($event, $macro);
+            foreach ($macros as $event => $macro) Core::$app->events->on($event, $macro);
         }
 
         // Нужно закончить сбор статистики (сохранить все в БД) после ее выключения. 
@@ -60,7 +60,7 @@ class StatisticsModule extends Module
         // В этом обработчике конца убираем все установленные обработчики событий
         // статистики (выключаем сбор статистики) и только после этого уже добавляем
         // все в БД.
-        Core::$app->on(
+        Core::$app->events->on(
             Core::EVENT_APP_START, 
             new class($submodules) extends BaseStatCollector {
                 private $statModules = [];
@@ -68,7 +68,7 @@ class StatisticsModule extends Module
                     $this->statModules = $statModules;
                 }
                 protected function collect(...$args) {
-                    Core::$app->on(
+                    Core::$app->events->on(
                         Core::EVENT_APP_END, 
                         new class($this->statModules) extends BaseStatCollector {
                             private $statModules;
@@ -80,7 +80,7 @@ class StatisticsModule extends Module
                                     /** @var BaseStatisticsSubModule $module */
                                     $macros = $module->getAppEventHandlers();
                                     foreach ($macros as $event => $macro) {
-                                        Core::$app->off($event, $macro);
+                                        Core::$app->events->off($event, $macro);
                                     }
                                 }
                                 foreach ($this->statModules as $module) {

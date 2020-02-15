@@ -12,9 +12,9 @@ class EventManagerTest extends TestCase
         $events = new EventManager;
         $macro = new MacroEmptyExample;
         $macro2 = new MacroEmptyExample;
-        $events->subscribe('event1', $macro);
-        $events->subscribe('event1', $macro2);
-        $events->subscribe('event3', $macro);
+        $events->on('event1', $macro);
+        $events->on('event1', $macro2);
+        $events->on('event3', $macro);
 
         $this->assertEquals([
             'event1' => [$macro, $macro2],
@@ -26,7 +26,7 @@ class EventManagerTest extends TestCase
     {
         $events = new EventManager;
         $macro = new MacroAccumulationExample('hello');
-        $events->subscribe('say-hello', $macro);
+        $events->on('say-hello', $macro);
 
         $this->assertEquals(0, $macro->getCount());
         

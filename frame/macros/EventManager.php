@@ -50,7 +50,7 @@ class EventManager
     private $blockedEvent = null;
     private $lastEmitId = 0;
 
-    public function subscribe(string $event, callable $macro)
+    public function on(string $event, callable $macro)
     {
         $this->subscribers[$event][] = $macro;
         if (!$this->isBlockingEvent($event)) $this->emit(
@@ -60,7 +60,7 @@ class EventManager
         );
     }
 
-    public function unsubscribe(string $event, callable $macro)
+    public function off(string $event, callable $macro)
     {
         $index = array_search($macro, $this->subscribers[$event] ?? []);
         if ($index === false) return;
