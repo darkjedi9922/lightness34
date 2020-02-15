@@ -1,12 +1,9 @@
 <?php namespace frame\actions;
 
 use frame\actions\fields\BaseField;
-use frame\actions\fields\BooleanField;
 use frame\actions\UploadedFile;
 use frame\errors\HttpError;
 use frame\core\Core;
-
-use function lightlib\encode_specials;
 
 /**
  * Класс служит для обработки форм, но можно использовать для запуска других
@@ -116,7 +113,7 @@ class Action
      * его нет.
      * 
      * @param string $type post|get|files
-     * @param string|UploadedFile|null $default
+     * @param mixed $default
      * @return string|UploadedFile|null
      */
     public function getData(string $type, string $name, $default = null)
@@ -127,6 +124,10 @@ class Action
         return $value;
     }
 
+    /**
+     * Если unpack указан как true, будет возвращен массив значений всех BaseField,
+     * иначе будет возвращен массив самих BaseField.
+     */
     public function getDataArray(bool $unpack = false): array
     {
         if (!$unpack) return $this->data;

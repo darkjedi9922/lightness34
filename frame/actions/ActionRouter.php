@@ -21,7 +21,7 @@ class ActionRouter
         return $action;
     }
 
-    public function getTriggerUrl(Action $action)
+    public function getTriggerUrl(Action $action): string
     {
         return Router::toUrlOf(
             '/' . str_replace('\\', '/', get_class($action->getBody())),
