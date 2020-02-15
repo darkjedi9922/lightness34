@@ -27,7 +27,7 @@ The framework aims on strong component and code structuring. The first purpose i
 
 * Apache 2
 * MySQL
-* PHP 7.2
+* PHP >= 7.2
 
 ### Installation
 
@@ -65,7 +65,19 @@ Clone the git project and create a new virtual host like you usually do.
 
 *This file is ignored by default because developers can have their own database configurations on their local machines that is different between each other. It is easier to ignore this file at all.*
 
-**To work with default implemented modules, import database backup `_dev/database/lightness34.sql`**.
+#### Installation of default modules
+
+1. Import database backup `_dev/database/lightness34.sql`.
+2. Using [NPM](https://www.npmjs.com) ([Node](https://nodejs.org) Package Manager) build style and javascript assets:
+
+```bash
+cd public
+npm install # download and install packages
+
+# build (any of two commands)
+npm run webpack # debug build
+npm run build # release build
+```
 
 ### Default modules
 
