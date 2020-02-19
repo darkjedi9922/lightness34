@@ -20,8 +20,9 @@ class LoggerTest extends TestCase
         $file = ROOT_DIR . '/tests/tools/examples/new-log.txt';
         $logger = new Logger($file);
         
+        $eol = PHP_EOL;
         $messageOne = 'Some message text';
-        $messageTwo = "Some message text\nwith several\nlines";
+        $messageTwo = "Some message text{$eol}with several{$eol}lines";
 
         $logger->write(Logger::TESTING, $messageOne);
         $logger->write(Logger::INFO, $messageTwo);
