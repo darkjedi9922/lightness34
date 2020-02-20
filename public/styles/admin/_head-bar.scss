@@ -1,7 +1,7 @@
 .head-bar {
     background: $clr-box;
-    height: 63px;
-    padding: 0px 18px;
+    height: $headbar-height;
+    padding: 0px $content-padding;
     display: flex;
 
     &__left {

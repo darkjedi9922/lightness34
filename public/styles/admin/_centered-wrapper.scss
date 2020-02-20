@@ -4,4 +4,12 @@
     align-items: center;
     width: 100%;
     height: 100%;
+
+    // Предназначен для использования только на полноценных страницах с меню,
+    // хедбаром и т.д.
+    &--fixed {
+        position: fixed;
+        width: calc(100% - #{$menu-width} - #{$content-padding} * 2);
+        height: calc(100vh - #{$headbar-height} - #{$content-padding} * 2);
+    }
 }

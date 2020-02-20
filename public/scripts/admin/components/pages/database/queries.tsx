@@ -5,6 +5,7 @@ import {
 } from 'recharts';
 import $ from 'jquery';
 import { isNil } from 'lodash';
+import LoadingContent from '../../loading-content';
 
 interface QueriesCount {
     time: string,
@@ -36,22 +37,17 @@ class QueriesPage extends React.Component<{}, QueriesPageState> {
     }
 
     public render(): React.ReactNode {
-        return (<>
-            <div className="content__header">
-                <div className="breadcrumbs-wrapper">
-                    <Breadcrumbs items={[{
-                        name: 'Мониторинг'
-                    }, {
-                        name: 'База данных'
-                    }, {
-                        name: 'Запросы'
-                    }]} />
-                    {isNil(this.state.data) &&
-                        <i className="icon-spin1 animate-spin content__loading"></i>
-                    }
+        return <LoadingContent>
+            {!isNil(this.state.data) && <>
+                <div className="content__header">
+                    <div className="breadcrumbs-wrapper">
+                        <Breadcrumbs items={[
+                            {name: 'Мониторинг'},
+                            {name: 'База данных'},
+                            {name: 'Запросы'}
+                        ]} />
+                    </div>
                 </div>
-            </div>
-            {!isNil(this.state.data) &&
                 <div className="box chart">
                     <ResponsiveContainer height={400} width="99%">
                         <LineChart
@@ -73,8 +69,8 @@ class QueriesPage extends React.Component<{}, QueriesPageState> {
                         </LineChart>
                     </ResponsiveContainer>
                 </div>
-            }
-        </>);
+            </>}
+        </LoadingContent>;
     }
 }
 

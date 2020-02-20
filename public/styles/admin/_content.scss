@@ -1,5 +1,5 @@
 .content {
-    padding: 18px 18px 0px;
+    padding: $content-padding $content-padding 0px;
     background: url('/public/images/admin/logo.png') no-repeat;
     background-position: center 50%;
     vertical-align: top;
@@ -66,10 +66,14 @@
         }
     }
 
+    &__clear-bckg {
+        background: $global-background-color;
+        width: 100%;
+        height: 100%;
+    }
+
     &__loading {
         color: white;
-        position: relative;
-        left: 0.5rem;
-        font-size: 1.25rem;
+        font-size: 2rem;
     }
 }

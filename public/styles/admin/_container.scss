@@ -6,7 +6,7 @@
 
     &__sidebox {
         padding: 0;
-        width: 261px;
+        width: $menu-width;
         vertical-align: top;
         background: $menu-background-color;
         flex-shrink: 0;
