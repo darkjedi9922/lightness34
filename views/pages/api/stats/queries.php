@@ -13,7 +13,7 @@ $maxCount = 10; // Не должно быть <= 0 или слишком бол�
 $data = database::get()->query(
     "SELECT 
         COUNT(stat_queries.id),
-        CAST(stat_query_routes.time / $secInterval AS UNSIGNED) * $secInterval 
+        FLOOR(stat_query_routes.time / $secInterval) * $secInterval 
             as interval_time
     FROM stat_queries INNER JOIN stat_query_routes 
         ON stat_queries.route_id = stat_query_routes.id
@@ -32,7 +32,7 @@ while (($line = $data->readLine()) !== null) {
     $currentTime = $line['interval_time'];
     if ($lastTime) {
         $times = ($lastTime - $secInterval - $currentTime) / $secInterval;
-        for ($i = 0; $n = $times; ++$i) {
+        for ($i = 0; $i < $times; ++$i) {
             if ($resultCount === $maxCount) break;
             $prevInterval = $lastTime - $secInterval * ($i + 1);
             $resultData[] = [
