@@ -85,7 +85,15 @@ if ($rights->can('see-logs')) $menu = array_merge_recursive($menu, [
         'submenu' => [[
             'name' => 'Маршруты',
             'icon' => 'link',
-            'link' => '/admin/statistics/routes'
+            'submenu' => [[
+                'name' => 'История',
+                'icon' => 'clock',
+                'link' => '/admin/statistics/routes/history'
+            ], [
+                'name' => 'Статистика',
+                'icon' => 'chart-area',
+                'link' => '/admin/statistics/routes/charts'
+            ]]
         ], [
             'name' => 'События',
             'icon' => 'flash-1',

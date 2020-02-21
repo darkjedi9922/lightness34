@@ -20,7 +20,9 @@ $clear = new ViewAction(ClearStatistics::class, ['module' => 'stat/routes']);
     <div class="breadcrumbs">
         <span class="breadcrumbs__item">Мониторинг</span>
         <span class="breadcrumbs__divisor"></span>
-        <span class="breadcrumbs__item breadcrumbs__item--current">Маршруты</span>
+        <span class="breadcrumbs__item">Маршруты</span>
+        <span class="breadcrumbs__divisor"></span>
+        <span class="breadcrumbs__item breadcrumbs__item--current">История</span>
     </div>
     <a href="<?= $clear->getUrl() ?>" class="button">Очистить статистику</a>
 </div>

@@ -3,6 +3,7 @@ import QueryHistory from './components/database/query-history';
 import QueriesPage from './components/pages/database/queries';
 import DatabaseTables from './components/database/db-tables';
 import ViewsHistory from './components/views/views-history';
+import RoutesCharts from './components/pages/routes/charts';
 import CashUseHistory from './components/cash/use-history';
 import ArticlesTable from './components/articles-table';
 import MessagesPage from './components/pages/messages';
@@ -19,6 +20,7 @@ import Menu from './components/menu';
 
 setupReactComponent('#cash-use-history', CashUseHistory);
 setupReactComponent('#views-stat-page', ViewsHistory);
+setupReactComponent('#routes-charts', RoutesCharts);
 setupReactComponent('#messages-page', MessagesPage);
 setupReactComponent('#query-history', QueryHistory);
 setupReactComponent('#article-comments', Comments);
