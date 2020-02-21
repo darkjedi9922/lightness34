@@ -11,5 +11,6 @@
         position: fixed;
         width: calc(100% - #{$menu-width} - #{$content-padding} * 2);
         height: calc(100vh - #{$headbar-height} - #{$content-padding} * 2);
+        top: calc(#{$headbar-height} + #{$content-padding});
     }
 }
