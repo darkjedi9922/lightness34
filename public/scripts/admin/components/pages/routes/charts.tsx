@@ -6,6 +6,7 @@ import {
     AreaChart, Area, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer
 } from 'recharts';
 import $ from 'jquery';
+import Table from '../../table/table';
 
 interface TimeIntervalCounts {
     time: string,
@@ -61,13 +62,14 @@ class RoutesCharts extends React.Component<{}, RoutesChartsState> {
                 <Breadcrumbs items={[
                     { 'name': 'Мониторинг' },
                     { 'name': 'Маршруты' },
-                    { 'name': 'Статистика' }
+                    { 'name': 'Статистика' },
+                    { 'name': 'Количество' }
                 ]} />
             </ContentHeader>
             <LoadingContent>
                 {this.state.counts.length &&
                     <div className="box chart">
-                        <ResponsiveContainer height={300} width="99%">
+                        <ResponsiveContainer height={250} width="99%">
                             <AreaChart
                                 data={this.state.counts}
                                 margin={{
@@ -85,12 +87,8 @@ class RoutesCharts extends React.Component<{}, RoutesChartsState> {
                                             type="monotone"
                                             name={url}
                                             dataKey={`counts[${url}]`}
-                                            fill={this.lineColors[
-                                                index % this.lineColors.length
-                                            ]}
-                                            stroke={this.lineColors[
-                                                index % this.lineColors.length
-                                            ]}
+                                            fill={this.getColorByNumber(index)}
+                                            stroke={this.getColorByNumber(index)}
                                             fillOpacity={0.05}
                                             dot={false}
                                             activeDot={{ r: 4, className: 'chart__dot' }}
@@ -98,6 +96,29 @@ class RoutesCharts extends React.Component<{}, RoutesChartsState> {
                                 ))}
                             </AreaChart>
                         </ResponsiveContainer>
+                        <Table 
+                            className="chart-table"
+                            headers={['Route', 'Max', 'Avg']}
+                            items={Object.keys(this.state.urls)
+                                .map((url: string, index: number) => {
+                                    return {
+                                        cells: [
+                                            <>
+                                                <i className="
+                                                    icon-bookmark 
+                                                    chart-table__color-icon
+                                                " style={{
+                                                    color: this.getColorByNumber(index)
+                                                }}></i>
+                                                {url}
+                                            </>,
+                                            this.state.urls[url].max,
+                                            this.state.urls[url].avg
+                                        ]
+                                    }
+                                })
+                            }
+                        />
                     </div>
                 }
             </LoadingContent>
@@ -148,6 +169,10 @@ class RoutesCharts extends React.Component<{}, RoutesChartsState> {
                 })
             }
         })
+    }
+
+    private getColorByNumber(number: number): string {
+        return this.lineColors[number % this.lineColors.length];
     }
 }
 

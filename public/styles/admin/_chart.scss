@@ -1,7 +1,11 @@
 .chart {
     &__line path {
+        stroke-width: 2;
+    }
+
+    &__area path {
         stroke: $clr-color;
-        stroke-width: 5;
+        stroke-width: 2;
     }
 
     &__dot {
