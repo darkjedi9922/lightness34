@@ -2,25 +2,13 @@ import React from 'react';
 import ContentHeader from '../../content-header';
 import LoadingContent from '../../loading-content';
 import Breadcrumbs from '../../common/Breadcrumbs';
-import {
-    AreaChart, Area, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer
-} from 'recharts';
 import $ from 'jquery';
-import Table from '../../table/table';
-
-interface TimeIntervalCounts {
-    time: string,
-    counts: {[url: string]: any}
-}
-
-interface UrlSummaryCount {
-    max: number,
-    avg: number
-}
+import SummaryChart, { 
+    TimeIntervalValues, SummaryData, SummaryChartProps
+} from '../../charts/SummaryChart';
 
 interface RoutesChartsState {
-    urls: {[url: string]: UrlSummaryCount}
-    counts: TimeIntervalCounts[]
+    counts: SummaryChartProps
 }
 
 interface RoutesCountAPIResult {
@@ -36,19 +24,13 @@ interface RoutesCountAPIResult {
 }
 
 class RoutesCharts extends React.Component<{}, RoutesChartsState> {
-    private lineColors = [
-        '#3F51B5', // blue
-        '#4CAF50', // green
-        '#F44336', // red
-        '#b3ab00', // yellow
-        '#9c27b0' // purple
-    ];
-
     public constructor(props) {
         super(props);
         this.state = {
-            urls: {},
-            counts: []
+            counts: {
+                objects: {},
+                values: []
+            }
         }
     }
 
@@ -57,79 +39,27 @@ class RoutesCharts extends React.Component<{}, RoutesChartsState> {
     }
 
     public render(): React.ReactNode {
-        return <>
-            <ContentHeader>
-                <Breadcrumbs items={[
-                    { 'name': 'Мониторинг' },
-                    { 'name': 'Маршруты' },
-                    { 'name': 'Статистика' },
-                    { 'name': 'Количество' }
-                ]} />
-            </ContentHeader>
-            <LoadingContent>
-                {this.state.counts.length &&
-                    <div className="box chart">
-                        <ResponsiveContainer height={250} width="99%">
-                            <AreaChart
-                                data={this.state.counts}
-                                margin={{
-                                    top: 10, right: 30, left: -20, bottom: 10,
-                                }}
-                            >
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dataKey="time" />
-                                <YAxis />
-                                <Tooltip isAnimationActive={false} />
-                                {Object.keys(this.state.urls)
-                                    .map((url: string, index: number) => (
-                                        <Area
-                                            key={index}
-                                            type="monotone"
-                                            name={url}
-                                            dataKey={`counts[${url}]`}
-                                            fill={this.getColorByNumber(index)}
-                                            stroke={this.getColorByNumber(index)}
-                                            fillOpacity={0.05}
-                                            dot={{ r: 3 }}
-                                            activeDot={{ r: 4 }}
-                                        />
-                                ))}
-                            </AreaChart>
-                        </ResponsiveContainer>
-                        <Table 
-                            className="chart-table"
-                            headers={['Route', 'Max', 'Avg']}
-                            items={Object.keys(this.state.urls)
-                                .map((url: string, index: number) => {
-                                    return {
-                                        cells: [
-                                            <>
-                                                <i className="
-                                                    icon-bookmark 
-                                                    chart-table__color-icon
-                                                " style={{
-                                                    color: this.getColorByNumber(index)
-                                                }}></i>
-                                                {url}
-                                            </>,
-                                            this.state.urls[url].max,
-                                            this.state.urls[url].avg
-                                        ]
-                                    }
-                                })
-                                .sort((a, b) => {
-                                    const sortColumnIndex = 1;
-                                    const aValue = a.cells[sortColumnIndex];
-                                    const bValue = b.cells[sortColumnIndex];
-                                    return -(aValue > bValue
-                                        ? 1 : (aValue == bValue ? 0 : -1));
-                                })
-                            }
-                        />
-                    </div>
-                }
-            </LoadingContent>
-        </>;
+        const basePaths = [
+            { 'name': 'Мониторинг' },
+            { 'name': 'Маршруты' },
+            { 'name': 'Статистика' }
+        ];
+        return this.state.counts.values.length
+            ? <>
+                <ContentHeader>
+                    <Breadcrumbs items={[...basePaths, { 'name': 'Количество' }]} />
+                </ContentHeader>
+                <SummaryChart
+                    objects={this.state.counts.objects}
+                    values={this.state.counts.values}
+                />
+            </>
+            : <>
+                <ContentHeader>
+                    <Breadcrumbs items={basePaths} />
+                </ContentHeader>
+                <LoadingContent></LoadingContent>
+            </>
     }
 
     private loadCounts(): void {
@@ -138,21 +68,8 @@ class RoutesCharts extends React.Component<{}, RoutesChartsState> {
             dataType: 'json',
             success: (result: RoutesCountAPIResult) => {
                 this.setState({
-                    urls: (() => {
-                        const resultUrls: {[url: string]: UrlSummaryCount} = {};
-                        for (const url in result) {
-                            if (result.hasOwnProperty(url)) {
-                                const urlData = result[url];
-                                resultUrls[url] = {
-                                    max: urlData.max,
-                                    avg: urlData.avg
-                                }
-                            }
-                        }
-                        return resultUrls;
-                    })(),
                     counts: (() => {
-                        const resultCounts: TimeIntervalCounts[] = [];
+                        const resultCounts: TimeIntervalValues[] = [];
                         for (const url in result) {
                             if (result.hasOwnProperty(url)) {
                                 const urlData = result[url];
@@ -164,21 +81,32 @@ class RoutesCharts extends React.Component<{}, RoutesChartsState> {
                                     // добавляя в них каждый новый url.
                                     if (!resultCounts[i]) resultCounts[i] = {
                                         time: countData.time,
-                                        counts: {}
+                                        values: {}
                                     }
-                                    resultCounts[i].counts[url] = countData.count;
+                                    resultCounts[i].values[url] = countData.count;
                                 }
                             }
                         }
-                        return resultCounts;
+
+                        const resultUrls: {[url: string]: SummaryData} = {};
+                        for (const url in result) {
+                            if (result.hasOwnProperty(url)) {
+                                const urlData = result[url];
+                                resultUrls[url] = {
+                                    max: urlData.max,
+                                    avg: urlData.avg
+                                }
+                            }
+                        }
+
+                        return {
+                            objects: resultUrls,
+                            values: resultCounts
+                        };
                     })()
                 })
             }
         })
-    }
-
-    private getColorByNumber(number: number): string {
-        return this.lineColors[number % this.lineColors.length];
     }
 }
 
