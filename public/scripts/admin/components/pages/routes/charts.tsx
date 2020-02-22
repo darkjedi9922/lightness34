@@ -90,8 +90,8 @@ class RoutesCharts extends React.Component<{}, RoutesChartsState> {
                                             fill={this.getColorByNumber(index)}
                                             stroke={this.getColorByNumber(index)}
                                             fillOpacity={0.05}
-                                            dot={false}
-                                            activeDot={{ r: 4, className: 'chart__dot' }}
+                                            dot={{ r: 3 }}
+                                            activeDot={{ r: 4 }}
                                         />
                                 ))}
                             </AreaChart>
@@ -116,6 +116,13 @@ class RoutesCharts extends React.Component<{}, RoutesChartsState> {
                                             this.state.urls[url].avg
                                         ]
                                     }
+                                })
+                                .sort((a, b) => {
+                                    const sortColumnIndex = 1;
+                                    const aValue = a.cells[sortColumnIndex];
+                                    const bValue = b.cells[sortColumnIndex];
+                                    return -(aValue > bValue
+                                        ? 1 : (aValue == bValue ? 0 : -1));
                                 })
                             }
                         />
@@ -146,7 +153,6 @@ class RoutesCharts extends React.Component<{}, RoutesChartsState> {
                     })(),
                     counts: (() => {
                         const resultCounts: TimeIntervalCounts[] = [];
-                        console.dir(result);
                         for (const url in result) {
                             if (result.hasOwnProperty(url)) {
                                 const urlData = result[url];
