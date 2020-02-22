@@ -1,6 +1,5 @@
 <?php namespace engine\statistics\lists;
 
-use frame\lists\base\BaseList;
 use frame\database\QueryResult;
 use frame\cash\database;
 use Iterator;
@@ -9,20 +8,14 @@ use ArrayIterator;
 /**
  * Каждый элемент списка это массив вида ['time' => string, 'count' => int].
  */
-abstract class IntervalCountList implements BaseList
+abstract class IntervalCountList extends IntervalList
 {
-    const HOUR_INTERVAL = 60*60;
-    const DAY_INTERVAL = self::HOUR_INTERVAL * 24;
-    const WEEK_INTERVAL = self::DAY_INTERVAL * 7;
-    const MONTH_INTERVAL = self::DAY_INTERVAL * 30;
-
-    private $secondsInterval;
     private $limit;
     private $result;
 
     public function __construct(int $secondsInterval, int $limit)
     {
-        $this->secondsInterval = $secondsInterval;
+        parent::__construct($secondsInterval);
         $this->limit = $limit;
         $this->result = $this->query();
     }
@@ -52,14 +45,13 @@ abstract class IntervalCountList implements BaseList
             // интервальных промежутков между текущим и следующим.
             $currentTime = $line['interval_time'];
             if ($lastTime) {
-                $timeDiff = $lastTime - $this->secondsInterval - $currentTime;
-                $times = $timeDiff / $this->secondsInterval;
-                for ($i = 0; $i < $times; ++$i) {
+                $times = new TimeIntervalList(
+                    $lastTime, $currentTime, $this->getSecondInterval()
+                );
+                foreach ($times as $time) {
                     if ($resultCount === $this->limit) break;
-                    // Помним, что идем с конца, значит время уменьшается.
-                    $prevInterval = $lastTime - $this->secondsInterval * ($i + 1);
                     $result[] = [
-                        'time' => $this->getIntervalDate($prevInterval),
+                        'time' => $this->getIntervalDate($time),
                         'count' => 0
                     ];
                     $resultCount += 1;
@@ -86,7 +78,7 @@ abstract class IntervalCountList implements BaseList
     private function query(): QueryResult
     {
         $intervalField = $this->getTimeField();
-        $interval = $this->secondsInterval;
+        $interval = $this->getSecondInterval();
 
         // Чтобы получить целое время запроса округленное к интервалу, нужно сначала
         // разделить его на время интервала, отбросив получившуюся дробную часть, и
@@ -101,16 +93,5 @@ abstract class IntervalCountList implements BaseList
             ORDER BY interval_time DESC
             LIMIT {$this->limit}"
         );
-    }
-
-    private function getIntervalDate(int $timestamp): string
-    {
-        switch ($this->secondsInterval) {
-            case self::HOUR_INTERVAL: return date('d.m.Y H', $timestamp) . 'h';
-            case self::DAY_INTERVAL: return date('d.m.Y', $timestamp);
-            case self::WEEK_INTERVAL: return date('Y/w', $timestamp) . 'w';
-            case self::MONTH_INTERVAL: return date('m.Y', $timestamp);
-            default: $this->secondsInterval . 's';
-        }
     }
 }
