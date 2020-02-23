@@ -61,7 +61,8 @@ foreach ($routesIt as $routeStat) {
     }
     $routes[] = [
         'route' => $routeStat->route,
-        'views' => $routeViews
+        'views' => $routeViews,
+        'time' => date('d.m.Y H:i', $routeStat->time)
     ];
 }
 

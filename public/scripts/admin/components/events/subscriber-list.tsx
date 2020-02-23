@@ -1,6 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import { Subscriber, Handle } from 'scripts/admin/structures';
+import Parameter from '../parameter';
 
 interface Props {
     subscribers: Subscriber[],
@@ -20,10 +21,12 @@ class SubscriberList extends React.Component<Props> {
                 { 'status--none': !hasExecutions },
             );
             items.push(
-                <div key={i} className="param">
-                    <span className="param__number">{i + 1}</span>
-                    <span className="param__name">{subscriber.event}</span>
-                    <span className="param__value">{subscriber.class}</span>
+                <div className="executed-subscriber">
+                    <Parameter key={i}
+                        number={i + 1} 
+                        name={subscriber.event}
+                        value={subscriber.class}
+                    />
                     &nbsp;
                     <span className={statusClasses}>
                         <span className="status__message">

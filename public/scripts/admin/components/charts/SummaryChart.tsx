@@ -3,6 +3,7 @@ import {
     AreaChart, Area, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer
 } from 'recharts';
 import Table from '../table/table';
+import { round } from 'lodash';
 
 export interface TimeIntervalValues {
     time: string,
@@ -127,8 +128,6 @@ class SummaryChart extends React.Component<SummaryChartProps> {
     private findAverageOf(name: string): number {
         let average = 0;
         let count = 0;
-        // 10 в степени n, где округление числа до n-ой точки, после запятой.
-        const roundTen = Math.pow(10, 3);
         for (let i = 0; i < this.props.intervals.length; i++) {
             const values = this.props.intervals[i];
             const currentValue = values.values[name];
@@ -136,7 +135,7 @@ class SummaryChart extends React.Component<SummaryChartProps> {
             average += currentValue;
             count += 1;
         }
-        return Math.round((average / count) * roundTen) / roundTen;
+        return round(average / count, 3);
     }
 }
 

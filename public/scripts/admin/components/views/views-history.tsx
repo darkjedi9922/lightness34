@@ -6,6 +6,7 @@ import { isNil } from 'lodash';
 import Status, { Type } from '../status';
 import Parameter from '../parameter';
 import { DetailsProps } from '../details';
+import { round } from 'lodash';
 
 interface MetaData {
     name: string,
@@ -27,7 +28,8 @@ interface ViewStat {
 
 interface ViewRoute {
     route: string
-    views: ViewStat[]
+    views: ViewStat[],
+    time: string
 }
 
 interface ViewsHistoryProps {
@@ -39,27 +41,31 @@ class ViewsHistory extends React.Component<ViewsHistoryProps> {
     public render(): React.ReactNode {
         return <>
             <div className="content__header">
-                <Breadcrumbs items={[{
-                    name: 'Мониторинг'
-                }, {
-                    name: 'Виды'
-                }]} />
+                <Breadcrumbs items={[
+                    { name: 'Мониторинг' }, 
+                    { name: 'Виды' },
+                    { name: `История (${this.props.routes.length})`}
+                ]} />
                 <a href={this.props.clearStatsUrl} className="button">
                     Очистить статистику
                 </a>
             </div>
-            <span className="content__title">
-                История ({this.props.routes.length})
-            </span>
             <div className="box box--table">
                 <Table 
                     className="routes"
                     collapsable={true}
-                    headers={['Route', 'Views', 'Status']}
+                    headers={['Route', 'Views', 'Sum load', 'Status', 'Time']}
                     items={this.props.routes.map((route) => ({
                         cells: [
                             <RouteRequest route={route.route} />,
                             route.views.length,
+                            <span className="table__duration">
+                                {round(route.views.reduce<number>(
+                                    (prevValue, currentStat) => {
+                                        return prevValue + currentStat.durationSec
+                                    },
+                                0), 3)} sec
+                            </span>,
                             <div className="stat-status">
                                 {route.views.length
                                     ? (
@@ -80,7 +86,8 @@ class ViewsHistory extends React.Component<ViewsHistoryProps> {
                                         </span>
                                     )
                                 }
-                            </div>
+                            </div>,
+                            route.time
                         ],
                         details: (() => {
                             if (!route.views.length) return [{

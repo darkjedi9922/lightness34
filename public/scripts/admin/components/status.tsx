@@ -1,5 +1,4 @@
 import React from 'react'
-import classNames from 'classnames'
 import { isNil } from 'lodash'
 
 export enum Type {
