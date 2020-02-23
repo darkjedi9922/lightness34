@@ -54,7 +54,7 @@ class Item extends React.Component<Props, State> {
                     </td>
                 )}
             </tr>
-            {this.props.item.details &&
+            {this.props.item.details && !this.state.collapsed &&
                 <tr className="table__details-wrapper">
                     <td className={classNames(
                         "table__details",
@@ -64,14 +64,7 @@ class Item extends React.Component<Props, State> {
                                 : true
                         }
                     )} colSpan={100}>
-                        <div
-                            className="table__details-content" 
-                            style={{
-                                // Если использовать переключение display, то колонки
-                                // таблицы почему-то начинают менять размер.
-                                height: this.state.collapsed ? 0 : 'auto'
-                            }}
-                        >
+                        <div className="table__details-content">
                             {this.props.item.details.map((details, index) =>
                                 <Details
                                     key={index}
