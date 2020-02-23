@@ -2,17 +2,18 @@
 
 class JsonEncoder
 {
-    public static function toValidJson($value): string
+    public static function toValidJson($value, bool $pretty = false): string
     {
         return json_encode(
             $value,
             JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_SLASHES
+                | ($pretty ? JSON_PRETTY_PRINT : 0)
         );
     }
 
-    public static function forViewText($value): string
+    public static function forViewText($value, bool $pretty = false): string
     {
-        return static::toValidJson($value);
+        return static::toValidJson($value, $pretty);
     }
 
     public static function forHtmlAttribute(
