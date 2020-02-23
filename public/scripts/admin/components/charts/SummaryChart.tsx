@@ -27,7 +27,25 @@ class SummaryChart extends React.Component<SummaryChartProps> {
             <div className="box chart">
                 <ResponsiveContainer height={250} width="99%">
                     <AreaChart
-                        data={this.props.times}
+                        data={this.props.times.map((interval) => {
+                            return {
+                                time: interval.time,
+                                // Нужно заменить все null в значениях на 0,
+                                // потому что библиотека графиков сама этого
+                                // не делает.
+                                values: (() => {
+                                    const result = {};
+                                    for (const name in interval.values) {
+                                        if (interval.values.hasOwnProperty(name)) {
+                                            const value = interval.values[name];
+                                            result[name] = value !== null ?
+                                                value : 0;
+                                        }
+                                    }
+                                    return result;
+                                })()
+                            }
+                        })}
                         margin={{
                             top: 10, right: 30, left: -20, bottom: 10,
                         }}
@@ -98,6 +116,7 @@ class SummaryChart extends React.Component<SummaryChartProps> {
         for (let i = 0; i < this.props.times.length; i++) {
             const values = this.props.times[i];
             let currentValue = values.values[name];
+            if (currentValue === null) currentValue = 0;
             if (currentValue > max) max = currentValue;
         }
         return max;
@@ -111,6 +130,7 @@ class SummaryChart extends React.Component<SummaryChartProps> {
         for (let i = 0; i < this.props.times.length; i++) {
             const values = this.props.times[i];
             const currentValue = values.values[name];
+            if (currentValue === null) continue;
             average += currentValue;
             count += 1;
         }
