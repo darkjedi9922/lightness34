@@ -1,6 +1,7 @@
 import setupReactComponent from './setup-app';
 import QueryHistory from './components/database/query-history';
 import QueriesPage from './components/pages/database/queries';
+import RouteHistory from './components/pages/routes/history';
 import DatabaseTables from './components/database/db-tables';
 import ViewsHistory from './components/views/views-history';
 import RoutesCharts from './components/pages/routes/charts';
@@ -22,6 +23,7 @@ setupReactComponent('#cash-use-history', CashUseHistory);
 setupReactComponent('#views-stat-page', ViewsHistory);
 setupReactComponent('#routes-charts', RoutesCharts);
 setupReactComponent('#messages-page', MessagesPage);
+setupReactComponent('#route-history', RouteHistory);
 setupReactComponent('#query-history', QueryHistory);
 setupReactComponent('#article-comments', Comments);
 setupReactComponent('#add-user-page', AddUserPage);
