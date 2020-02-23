@@ -6,11 +6,13 @@ import Table from '../table/table';
 
 export interface TimeIntervalValues {
     time: string,
+    // Значения в values, могут быть null. Тогда они не будут учитываться при
+    // подсчете среднего значения. Во всех других случаях они преобразуются в 0. 
     values: { [objectName: string]: any }
 }
 
 export interface SummaryChartProps {
-    times: TimeIntervalValues[]
+    intervals: TimeIntervalValues[]
 }
 
 class SummaryChart extends React.Component<SummaryChartProps> {
@@ -27,7 +29,7 @@ class SummaryChart extends React.Component<SummaryChartProps> {
             <div className="box chart">
                 <ResponsiveContainer height={250} width="99%">
                     <AreaChart
-                        data={this.props.times.map((interval) => {
+                        data={this.props.intervals.map((interval) => {
                             return {
                                 time: interval.time,
                                 // Нужно заменить все null в значениях на 0,
@@ -54,8 +56,8 @@ class SummaryChart extends React.Component<SummaryChartProps> {
                         <XAxis dataKey="time" />
                         <YAxis />
                         <Tooltip isAnimationActive={false} />
-                        {this.props.times.length && Object
-                            .keys(this.props.times[0].values)
+                        {this.props.intervals.length && Object
+                            .keys(this.props.intervals[0].values)
                             .map((name: string, index: number) => (
                                 <Area
                                     key={index}
@@ -75,8 +77,8 @@ class SummaryChart extends React.Component<SummaryChartProps> {
                 <Table 
                     className="chart-table"
                     headers={['Route', 'Max', 'Avg']}
-                    items={(this.props.times.length ?
-                            Object.keys(this.props.times[0].values) : []
+                    items={(this.props.intervals.length ?
+                            Object.keys(this.props.intervals[0].values) : []
                         ).map((name: string, index: number) => {
                             return {
                                 cells: [
@@ -113,8 +115,8 @@ class SummaryChart extends React.Component<SummaryChartProps> {
 
     private findMaxOf(name: string): number {
         let max = Number.MIN_SAFE_INTEGER;
-        for (let i = 0; i < this.props.times.length; i++) {
-            const values = this.props.times[i];
+        for (let i = 0; i < this.props.intervals.length; i++) {
+            const values = this.props.intervals[i];
             let currentValue = values.values[name];
             if (currentValue === null) currentValue = 0;
             if (currentValue > max) max = currentValue;
@@ -127,8 +129,8 @@ class SummaryChart extends React.Component<SummaryChartProps> {
         let count = 0;
         // 10 в степени n, где округление числа до n-ой точки, после запятой.
         const roundTen = Math.pow(10, 3);
-        for (let i = 0; i < this.props.times.length; i++) {
-            const values = this.props.times[i];
+        for (let i = 0; i < this.props.intervals.length; i++) {
+            const values = this.props.intervals[i];
             const currentValue = values.values[name];
             if (currentValue === null) continue;
             average += currentValue;

@@ -25,17 +25,19 @@ class RoutesCharts extends React.Component<{}, RoutesChartsState> {
         super(props);
         this.state = {
             counts: {
-                times: []
+                intervals: []
             },
             durations: {
-                times: []
+                intervals: []
             }
         }
     }
 
     public componentDidMount() {
-        this.loadCounts();
-        this.loadDurations();
+        this.loadStatistics('/api/stats/routes/count')
+            .then((result) => this.setState({ counts: result }));
+        this.loadStatistics('/api/stats/routes/durations')
+            .then((result) => this.setState({ durations: result }));
     }
 
     public render(): React.ReactNode {
@@ -44,16 +46,17 @@ class RoutesCharts extends React.Component<{}, RoutesChartsState> {
             { 'name': 'Маршруты' },
             { 'name': 'Статистика' }
         ];
-        return this.state.counts.times.length && this.state.durations.times.length
+        return this.state.counts.intervals.length 
+            && this.state.durations.intervals.length
             ? <>
                 <ContentHeader>
                     <Breadcrumbs items={[...basePaths, { 'name': 'Количество' }]} />
                 </ContentHeader>
-                <SummaryChart times={this.state.counts.times} />
+                <SummaryChart intervals={this.state.counts.intervals} />
                 <ContentHeader>
                     <Breadcrumbs items={[...basePaths, { 'name': 'Макс. время' }]} />
                 </ContentHeader>
-                <SummaryChart times={this.state.durations.times} />
+                <SummaryChart intervals={this.state.durations.intervals} />
             </>
             : <>
                 <ContentHeader>
@@ -63,73 +66,36 @@ class RoutesCharts extends React.Component<{}, RoutesChartsState> {
             </>
     }
 
-    private loadCounts(): void {
-        $.ajax({
-            url: '/api/stats/routes/count',
-            dataType: 'json',
-            success: (result: RoutesSummaryAPIResult) => {
-                this.setState({
-                    counts: (() => {
-                        const resultCounts: TimeIntervalValues[] = [];
-                        for (const url in result) {
-                            if (result.hasOwnProperty(url)) {
-                                const urlData = result[url];
-                                // Все url в ответе имеют одинаковое количество
-                                // одинаковых временных интервалов.
-                                for (let i = 0; i < urlData.length; i++) {
-                                    const countData = urlData[i];
-                                    // Поэтому будем обновлять те же интервалы,
-                                    // добавляя в них каждый новый url.
-                                    if (!resultCounts[i]) resultCounts[i] = {
-                                        time: countData.time,
-                                        values: {}
-                                    }
-                                    resultCounts[i].values[url] = countData.value;
+    private loadStatistics(apiUrl: string): Promise<SummaryChartProps> {
+        return new Promise<SummaryChartProps>((resolve, reject) => {
+            $.ajax({
+                url: apiUrl,
+                dataType: 'json',
+                success: (result: RoutesSummaryAPIResult) => {
+                    const intervals: TimeIntervalValues[] = [];
+                    for (const objectName in result) {
+                        if (result.hasOwnProperty(objectName)) {
+                            const data = result[objectName];
+                            // Все objectName в ответе имеют одинаковое количество
+                            // одинаковых временных интервалов.
+                            for (let i = 0; i < data.length; i++) {
+                                const valueData = data[i];
+                                // Поэтому будем обновлять те же интервалы,
+                                // добавляя в них каждый новый objectName.
+                                if (!intervals[i]) intervals[i] = {
+                                    time: valueData.time,
+                                    values: {}
                                 }
+                                intervals[i].values[objectName] = valueData.value;
                             }
                         }
-
-                        return {
-                            times: resultCounts
-                        };
-                    })()
-                })
-            }
-        })
-    }
-
-    private loadDurations(): void {
-        $.ajax({
-            url: '/api/stats/routes/durations',
-            dataType: 'json',
-            success: (result: RoutesSummaryAPIResult) => {
-                this.setState({
-                    durations: (() => {
-                        const resultCounts: TimeIntervalValues[] = [];
-                        for (const url in result) {
-                            if (result.hasOwnProperty(url)) {
-                                const urlData = result[url];
-                                // Все url в ответе имеют одинаковое количество
-                                // одинаковых временных интервалов.
-                                for (let i = 0; i < urlData.length; i++) {
-                                    const countData = urlData[i];
-                                    // Поэтому будем обновлять те же интервалы,
-                                    // добавляя в них каждый новый url.
-                                    if (!resultCounts[i]) resultCounts[i] = {
-                                        time: countData.time,
-                                        values: {}
-                                    }
-                                    resultCounts[i].values[url] = countData.value;
-                                }
-                            }
-                        }
-
-                        return {
-                            times: resultCounts
-                        };
-                    })()
-                })
-            }
+                    }
+                    resolve({ intervals: intervals });
+                },
+                error: (jqXHR, textStatus, errorThrown) => {
+                    reject(apiUrl + ' error:' + errorThrown);
+                }
+            })
         })
     }
 }
