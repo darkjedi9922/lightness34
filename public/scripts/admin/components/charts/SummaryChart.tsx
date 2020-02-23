@@ -4,19 +4,13 @@ import {
 } from 'recharts';
 import Table from '../table/table';
 
-export interface SummaryData {
-    max: number,
-    avg: number
-}
-
 export interface TimeIntervalValues {
     time: string,
     values: { [objectName: string]: any }
 }
 
 export interface SummaryChartProps {
-    objects: { [name: string]: SummaryData }
-    values: TimeIntervalValues[]
+    times: TimeIntervalValues[]
 }
 
 class SummaryChart extends React.Component<SummaryChartProps> {
@@ -33,7 +27,7 @@ class SummaryChart extends React.Component<SummaryChartProps> {
             <div className="box chart">
                 <ResponsiveContainer height={250} width="99%">
                     <AreaChart
-                        data={this.props.values}
+                        data={this.props.times}
                         margin={{
                             top: 10, right: 30, left: -20, bottom: 10,
                         }}
@@ -42,7 +36,8 @@ class SummaryChart extends React.Component<SummaryChartProps> {
                         <XAxis dataKey="time" />
                         <YAxis />
                         <Tooltip isAnimationActive={false} />
-                        {Object.keys(this.props.objects)
+                        {this.props.times.length && Object
+                            .keys(this.props.times[0].values)
                             .map((name: string, index: number) => (
                                 <Area
                                     key={index}
@@ -55,14 +50,16 @@ class SummaryChart extends React.Component<SummaryChartProps> {
                                     dot={{ r: 3 }}
                                     activeDot={{ r: 4 }}
                                 />
-                        ))}
+                            ))
+                        }
                     </AreaChart>
                 </ResponsiveContainer>
                 <Table 
                     className="chart-table"
                     headers={['Route', 'Max', 'Avg']}
-                    items={Object.keys(this.props.objects)
-                        .map((url: string, index: number) => {
+                    items={(this.props.times.length ?
+                            Object.keys(this.props.times[0].values) : []
+                        ).map((name: string, index: number) => {
                             return {
                                 cells: [
                                     <>
@@ -72,10 +69,10 @@ class SummaryChart extends React.Component<SummaryChartProps> {
                                         " style={{
                                             color: this.getColorByNumber(index)
                                         }}></i>
-                                        {url}
+                                        {name}
                                     </>,
-                                    this.props.objects[url].max,
-                                    this.props.objects[url].avg
+                                    this.findMaxOf(name),
+                                    this.findAverageOf(name)
                                 ]
                             }
                         })
@@ -94,6 +91,30 @@ class SummaryChart extends React.Component<SummaryChartProps> {
 
     private getColorByNumber(number: number): string {
         return this.lineColors[number % this.lineColors.length];
+    }
+
+    private findMaxOf(name: string): number {
+        let max = Number.MIN_SAFE_INTEGER;
+        for (let i = 0; i < this.props.times.length; i++) {
+            const values = this.props.times[i];
+            let currentValue = values.values[name];
+            if (currentValue > max) max = currentValue;
+        }
+        return max;
+    }
+
+    private findAverageOf(name: string): number {
+        let average = 0;
+        let count = 0;
+        // 10 в степени n, где округление числа до n-ой точки, после запятой.
+        const roundTen = Math.pow(10, 3);
+        for (let i = 0; i < this.props.times.length; i++) {
+            const values = this.props.times[i];
+            const currentValue = values.values[name];
+            average += currentValue;
+            count += 1;
+        }
+        return Math.round((average / count) * roundTen) / roundTen;
     }
 }
 

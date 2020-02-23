@@ -46,34 +46,28 @@ class MultipleRouteIntervalCountList extends TimeIntervalList
             $currentUrl = $line['url'];
             $currentTime = $line['interval_time'];
 
-            if (!isset($result[$currentUrl])) {
-                $result[$currentUrl] = [
-                    'counts' => [],
-                    'max' => $line['max'],
-                    'avg' => $line['avg']
-                ];
-            }
+            if (!isset($result[$currentUrl])) $result[$currentUrl] = [];
 
             // Заполняем промежуток до следующего значения нулями по количеству
             // интервальных промежутков между текущим и следующим.
-            $lastTime = !empty($result[$currentUrl]['counts'])
-                ? last($result[$currentUrl]['counts'])['timestamp']
+            $lastTime = !empty($result[$currentUrl])
+                ? last($result[$currentUrl])['timestamp']
                 // Левая граница не включается в TimeIntervalList,
                 // поэтому возьмем границу на один интервал перед ней.
                 : $this->getLeftBorder() - $interval;
             $times = new TimeIntervalList($lastTime, $currentTime, $interval);
             foreach ($times as $time) {
-                $result[$currentUrl]['counts'][] = [
-                    'count' => 0,
+                $result[$currentUrl][] = [
+                    'value' => 0,
                     'time' => $this->getIntervalDate($time),
                     'timestamp' => $time
                 ];
             }
 
             // Затем добавляем текущее время.
-            $result[$currentUrl]['counts'][] = [
-                'count' => $line['count'],
                 'time' => $this->getIntervalDate($time),
+            $result[$currentUrl][] = [
+                'value' => $line['count'],
                 'timestamp' => $currentTime
             ];
         }
@@ -82,15 +76,15 @@ class MultipleRouteIntervalCountList extends TimeIntervalList
         // до текущего момента.
         foreach ($result as &$data) {
             $times = new TimeIntervalList(
-                last($data['counts'])['timestamp'],
+                last($data)['timestamp'],
                 // Правая гранциа не включается в TimeIntervalList, поэтому берем
                 // границу на интервал после нее.
                 $this->getRightBorder() + $this->getSecondInterval(),
                 $this->getSecondInterval()
             );
             foreach ($times as $time) {
-                $data['counts'][] = [
-                    'count' => 0,
+                $data[] = [
+                    'value' => 0,
                     'time' => $this->getIntervalDate($time),
                     'timestamp' => $time
                 ];
@@ -105,10 +99,10 @@ class MultipleRouteIntervalCountList extends TimeIntervalList
         $interval = $this->getSecondInterval();
         $minInterval = $this->getLeftBorder();
         return database::get()->query(
-            "SELECT stat_routes.url, COUNT(stat_routes.id) as count, max, avg, 
+            "SELECT stat_routes.url, COUNT(stat_routes.id) as count, 
                 FLOOR(time / $interval) * $interval as interval_time
             FROM stat_routes INNER JOIN (
-                SELECT url, MAX(count) as max, AVG(count) as avg
+                SELECT url, MAX(count) as max -- max - поле, по которому сортируем.
                 FROM (
                     SELECT url, COUNT(id) as count, 
                         FLOOR(time / $interval) * $interval as interval_time

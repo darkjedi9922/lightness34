@@ -4,23 +4,19 @@ import LoadingContent from '../../loading-content';
 import Breadcrumbs from '../../common/Breadcrumbs';
 import $ from 'jquery';
 import SummaryChart, { 
-    TimeIntervalValues, SummaryData, SummaryChartProps
+    TimeIntervalValues, SummaryChartProps
 } from '../../charts/SummaryChart';
 
 interface RoutesChartsState {
     counts: SummaryChartProps
 }
 
-interface RoutesCountAPIResult {
-    [url: string]: {
-        counts: [{
-            count: number,
-            time: string,
-            timestamp: number
-        }],
-        max: number,
-        avg: number
-    }
+interface RoutesSummaryAPIResult {
+    [url: string]: [{
+        value: number,
+        time: string,
+        timestamp: number
+    }]
 }
 
 class RoutesCharts extends React.Component<{}, RoutesChartsState> {
@@ -28,8 +24,7 @@ class RoutesCharts extends React.Component<{}, RoutesChartsState> {
         super(props);
         this.state = {
             counts: {
-                objects: {},
-                values: []
+                times: []
             }
         }
     }
@@ -44,15 +39,12 @@ class RoutesCharts extends React.Component<{}, RoutesChartsState> {
             { 'name': 'Маршруты' },
             { 'name': 'Статистика' }
         ];
-        return this.state.counts.values.length
+        return this.state.counts.times.length
             ? <>
                 <ContentHeader>
                     <Breadcrumbs items={[...basePaths, { 'name': 'Количество' }]} />
                 </ContentHeader>
-                <SummaryChart
-                    objects={this.state.counts.objects}
-                    values={this.state.counts.values}
-                />
+                <SummaryChart times={this.state.counts.times} />
             </>
             : <>
                 <ContentHeader>
@@ -66,7 +58,7 @@ class RoutesCharts extends React.Component<{}, RoutesChartsState> {
         $.ajax({
             url: '/api/stats/routes/count',
             dataType: 'json',
-            success: (result: RoutesCountAPIResult) => {
+            success: (result: RoutesSummaryAPIResult) => {
                 this.setState({
                     counts: (() => {
                         const resultCounts: TimeIntervalValues[] = [];
@@ -74,34 +66,22 @@ class RoutesCharts extends React.Component<{}, RoutesChartsState> {
                             if (result.hasOwnProperty(url)) {
                                 const urlData = result[url];
                                 // Все url в ответе имеют одинаковое количество
-                                // временных интервалов, а последние одинаковые.
-                                for (let i = 0; i < urlData.counts.length; i++) {
-                                    const countData = urlData.counts[i];
+                                // одинаковых временных интервалов.
+                                for (let i = 0; i < urlData.length; i++) {
+                                    const countData = urlData[i];
                                     // Поэтому будем обновлять те же интервалы,
                                     // добавляя в них каждый новый url.
                                     if (!resultCounts[i]) resultCounts[i] = {
                                         time: countData.time,
                                         values: {}
                                     }
-                                    resultCounts[i].values[url] = countData.count;
-                                }
-                            }
-                        }
-
-                        const resultUrls: {[url: string]: SummaryData} = {};
-                        for (const url in result) {
-                            if (result.hasOwnProperty(url)) {
-                                const urlData = result[url];
-                                resultUrls[url] = {
-                                    max: urlData.max,
-                                    avg: urlData.avg
+                                    resultCounts[i].values[url] = countData.value;
                                 }
                             }
                         }
 
                         return {
-                            objects: resultUrls,
-                            values: resultCounts
+                            times: resultCounts
                         };
                     })()
                 })
