@@ -2,41 +2,10 @@
 
 use frame\cash\database;
 use frame\database\QueryResult;
-use ArrayIterator;
-
 use function lightlib\last;
 
-class MultipleRouteIntervalCountList extends TimeIntervalList
+class MultipleRouteIntervalCountList extends MultipleIntervalDataList
 {
-    const SORT_FIELD_MAX = 'max';
-    const SORT_FIELD_AVG = 'avg';
-    const SORT_ORDER_DESC = 'desc';
-    const SORT_ORDER_ASC = 'asc';
-
-    private $routesLimit;
-    private $sortField;
-    private $sortOrder;
-
-    public function __construct(
-        int $routesLimit,
-        int $intervalCount,
-        int $secondInterval,
-        string $sortField,
-        string $sortOrder
-    ) {
-        $currentInterval = (int)(time() / $secondInterval) * $secondInterval;
-        $minInterval = $currentInterval - $secondInterval * ($intervalCount - 1);
-        parent::__construct($minInterval, $currentInterval, $secondInterval);
-        $this->routesLimit = $routesLimit;
-        $this->sortField = $sortField;
-        $this->sortOrder = $sortOrder;
-    }
-
-    public function getIterator()
-    {        
-        return new ArrayIterator($this->assembleArray());
-    }
-
     public function assembleArray(): array
     {
         $queryResult = $this->query();
@@ -94,7 +63,7 @@ class MultipleRouteIntervalCountList extends TimeIntervalList
         return $result;
     }
 
-    private function query(): QueryResult
+    protected function query(): QueryResult
     {
         $interval = $this->getSecondInterval();
         $minInterval = $this->getLeftBorder();
@@ -112,9 +81,9 @@ class MultipleRouteIntervalCountList extends TimeIntervalList
                     ORDER BY id ASC
                 ) as intervalled
                 GROUP BY url
-                ORDER BY {$this->sortField} {$this->sortOrder}
-                LIMIT {$this->routesLimit}
-            ) as stat ON stat_routes.url = stat.url
+                ORDER BY {$this->getSortField()} {$this->getSortOrder()}
+                LIMIT {$this->getObjectsLimit()}
+            ) as limited ON stat_routes.url = limited.url
             GROUP BY stat_routes.url, interval_time
             HAVING interval_time >= $minInterval
             ORDER BY interval_time ASC"
