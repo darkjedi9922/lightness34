@@ -32,7 +32,7 @@ class Debug
             $object = $trace[$i]['object'] ?? null;
             $function = $trace[$i]['function'];
             $callType = $trace[$i]['type'] ?? '';
-            $args = $trace[$i]['args'];
+            $args = $trace[$i]['args'] ?? [];
             for ($j = 0, $jc = count($args); $j < $jc; ++$j) {
                 list($argStr, $argType) = static::getStringAndType($args[$j]);
                 $args[$j] = "($argType) $argStr";
