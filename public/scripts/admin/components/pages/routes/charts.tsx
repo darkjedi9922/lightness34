@@ -3,13 +3,13 @@ import ContentHeader from '../../content-header';
 import LoadingContent from '../../loading-content';
 import Breadcrumbs from '../../common/Breadcrumbs';
 import $ from 'jquery';
-import SummaryChart, { 
-    TimeIntervalValues, SummaryChartProps
-} from '../../charts/SummaryChart';
+import MultipleChart, { 
+    TimeIntervalValues, MultipleChartProps
+} from '../../charts/MultipleChart';
 
 interface RoutesChartsState {
-    counts: SummaryChartProps,
-    durations: SummaryChartProps
+    counts: MultipleChartProps,
+    durations: MultipleChartProps
 }
 
 interface RoutesSummaryAPIResult {
@@ -52,11 +52,11 @@ class RoutesCharts extends React.Component<{}, RoutesChartsState> {
                 <ContentHeader>
                     <Breadcrumbs items={[...basePaths, { 'name': 'Количество' }]} />
                 </ContentHeader>
-                <SummaryChart intervals={this.state.counts.intervals} />
+                <MultipleChart intervals={this.state.counts.intervals} />
                 <ContentHeader>
                     <Breadcrumbs items={[...basePaths, { 'name': 'Макс. время' }]} />
                 </ContentHeader>
-                <SummaryChart intervals={this.state.durations.intervals} />
+                <MultipleChart intervals={this.state.durations.intervals} />
             </>
             : <>
                 <ContentHeader>
@@ -66,8 +66,8 @@ class RoutesCharts extends React.Component<{}, RoutesChartsState> {
             </>
     }
 
-    private loadStatistics(apiUrl: string): Promise<SummaryChartProps> {
-        return new Promise<SummaryChartProps>((resolve, reject) => {
+    private loadStatistics(apiUrl: string): Promise<MultipleChartProps> {
+        return new Promise<MultipleChartProps>((resolve, reject) => {
             $.ajax({
                 url: apiUrl,
                 dataType: 'json',

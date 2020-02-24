@@ -12,11 +12,11 @@ export interface TimeIntervalValues {
     values: { [objectName: string]: any }
 }
 
-export interface SummaryChartProps {
+export interface MultipleChartProps {
     intervals: TimeIntervalValues[]
 }
 
-class SummaryChart extends React.Component<SummaryChartProps> {
+class MultipleChart extends React.Component<MultipleChartProps> {
     private lineColors = [
         '#3F51B5', // blue
         '#4CAF50', // green
@@ -28,7 +28,7 @@ class SummaryChart extends React.Component<SummaryChartProps> {
     public render(): React.ReactNode {
         return <>
             <div className="box chart">
-                <ResponsiveContainer height={250} width="99%">
+                <ResponsiveContainer height={200} width="99%">
                     <AreaChart
                         data={this.props.intervals.map((interval) => {
                             return {
@@ -49,9 +49,7 @@ class SummaryChart extends React.Component<SummaryChartProps> {
                                 })()
                             }
                         })}
-                        margin={{
-                            top: 10, right: 30, left: -20, bottom: 10,
-                        }}
+                        margin={{top: 10, right: 30, left: -20, bottom: 10}}
                     >
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="time" />
@@ -139,4 +137,4 @@ class SummaryChart extends React.Component<SummaryChartProps> {
     }
 }
 
-export default SummaryChart;
+export default MultipleChart;

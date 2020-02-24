@@ -52,7 +52,7 @@ abstract class IntervalCountList extends IntervalList
                     if ($resultCount === $this->limit) break;
                     $result[] = [
                         'time' => $this->getIntervalDate($time),
-                        'count' => 0
+                        'value' => 0
                     ];
                     $resultCount += 1;
                 }
@@ -62,7 +62,7 @@ abstract class IntervalCountList extends IntervalList
             // Затем добавляем текущее время.
             $result[] = [
                 'time' => $this->getIntervalDate($currentTime),
-                'count' => $line["COUNT({$this->getCountField()})"]
+                'value' => $line["COUNT({$this->getCountField()})"]
             ];
             $resultCount += 1;
             $lastTime = $currentTime;
