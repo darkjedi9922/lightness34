@@ -6,13 +6,17 @@ import $ from 'jquery';
 import MultipleChart, { 
     TimeIntervalValues, MultipleChartProps
 } from '../../charts/MultipleChart';
+import SingleChart, { SingleChartProps, TimeIntervalValue } from '../../charts/SingleChart';
 
 interface RoutesChartsState {
+    summary: SingleChartProps,
     counts: MultipleChartProps,
     durations: MultipleChartProps
 }
 
-interface RoutesSummaryAPIResult {
+interface RouteCountsAPIResultItem extends TimeIntervalValue {}
+
+interface RoutesMultipleStatsAPIResult {
     [url: string]: [{
         value?: number,
         time: string,
@@ -24,19 +28,18 @@ class RoutesCharts extends React.Component<{}, RoutesChartsState> {
     public constructor(props) {
         super(props);
         this.state = {
-            counts: {
-                intervals: []
-            },
-            durations: {
-                intervals: []
-            }
+            summary: null,
+            counts: null,
+            durations: null
         }
     }
 
     public componentDidMount() {
-        this.loadStatistics('/api/stats/routes/count')
+        this.loadCountStatistics('/api/stats/counts/route')
+            .then((result) => this.setState({ summary: result }));
+        this.loadParamStatistics('/api/stats/routes/count')
             .then((result) => this.setState({ counts: result }));
-        this.loadStatistics('/api/stats/routes/durations')
+        this.loadParamStatistics('/api/stats/routes/durations')
             .then((result) => this.setState({ durations: result }));
     }
 
@@ -46,15 +49,26 @@ class RoutesCharts extends React.Component<{}, RoutesChartsState> {
             { 'name': 'Маршруты' },
             { 'name': 'Статистика' }
         ];
-        return this.state.counts.intervals.length 
-            && this.state.durations.intervals.length
+        return this.state.summary !== null 
+            && this.state.counts !== null 
+            && this.state.durations !== null
             ? <>
                 <ContentHeader>
-                    <Breadcrumbs items={[...basePaths, { 'name': 'Количество' }]} />
+                    <Breadcrumbs items={[...basePaths, {
+                        'name': 'Общее количество'
+                    }]} />
+                </ContentHeader>
+                <SingleChart intervals={this.state.summary.intervals} />
+                <ContentHeader>
+                    <Breadcrumbs items={[...basePaths, {
+                        'name': 'Макс. количество'
+                    }]} />
                 </ContentHeader>
                 <MultipleChart intervals={this.state.counts.intervals} />
                 <ContentHeader>
-                    <Breadcrumbs items={[...basePaths, { 'name': 'Макс. время' }]} />
+                    <Breadcrumbs items={[...basePaths, {
+                        'name': 'Макс. время' 
+                    }]} />
                 </ContentHeader>
                 <MultipleChart intervals={this.state.durations.intervals} />
             </>
@@ -66,12 +80,27 @@ class RoutesCharts extends React.Component<{}, RoutesChartsState> {
             </>
     }
 
-    private loadStatistics(apiUrl: string): Promise<MultipleChartProps> {
+    private loadCountStatistics(apiUrl: string): Promise<SingleChartProps> {
+        return new Promise<SingleChartProps>((resolve, reject) => {
+            $.ajax({
+                url: apiUrl,
+                dataType: 'json',
+                success: (result: RouteCountsAPIResultItem[]) => {
+                    resolve({ intervals: result });
+                },
+                error: (jqXHR, textStatus, errorThrown) => {
+                    reject(apiUrl + ' error:' + errorThrown);
+                }
+            })
+        })
+    }
+
+    private loadParamStatistics(apiUrl: string): Promise<MultipleChartProps> {
         return new Promise<MultipleChartProps>((resolve, reject) => {
             $.ajax({
                 url: apiUrl,
                 dataType: 'json',
-                success: (result: RoutesSummaryAPIResult) => {
+                success: (result: RoutesMultipleStatsAPIResult) => {
                     const intervals: TimeIntervalValues[] = [];
                     for (const objectName in result) {
                         if (result.hasOwnProperty(objectName)) {

@@ -2,11 +2,11 @@
 
 use frame\tools\JsonEncoder;
 use frame\tools\Init;
-use engine\statistics\lists\IntervalCountList;
+use engine\statistics\lists\count\IntervalCountList;
 
 Init::require($self->hasArgument(0));
 $type = ucfirst($self->getArgument(0));
-$class = "engine\\statistics\\lists\\{$type}IntervalCountList";
+$class = "engine\\statistics\\lists\\count\\{$type}IntervalCountList";
 Init::require(is_subclass_of($class, IntervalCountList::class));
 
 $secInterval = IntervalCountList::DAY_INTERVAL;

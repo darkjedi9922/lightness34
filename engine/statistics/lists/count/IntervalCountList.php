@@ -1,5 +1,7 @@
-<?php namespace engine\statistics\lists;
+<?php namespace engine\statistics\lists\count;
 
+use engine\statistics\lists\IntervalList;
+use engine\statistics\lists\TimeIntervalList;
 use frame\database\QueryResult;
 use frame\cash\database;
 use Iterator;

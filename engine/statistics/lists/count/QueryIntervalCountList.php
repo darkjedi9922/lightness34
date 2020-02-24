@@ -1,4 +1,4 @@
-<?php namespace engine\statistics\lists;
+<?php namespace engine\statistics\lists\count;
 
 class QueryIntervalCountList extends IntervalCountList
 {
