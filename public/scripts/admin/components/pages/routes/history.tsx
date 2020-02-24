@@ -32,6 +32,7 @@ class RouteHistory extends React.Component<{}, RouteHistoryState> {
     public constructor(props) {
         super(props);
         this.state = {
+            // Поле используется также как флаг окончания получения ответа с сервера.
             clearActionUrl: null,
             routes: []
         }
@@ -54,7 +55,10 @@ class RouteHistory extends React.Component<{}, RouteHistoryState> {
                 <Breadcrumbs items={[
                     { name: 'Мониторинг' },
                     { name: 'Маршруты' },
-                    { name: 'История' }
+                    { name: `История ${state.clearActionUrl 
+                        ? '(' + state.routes.length + ')' 
+                        : ''}`
+                    }
                 ]} />
                 {state.clearActionUrl && <a
                     href={state.clearActionUrl}
