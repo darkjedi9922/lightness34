@@ -6,7 +6,7 @@ $routesLimit = 5;
 $sortField = 'max'; // 'max' or 'avg'
 $sortOrder = 'desc'; // 'desc' or 'asc'
 $intervalCount = 10;
-$secondInterval = MultipleRouteIntervalTimeList::HOUR_INTERVAL;
+$secondInterval = MultipleRouteIntervalTimeList::DAY_INTERVAL;
 
 $list = new MultipleRouteIntervalTimeList(
     $routesLimit, $intervalCount, $secondInterval, $sortField, $sortOrder
