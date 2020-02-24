@@ -1,7 +1,7 @@
 import React from 'react';
 import ContentHeader from '../../content-header';
 import Breadcrumbs from '../../common/Breadcrumbs';
-import Table from '../../table/table';
+import Table, { SortOrder } from '../../table/table';
 import RouteRequest from '../../routes/request';
 import Parameter from '../../parameter';
 import Status, { Type } from '../../status';
@@ -71,7 +71,18 @@ class RouteHistory extends React.Component<{}, RouteHistoryState> {
                         className="routes"
                         collapsable={true}
                         headers={['Path', 'Load', 'Code', 'Time']}
+                        sort={{
+                            defaultCellIndex: 3,
+                            defaultOrder: SortOrder.DESC,
+                            isAlreadySorted: true
+                        }}
                         items={state.routes.map((route) => ({
+                            pureCellsToSort: [
+                                route.route,
+                                route.loadSeconds,
+                                route.code,
+                                route.time
+                            ],
                             cells: [
                                 <>
                                     <RouteRequest route={route.route} />

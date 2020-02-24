@@ -13,6 +13,29 @@
         padding: 0.5rem 1rem;
     }
 
+    &__title {
+        display: inline-block;
+        padding: 0.1rem calc(0.6rem + 1px);
+        position: relative;
+        right: calc(0.6rem + 1px);
+
+        &--sortable:hover, &--sorted {
+            padding: 0.1rem 0.6rem;
+            background: $clr-hoverbox;
+            border: solid 1px #bfbfbf;
+            border-radius: 0.75rem;
+
+            i:before {
+                margin-right: 0;
+                width: auto;
+            }
+        }
+
+        &--sortable:hover {
+            cursor: pointer;
+        }
+    }
+
     &__item-wrapper {
         &--opened {
             background: $clr-hoverbox;

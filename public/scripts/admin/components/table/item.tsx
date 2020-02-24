@@ -4,7 +4,7 @@ import Details, { DetailsProps } from '../details';
 import { isNil } from 'lodash';
 
 export interface TableItem {
-    cells: any[]
+    cells: any[],
     details?: DetailsProps[],
     detailsIndent?: boolean
 }
