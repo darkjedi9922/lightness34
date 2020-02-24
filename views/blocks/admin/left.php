@@ -109,7 +109,15 @@ if ($rights->can('see-logs')) $menu = array_merge_recursive($menu, [
         ], [
             'name' => 'Действия',
             'icon' => 'superpowers',
-            'link' => '/admin/statistics/actions'
+            'submenu' => [[
+                'name' => 'История',
+                'icon' => 'clock',
+                'link' => '/admin/statistics/actions/history'
+            ], [
+                'name' => 'Каталог',
+                'icon' => 'folder',
+                'link' => '/admin/statistics/actions/catalog'
+            ]]
         ], [
             'name' => 'База данных',
             'icon' => 'database',

@@ -3,7 +3,6 @@
 use frame\tools\Init;
 use frame\actions\ActionBody;
 use frame\lists\base\IdentityList;
-use engine\statistics\lists\ActionList;
 use engine\statistics\stats\ActionStat;
 use engine\statistics\actions\ClearStatistics;
 use frame\actions\fields\PasswordField;
@@ -11,11 +10,9 @@ use frame\actions\UploadedFile;
 use frame\actions\ViewAction;
 
 use function lightlib\bytes_to;
-use function lightlib\encode_specials;
 
 Init::accessRight('admin', 'see-logs');
 
-$actions = new ActionList;
 $history = new IdentityList(ActionStat::class, ['id' => 'DESC']);
 $clear = new ViewAction(ClearStatistics::class, ['module' => 'stat/actions']);
 ?>
@@ -24,12 +21,13 @@ $clear = new ViewAction(ClearStatistics::class, ['module' => 'stat/actions']);
     <div class="breadcrumbs">
         <span class="breadcrumbs__item">Мониторинг</span>
         <span class="breadcrumbs__divisor"></span>
-        <span class="breadcrumbs__item breadcrumbs__item--current">Действия</span>
+        <span class="breadcrumbs__item">Действия</span>
+        <span class="breadcrumbs__divisor"></span>
+        <span class="breadcrumbs__item breadcrumbs__item--current">История</span>
     </div>
     <a href="<?= $clear->getUrl() ?>" class="button">Очистить статистику</a>
 </div>
 
-<span class="content__title">История запусков</span>
 <div class="box box--table">
     <table class="table routes">
         <tr class="table__headers">
@@ -223,55 +221,9 @@ $clear = new ViewAction(ClearStatistics::class, ['module' => 'stat/actions']);
                                         <span class="status__message status__message--empty">The error was not specified<span>
                                             <?php endif ?>
                                         </span>
+                                    </span>
                             </div>
                         <?php endif ?>
-                    </td>
-                </tr>
-            </tbody>
-        <?php endforeach ?>
-    </table>
-</div>
-
-<span class="content__title">Доступные действия</span>
-<div class="box box--table">
-    <table class="table action-list">
-        <tr class="table__headers">
-            <td class="table__header">Class</td>
-            <td class="table__header">Module</td>
-        </tr>
-        <?php foreach ($actions as $class) :
-            /** @var string $class */
-            $module = explode('\\', $class)[2];
-            // $color = ord($module[0]) % 5 + 1;
-            /** @var ActionBody $action */
-            $action = new $class;
-            $parameters = [
-                'GET' => $action->listGet(),
-                'POST' => $action->listPost()
-            ]
-            ?>
-            <tbody class="table__item-wrapper">
-                <tr class="table__item">
-                    <td class="table__cell"><?= ltrim($class, '\\') ?></td>
-                    <td class="table__cell">
-                        <span class="actions__module"><?= $module ?></span>
-                    </td>
-                </tr>
-                <tr class="table__details-wrapper">
-                    <td class="table__details table__details--indent" colspan="100">
-                        <?php foreach ($parameters as $type => $list) : ?>
-                            <?php if (!empty($list)) : ?>
-                                <div class="details">
-                                    <span class="details__header"><?= $type ?> Parameters</span>
-                                    <?php foreach ($list as $name => $fieldType) : ?>
-                                        <div class="param action-param">
-                                            <span class="param__name"><?= $name ?></span>
-                                            <span class="param__value action-param__type action-param__type--<?= $fieldType ?>"><?= $fieldType ?></span>
-                                        </div>
-                                    <?php endforeach ?>
-                                </div>
-                            <?php endif ?>
-                        <?php endforeach ?>
                     </td>
                 </tr>
             </tbody>
