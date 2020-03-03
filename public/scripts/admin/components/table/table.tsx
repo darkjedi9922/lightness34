@@ -10,7 +10,8 @@ export enum SortOrder {
 interface SortParameters {
     defaultCellIndex: number,
     defaultOrder: SortOrder,
-    isAlreadySorted: boolean
+    isAlreadySorted: boolean,
+    onSort?: (column: number, order: SortOrder) => void
 }
 
 interface SortedTableItem extends TableItem {
@@ -129,7 +130,8 @@ class Table extends React.Component<TableProps, TableState> {
                 column: column,
                 order: order
             }
-        }))
+        }));
+        this.props.sort && this.props.sort.onSort(column, order);
     }
 
     private toggleSort(column: number) {

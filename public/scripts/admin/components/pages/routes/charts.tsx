@@ -3,15 +3,38 @@ import ContentHeader from '../../content-header';
 import LoadingContent from '../../loading-content';
 import Breadcrumbs from '../../common/Breadcrumbs';
 import $ from 'jquery';
-import MultipleChart, { 
-    TimeIntervalValues, MultipleChartProps
-} from '../../charts/MultipleChart';
-import SingleChart, { SingleChartProps, TimeIntervalValue } from '../../charts/SingleChart';
+import MultipleChart, { TimeIntervalValues, SortColumn } from '../../charts/MultipleChart';
+import SingleChart, { TimeIntervalValue } from '../../charts/SingleChart';
+import { SortOrder } from '../../table/table';
+
+enum SecondInterval {
+    HOUR = 60 * 60,
+    DAY = HOUR * 24,
+    WEEK = DAY * 7,
+    MONTH = DAY * 30
+}
+
+interface ChartData {
+    title: string,
+    type: 'single' | 'multiple',
+    apiUrl: string,
+    secondInterval: SecondInterval
+    intervalCount: number,
+}
+
+interface SingleChartData extends ChartData {
+    intervals: TimeIntervalValue[]
+}
+
+interface MultipleChartData extends ChartData {
+    intervals: TimeIntervalValues[],
+    limit: number,
+    sortField: SortColumn,
+    sortOrder: SortOrder,
+}
 
 interface RoutesChartsState {
-    summary: SingleChartProps,
-    counts: MultipleChartProps,
-    durations: MultipleChartProps
+    charts: (SingleChartData|MultipleChartData)[]
 }
 
 interface RouteCountsAPIResultItem extends TimeIntervalValue {}
@@ -28,19 +51,56 @@ class RoutesCharts extends React.Component<{}, RoutesChartsState> {
     public constructor(props) {
         super(props);
         this.state = {
-            summary: null,
-            counts: null,
-            durations: null
-        }
+            charts: [{
+                title: 'Общее количество',
+                type: 'single',
+                apiUrl: '/api/stats/counts/route',
+                intervals: null,
+                secondInterval: SecondInterval.DAY,
+                intervalCount: 10
+            } as SingleChartData, {
+                title: 'Макс. количество',
+                type: 'multiple',
+                apiUrl: '/api/stats/routes/count',
+                intervals: null,
+                secondInterval: SecondInterval.DAY,
+                intervalCount: 10,
+                limit: 5,
+                sortField: SortColumn.MAX,
+                sortOrder: SortOrder.DESC
+            } as MultipleChartData, {
+                title: 'Макс. время',
+                type: 'multiple',
+                apiUrl: '/api/stats/routes/durations',
+                intervals: null,
+                secondInterval: SecondInterval.DAY,
+                intervalCount: 10,
+                limit: 5,
+                sortField: SortColumn.MAX,
+                sortOrder: SortOrder.DESC
+            }]
+        };
     }
 
     public componentDidMount() {
-        this.loadCountStatistics('/api/stats/counts/route')
-            .then((result) => this.setState({ summary: result }));
-        this.loadParamStatistics('/api/stats/routes/count')
-            .then((result) => this.setState({ counts: result }));
-        this.loadParamStatistics('/api/stats/routes/durations')
-            .then((result) => this.setState({ durations: result }));
+        for (let i = 0; i < this.state.charts.length; i++) {
+            const chartData = this.state.charts[i];
+            const update = (result: TimeIntervalValue[] |TimeIntervalValues[]) => {
+                this.setState((state) => {
+                    const newState = { ...state };
+                    newState.charts[i].intervals = result;
+                    return newState;
+                })
+            }
+            switch (chartData.type) {
+                case 'single':
+                    this.loadCountStatistics(chartData.apiUrl).then(update);
+                    break;
+                case 'multiple':
+                    this.loadParamStatistics(chartData.apiUrl).then(update);
+                    break;
+            }
+        }
     }
 
     public render(): React.ReactNode {
@@ -49,29 +109,23 @@ class RoutesCharts extends React.Component<{}, RoutesChartsState> {
             { 'name': 'Маршруты' },
             { 'name': 'Статистика' }
         ];
-        return this.state.summary !== null 
-            && this.state.counts !== null 
-            && this.state.durations !== null
-            ? <>
+        return this.areAllChartsLoaded()
+            ? this.state.charts.map((chart, index) => <div key={index}>
                 <ContentHeader>
-                    <Breadcrumbs items={[...basePaths, {
-                        'name': 'Общее количество'
-                    }]} />
+                    <Breadcrumbs items={[...basePaths, { 'name': chart.title }]} />
                 </ContentHeader>
-                <SingleChart intervals={this.state.summary.intervals} />
-                <ContentHeader>
-                    <Breadcrumbs items={[...basePaths, {
-                        'name': 'Макс. количество'
-                    }]} />
-                </ContentHeader>
-                <MultipleChart intervals={this.state.counts.intervals} />
-                <ContentHeader>
-                    <Breadcrumbs items={[...basePaths, {
-                        'name': 'Макс. время' 
-                    }]} />
-                </ContentHeader>
-                <MultipleChart intervals={this.state.durations.intervals} />
-            </>
+                {chart.type === 'single'
+                    ? <SingleChart
+                        intervals={chart.intervals as TimeIntervalValue[]}
+                    />
+                    : <MultipleChart
+                        intervals={chart.intervals as TimeIntervalValues[]}
+                        onSort={(column, order) => this.onMultipleChartSort(
+                            index, column, order
+                        )}
+                    />
+                }
+            </div>)
             : <>
                 <ContentHeader>
                     <Breadcrumbs items={basePaths} />
@@ -80,13 +134,13 @@ class RoutesCharts extends React.Component<{}, RoutesChartsState> {
             </>
     }
 
-    private loadCountStatistics(apiUrl: string): Promise<SingleChartProps> {
-        return new Promise<SingleChartProps>((resolve, reject) => {
+    private loadCountStatistics(apiUrl: string): Promise<TimeIntervalValue[]> {
+        return new Promise<TimeIntervalValue[]>((resolve, reject) => {
             $.ajax({
                 url: apiUrl,
                 dataType: 'json',
                 success: (result: RouteCountsAPIResultItem[]) => {
-                    resolve({ intervals: result });
+                    resolve(result);
                 },
                 error: (jqXHR, textStatus, errorThrown) => {
                     reject(apiUrl + ' error:' + errorThrown);
@@ -95,8 +149,8 @@ class RoutesCharts extends React.Component<{}, RoutesChartsState> {
         })
     }
 
-    private loadParamStatistics(apiUrl: string): Promise<MultipleChartProps> {
-        return new Promise<MultipleChartProps>((resolve, reject) => {
+    private loadParamStatistics(apiUrl: string): Promise<TimeIntervalValues[]> {
+        return new Promise<TimeIntervalValues[]>((resolve, reject) => {
             $.ajax({
                 url: apiUrl,
                 dataType: 'json',
@@ -119,13 +173,19 @@ class RoutesCharts extends React.Component<{}, RoutesChartsState> {
                             }
                         }
                     }
-                    resolve({ intervals: intervals });
+                    resolve(intervals);
                 },
                 error: (jqXHR, textStatus, errorThrown) => {
                     reject(apiUrl + ' error:' + errorThrown);
                 }
             })
         })
+    }
+
+    private areAllChartsLoaded(): boolean {
+        return this.state.charts.findIndex((chart) => 
+            chart.intervals === null
+        ) === -1;
     }
 }
 

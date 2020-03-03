@@ -2,8 +2,13 @@ import React from 'react';
 import {
     AreaChart, Area, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer
 } from 'recharts';
-import Table from '../table/table';
+import Table, { SortOrder } from '../table/table';
 import { round } from 'lodash';
+
+export enum SortColumn {
+    MAX = 'max',
+    AVG = 'avg'
+}
 
 export interface TimeIntervalValues {
     time: string,
@@ -13,10 +18,16 @@ export interface TimeIntervalValues {
 }
 
 export interface MultipleChartProps {
-    intervals: TimeIntervalValues[]
+    intervals: TimeIntervalValues[],
+    onSort?: (column: SortColumn, order: SortOrder) => void
 }
 
 class MultipleChart extends React.Component<MultipleChartProps> {
+    public constructor(props: MultipleChartProps) {
+        super(props);
+        this.handleSort = this.handleSort.bind(this);
+    }
+
     private lineColors = [
         '#3F51B5', // blue
         '#4CAF50', // green
@@ -76,10 +87,21 @@ class MultipleChart extends React.Component<MultipleChartProps> {
                 <Table 
                     className="chart-table"
                     headers={['Route', 'Max', 'Avg']}
+                    sort={{
+                        defaultCellIndex: 1,
+                        defaultOrder: SortOrder.DESC,
+                        isAlreadySorted: true,
+                        onSort: this.handleSort
+                    }}
                     items={(this.props.intervals.length ?
                             Object.keys(this.props.intervals[0].values) : []
                         ).map((name: string, index: number) => {
                             return {
+                                pureCellsToSort: [
+                                    name,
+                                    this.findMaxOf(name),
+                                    this.findAverageOf(name)
+                                ],
                                 cells: [
                                     <>
                                         <i className="
@@ -134,6 +156,14 @@ class MultipleChart extends React.Component<MultipleChartProps> {
             count += 1;
         }
         return round(average / count, 3);
+    }
+
+    private handleSort(column: number, order: SortOrder): void {
+        if (!this.props.onSort) return;
+        switch (column) {
+            case 1: this.props.onSort(SortColumn.MAX, order); break;
+            case 2: this.props.onSort(SortColumn.AVG, order); break;
+        }
     }
 }
 
