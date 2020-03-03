@@ -50,6 +50,11 @@ class EventManager
     private $blockedEvent = null;
     private $lastEmitId = 0;
 
+    /**
+     * Устанавливает обработчик на любое событие, которое вызывается через emit().
+     * События могут устаналиваться любые в пределах всего менеджера событий.
+     * Важно лишь, чтобы они не совпали по имени.
+     */
     public function on(string $event, callable $macro)
     {
         $this->subscribers[$event][] = $macro;
@@ -60,6 +65,9 @@ class EventManager
         );
     }
 
+    /**
+     * Убирает установленный ранее обработчик события.
+     */
     public function off(string $event, callable $macro)
     {
         $index = array_search($macro, $this->subscribers[$event] ?? []);
@@ -73,6 +81,9 @@ class EventManager
     }
 
     /**
+     * Вызывает сигнал о произошедшем событии. События могут вызываться любые в 
+     * пределах одного менеджера событий. Важно лишь, чтобы они не совпали по имени.
+     * 
      * Возвращает массив callable макросов, которые были вызваны. 
      */
     public function emit(string $event, ...$args): array
