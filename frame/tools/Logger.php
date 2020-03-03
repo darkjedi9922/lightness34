@@ -19,7 +19,8 @@ class Logger
     public function __construct($filename)
     {
         if (!File::exists($filename)) File::createFullPath($filename);
-        $this->handle = fopen($filename, 'at');
+        // Почему открывается в бинарном режиме, см. write()
+        $this->handle = fopen($filename, 'ab');
         $this->filename = $filename;
     }
 
@@ -27,7 +28,17 @@ class Logger
     {
         $date = date('d.m.Y H:i');
         $ip = Client::isCli() ? 'CLI' : Client::getIp();
-        $text = "[$date - $ip] $type: $message\n";
+        $text = "[$date - $ip] $type: $message" . PHP_EOL;
+
+        /**
+         * @see https://www.php.net/fwrite
+         * В системах, различающих двоичные и текстовые файлы (к примеру, Windows), 
+         * файл должен быть открыт используя флаг 'b' в конце аргумента mode функции
+         * fopen().
+         * 
+         * В данном случае, без него, PHP_EOL на Windows почему-то при записи
+         * превращается из "\r\n" в "\r\r\n" о_О
+         */
         fwrite($this->handle, $text);
     }
 
