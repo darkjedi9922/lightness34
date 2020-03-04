@@ -6,20 +6,21 @@ class MultipleRouteIntervalTimeList extends MultipleIntervalDataList
     {
         $interval = $this->getSecondInterval();
         $minInterval = $this->getLeftBorder();
+        $summaryFunction = $this->getSortField();
         return "SELECT 
             stat_routes.url as object, 
-            MAX(duration_sec) as value,
+            ROUND($summaryFunction(duration_sec), 3) as value,
             -- ROUND(AVG(duration_sec), 3) as avg,
             -- MIN(duration_sec) as min,
             FLOOR(time / $interval) * $interval as interval_time
         FROM stat_routes INNER JOIN (
             SELECT url, 
                 -- Тут находим значение, по которому будем сортировка.
-                MAX(duration_sec) as sorted_value
+                $summaryFunction(duration_sec) as sorted_field
             FROM stat_routes
             WHERE (FLOOR(time / $interval) * $interval) >= $minInterval
             GROUP BY url
-            ORDER BY sorted_value DESC
+            ORDER BY sorted_field {$this->getSortOrder()}
             LIMIT {$this->getObjectsLimit()}
         ) as limited ON stat_routes.url = limited.url
         GROUP BY object, interval_time

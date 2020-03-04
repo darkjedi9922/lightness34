@@ -19,6 +19,9 @@ export interface TimeIntervalValues {
 
 export interface MultipleChartProps {
     intervals: TimeIntervalValues[],
+    sortColumn: SortColumn,
+    sortOrder: SortOrder,
+    columnUpdating?: SortColumn,
     onSort?: (column: SortColumn, order: SortOrder) => void
 }
 
@@ -37,6 +40,7 @@ class MultipleChart extends React.Component<MultipleChartProps> {
     ];
 
     public render(): React.ReactNode {
+        const props = this.props;
         return <>
             <div className="box chart">
                 <ResponsiveContainer height={200} width="99%">
@@ -86,11 +90,23 @@ class MultipleChart extends React.Component<MultipleChartProps> {
                 </ResponsiveContainer>
                 <Table 
                     className="chart-table"
-                    headers={['Route', 'Max', 'Avg']}
+                    headers={[
+                        'Route',
+                        <span>Max {props.columnUpdating == SortColumn.MAX && <i 
+                            className="icon-spin1 animate-spin chart-table__loading"
+                        />
+                        }</span>,
+                        <span>Avg {props.columnUpdating === SortColumn.AVG && <i
+                            className="icon-spin1 animate-spin chart-table__loading"
+                        />
+                        }</span>
+                    ]}
                     sort={{
-                        defaultCellIndex: 1,
-                        defaultOrder: SortOrder.DESC,
-                        isAlreadySorted: true,
+                        sortableCells: [1, 2],
+                        defaultCellIndex: this.props.sortColumn === SortColumn.MAX
+                            ? 1 : 2,
+                        defaultOrder: this.props.sortOrder,
+                        isAlreadySorted: false,
                         onSort: this.handleSort
                     }}
                     items={(this.props.intervals.length ?
