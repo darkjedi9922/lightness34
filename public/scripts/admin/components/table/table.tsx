@@ -1,6 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import Item, { TableItem } from './item';
+import { isNil } from 'lodash';
 
 export enum SortOrder {
     ASC = 0,
@@ -8,6 +9,7 @@ export enum SortOrder {
 }
 
 interface SortParameters {
+    sortableCells?: number[],
     defaultCellIndex: number,
     defaultOrder: SortOrder,
     isAlreadySorted: boolean,
@@ -74,12 +76,14 @@ class Table extends React.Component<TableProps, TableState> {
                                     <span 
                                         className={classNames(
                                             "table__title",
-                                            {'table__title--sortable': state.sort},
+                                            {'table__title--sortable':
+                                                this.isColumnSortable(index)
+                                            },
                                             {'table__title--sorted': state.sort &&
                                                 state.sort.column === index
                                             }
                                         )} 
-                                        onClick={state.sort
+                                        onClick={this.isColumnSortable(index)
                                             ? () => this.toggleSort(index)
                                             : null
                                         }
@@ -113,6 +117,13 @@ class Table extends React.Component<TableProps, TableState> {
                 }
             </table>
         );
+    }
+
+    private isColumnSortable(index: number): boolean {
+        return this.props.sort 
+            && (isNil(this.props.sort.sortableCells)
+                || this.props.sort.sortableCells.indexOf(index) !== -1
+            )
     }
 
     private sort(column: number, order: SortOrder) {
