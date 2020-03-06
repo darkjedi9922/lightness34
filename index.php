@@ -11,6 +11,7 @@ use frame\errors\handlers\StrictExceptionHandler;
 
 use engine\admin\AdminModule;
 use engine\users\UsersModule;
+use engine\messages\MessagesModule;
 use engine\articles\ArticlesModule;
 use engine\comments\CommentsModule;
 use engine\statistics\StatisticsModule;
@@ -34,6 +35,7 @@ $app->setHandler(StrictException::class, StrictExceptionHandler::class);
 $app->setModule(new StatisticsModule('stat'));
 $app->setModule(new AdminModule('admin'));
 $app->setModule(new UsersModule('users'));
+$app->setModule(new MessagesModule('messages'));
 $app->setModule(new ArticlesModule('articles'));
 $app->setModule(new CommentsModule('comments', $app->getModule('articles')));
 

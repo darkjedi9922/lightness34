@@ -6,14 +6,16 @@ use engine\users\cash\user_me;
 use engine\messages\Message;
 use frame\tools\Logger;
 use frame\tools\trackers\read\ReadLimitedProgressTracker as Tracker;
+use engine\users\cash\my_rights;
 
 $me = user_me::get();
 $group = my_group::get();
-$unreadedMessages = Message::countUnreaded($me->id);
 $unreadedArticles = Article::countUnreaded($me->id);
 $logger = new Logger('log.txt');
 $logTracker = new Tracker('log', crc32('log.txt'), count($logger->read()), $me->id);
 $logNewRecords = $logTracker->loadUnreaded();
+$messagesRights = my_rights::get('messages');
+if ($messagesRights->can('use')) $unreadedMessages = Message::countUnreaded($me->id);
 ?>
 
 <div class="head-bar__left">
@@ -30,12 +32,12 @@ $logNewRecords = $logTracker->loadUnreaded();
     </div>
     <?php if ($group->id !== $group::GUEST_ID) : ?>
         <div class="mini-profile">
-            <?php if ($unreadedMessages === 0) : ?>
-                <a class="messages" href="/admin/profile/dialogs"><i class="fontello icon-email"></i></a>
-            <?php else : ?>
-                <a class="messages new" href="/admin/profile/dialogs"
-                    ><i class="fontello icon-email"></i><span class="amount"
-                    > <?= $unreadedMessages ?></span></a>
+            <?php if ($messagesRights->can('use')) : ?>
+                <?php if ($unreadedMessages === 0) : ?>
+                    <a class="messages" href="/admin/profile/dialogs"><i class="fontello icon-email"></i></a>
+                <?php else : ?>
+                    <a class="messages new" href="/admin/profile/dialogs"><i class="fontello icon-email"></i><span class="amount"> <?= $unreadedMessages ?></span></a>
+                <?php endif ?>
             <?php endif ?>
             <img class="avatar" src='/<?= $me->getAvatarUrl() ?>'>
             <a class="login" href='/admin/users/profile/<?= $me->login ?>'><?= $me->login ?></a>

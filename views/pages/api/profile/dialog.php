@@ -5,7 +5,6 @@ use frame\cash\pagenumber;
 use engine\messages\MessagePagedList;
 use engine\messages\Message;
 use engine\users\cash\user_me;
-use engine\users\Group;
 use engine\users\User;
 use frame\actions\ViewAction;
 use engine\messages\actions\AddMessage;
@@ -14,10 +13,9 @@ use frame\cash\prev_router;
 use frame\tools\JsonEncoder;
 use frame\views\Pager;
 
+Init::accessRight('messages', 'use');
+
 $me = user_me::get();
-
-Init::access((int) $me->group_id !== Group::GUEST_ID);
-
 $withWhoId = (int) Init::requireGet('withId');
 $who = User::selectIdentity($withWhoId);
 

@@ -2,7 +2,6 @@
 
 use frame\tools\Init;
 use engine\users\cash\user_me;
-use engine\users\Group;
 use engine\messages\actions\DeleteDialog;
 use engine\messages\DialogPagedList;
 use engine\messages\Dialog;
@@ -13,10 +12,8 @@ use frame\actions\ViewAction;
 use frame\views\Pager;
 use frame\tools\JsonEncoder;
 
+Init::accessRight('messages', 'use');
 $me = user_me::get();
-
-Init::access($me->group_id !== Group::GUEST_ID);
-
 $page = pagenumber::get();
 $dialogs = new DialogPagedList($page);
 $pageCount = $dialogs->getPager()->countPages();

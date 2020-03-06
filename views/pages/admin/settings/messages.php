@@ -7,8 +7,7 @@ use frame\actions\ViewAction;
 use engine\admin\actions\EditConfigAction;
 use frame\tools\JsonEncoder;
 
-Init::accessGroup(Group::ROOT_ID);
-
+Init::accessRight('messages', 'setup');
 $config = config::get('messages');
 $edit = new ViewAction(EditConfigAction::class, ['name' => 'messages']);
 

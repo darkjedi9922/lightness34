@@ -19,7 +19,8 @@ Init::require($profile !== null);
 
 $gender = Gender::selectIdentity($profile->gender_id);
 $group = Group::selectIdentity($profile->group_id);
-$rights = my_rights::get('users');
+$usersRights = my_rights::get('users');
+$messagesRights = my_rights::get('messages');
 $me = user_me::get();
 
 $deleteAvatar = new ViewAction(DeleteAvatarAction::class, ['uid' => $profile->id]);
@@ -43,12 +44,13 @@ $pageProps = [
         'isOnline' => $profile->online === 1
     ],
     'rights' => [
-        'canEdit' => $rights->canOneOf([
+        'canEdit' => $usersRights->canOneOf([
             'edit-all' => [$profile],
             'edit-own' => [$profile]
         ]),
         'canChangeGroup' => $me->group_id === Group::ROOT_ID 
-            && $group->id !== Group::ROOT_ID
+            && $group->id !== Group::ROOT_ID,
+        'canUseMessages' => $messagesRights->can('use')
     ],
     'actions' => [
         'deleteAvatarUrl' => $deleteAvatar->getUrl()

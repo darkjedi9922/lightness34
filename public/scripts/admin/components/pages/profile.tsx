@@ -1,8 +1,6 @@
 import React from 'react';
 import Breadcrumbs from '../common/Breadcrumbs';
 import Parameter from '../parameter';
-import classNames from 'classnames';
-import Status, { Type } from '../status';
 import Mark from '../mark';
 
 interface User {
@@ -23,7 +21,8 @@ interface User {
 
 interface PageRights {
     canEdit: boolean,
-    canChangeGroup: boolean
+    canChangeGroup: boolean,
+    canUseMessages: boolean
 }
 
 interface Actions {
@@ -122,42 +121,34 @@ class ProfilePage extends React.Component<ProfileProps> {
                             />
                         </div>
                     </div>
-                    <div className="box__actions box-actions">
-                        <a
-                            href={`/admin/profile/dialog?uid=${this.props.user.id}`}
-                            className="box-actions__item"
-                        >
-                            <i className="box-actions__icon icon-email"></i>
-                            Новое сообщение
-                            </a>
-                        {this.props.rights.canChangeGroup &&
-                            <a
-                                href={`/admin/users/change/group?id=${this.props.user.id}`}
-                                className="box-actions__item"
-                            >
-                                <i className="box-actions__icon icon-group"></i>
-                                Изменить группу
-                            </a>
-                        }
-                        {this.props.rights.canEdit && <>
-                            <a
-                                href={`/admin/users/edit/profile?id=${this.props.user.id}`}
-                                className="box-actions__item"
-                            >
-                                <i className="box-actions__icon icon-pencil"></i>
-                                Редактировать профиль
-                            </a>
-                            {this.props.user.hasAvatar &&
-                                <a
-                                    href={this.props.actions.deleteAvatarUrl}
-                                    className="box-actions__item box-actions__item--red"
-                                >
-                                    <i className="box-actions__icon icon-trash"></i>
-                                    Удалить аватар
+                    {(this.props.rights.canChangeGroup || this.props.rights.canEdit || this.props.rights.canUseMessages) &&
+                        <div className="box__actions box-actions">
+                            {this.props.rights.canUseMessages &&
+                                <a href={`/admin/profile/dialog?uid=${this.props.user.id}`} className="box-actions__item">
+                                    <i className="box-actions__icon icon-email"></i>Новое сообщение
                                 </a>
                             }
-                        </>}
-                    </div>
+                            {this.props.rights.canChangeGroup &&
+                                <a href={`/admin/users/change/group?id=${this.props.user.id}`} className="box-actions__item">
+                                    <i className="box-actions__icon icon-group"></i>Изменить группу
+                                </a>
+                            }
+                            {this.props.rights.canEdit && <>
+                                <a href={`/admin/users/edit/profile?id=${this.props.user.id}`} className="box-actions__item">
+                                    <i className="box-actions__icon icon-pencil"></i>Редактировать профиль
+                                </a>
+                                {this.props.user.hasAvatar &&
+                                    <a
+                                        href={this.props.actions.deleteAvatarUrl}
+                                        className="box-actions__item box-actions__item--red"
+                                    >
+                                        <i className="box-actions__icon icon-trash"></i>
+                                        Удалить аватар
+                                    </a>
+                                }
+                            </>}
+                        </div>
+                    }
                 </div>
             </div>
         );

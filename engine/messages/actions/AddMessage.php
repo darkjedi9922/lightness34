@@ -4,7 +4,6 @@ use frame\actions\ActionBody;
 use engine\users\User;
 use frame\tools\Init;
 use engine\users\cash\user_me;
-use engine\users\Group;
 use frame\actions\fields\IntegerField;
 use frame\actions\fields\StringField;
 use frame\database\Records;
@@ -13,8 +12,6 @@ class AddMessage extends ActionBody
 {
     const E_TEXT_IS_EMPTY = 1;
 
-    /** @var User */
-    private $me;
     /** @var User */
     private $who;
 
@@ -34,8 +31,7 @@ class AddMessage extends ActionBody
 
     public function initialize(array $get)
     {
-        $this->me = user_me::get();
-        Init::access((int) $this->me->group_id !== Group::GUEST_ID);
+        Init::accessRight('messages', 'use');
         $this->who = User::selectIdentity($get['to_uid']->get());
         Init::require($this->who !== null);
     }
@@ -49,24 +45,25 @@ class AddMessage extends ActionBody
 
     public function succeed(array $post, array $files)
     {
+        $me = user_me::get();
         $date = time();
         $member1Id = null;
         $member2Id = null;
-        if ($this->me->id < $this->who->id) {
-            $member1Id = $this->me->id;
+        if ($me->id < $this->who->id) {
+            $member1Id = $me->id;
             $member2Id = $this->who->id;
         } else {
             $member1Id = $this->who->id;
-            $member2Id = $this->me->id;
+            $member2Id = $me->id;
         }
 
         $id = Records::from('messages')->insert([
             'member1_sorted_id' => $member1Id,
             'member2_sorted_id' => $member2Id,
-            'from_id' => $this->me->id,
+            'from_id' => $me->id,
             'to_id' => $this->who->id,
             'date' => $date,
-            'readed' => $this->who->id === $this->me->id
+            'readed' => $this->who->id === $me->id
         ]);
 
         Records::from('message_texts')->insert([

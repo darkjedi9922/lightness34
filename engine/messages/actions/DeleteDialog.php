@@ -22,8 +22,7 @@ class DeleteDialog extends ActionBody
 
     public function initialize(array $get)
     {
-        $me = user_me::get();
-        Init::access($me->group_id !== Group::GUEST_ID);
+        Init::accessRight('messages', 'use');
         $this->uid = $get['uid']->get();
     }
 
