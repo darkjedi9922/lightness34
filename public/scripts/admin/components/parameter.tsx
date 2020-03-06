@@ -8,7 +8,8 @@ interface Props {
     value: string,
     type?: string,
     nameIsStrong?: boolean,
-    divisor?: string
+    divisor?: string,
+    empty?: boolean
 }
 
 class Parameter extends React.Component<Props> {
@@ -35,9 +36,17 @@ class Parameter extends React.Component<Props> {
             }
             <span className={classNames(
                 'param__value',
-                { 'param__value--empty': this.props.value === '' }
-            )}>{this.props.value !== '' ? this.props.value : 'empty'}</span>
+                { 'param__value--empty': this.isEmptyStyled() }
+            )}>{this.getValue()}</span>
         </div>
+    }
+
+    private getValue(): string {
+        return this.props.value !== '' ? this.props.value : 'empty';
+    }
+
+    private isEmptyStyled(): boolean {
+        return this.props.value === '' || this.props.empty;
     }
 }
 

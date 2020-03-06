@@ -18,6 +18,7 @@ import Comments from './components/comments';
 import Form from './components/form/Form';
 import Events from './components/events';
 import Menu from './components/menu';
+import ActionHistory from './components/pages/actions/history';
 
 setupReactComponent('#cash-use-history', CashUseHistory);
 setupReactComponent('#views-stat-page', ViewsHistory);
@@ -37,5 +38,6 @@ setupReactComponent('#log-page', LogPage);
 setupReactComponent('#users', UsersTable);
 setupReactComponent('#events', Events);
 setupReactComponent('#menu', Menu);
+setupReactComponent('#action-history', ActionHistory);
 
 setupReactComponent('.react-form', Form);
