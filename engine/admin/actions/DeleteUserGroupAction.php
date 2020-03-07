@@ -28,10 +28,10 @@ class DeleteUserGroupAction extends ActionBody
 
     public function initialize(array $get)
     {
+        Init::accessGroup(Group::ROOT_ID);
         $this->group = Group::selectIdentity($get['id']->get());
         Init::require($this->group !== null);
         Init::require(!$this->group->isSystem());
-        Init::access((int) user_me::get()->group_id === Group::ROOT_ID);
     }
 
     public function succeed(array $post, array $files)

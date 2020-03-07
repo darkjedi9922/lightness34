@@ -24,7 +24,7 @@ class AddGender extends ActionBody
 
     public function initialize(array $get)
     {
-        Init::accessGroup(Group::ROOT_ID);
+        Init::accessRight('users', 'configure-genders');
     }
 
     public function validate(array $post, array $files): array

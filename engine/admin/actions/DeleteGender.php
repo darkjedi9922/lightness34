@@ -28,10 +28,10 @@ class DeleteGender extends ActionBody
 
     public function initialize(array $get)
     {
+        Init::accessRight('users', 'configure-genders');
         $this->gender = Gender::selectIdentity($get['id']->get());
         Init::require($this->gender !== null);
         Init::require(!$this->gender->isDefault());
-        Init::accessGroup(Group::ROOT_ID);
     }
 
     public function succeed(array $post, array $files)

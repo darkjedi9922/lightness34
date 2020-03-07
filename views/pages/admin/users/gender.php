@@ -1,14 +1,12 @@
 <?php /** @var frame\views\Page $self */
 
 use frame\tools\Init;
-use engine\users\Group;
 use engine\users\Gender;
 use frame\actions\ViewAction;
 use engine\admin\actions\EditGender;
-use frame\tools\JsonEncoder; 
+use frame\tools\JsonEncoder;
 
-Init::accessGroup(Group::ROOT_ID);
-
+Init::accessRight('users', 'configure-genders');
 $id = (int)Init::requireGet('id');
 $gender = Gender::selectIdentity($id);
 

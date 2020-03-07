@@ -11,7 +11,6 @@ use engine\users\Group;
 use engine\users\User;
 use frame\actions\ActionBody;
 use frame\actions\UploadedFile;
-use frame\auth\Auth;
 use frame\cash\prev_router;
 use frame\tools\Client;
 use frame\tools\Init;
@@ -47,9 +46,7 @@ class AddUser extends ActionBody
 
     public function initialize(array $get)
     {
-        $amIGuest = !(new Auth)->isLogged();
-        if (!$amIGuest) $prevRoute = prev_router::get();
-        Init::access($amIGuest || $prevRoute && $prevRoute->isInNamespace('admin'));
+        Init::accessRight('users', 'add');
     }
 
     public function validate(array $post, array $files): array

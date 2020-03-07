@@ -16,6 +16,10 @@ $login = $self->getArgument(0);
 $profile = User::select(['login' => $login]);
 
 Init::require($profile !== null);
+Init::accessOneRight('users', [
+    'see-own' => [$profile],
+    'see-others' => [$profile]
+]);
 
 $gender = Gender::selectIdentity($profile->gender_id);
 $group = Group::selectIdentity($profile->group_id);

@@ -37,9 +37,9 @@ class EditGender extends ActionBody
 
     public function initialize(array $get)
     {
+        Init::accessRight('users', 'configure-genders');
         $this->gender = Gender::selectIdentity($get['id']->get());
         Init::require($this->gender !== null);
-        Init::accessGroup(Group::ROOT_ID);
     }
 
     public function validate(array $post, array $files)

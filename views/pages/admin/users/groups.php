@@ -2,17 +2,13 @@
 
 use engine\admin\actions\DeleteUserGroupAction;
 use frame\actions\ViewAction;
-use engine\users\cash\my_group;
 use engine\users\Group;
 use engine\admin\actions\NewUserGroupAction;
 use frame\lists\base\IdentityList;
 use frame\tools\Init;
 use frame\tools\JsonEncoder;
 
-$myGroup = my_group::get();
-
-Init::access($myGroup->id === $myGroup::ROOT_ID);
-
+Init::accessGroup(Group::ROOT_ID);
 $groups = new IdentityList(Group::class);
 $newGroup  = new ViewAction(NewUserGroupAction::class);
 $delGroup  = new ViewAction(DeleteUserGroupAction::class);

@@ -1,17 +1,12 @@
 <?php /** @var frame\views\Page $self */
 
 use frame\tools\Init;
-use engine\users\Group;
-use engine\users\cash\user_me;
 use frame\cash\config;
 use engine\admin\actions\EditConfigAction;
 use frame\actions\ViewAction;
 use frame\tools\JsonEncoder;
 
-$me = user_me::get();
-
-Init::access((int) $me->group_id === Group::ROOT_ID);
-
+Init::accessRight('users', 'setup');
 $config = config::get('users');
 $edit = new ViewAction(EditConfigAction::class, ['name' => 'users']);
 

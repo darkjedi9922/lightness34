@@ -3,16 +3,13 @@
 use engine\admin\actions\EditRightsAction;
 use frame\actions\ViewAction;
 use frame\tools\JsonEncoder;
-use engine\users\cash\my_group;
 use engine\users\Group;
 use frame\core\Core;
 use frame\modules\GroupRights;
 use frame\modules\Module;
 use frame\tools\Init;
 
-$myGroup = my_group::get();
-
-Init::access($myGroup->id === $myGroup::ROOT_ID);
+Init::accessGroup(Group::ROOT_ID);
 
 $id = (int) Init::requireGet('id');
 $group = Group::selectIdentity($id);

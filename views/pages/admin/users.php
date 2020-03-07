@@ -5,9 +5,14 @@ use engine\users\UserPagedList;
 use engine\users\User;
 use engine\users\Group;
 use engine\users\Gender;
+use frame\tools\Init;
+use engine\users\cash\my_rights;
+
+Init::accessRight('users', 'see-list');
 
 $pagenumber = pagenumber::get();
 $users = new UserPagedList($pagenumber);
+$rights = my_rights::get('users');
 
 $tableProps = ['items' => []];
 foreach ($users as $user) {
@@ -38,10 +43,12 @@ foreach ($users as $user) {
         <?php $users->getPager()->show('admin') ?>
     </div>
     <?php endif ?>
-    <div class="actions">
-        <div class="actions__item">
-            <a href="/admin/users/add" class="button">Добавить пользователя</a>
+    <?php if ($rights->can('add')): ?>
+        <div class="actions">
+            <div class="actions__item">
+                <a href="/admin/users/add" class="button">Добавить пользователя</a>
+            </div>
         </div>
-    </div>
+    <?php endif ?>
 </div>
 <div id="users" data-props='<?= json_encode($tableProps, JSON_HEX_AMP) ?>'></div>

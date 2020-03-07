@@ -2,15 +2,11 @@
 
 use frame\tools\Init;
 use engine\users\Group;
-use engine\users\cash\user_me;
 use engine\admin\actions\EditUserGroupAction;
 use frame\actions\ViewAction;
 use frame\tools\JsonEncoder;
 
-$me = user_me::get();
-
-Init::access((int)$me->group_id === Group::ROOT_ID);
-
+Init::accessGroup(Group::ROOT_ID);
 $id = (int)Init::requireGet('id');
 $group = Group::selectIdentity($id);
 
