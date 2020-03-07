@@ -49,7 +49,7 @@ $formProps = [
     'actionUrl' => $edit->getUrl(),
     'method' => 'post',
     'fields' => $fieldGroups,
-    'short' => true,
+    'short' => false,
     'buttonText' => 'Сохранить'
 ];
 $formProps = JsonEncoder::forHtmlAttribute($formProps);

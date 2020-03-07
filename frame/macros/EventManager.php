@@ -119,6 +119,7 @@ class EventManager
                     $args
                 );
                 $result[] = $macro;
+                $macro(...$args);
                 if (!$this->blockedEvent) $this->emit(
                     self::BLOCK_EVENT_MACRO_END,
                     $emitId,
@@ -126,7 +127,6 @@ class EventManager
                     $macro,
                     $args
                 );
-                $macro(...$args);
             }
         }
 

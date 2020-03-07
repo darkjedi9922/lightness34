@@ -19,8 +19,9 @@ class my_rights extends Cash
                 throw new \Exception("There is no module $module.");
 
             $desc = $moduleInstance->createRightsDescription();
-            if (!$desc) throw new \Exception("There is no module rights 
-                of $module module.");
+            if (!$desc) throw new \Exception(
+                "Module '$module' has no rights description."
+            );
 
             return new UserRights($desc, $moduleInstance->getId(), user_me::get());
         });
