@@ -48,12 +48,6 @@ class EditConfig extends ActionBody
     {
         return [
             'enabled' => BooleanField::class,
-            'routes->history->limit' => IntegerField::class,
-            'events->history->limit' => IntegerField::class,
-            'views->history->limit' => IntegerField::class,
-            'actions->history->limit' => IntegerField::class,
-            'queries->history->limit' => IntegerField::class,
-            'cash->history->limit' => IntegerField::class,
             'storeTimeValue' => IntegerField::class,
             'storeTimeUnit' => StringField::class
         ];
@@ -68,12 +62,6 @@ class EditConfig extends ActionBody
     {
         $config = new Json(ROOT_DIR . '/config/statistics.json');
         $config->enabled = $post['enabled']->get();
-        $config->{'routes.history.limit'} = $post['routes->history->limit']->get();
-        $config->{'events.history.limit'} = $post['events->history->limit']->get();
-        $config->{'views.history.limit'} = $post['views->history->limit']->get();
-        $config->{'actions.history.limit'} = $post['actions->history->limit']->get();
-        $config->{'queries.history.limit'} = $post['queries->history->limit']->get();
-        $config->{'cash.history.limit'} = $post['cash->history->limit']->get();
         $config->storeTimeInSeconds = self::calcSecondsFromStoreTime(
             $post['storeTimeValue']->get(),
             $post['storeTimeUnit']->get()
