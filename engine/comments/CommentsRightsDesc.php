@@ -12,7 +12,8 @@ class CommentsRightsDesc extends RightsDesc
             'edit-all' => 'Editing all comments',
             'edit-own' => 'Editing own comments',
             'delete-all' => 'Deleting all comments',
-            'delete-own' => 'Deleting own comments'
+            'delete-own' => 'Deleting own comments',
+            'configure' => 'Configure the module',
         ];
     }
 
