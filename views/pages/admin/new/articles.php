@@ -4,7 +4,9 @@ use frame\cash\pagenumber;
 use engine\articles\NewArticlePagedList;
 use engine\users\User;
 use function lightlib\shorten;
+use frame\tools\Init;
 
+Init::accessRight('articles', 'see-new-list');
 $pagenumber = pagenumber::get();
 $articles = new NewArticlePagedList($pagenumber);
 ?>

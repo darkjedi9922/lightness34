@@ -7,7 +7,9 @@ use engine\users\cash\my_rights;
 use engine\users\User;
 use function lightlib\shorten;
 use frame\tools\JsonEncoder;
+use frame\tools\Init;
 
+Init::accessRight('articles', 'see-list');
 $pagenumber = pagenumber::get();
 $articles = new ArticlePagedList($pagenumber);
 $rights = my_rights::get('articles');

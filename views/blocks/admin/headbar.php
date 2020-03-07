@@ -1,7 +1,6 @@
 <?php /** @var frame\views\Block $self */
 
 use engine\articles\Article;
-use engine\users\cash\my_group;
 use engine\users\cash\user_me;
 use engine\messages\Message;
 use frame\tools\Logger;
@@ -9,11 +8,16 @@ use frame\tools\trackers\read\ReadLimitedProgressTracker as Tracker;
 use engine\users\cash\my_rights;
 
 $me = user_me::get();
-$group = my_group::get();
-$unreadedArticles = Article::countUnreaded($me->id);
-$logger = new Logger('log.txt');
-$logTracker = new Tracker('log', crc32('log.txt'), count($logger->read()), $me->id);
-$logNewRecords = $logTracker->loadUnreaded();
+$articleRights = my_rights::get('articles');
+if ($articleRights->can('see-new-list')) {
+    $unreadedArticles = Article::countUnreaded($me->id);
+}
+$adminRights = my_rights::get('admin');
+if ($adminRights->can('see-logs')) {
+    $logger = new Logger(ROOT_DIR . '/log.txt');
+    $logTracker = new Tracker('log', crc32('log.txt'), count($logger->read()), $me->id);
+    $logNewRecords = $logTracker->loadUnreaded();
+}
 $usersRights = my_rights::get('users');
 $messagesRights = my_rights::get('messages');
 if ($messagesRights->can('use')) $unreadedMessages = Message::countUnreaded($me->id);
@@ -24,10 +28,10 @@ if ($messagesRights->can('use')) $unreadedMessages = Message::countUnreaded($me-
 </div>
 <div class="head-bar__right">
     <div class="notice-bar">
-        <?php if ($unreadedArticles !== 0) : ?>
+        <?php if ($articleRights->can('see-new-list') && $unreadedArticles !== 0) : ?>
             <a href="/admin/new/articles"><i class="fontello icon-rss"></i> <?= $unreadedArticles ?></a>
         <?php endif ?>
-        <?php if ($logNewRecords !== 0) : ?>
+        <?php if ($adminRights->can('see-logs') && $logNewRecords !== 0) : ?>
             <a href="/admin/log"><i class="fontello icon-attention"></i> <?= $logNewRecords ?></a>
         <?php endif ?>
     </div>

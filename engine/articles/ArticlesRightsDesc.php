@@ -13,7 +13,10 @@ class ArticlesRightsDesc extends RightsDesc
             'edit-all' => 'Edit all articles',
             'edit-own' => 'Edit own article',
             'delete-all' => 'Delete all articles',
-            'delete-own' => 'Delete own article'
+            'delete-own' => 'Delete own article',
+            'see-list' => 'See a list of articles',
+            'see-new-list' => 'See a list of new articles',
+            'configure' => 'Confugure the module',
         ];
     }
 
