@@ -1,6 +1,9 @@
 {
-    "pages/admin": "admin",
-    "pages/api": null,
     "pages": "main",
-    "widgets": "widget"
+    "pages/admin": "admin",
+    "pages/admin/statistics": "admin-stats",
+    "pages/api": null,
+    "pages/api/stats": "api-stats",
+    "widgets": "widget",
+    "layouts/admin-stats": "admin"
 }

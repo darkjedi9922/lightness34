@@ -1,6 +1,5 @@
 <?php /** @var frame\views\Page $self */
 
-use frame\tools\Init;
 use frame\lists\base\IdentityList;
 use engine\statistics\stats\CashRouteStat;
 use engine\statistics\stats\CashValueStat;
@@ -10,10 +9,7 @@ use engine\statistics\actions\ClearStatistics;
 use frame\database\Records;
 use frame\lists\iterators\IdentityIterator;
 
-Init::accessRight('admin', 'see-logs');
-
 $clear = new ViewAction(ClearStatistics::class, ['module' => 'stat/cash']);
-
 $routes = new IdentityList(CashRouteStat::class, ['id' => 'DESC']);
 $routesProps = [];
 foreach ($routes as $route) {

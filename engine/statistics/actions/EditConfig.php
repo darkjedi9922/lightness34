@@ -59,6 +59,11 @@ class EditConfig extends ActionBody
         ];
     }
 
+    public function initialize(array $get)
+    {
+        Init::accessRight('stat', 'configure');
+    }
+
     public function succeed(array $post, array $files)
     {
         $config = new Json(ROOT_DIR . '/config/statistics.json');

@@ -1,10 +1,7 @@
 <?php /** @var frame\views\Page $self */
 
-use frame\tools\Init;
 use frame\tools\JsonEncoder;
 use frame\cash\database;
-
-Init::accessRight('admin', 'see-logs');
 
 $tablesProps = ['tables' => []];
 $tables = database::get()->query("SHOW TABLES")->readColumn(0);

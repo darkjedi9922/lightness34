@@ -20,6 +20,7 @@ class ClearStatistics extends ActionBody
 
     public function initialize(array $get)
     {
+        Init::accessRight('stat', 'clear');
         $this->module = Core::$app->getModule($get['module']->get());
         Init::require($this->module !== null);
         Init::require(is_subclass_of($this->module, BaseStatisticsSubModule::class));

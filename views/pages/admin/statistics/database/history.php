@@ -1,6 +1,5 @@
 <?php /** @var frame\views\Page $self */
 
-use frame\tools\Init;
 use frame\lists\base\IdentityList;
 use engine\statistics\stats\QueryRouteStat;
 use frame\lists\iterators\IdentityIterator;
@@ -10,10 +9,7 @@ use frame\actions\ViewAction;
 use engine\statistics\actions\ClearStatistics;
 use frame\tools\JsonEncoder;
 
-Init::accessRight('admin', 'see-logs');
-
 $clear = new ViewAction(ClearStatistics::class, ['module' => 'stat/db']);
-
 $queryHistoryProps = ['routes' => []];
 $queryRoutes = new IdentityList(QueryRouteStat::class, ['id' => 'DESC']);
 foreach ($queryRoutes as $routeStat) {

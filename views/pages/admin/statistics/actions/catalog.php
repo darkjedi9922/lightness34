@@ -1,10 +1,8 @@
 <?php /** @var frame\views\Page $self */
 
-use frame\tools\Init;
 use frame\actions\ActionBody;
 use engine\statistics\lists\ActionList;
 
-Init::accessRight('admin', 'see-logs');
 $actions = new ActionList;
 ?>
 

@@ -1,6 +1,5 @@
 <?php /** @var frame\views\Page $self */
 
-use frame\tools\Init;
 use frame\tools\JsonEncoder;
 use frame\lists\base\IdentityList;
 use engine\statistics\stats\EventRouteStat;
@@ -10,8 +9,6 @@ use engine\statistics\stats\EventEmitStat;
 use frame\lists\iterators\IdentityIterator;
 use frame\actions\ViewAction;
 use engine\statistics\actions\ClearStatistics;
-
-Init::accessRight('admin', 'see-logs');
 
 $clear = new ViewAction(ClearStatistics::class, ['module' => 'stat/events']);
 

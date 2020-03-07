@@ -1,11 +1,8 @@
 <?php /** @var frame\views\Page $self */
 
 use frame\core\Core;
-use frame\tools\Init;
 use frame\modules\Module;
 use engine\users\User;
-
-Init::accessRight('admin', 'see-logs');
 
 $listProps = ['list' => []];
 $modules = Core::$app->getModules();

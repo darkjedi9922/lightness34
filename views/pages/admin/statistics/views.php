@@ -1,6 +1,5 @@
 <?php /** @var frame\views\Page $self */
 
-use frame\tools\Init;
 use frame\actions\ViewAction;
 use engine\statistics\actions\ClearStatistics;
 use frame\lists\iterators\IdentityIterator;
@@ -10,10 +9,7 @@ use engine\statistics\stats\ViewRouteStat;
 use engine\statistics\stats\ViewStat;
 use engine\statistics\stats\ViewMetaStat;
 
-Init::accessRight('admin', 'see-logs');
-
 $clear = new ViewAction(ClearStatistics::class, ['module' => 'stat/views']);
-
 $routes = [];
 $routesIt = new IdentityIterator(
     Records::from(ViewRouteStat::getTable())

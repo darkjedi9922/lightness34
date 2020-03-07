@@ -7,7 +7,7 @@ use frame\actions\ViewAction;
 use engine\statistics\actions\EditConfig;
 use frame\tools\JsonEncoder;
 
-Init::accessGroup(Group::ROOT_ID);
+Init::accessRight('stat', 'configure');
 
 $config = config::get('statistics');
 $edit = new ViewAction(EditConfig::class, ['name' => 'statistics']);

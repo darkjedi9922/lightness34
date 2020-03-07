@@ -36,7 +36,7 @@ class StatisticsModule extends Module
 
     public function createRightsDescription(): ?RightsDesc
     {
-        return null;
+        return new StatsRightsDesc;
     }
 
     private function setupEventHandlers(array $submodules)
