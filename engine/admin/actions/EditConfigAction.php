@@ -35,10 +35,8 @@ class EditConfigAction extends ActionBody
     public function initialize(array $get)
     {
         $name = $get['name']->get();
-        Init::require($name);
         $this->config = new Json(ROOT_DIR . '/config/' . $name . '.json');
         Init::require(!empty($this->config->getData()));
-        Init::access((int) user_me::get()->group_id === Group::ROOT_ID);
     }
     
     public function succeed(array $post, array $files)

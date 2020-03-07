@@ -31,19 +31,15 @@ if ($messagesRights->can('use')) $unreadedMessages = Message::countUnreaded($me-
             <a href="/admin/log"><i class="fontello icon-attention"></i> <?= $logNewRecords ?></a>
         <?php endif ?>
     </div>
-    <?php if ($usersRights->can('see-own', $me) || $messagesRights->can('use')) : ?>
-        <div class="mini-profile">
-            <?php if ($messagesRights->can('use')) : ?>
-                <?php if ($unreadedMessages === 0) : ?>
-                    <a class="messages" href="/admin/profile/dialogs"><i class="fontello icon-email"></i></a>
-                <?php else : ?>
-                    <a class="messages new" href="/admin/profile/dialogs"><i class="fontello icon-email"></i><span class="amount"> <?= $unreadedMessages ?></span></a>
-                <?php endif ?>
+    <div class="mini-profile">
+        <?php if ($messagesRights->can('use')) : ?>
+            <?php if ($unreadedMessages === 0) : ?>
+                <a class="messages" href="/admin/profile/dialogs"><i class="fontello icon-email"></i></a>
+            <?php else : ?>
+                <a class="messages new" href="/admin/profile/dialogs"><i class="fontello icon-email"></i><span class="amount"> <?= $unreadedMessages ?></span></a>
             <?php endif ?>
-            <?php if ($usersRights->can('see-own', $me)): ?>
-                <img class="avatar" src='/<?= $me->getAvatarUrl() ?>'>
-                <a class="login" href='/admin/users/profile/<?= $me->login ?>'><?= $me->login ?></a>
-            <?php endif ?>
-        </div>
-    <?php endif ?>
+        <?php endif ?>
+        <img class="avatar" src='/<?= $me->getAvatarUrl() ?>'>
+        <a class="login" href='/admin/users/profile/<?= $me->login ?>'><?= $me->login ?></a>
+    </div>
 </div>

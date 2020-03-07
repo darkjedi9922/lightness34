@@ -11,7 +11,7 @@ $userRights = my_rights::get('users');
 $auth = new Auth;
 $me = user_me::get();
 
-$doShowMiniProfile = $auth->isLogged() && $userRights->can('see-own', $me);
+$doShowMiniProfile = $auth->isLogged();
 $doShowWelcomeWidget = !$auth->isLogged() && $userRights->can('add');
 ?>
 
