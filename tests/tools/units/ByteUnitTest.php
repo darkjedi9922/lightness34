@@ -56,4 +56,30 @@ class ByteUnitTest extends TestCase
             [2, ByteUnit::TB, 1024*2, ByteUnit::GB]
         ];
     }
+
+    /**
+     * @dataProvider convenientFormProvider
+     */
+    public function testCalcsConvenientForm(
+        float $unconvenientValue, string $unconvenientUnit,
+        float $convenientValue, string $convenientUnit
+    ) {
+        $unit = new ByteUnit($unconvenientValue, $unconvenientUnit);
+        list($actualValue, $actualUnit) = $unit->calcConvenientForm();
+        $this->assertEquals($convenientValue, $actualValue);
+        $this->assertEquals($convenientUnit, $actualUnit);
+    }
+
+    public function convenientFormProvider(): array
+    {
+        return [
+            [1024, ByteUnit::BYTES, 1, ByteUnit::KB],
+            [0.5, ByteUnit::MB, 512, ByteUnit::KB],
+            [1024+512, ByteUnit::MB, 1.5, ByteUnit::GB],
+            [1024*2, ByteUnit::GB, 2, ByteUnit::TB],
+            [1, ByteUnit::KB, 1, ByteUnit::KB],
+            [0, ByteUnit::KB, 0, ByteUnit::KB],
+            [99983, ByteUnit::BYTES, 97.6, ByteUnit::KB]
+        ];
+    }
 }

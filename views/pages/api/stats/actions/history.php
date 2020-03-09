@@ -56,7 +56,7 @@ foreach ($history as $action) {
                 $status = 'OK';
         }
         $size = new ByteUnit($file->getSize(), ByteUnit::BYTES);
-        list($maxIntSize, $maxIntUnit) = $size->calcMaxInt();
+        list($convenientSize, $convenientUnit) = $size->calcConvenientForm();
         $actionFiles[] = [
             'field' => $field,
             'data' => $file->isEmpty() ? [] : [
@@ -64,7 +64,7 @@ foreach ($history as $action) {
                 'mime' => $fileData['mime'],
                 'tempName' => $file->getTempName(),
                 'status' => $status,
-                'size' => "$maxIntSize $maxIntUnit"
+                'size' => "$convenientSize $convenientUnit"
             ]
         ];
     }
