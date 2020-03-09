@@ -21,10 +21,15 @@ class TimeUnit
     private $value;
     private $unit;
 
-    public function __construct(int $value, int $unit)
+    public function __construct(float $value, int $unit)
     {
         $this->value = $value;
         $this->unit = $unit;
+    }
+
+    public function convertTo(int $unit): float
+    {
+        return $this->value * $this->unit / $unit;
     }
 
     public function calcMaxInt(array $allowedUnits = null): array
@@ -37,8 +42,9 @@ class TimeUnit
                 if (   $allowedUnits !== null 
                     && array_search(self::UNITS[$i], $allowedUnits, true) === false
                 ) continue;
-                if (($this->value * $this->unit) % self::UNITS[$i] !== 0) break;
-                $currentValue = ($this->value * $this->unit) / self::UNITS[$i];
+                $unitValue = $this->convertTo(self::UNITS[$i]);
+                if ((int) $unitValue != $unitValue) break;
+                $currentValue = $unitValue;
                 $currentUnit = self::UNITS[$i];
             }
         }

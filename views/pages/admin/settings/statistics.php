@@ -39,22 +39,17 @@ $formProps = [
         'title' => '',
         'values' => [[
             'label' => 'Часы',
-            'value' => EditConfig::STORE_TIME_UNIT_HOURS
+            'value' => TimeUnit::HOURS
         ], [
             'label' => 'Дни',
-            'value' => EditConfig::STORE_TIME_UNIT_DAYS
+            'value' => TimeUnit::DAYS
         ], [
             'label' => 'Месяцы',
-            'value' => EditConfig::STORE_TIME_UNIT_MONTHS
+            'value' => TimeUnit::MONTHS
         ]],
         'currentValue' => $edit->getPost(
             'storeTimeUnit',
-            $maxStoreTimeIntUnit === TimeUnit::HOURS
-                ? EditConfig::STORE_TIME_UNIT_HOURS
-                : ($maxStoreTimeIntUnit === TimeUnit::DAYS
-                    ? EditConfig::STORE_TIME_UNIT_DAYS
-                    : EditConfig::STORE_TIME_UNIT_MONTHS
-                )
+            $maxStoreTimeIntUnit
         )
     ]],
     'buttonText' => 'Сохранить',

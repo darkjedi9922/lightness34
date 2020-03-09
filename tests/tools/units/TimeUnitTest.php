@@ -68,4 +68,26 @@ class TimeUnitTest extends TestCase
             TimeUnit::MONTHS
         ]));
     }
+
+    /**
+     * @dataProvider convertedValuesProvider
+     */
+    public function testConvertsValuesFromeOneUnitToAnother(
+        float $initialValue, int $initialUnit,
+        float $convertedValue, int $convertedUnit
+    ) {
+        $time = new TimeUnit($initialValue, $initialUnit);
+        $actualConversion = $time->convertTo($convertedUnit);
+        $this->assertEquals($convertedValue, $actualConversion);
+    }
+
+    public function convertedValuesProvider(): array
+    {
+        return [
+            [60, TimeUnit::SECONDS, 1, TimeUnit::MINUTES],
+            [30, TimeUnit::MINUTES, 0.5, TimeUnit::HOURS],
+            [1.5, TimeUnit::HOURS, 90, TimeUnit::MINUTES],
+            [2, TimeUnit::MINUTES, 120, TimeUnit::SECONDS]
+        ];
+    }
 }
