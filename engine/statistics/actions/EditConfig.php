@@ -3,6 +3,7 @@
 use frame\actions\ActionBody;
 use frame\actions\fields\BooleanField;
 use frame\actions\fields\IntegerField;
+use frame\actions\fields\StringField;
 use frame\config\Json;
 use frame\tools\Init;
 use frame\tools\units\TimeUnit;
@@ -14,7 +15,7 @@ class EditConfig extends ActionBody
         return [
             'enabled' => BooleanField::class,
             'storeTimeValue' => IntegerField::class,
-            'storeTimeUnit' => IntegerField::class
+            'storeTimeUnit' => StringField::class
         ];
     }
 

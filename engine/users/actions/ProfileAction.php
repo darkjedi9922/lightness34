@@ -7,8 +7,7 @@ use frame\tools\Init;
 use engine\users\User;
 use engine\users\Gender;
 use frame\cash\config;
-
-use function lightlib\bytes;
+use frame\tools\units\ByteUnit;
 
 abstract class ProfileAction extends ActionBody
 {
@@ -125,10 +124,10 @@ abstract class ProfileAction extends ActionBody
     {
         $errors = [];
 
-        $maxByteSize = bytes(
+        $maxByteSize = (int) (new ByteUnit(
             $this->config->{'avatar.max_size.value'},
-            $this->config->{'avatar.max_size.unit'}
-        );
+            $this->config->{'avatar.max_size.unit'})
+        )->convertTo(ByteUnit::BYTES);
         if ($avatar->hasSizeError($maxByteSize)) {
             $errors[] = static::E_AVATAR_SIZE;
             return $errors;

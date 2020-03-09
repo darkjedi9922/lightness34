@@ -2,15 +2,22 @@
 
 class ByteUnit extends Unit
 {
-    const BYTES = 1;
-    const KB = self::BYTES * 1024;
-    const MB = self::KB * 1024;
-    const GB = self::MB * 1024;
-    const TB = self::GB * 1024;
-    const PB = self::TB * 1024;
+    const BYTES = 'bytes';
+    const KB = 'KB';
+    const MB = 'MB';
+    const GB = 'GB';
+    const TB = 'TB';
+    const PB = 'PB';
 
     public static function getOrderedUnits(): array
     {
-        return [self::BYTES, self::KB, self::MB, self::GB, self::TB, self::PB];
+        return [
+            self::BYTES => 1,
+            self::KB    => 1*1024,
+            self::MB    => 1*1024*1024,
+            self::GB    => 1*1024*1024*1024,
+            self::TB    => 1*1024*1024*1024*1024,
+            self::PB    => 1*1024*1024*1024*1024*1024
+        ];
     }
 }

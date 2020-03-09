@@ -6,7 +6,7 @@ use frame\lists\base\IdentityList;
 use engine\statistics\stats\ActionStat;
 use frame\actions\fields\PasswordField;
 use frame\actions\UploadedFile;
-use function lightlib\bytes_to;
+use frame\tools\units\ByteUnit;
 
 $clear = new ViewAction(ClearStatistics::class, ['module' => 'stat/actions']);
 
@@ -55,6 +55,8 @@ foreach ($history as $action) {
             default:
                 $status = 'OK';
         }
+        $size = new ByteUnit($file->getSize(), ByteUnit::BYTES);
+        list($maxIntSize, $maxIntUnit) = $size->calcMaxInt();
         $actionFiles[] = [
             'field' => $field,
             'data' => $file->isEmpty() ? [] : [
@@ -62,7 +64,7 @@ foreach ($history as $action) {
                 'mime' => $fileData['mime'],
                 'tempName' => $file->getTempName(),
                 'status' => $status,
-                'size' => round(bytes_to($file->getSize(), 'KB'), 1) . ' KB'
+                'size' => "$maxIntSize $maxIntUnit"
             ]
         ];
     }

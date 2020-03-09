@@ -2,18 +2,22 @@
 
 class TimeUnit extends Unit
 {
-    const SECONDS = 1;
-    const MINUTES = self::SECONDS * 60;
-    const HOURS = self::MINUTES * 60;
-    const DAYS = self::HOURS * 24;
-    const MONTHS = self::DAYS * 30;
-    const YEARS = self::MONTHS * 12;
+    const SECONDS = 'seconds';
+    const MINUTES = 'minutes';
+    const HOURS = 'hours';
+    const DAYS = 'days';
+    const MONTHS = 'months';
+    const YEARS = 'years';
 
     public static function getOrderedUnits(): array
     {
         return [
-            self::SECONDS, self::MINUTES, self::HOURS,
-            self::DAYS, self::MONTHS, self::YEARS
+            self::SECONDS   => 1,
+            self::MINUTES   => 1*60,
+            self::HOURS     => 1*60*60,
+            self::DAYS      => 1*60*60*24,
+            self::MONTHS    => 1*60*60*24*30,
+            self::YEARS     => 1*60*60*24*30*12
         ];
     }
 }

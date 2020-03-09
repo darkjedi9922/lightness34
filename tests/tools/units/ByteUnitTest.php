@@ -8,10 +8,10 @@ class ByteUnitTest extends TestCase
     /**
      * @dataProvider valueMaxIntUnitValuesProvider
      */
-    public function testDefinesMaxIntegralUnitFromAValue(
+    public function testDefinesMaxIntegralUnitFromABaseValue(
         int $value,
         int $expectedValue,
-        int $expectedUnit
+        string $expectedUnit
     ) {
         $time = new ByteUnit($value, ByteUnit::BYTES);
         list($maxValue, $maxUnit) = $time->calcMaxInt();
@@ -30,7 +30,8 @@ class ByteUnitTest extends TestCase
             [1024*1024+1024*512, 1536, ByteUnit::KB],
             [1024*1024*1024, 1, ByteUnit::GB],
             [1024*1024*1024*1024, 1, ByteUnit::TB],
-            [1024*1024*1024*1024*1024, 1, ByteUnit::PB]
+            [1024*1024*1024*1024*1024, 1, ByteUnit::PB],
+            [0, 0, ByteUnit::BYTES]
         ];
     }
 
@@ -38,8 +39,8 @@ class ByteUnitTest extends TestCase
      * @dataProvider convertedValuesProvider
      */
     public function testConvertsValuesFromeOneUnitToAnother(
-        float $initialValue, int $initialUnit,
-        float $convertedValue, int $convertedUnit
+        float $initialValue, string $initialUnit,
+        float $convertedValue, string $convertedUnit
     ) {
         $time = new ByteUnit($initialValue, $initialUnit);
         $actualConversion = $time->convertTo($convertedUnit);

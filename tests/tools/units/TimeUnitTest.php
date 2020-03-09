@@ -11,7 +11,7 @@ class TimeUnitTest extends TestCase
     public function testDefinesMaxIntegralUnitFromSeconds(
         int $seconds,
         int $expectedValue,
-        int $expectedUnit
+        string $expectedUnit
     ) {
         $time = new TimeUnit($seconds, TimeUnit::SECONDS);
         list($maxValue, $maxUnit) = $time->calcMaxInt();
@@ -40,7 +40,7 @@ class TimeUnitTest extends TestCase
     public function testDefinesMaxIntegralUnitFromHours(
         int $hours,
         int $expectedValue,
-        int $expectedUnit
+        string $expectedUnit
     ) {
         $time = new TimeUnit($hours, TimeUnit::HOURS);
         list($maxValue, $maxUnit) = $time->calcMaxInt();
@@ -73,8 +73,8 @@ class TimeUnitTest extends TestCase
      * @dataProvider convertedValuesProvider
      */
     public function testConvertsValuesFromeOneUnitToAnother(
-        float $initialValue, int $initialUnit,
-        float $convertedValue, int $convertedUnit
+        float $initialValue, string $initialUnit,
+        float $convertedValue, string $convertedUnit
     ) {
         $time = new TimeUnit($initialValue, $initialUnit);
         $actualConversion = $time->convertTo($convertedUnit);

@@ -2,17 +2,17 @@
 
 use frame\actions\fields\FileField;
 use frame\cash\config;
-use function lightlib\bytes;
+use frame\tools\units\ByteUnit;
 
 class UserAvatarField extends FileField
 {
     public function isValidByteSize(): bool
     {
         $config = config::get('users');
-        return !$this->get()->hasSizeError(bytes(
+        return !$this->get()->hasSizeError((int) (new ByteUnit(
             $config->{'avatar.max_size.value'},
             $config->{'avatar.max_size.unit'}
-        ));
+        ))->convertTo(ByteUnit::BYTES));
     }
 
     public function isImage(): bool

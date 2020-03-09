@@ -8,16 +8,16 @@ abstract class Unit
 
     public abstract static function getOrderedUnits(): array;
 
-    public function __construct(float $value, int $unit)
+    public function __construct(float $value, string $unit)
     {
         $this->value = $value;
         $this->unit = $unit;
         $this->units = static::getOrderedUnits();
     }
 
-    public function convertTo(int $unit): float
+    public function convertTo(string $unit): float
     {
-        return $this->value * $this->unit / $unit;
+        return $this->value * $this->units[$this->unit] / $this->units[$unit];
     }
 
     public function calcMaxInt(array $allowedUnits = null): array

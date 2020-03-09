@@ -137,32 +137,6 @@ function decode_specials($data)
 // =============================================================================
 
 /**
- * @param int $number
- * @param string $unit KB|MB|GB
- * @return int
- */
-function bytes($number, $unit)
-{
-	if ($unit === 'KB') return $number * 1024;
-	else if ($unit === 'MB') return $number * 1024 * 1024;
-	else if ($unit === 'GB') return $number * 1024 * 1024 * 1024;
-	else return $number;
-}
-
-/**
- * @param string $unit KB|MB|GB
- */
-function bytes_to(int $bytes, string $unit): float
-{
-    if ($unit === 'KB') return $bytes / 1024;
-    else if ($unit === 'MB') return $bytes / (1024 * 1024);
-    else if ($unit === 'GB') return $bytes / (1024 * 1024 * 1024);
-    else return $bytes;
-}
-
-// =============================================================================
-
-/**
  * Перебирает по-порядку каждый заданный аргумент (их может быть сколько угодно)
  * и возвращает тот, который в bool равен true. Если ни один, кроме последнего
  * не соответсвует условию, вернет последний аргумент.
