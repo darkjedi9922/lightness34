@@ -28,6 +28,8 @@ class Core
      */
     public static $app = null;
 
+    private $uses = [];
+
     /**
      * @var Router Роутер текущего запроса
      */
@@ -77,6 +79,16 @@ class Core
         } catch (\Throwable $error) {
             $this->handleError($error);
         }
+    }
+
+    public function use(string $interface, string $class)
+    {
+        $this->uses[$interface] = $class;
+    }
+
+    public function getUse(string $interface): ?string
+    {
+        return $this->uses[$interface] ?? null;
     }
 
     /**
