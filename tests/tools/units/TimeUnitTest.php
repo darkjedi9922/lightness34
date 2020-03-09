@@ -1,4 +1,4 @@
-<?php namespace tests\tools;
+<?php
 
 use PHPUnit\Framework\TestCase;
 use frame\tools\units\TimeUnit;
