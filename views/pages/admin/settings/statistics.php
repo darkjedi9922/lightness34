@@ -1,16 +1,20 @@
 <?php /** @var frame\views\Page $self */
 
 use frame\tools\Init;
-use engine\users\Group;
 use frame\cash\config;
 use frame\actions\ViewAction;
 use engine\statistics\actions\EditConfig;
 use frame\tools\JsonEncoder;
+use frame\tools\units\TimeUnit;
 
 Init::accessRight('stat', 'configure');
 
 $config = config::get('statistics');
 $edit = new ViewAction(EditConfig::class, ['name' => 'statistics']);
+$storeTime = new TimeUnit($config->storeTimeInSeconds, TimeUnit::SECONDS);
+list($maxStoreTimeIntValue, $maxStoreTimeIntUnit) = $storeTime->calcMaxInt([
+    TimeUnit::HOURS, TimeUnit::DAYS, TimeUnit::MONTHS
+]);
 
 $formProps = [
     'actionUrl' => $edit->getUrl(),
@@ -27,10 +31,7 @@ $formProps = [
         'name' => 'storeTimeValue',
         'defaultValue' => (string)$edit->getPost(
             'storeTimeValue',
-            EditConfig::calcStoreTimeFromSeconds(
-                $config->storeTimeInSeconds,
-                EditConfig::STORE_TIME_UNIT_HOURS
-            )
+            $maxStoreTimeIntValue
         )
     ], [
         'type' => 'radio',
@@ -48,7 +49,12 @@ $formProps = [
         ]],
         'currentValue' => $edit->getPost(
             'storeTimeUnit',
-            EditConfig::STORE_TIME_UNIT_HOURS
+            $maxStoreTimeIntUnit === TimeUnit::HOURS
+                ? EditConfig::STORE_TIME_UNIT_HOURS
+                : ($maxStoreTimeIntUnit === TimeUnit::DAYS
+                    ? EditConfig::STORE_TIME_UNIT_DAYS
+                    : EditConfig::STORE_TIME_UNIT_MONTHS
+                )
         )
     ]],
     'buttonText' => 'Сохранить',

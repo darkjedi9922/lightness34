@@ -29,21 +29,6 @@ class EditConfig extends ActionBody
         }
     }
 
-    /**
-     * @throws InvalidArgumentException if unit is not equals one of this action
-     * unit constants.
-     */
-    public static function calcStoreTimeFromSeconds(int $seconds, string $unit): int
-    {
-        switch ($unit) {
-            case self::STORE_TIME_UNIT_HOURS: return $seconds / (60 * 60);
-            case self::STORE_TIME_UNIT_DAYS: return $seconds / (24 * 60 * 60);
-            case self::STORE_TIME_UNIT_MONTHS: return $seconds / (30 * 24 * 60 * 60);
-            default:
-                throw new InvalidArgumentException("Unit $unit is not supported");
-        }
-    }
-
     public function listPost(): array
     {
         return [
