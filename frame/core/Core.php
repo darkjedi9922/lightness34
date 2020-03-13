@@ -83,12 +83,40 @@ class Core
 
     public function use(string $interface, string $class)
     {
-        $this->uses[$interface] = $class;
+        $this->uses[$interface] = [$class];
     }
 
-    public function getUse(string $interface): ?string
+    public function useDecoration(string $interface, string $class)
     {
-        return $this->uses[$interface] ?? null;
+        $use = $this->uses[$interface] ?? [];
+        if (is_object($use)) $this->uses[$interface] = new $class($use);
+        else {
+            $use[] = $class;
+            $this->uses[$interface] = $use;
+        } 
+    }
+
+    // public function getUse(string $interface): ?string
+    // {
+    //     return $this->uses[$interface] ?? null;
+    // }
+
+    public function getUseInstance(string $interface): object
+    {
+        $use = $this->uses[$interface] ?? [];
+        // Элементом $use может быть либо строка с классом, либо уже готовый
+        // экземпляр (объект) этого использования, либо null.
+        if (is_object($use)) return $use;
+        else if (empty($use)) {
+            $this->uses[$interface] = new $interface;
+            return $this->uses[$interface];
+        } else {
+            $object = $this->getUseInstance($use[0]);
+            for ($i = 1, $c = count($use); $i < $c; ++$i) {
+                $object = new $use[0]($object);
+            }
+            return $object;
+        }
     }
 
     /**
