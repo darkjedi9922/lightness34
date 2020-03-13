@@ -1,6 +1,6 @@
 <?php namespace frame\macros;
 
-use frame\core\Engine;
+use frame\core\Component;
 
 /**
  * Реализует механизм событий.
@@ -14,7 +14,7 @@ use frame\core\Engine;
  * 
  * Одними из блокирующих событий являются события самого EventManager.
  */
-class EventManager extends Engine
+class EventManager extends Component
 {
     /**
      * Происходит при подписке нового слушателя на событие.

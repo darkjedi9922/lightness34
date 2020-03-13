@@ -2,7 +2,7 @@
 
 use frame\macros\EventManager;
 
-class EventsEngineExample extends EventManager
+class EventsComponentExample extends EventManager
 {
     public $counter = 0;
 

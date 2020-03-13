@@ -81,12 +81,12 @@ class Core
         }
     }
 
-    public function use(string $interface, string $class)
+    public function replace(string $interface, string $class)
     {
         $this->uses[$interface] = [$class];
     }
 
-    public function useDecoration(string $interface, string $class)
+    public function decorate(string $interface, string $class)
     {
         $use = $this->uses[$interface] ?? [];
         if (is_object($use)) $this->uses[$interface] = new $class($use);
@@ -95,11 +95,6 @@ class Core
             $this->uses[$interface] = $use;
         } 
     }
-
-    // public function getUse(string $interface): ?string
-    // {
-    //     return $this->uses[$interface] ?? null;
-    // }
 
     public function getUseInstance(string $interface): object
     {

@@ -1,6 +1,6 @@
 <?php namespace frame\core;
 
-class Engine
+abstract class Component
 {
     /** @return static */
     public static function get()
