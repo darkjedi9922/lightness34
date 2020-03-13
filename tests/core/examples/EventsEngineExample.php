@@ -1,8 +1,8 @@
 <?php namespace tests\core\examples;
 
-use frame\macros\Events;
+use frame\macros\EventManager;
 
-class EventsExample extends Events
+class EventsEngineExample extends EventManager
 {
     public $counter = 0;
 
