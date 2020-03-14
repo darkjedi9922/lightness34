@@ -1,13 +1,13 @@
 <?php namespace engine\statistics;
 
-use frame\core\Core;
 use frame\database\Records;
 use engine\statistics\stats\CashRouteStat;
 use engine\statistics\macros\cash\EndCollectCashStats;
 use engine\statistics\macros\cash\CollectCashCalls;
-use frame\tools\Cash;
 use engine\statistics\macros\cash\CollectCashError;
 use frame\modules\Module;
+use frame\errors\Errors;
+use frame\tools\Cash;
 
 class CashStatisticsSubModule extends BaseStatisticsSubModule
 {
@@ -41,7 +41,7 @@ class CashStatisticsSubModule extends BaseStatisticsSubModule
 
         return [
             Cash::EVENT_CALL => $this->callsCollector,
-            Core::EVENT_APP_ERROR => $errorCollector
+            Errors::EVENT_ERROR => $errorCollector
         ];
     }
 }

@@ -3,24 +3,16 @@
 use frame\route\Router;
 use frame\views\Page;
 use frame\tools\Logger;
-use frame\errors\ErrorException;
 use frame\errors\HttpError;
 use frame\config\Config;
 use frame\modules\Module;
 use frame\views\DynamicPage;
 use frame\macros\Events;
-use frame\tools\Debug;
 
 class Core
 {
     const EVENT_APP_START = 'core-app-started';
     const EVENT_APP_END = 'core-app-end';
-
-    /**
-     * Event of any uncaught error.
-     * Event args: Throwable.
-     */
-    const EVENT_APP_ERROR = 'core-app-error';
 
     /**
      * @var Core $app Экземпляр приложения. Инициализуется
@@ -40,18 +32,6 @@ class Core
      */
     public $config;
 
-    /**
-     * @var array Ключ - имя класса исключения, 
-     * значение - имя класса обработчика
-     */
-    private $handlers = [];
-
-    /**
-     * @var string Имя класса, обрабатывающего ошибки,
-     * на которые не был задан обработчик
-     */
-    private $defaultHandler = null;
-
     private $modules = [];
     private $executed = false;
 
@@ -62,11 +42,8 @@ class Core
         static::$app = $this;
 
         date_default_timezone_set('Europe/Kiev');
-
-        $this->enableErrorHandlers();
         $this->config = \frame\cash\config::get('core');
         $this->router = $router;
-        
     }
 
     public function __destruct()
@@ -124,25 +101,6 @@ class Core
     }
 
     /**
-     * @param string $throwableClass Имя класса Throwable исключения
-     * @param string $handlerClass Имя класса его обработчика. Обработчик
-     * должен реализовывать интерфейс ErrorHandler
-     */
-    public function setHandler($throwableClass, $handlerClass)
-    {
-        $this->handlers[$throwableClass] = $handlerClass;
-    }
-
-    /**
-     * Устанавливает обработчик ошибок, на которые не был задан обработчик
-     * @param string $handlerClass Имя класса обработчика
-     */
-    public function setDefaultHandler($handlerClass)
-    {
-        $this->defaultHandler = $handlerClass;
-    }
-
-    /**
      * @throws \Exception если модуль с таким именем уже существует.
      */
     public function setModule(Module $module)
@@ -179,48 +137,6 @@ class Core
         $page = $this->findPage($pagename);
         if ($page) $page->show();
         else throw new HttpError(404, 'Page ' . $pagename . ' does not exist.');
-    }
-
-    /**
-     * Регистрирует все обработчики ошибок, где они преобразуют ошибки в Throwable
-     * и делегируют их методу handleError()
-     */
-    private function enableErrorHandlers()
-    {
-        // error
-        set_error_handler(function ($type, $message, $file, $line) {
-            $this->handleError(new ErrorException($type, $message, $file, $line));
-        });
-        // shutdown error
-        register_shutdown_function(function () {
-            $e = error_get_last();
-            if ($e && in_array($e['type'], ErrorException::FATAL_ERRORS)) {
-                $this->handleError(new ErrorException(
-                    $e['type'], $e['message'], $e['file'], $e['line'])
-                );
-            }
-        });
-        // exceptions
-        set_exception_handler(function (\Throwable $e) {
-            $this->handleError($e);
-        });
-    }
-
-    /**
-     * Абсолютно все необработанные ошибки и исключения всех видов
-     * и уровней попадают сюда в виде Throwable
-     */
-    private function handleError(\Throwable $e)
-    {
-        $logging = $this->config->{'log.enabled'};
-        if ($logging) $this->writeInLog(Logger::ERROR, Debug::getErrorMessage($e));
-
-        Events::get()->emit(self::EVENT_APP_ERROR, $e);
-
-        if (isset($this->handlers[get_class($e)])) 
-            (new $this->handlers[get_class($e)])->handle($e);
-        else if ($this->defaultHandler) (new $this->defaultHandler)->handle($e);
-        else throw $e;
     }
 
     private function findPage(string $pagename): ?Page

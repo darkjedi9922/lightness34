@@ -1,8 +1,5 @@
 <?php namespace engine\statistics;
 
-use frame\core\Core;
-use frame\actions\Action;
-
 use engine\statistics\stats\TimeStat;
 use engine\statistics\stats\ActionStat;
 use engine\statistics\macros\actions\StartCollectActionStat;
@@ -10,7 +7,9 @@ use engine\statistics\macros\actions\EndCollectActionStat;
 use engine\statistics\macros\actions\CollectActionError;
 use engine\statistics\macros\actions\EndCollectAppStat;
 use frame\database\Records;
+use frame\actions\Action;
 use frame\modules\Module;
+use frame\errors\Errors;
 
 class ActionStatisticsSubModule extends BaseStatisticsSubModule
 {
@@ -54,7 +53,7 @@ class ActionStatisticsSubModule extends BaseStatisticsSubModule
                 $this->stat,
                 $this->timer
             ),
-            Core::EVENT_APP_ERROR => $this->collectActionError
+            Errors::EVENT_ERROR => $this->collectActionError
         ];
     }
 }

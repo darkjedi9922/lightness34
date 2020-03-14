@@ -13,6 +13,7 @@ use engine\statistics\macros\routes\EndCollectRouteStat;
 use engine\statistics\stats\DynamicRouteParam;
 use frame\database\Records;
 use frame\modules\Module;
+use frame\errors\Errors;
 
 class RouteStatisticsSubModule extends BaseStatisticsSubModule
 {
@@ -53,7 +54,7 @@ class RouteStatisticsSubModule extends BaseStatisticsSubModule
             ActionMacro::EVENT_ACTION_TRIGGERED => new CollectActionRouteStat(
                 $this->routeStat
             ),
-            Core::EVENT_APP_ERROR => new CollectErrorRouteStat($this->routeStat),
+            Errors::EVENT_ERROR => new CollectErrorRouteStat($this->routeStat),
             View::EVENT_LOAD_START => $this->collectPage
         ];
     }

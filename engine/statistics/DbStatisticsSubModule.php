@@ -1,6 +1,5 @@
 <?php namespace engine\statistics;
 
-use frame\core\Core;
 use frame\database\Records;
 use frame\database\Database;
 use engine\statistics\stats\QueryRouteStat;
@@ -10,6 +9,7 @@ use engine\statistics\macros\database\StartCollectQueryStat;
 use engine\statistics\macros\database\EndCollectQueryStat;
 use engine\statistics\macros\database\CollectDbError;
 use frame\modules\Module;
+use frame\errors\Errors;
 
 class DbStatisticsSubModule extends BaseStatisticsSubModule
 {
@@ -44,7 +44,7 @@ class DbStatisticsSubModule extends BaseStatisticsSubModule
         $errorCollector = new CollectDbError($this->startQueryCollector);
 
         return [
-            Core::EVENT_APP_ERROR => $errorCollector,
+            Errors::EVENT_ERROR => $errorCollector,
             Database::EVENT_QUERY_START => $this->startQueryCollector,
             Database::EVENT_QUERY_END => $endQueryCollector
         ];

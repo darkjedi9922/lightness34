@@ -16,6 +16,7 @@ use engine\articles\ArticlesModule;
 use engine\comments\CommentsModule;
 use engine\statistics\StatisticsModule;
 
+use frame\errors\Errors;
 use frame\macros\Events;
 use frame\actions\ActionMacro;
 use frame\macros\ValueMacro;
@@ -27,9 +28,10 @@ use frame\views\macros\ApplyDefaultLayout;
 
 $app = new Core(new Router(Request::getRequest()));
 
-$app->setDefaultHandler(DefaultErrorHandler::class);
-$app->setHandler(HttpError::class, HttpErrorHandler::class);
-$app->setHandler(StrictException::class, StrictExceptionHandler::class);
+$errors = Errors::get();
+$errors->setDefaultHandler(DefaultErrorHandler::class);
+$errors->setHandler(HttpError::class, HttpErrorHandler::class);
+$errors->setHandler(StrictException::class, StrictExceptionHandler::class);
 
 $app->setModule(new StatisticsModule('stat'));
 $app->setModule(new AdminModule('admin'));

@@ -13,7 +13,7 @@ use frame\views\Layouted;
 use frame\views\View;
 use frame\cash\config;
 use frame\cash\database;
-use frame\core\Core;
+use frame\errors\Errors;
 
 class ViewStatisticsSubModule extends BaseStatisticsSubModule
 {
@@ -81,7 +81,7 @@ class ViewStatisticsSubModule extends BaseStatisticsSubModule
         $endViewCollector = new EndCollectViewStats($this->viewStartCollector);
 
         return [
-            Core::EVENT_APP_ERROR => new CollectViewError($this->viewStartCollector),
+            Errors::EVENT_ERROR => new CollectViewError($this->viewStartCollector),
             View::EVENT_LOAD_START => $this->viewStartCollector,
             View::EVENT_LOAD_END => $endViewCollector
         ];
