@@ -1,7 +1,7 @@
 <?php namespace frame\database;
 
-use frame\core\Core;
 use frame\database\QueryResult;
+use frame\macros\Events;
 
 /**
  * Данный класс использует MySQLi.
@@ -37,9 +37,9 @@ class Database
      */
     public function query(string $sql)
     {
-        Core::$app->events->emit(self::EVENT_QUERY_START, $sql);
+        Events::get()->emit(self::EVENT_QUERY_START, $sql);
         $result = $this->mysqli->query($sql);
-        Core::$app->events->emit(self::EVENT_QUERY_END, $sql);
+        Events::get()->emit(self::EVENT_QUERY_END, $sql);
         if ($this->mysqli->errno) {
             throw new QueryException(
                 $sql,

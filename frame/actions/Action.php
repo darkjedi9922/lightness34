@@ -3,7 +3,7 @@
 use frame\actions\fields\BaseField;
 use frame\actions\UploadedFile;
 use frame\errors\HttpError;
-use frame\core\Core;
+use frame\macros\Events;
 
 /**
  * Класс служит для обработки форм, но можно использовать для запуска других
@@ -154,7 +154,7 @@ class Action
      */
     public final function exec()
     {
-        Core::$app->events->emit(self::EVENT_START, $this);
+        Events::get()->emit(self::EVENT_START, $this);
         $this->prepareData(self::ARGS, $this->body->listGet());
         $this->prepareData(self::POST, $this->body->listPost());
         $this->body->initialize($this->data[self::ARGS]);
@@ -173,7 +173,7 @@ class Action
                 $this->data[self::FILES]
             ) ?? [];
         }
-        Core::$app->events->emit(self::EVENT_END, $this);
+        Events::get()->emit(self::EVENT_END, $this);
     }
 
     public function getErrors(): array

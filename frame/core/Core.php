@@ -8,7 +8,7 @@ use frame\errors\HttpError;
 use frame\config\Config;
 use frame\modules\Module;
 use frame\views\DynamicPage;
-use frame\macros\EventManager;
+use frame\macros\Events;
 use frame\tools\Debug;
 
 class Core
@@ -40,8 +40,6 @@ class Core
      */
     public $config;
 
-    public $events;
-
     /**
      * @var array Ключ - имя класса исключения, 
      * значение - имя класса обработчика
@@ -66,7 +64,6 @@ class Core
         date_default_timezone_set('Europe/Kiev');
 
         $this->enableErrorHandlers();
-        $this->events = new EventManager;
         $this->config = \frame\cash\config::get('core');
         $this->router = $router;
         
@@ -75,7 +72,7 @@ class Core
     public function __destruct()
     {
         try {
-            if ($this->executed) $this->events->emit(self::EVENT_APP_END);
+            if ($this->executed) Events::get()->emit(self::EVENT_APP_END);
         } catch (\Throwable $error) {
             $this->handleError($error);
         }
@@ -146,15 +143,6 @@ class Core
     }
 
     /**
-     * Менеджер событий, через который работает механизм событий в экземпляре класса.
-     * Из него можно узнать дополнительную информацию о работе событий.
-     */
-    public function getEventManager(): EventManager
-    {
-        return $this->events;
-    }
-
-    /**
      * @throws \Exception если модуль с таким именем уже существует.
      */
     public function setModule(Module $module)
@@ -186,7 +174,7 @@ class Core
     public function exec()
     {
         $this->executed = true;
-        $this->events->emit(self::EVENT_APP_START);
+        Events::get()->emit(self::EVENT_APP_START);
         $pagename = $this->router->pagename;
         $page = $this->findPage($pagename);
         if ($page) $page->show();
@@ -227,7 +215,7 @@ class Core
         $logging = $this->config->{'log.enabled'};
         if ($logging) $this->writeInLog(Logger::ERROR, Debug::getErrorMessage($e));
 
-        if (!$this->events->isBlocked()) $this->events->emit(self::EVENT_APP_ERROR, $e);
+        Events::get()->emit(self::EVENT_APP_ERROR, $e);
 
         if (isset($this->handlers[get_class($e)])) 
             (new $this->handlers[get_class($e)])->handle($e);

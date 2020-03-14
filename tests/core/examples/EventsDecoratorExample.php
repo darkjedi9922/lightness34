@@ -1,6 +1,6 @@
 <?php namespace tests\core\examples;
 
-use frame\macros\EventManager;
+use frame\macros\Events;
 use frame\core\Decorator;
 
 class EventsDecoratorExample extends Decorator
@@ -8,7 +8,7 @@ class EventsDecoratorExample extends Decorator
     public static $counter = 0;
     private $manager;
 
-    public function __construct(EventManager $manager)
+    public function __construct(Events $manager)
     {
         parent::__construct($manager);
         $this->manager = $manager;

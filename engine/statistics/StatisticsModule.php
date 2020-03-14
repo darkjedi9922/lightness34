@@ -3,9 +3,11 @@
 use frame\core\Core;
 use frame\modules\Module;
 use frame\modules\RightsDesc;
+use frame\macros\Events;
 use engine\statistics\BaseStatisticsSubModule;
-use frame\cash\config;
 use engine\statistics\macros\BaseStatCollector;
+use engine\statistics\tools\StatEvents;
+use frame\cash\config;
 
 class StatisticsModule extends Module
 {
@@ -41,10 +43,12 @@ class StatisticsModule extends Module
 
     private function setupEventHandlers(array $submodules)
     {
+        Core::$app->decorate(Events::class, StatEvents::class);
         foreach ($submodules as $submodule) {
             /** @var BaseStatisticsSubModule $submodule */
             $macros = $submodule->getAppEventHandlers();
-            foreach ($macros as $event => $macro) Core::$app->events->on($event, $macro);
+            foreach ($macros as $event => $macro) 
+                Events::get()->on($event, $macro);
         }
 
         // Нужно закончить сбор статистики (сохранить все в БД) после ее выключения. 
@@ -60,7 +64,7 @@ class StatisticsModule extends Module
         // В этом обработчике конца убираем все установленные обработчики событий
         // статистики (выключаем сбор статистики) и только после этого уже добавляем
         // все в БД.
-        Core::$app->events->on(
+        Events::get()->on(
             Core::EVENT_APP_START, 
             new class($submodules) extends BaseStatCollector {
                 private $statModules = [];
@@ -68,7 +72,7 @@ class StatisticsModule extends Module
                     $this->statModules = $statModules;
                 }
                 protected function collect(...$args) {
-                    Core::$app->events->on(
+                    Events::get()->on(
                         Core::EVENT_APP_END, 
                         new class($this->statModules) extends BaseStatCollector {
                             private $statModules;
@@ -80,7 +84,7 @@ class StatisticsModule extends Module
                                     /** @var BaseStatisticsSubModule $module */
                                     $macros = $module->getAppEventHandlers();
                                     foreach ($macros as $event => $macro) {
-                                        Core::$app->events->off($event, $macro);
+                                        Events::get()->off($event, $macro);
                                     }
                                 }
                                 foreach ($this->statModules as $module) {

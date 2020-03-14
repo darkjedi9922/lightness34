@@ -1,15 +1,15 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use frame\macros\EventManager;
+use frame\macros\Events;
 use tests\macros\examples\MacroEmptyExample;
 use tests\macros\examples\MacroAccumulationExample;
 
-class EventManagerTest extends TestCase
+class EventsTest extends TestCase
 {
     public function testSubscribesAMacroForAnEvent()
     {
-        $events = new EventManager;
+        $events = new Events;
         $macro = new MacroEmptyExample;
         $macro2 = new MacroEmptyExample;
         $events->on('event1', $macro);
@@ -24,7 +24,7 @@ class EventManagerTest extends TestCase
 
     public function testMacrosHandlesEmits()
     {
-        $events = new EventManager;
+        $events = new Events;
         $macro = new MacroAccumulationExample('hello');
         $events->on('say-hello', $macro);
 

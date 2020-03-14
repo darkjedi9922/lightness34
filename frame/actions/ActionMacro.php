@@ -8,6 +8,7 @@ use frame\route\Response;
 use frame\route\Router;
 use frame\route\Request;
 use frame\macros\GetMacro;
+use frame\macros\Events;
 
 class ActionMacro extends GetMacro
 {
@@ -18,7 +19,7 @@ class ActionMacro extends GetMacro
 
     protected function triggerExec(string $value)
     {
-        Core::$app->events->emit(self::EVENT_ACTION_TRIGGERED);
+        Events::get()->emit(self::EVENT_ACTION_TRIGGERED);
         $router = new ActionRouter;
         $this->action = $router->fromTriggerUrl(Core::$app->router->url);
         $tokenizer = new ActionToken($this->action);

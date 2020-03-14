@@ -16,6 +16,7 @@ use engine\articles\ArticlesModule;
 use engine\comments\CommentsModule;
 use engine\statistics\StatisticsModule;
 
+use frame\macros\Events;
 use frame\actions\ActionMacro;
 use frame\macros\ValueMacro;
 use frame\macros\BlockMacro;
@@ -37,10 +38,11 @@ $app->setModule(new MessagesModule('messages'));
 $app->setModule(new ArticlesModule('articles'));
 $app->setModule(new CommentsModule('comments', $app->getModule('articles')));
 
-$app->events->on(Core::EVENT_APP_START, new ActionMacro('action'));
-$app->events->on(Core::EVENT_APP_START, new ValueMacro('value'));
-$app->events->on(Core::EVENT_APP_START, new BlockMacro('block'));
-$app->events->on(Core::EVENT_APP_START, new WidgetMacro('widget'));
-$app->events->on(View::EVENT_LOAD_START, new ApplyDefaultLayout);
+$events = Events::get();
+$events->on(Core::EVENT_APP_START, new ActionMacro('action'));
+$events->on(Core::EVENT_APP_START, new ValueMacro('value'));
+$events->on(Core::EVENT_APP_START, new BlockMacro('block'));
+$events->on(Core::EVENT_APP_START, new WidgetMacro('widget'));
+$events->on(View::EVENT_LOAD_START, new ApplyDefaultLayout);
 
 $app->exec();

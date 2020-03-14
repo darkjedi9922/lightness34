@@ -1,6 +1,5 @@
 <?php namespace engine\statistics;
 
-use frame\core\Core;
 use engine\statistics\stats\EventRouteStat;
 use engine\statistics\stats\EventEmitStat;
 use engine\statistics\stats\EventSubscriberStat;
@@ -9,7 +8,8 @@ use engine\statistics\macros\events\CollectEventEmits;
 use engine\statistics\macros\events\StartCollectHandles;
 use engine\statistics\macros\events\EndCollectHandles;
 use engine\statistics\macros\events\EndCollectEvents;
-use frame\macros\EventManager;
+use engine\statistics\tools\StatEvents;
+use frame\macros\Events;
 use frame\database\Records;
 use frame\modules\Module;
 
@@ -62,16 +62,16 @@ class EventStatisticsSubModule extends BaseStatisticsSubModule
         $this->collectAlreadySubscribers($this->subsciberCollector);
 
         return [
-            EventManager::BLOCK_EVENT_SUBSCRIBE => $this->subsciberCollector,
-            EventManager::BLOCK_EVENT_EMIT => $this->emitCollector,
-            EventManager::BLOCK_EVENT_MACRO_START => $this->startHandleCollector,
-            EventManager::BLOCK_EVENT_MACRO_END => $this->endHandleCollector
+            StatEvents::EVENT_SUBSCRIBE => $this->subsciberCollector,
+            StatEvents::EVENT_EMIT => $this->emitCollector,
+            StatEvents::EVENT_MACRO_START => $this->startHandleCollector,
+            StatEvents::EVENT_MACRO_END => $this->endHandleCollector
         ];
     }
 
     private function collectAlreadySubscribers(CollectEventSubscribers $collector)
     {
-        $subscribers = Core::$app->events->getSubscribers();
+        $subscribers = Events::get()->getSubscribers();
         foreach ($subscribers as $event => $eventSubscribers) {
             foreach ($eventSubscribers as $subscriber) {
                 $collector->exec($event, $subscriber);

@@ -1,6 +1,6 @@
 <?php namespace frame\route;
 
-use frame\core\Core;
+use frame\macros\Events;
 
 use function lightlib\ob_end_clean_all;
 
@@ -66,7 +66,7 @@ class Response
         if (self::$finish) return;
        
         self::$finish = true;
-        Core::$app->events->emit(self::EVENT_FINISH);
+        Events::get()->emit(self::EVENT_FINISH);
         exit;
     }
 }

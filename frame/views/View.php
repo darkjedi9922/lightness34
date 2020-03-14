@@ -1,6 +1,6 @@
 <?php namespace frame\views;
 
-use frame\core\Core;
+use frame\macros\Events;
 
 function __show(View $self) 
 {
@@ -100,11 +100,11 @@ class View
     protected function getContent()
     {
         if ($this->cachedContent === null) {
-            Core::$app->events->emit(self::EVENT_LOAD_START, $this);
+            Events::get()->emit(self::EVENT_LOAD_START, $this);
             ob_start();
             __show($this);
             $this->cachedContent = ob_get_clean();
-            Core::$app->events->emit(self::EVENT_LOAD_END, $this);
+            Events::get()->emit(self::EVENT_LOAD_END, $this);
         }
         return $this->cachedContent;
     }
