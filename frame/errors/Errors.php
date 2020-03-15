@@ -5,6 +5,7 @@ use frame\core\Component;
 use frame\macros\Events;
 use frame\tools\Debug;
 use frame\tools\Logger;
+use frame\cash\config;
 
 class Errors extends Component
 {
@@ -81,7 +82,7 @@ class Errors extends Component
      */
     private function handleError(\Throwable $e)
     {
-        $logging = Core::$app->config->{'log.enabled'};
+        $logging = config::get('core')->{'log.enabled'};
         if ($logging) {
             Core::$app->writeInLog(Logger::ERROR, Debug::getErrorMessage($e));
         }

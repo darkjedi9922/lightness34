@@ -4,9 +4,9 @@ use frame\route\Router;
 use frame\views\Page;
 use frame\tools\Logger;
 use frame\errors\HttpError;
-use frame\config\Config;
 use frame\views\DynamicPage;
 use frame\macros\Events;
+use frame\cash\config;
 
 class Core
 {
@@ -26,11 +26,6 @@ class Core
      */
     public $router;
 
-    /**
-     * @var Config Конфиг core.json
-     */
-    public $config;
-
     private $executed = false;
 
     public function __construct(Router $router)
@@ -40,7 +35,6 @@ class Core
         static::$app = $this;
 
         date_default_timezone_set('Europe/Kiev');
-        $this->config = \frame\cash\config::get('core');
         $this->router = $router;
     }
 
@@ -100,7 +94,7 @@ class Core
      */
     public function writeInLog($type, $message)
     {
-        $logger = new Logger(ROOT_DIR . '/' . $this->config->{'log.file'});
+        $logger = new Logger(ROOT_DIR . '/' . config::get('core')->{'log.file'});
         $logger->write($type, $message);
     }
 

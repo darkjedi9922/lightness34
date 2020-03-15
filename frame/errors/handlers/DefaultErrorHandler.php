@@ -1,13 +1,13 @@
 <?php namespace frame\errors\handlers;
 
-use frame\core\Core;
 use frame\errors\StrictException;
-
-use function lightlib\ob_end_clean_all;
 use frame\route\Response;
 use frame\errors\HttpError;
 use frame\tools\Debug;
 use frame\views\ErrorPage;
+use frame\cash\config;
+
+use function lightlib\ob_end_clean_all;
 
 class DefaultErrorHandler implements ErrorHandler
 {
@@ -19,7 +19,7 @@ class DefaultErrorHandler implements ErrorHandler
         if (Response::getCode() === HttpError::OK) 
             Response::setCode(HttpError::INTERNAL_SERVER_ERROR);
 
-        $page = Core::$app->config->{'errors.errorPage'};
+        $page = config::get('core')->{'errors.errorPage'};
         if ($page !== null) {
             try {
                 (new ErrorPage($page))->show();

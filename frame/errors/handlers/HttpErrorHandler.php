@@ -1,8 +1,8 @@
 <?php namespace frame\errors\handlers;
 
-use frame\core\Core;
 use frame\route\Response;
 use frame\views\ErrorPage;
+use frame\cash\config;
 
 class HttpErrorHandler implements ErrorHandler
 {
@@ -12,7 +12,7 @@ class HttpErrorHandler implements ErrorHandler
     public function handle($error)
     {
         $code = $error->getCode();
-        $page = Core::$app->config->{"errors.$code.page"};
+        $page = config::get('core')->{"errors.$code.page"};
         Response::setCode($code);
         if (ErrorPage::find($page)) (new ErrorPage($page))->show();
         else {

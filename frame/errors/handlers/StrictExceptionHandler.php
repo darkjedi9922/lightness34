@@ -1,14 +1,14 @@
 <?php namespace frame\errors\handlers;
 
-use frame\core\Core;
 use frame\route\Response;
 use frame\errors\HttpError;
+use frame\cash\config;
 
 class StrictExceptionHandler implements ErrorHandler
 {
     public function handle($error)
     {
-        $logging = Core::$app->config->{'log.enabled'};
+        $logging = config::get('core')->{'log.enabled'};
         echo 'Error has occured but ' . $error->getMessage() . ($logging ? '. See more in the log.' : '');
         Response::setCode(HttpError::INTERNAL_SERVER_ERROR);
     }
