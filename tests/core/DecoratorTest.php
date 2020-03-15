@@ -22,7 +22,7 @@ class DecoratorTest extends TestCase
         $this->assertEquals(1, $counter);
         $this->assertEquals(0, EventsDecoratorExample::$counter);
 
-        $app->decorate(Events::class, EventsDecoratorExample::class);
+        $app->decorateComponent(Events::class, EventsDecoratorExample::class);
 
         Events::get()->emit('test');
         $this->assertEquals(2, $counter);

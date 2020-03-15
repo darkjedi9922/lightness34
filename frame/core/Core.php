@@ -55,33 +55,39 @@ class Core
         }
     }
 
-    public function replace(string $interface, string $class)
-    {
-        $this->uses[$interface] = [$class];
+    public function replaceComponent(
+        string $componentClass,
+        string $replaceComponentClass
+    ) {
+        $this->uses[$componentClass] = [$replaceComponentClass];
     }
 
-    public function decorate(string $interface, string $class)
+    public function decorateComponent(string $componentClass, string $decoratorClass)
     {
-        $use = $this->uses[$interface] ?? [];
-        if (is_object($use)) $this->uses[$interface] = new $class($use);
-        else {
-            $use[] = $class;
-            $this->uses[$interface] = $use;
+        $use = $this->uses[$componentClass] ?? [];
+        if (is_object($use)) {
+            $this->uses[$componentClass] = new $decoratorClass($use);
+        } else {
+            $use[] = $decoratorClass;
+            $this->uses[$componentClass] = $use;
         } 
     }
 
-    public function getUseInstance(string $interface): object
+    public function getComponent(string $componentClass): object
     {
-        $use = $this->uses[$interface] ?? [];
+        $use = $this->uses[$componentClass] ?? [];
         // Элементом $use может быть либо строка с классом, либо уже готовый
         // экземпляр (объект) этого использования, либо null.
         if (is_object($use)) return $use;
         else if (empty($use)) {
-            $this->uses[$interface] = new $interface;
-            return $this->uses[$interface];
+            // Тут создаем экземпляр компонента.
+            $this->uses[$componentClass] = new $componentClass;
+            return $this->uses[$componentClass];
         } else {
-            $object = $this->getUseInstance($use[0]);
+            // При i = 0 это Component.
+            $object = $this->getComponent($use[0]);
             for ($i = 1, $c = count($use); $i < $c; ++$i) {
+                // Оборачиваем в декораторы (i > 0).
                 $object = new $use[0]($object);
             }
             return $object;

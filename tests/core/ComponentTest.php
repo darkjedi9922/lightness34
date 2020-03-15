@@ -13,7 +13,10 @@ class ComponentTest extends TestCase
     public function testReplacesEvents()
     {
         $app = new Core(new Router);
-        $app->replace(Events::class, EventsComponentExample::class);
+
+        // Можно было бы Events::use(), но тогда будет подключаться класс Events,
+        // который мог бы и не понадобиться.
+        $app->replaceComponent(Events::class, EventsComponentExample::class);
 
         $this->assertEquals(0, EventsComponentExample::get()->counter);
         Events::get()->emit('test');
