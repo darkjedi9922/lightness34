@@ -6,7 +6,7 @@ use engine\users\User;
 use frame\cash\pagenumber;
 use engine\users\cash\user_me;
 use engine\users\Group;
-use frame\core\Core;
+use frame\modules\Modules;
 use frame\views\Pager;
 use frame\actions\ViewAction;
 use engine\comments\actions\AddComment;
@@ -25,7 +25,7 @@ $author = User::selectIdentity($article->author_id);
 $group = Group::selectIdentity($author->group_id);
 $prevPagenumber = pagenumber::get(true);
 $page = pagenumber::get();
-$moduleId = Core::$app->getModule('articles/comments')->getId();
+$moduleId = Modules::get()->findByName('articles/comments')->getId();
 $materialId = $article->id;
 $comments = new CommentList($moduleId, $materialId, $page);
 $pages = $comments->getPager()->countPages();
@@ -42,7 +42,7 @@ $articleCommentsData = [
         'avatarUrl' => '/' . $me->getAvatarUrl(),
         'login' => $me->login
     ],
-    // 'moduleId' => Core::$app->getModule('articles/comments')->getId(),
+    // 'moduleId' => Modules::get()->findByName('articles/comments')->getId(),
     // 'materialId' => $article->id,
     'list' => [],
     'pagerHtml' => ($pages > 1 ? (new Pager($comments->getPager(), 'admin'))->getHtml() : ''),

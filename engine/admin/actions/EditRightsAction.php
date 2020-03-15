@@ -6,9 +6,9 @@ use frame\tools\Init;
 use engine\users\Group;
 use frame\actions\fields\BaseField;
 use frame\actions\fields\IntegerField;
-use frame\core\Core;
 use frame\modules\GroupRights;
 use frame\modules\Module;
+use frame\modules\Modules;
 
 /**
  * Параметры:
@@ -56,7 +56,7 @@ class EditRightsAction extends ActionBody
     public function succeed(array $post, array $files)
     {
         $rights = $post['rights']->get();
-        $modules = Core::$app->getModules();
+        $modules = Modules::get()->toArray();
         foreach ($modules as $moduleName => $module) {
             /** @var Module $module */
             $desc = $module->createRightsDescription();

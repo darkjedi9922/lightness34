@@ -18,6 +18,8 @@ use engine\statistics\StatisticsModule;
 
 use frame\errors\Errors;
 use frame\macros\Events;
+use frame\modules\Modules;
+
 use frame\actions\ActionMacro;
 use frame\macros\ValueMacro;
 use frame\macros\BlockMacro;
@@ -33,12 +35,13 @@ $errors->setDefaultHandler(DefaultErrorHandler::class);
 $errors->setHandler(HttpError::class, HttpErrorHandler::class);
 $errors->setHandler(StrictException::class, StrictExceptionHandler::class);
 
-$app->setModule(new StatisticsModule('stat'));
-$app->setModule(new AdminModule('admin'));
-$app->setModule(new UsersModule('users'));
-$app->setModule(new MessagesModule('messages'));
-$app->setModule(new ArticlesModule('articles'));
-$app->setModule(new CommentsModule('comments', $app->getModule('articles')));
+$modules = Modules::get();
+$modules->set(new StatisticsModule('stat'));
+$modules->set(new AdminModule('admin'));
+$modules->set(new UsersModule('users'));
+$modules->set(new MessagesModule('messages'));
+$modules->set(new ArticlesModule('articles'));
+$modules->set(new CommentsModule('comments', $modules->findByName('articles')));
 
 $events = Events::get();
 $events->on(Core::EVENT_APP_START, new ActionMacro('action'));

@@ -3,7 +3,7 @@
 use frame\modules\RightsDesc;
 use frame\modules\UserRights;
 use frame\modules\GroupUser;
-use frame\core\Core;
+use frame\modules\Modules;
 
 class StatsRightsDesc extends RightsDesc
 {
@@ -20,7 +20,7 @@ class StatsRightsDesc extends RightsDesc
     {
         return [
             'configure' => function() use ($user) {
-                $statsModule = Core::$app->getModule('stat')->getId();
+                $statsModule = Modules::get()->findByName('stat')->getId();
                 $statsRights = new UserRights($this, $statsModule, $user);
                 return $statsRights->can('see');
             }

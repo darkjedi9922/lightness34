@@ -1,8 +1,8 @@
 <?php namespace engine\comments;
 
-use frame\core\Core;
 use frame\database\Identity;
 use frame\database\Records;
+use frame\modules\Modules;
 
 class Comment extends Identity
 {
@@ -14,7 +14,7 @@ class Comment extends Identity
     public static function count(string $module, int $materialId): int
     {
         return Records::from(static::getTable(), [
-            'module_id' => Core::$app->getModule($module)->getId(),
+            'module_id' => Modules::get()->findByName($module)->getId(),
             'material_id' => $materialId
         ])->count('id');
     }

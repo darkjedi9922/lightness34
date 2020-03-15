@@ -4,9 +4,9 @@ use engine\admin\actions\EditRightsAction;
 use frame\actions\ViewAction;
 use frame\tools\JsonEncoder;
 use engine\users\Group;
-use frame\core\Core;
 use frame\modules\GroupRights;
 use frame\modules\Module;
+use frame\modules\Modules;
 use frame\tools\Init;
 
 Init::accessGroup(Group::ROOT_ID);
@@ -16,7 +16,7 @@ $group = Group::selectIdentity($id);
 
 Init::require((bool) $group);
 
-$modules = Core::$app->getModules();
+$modules = Modules::get()->toArray();
 $edit = new ViewAction(EditRightsAction::class, ['id' => $id]);
 
 $fieldGroups = [];

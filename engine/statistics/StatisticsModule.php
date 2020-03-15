@@ -8,6 +8,7 @@ use engine\statistics\BaseStatisticsSubModule;
 use engine\statistics\macros\BaseStatCollector;
 use engine\statistics\tools\StatEvents;
 use frame\cash\config;
+use frame\modules\Modules;
 
 class StatisticsModule extends Module
 {
@@ -25,7 +26,7 @@ class StatisticsModule extends Module
         ];
 
         foreach ($submodules as $submodule) {
-            Core::$app->setModule($submodule);
+            Modules::get()->set($submodule);
         }
 
         $config = config::get('statistics');

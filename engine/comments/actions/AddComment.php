@@ -2,13 +2,13 @@
 
 use frame\actions\ActionBody;
 use engine\comments\Comment;
-use frame\core\Core;
 use frame\tools\Init;
 use frame\modules\Module;
 use engine\comments\CommentsModule;
 use engine\users\cash\user_me;
 use frame\actions\fields\IntegerField;
 use frame\actions\fields\StringField;
+use frame\modules\Modules;
 
 class AddComment extends ActionBody
 {
@@ -34,7 +34,7 @@ class AddComment extends ActionBody
 
     public function initialize(array $get)
     {
-        $this->module = Core::$app->findModule($get['module_id']->get());
+        $this->module = Modules::get()->findById($get['module_id']->get());
         Init::require($this->module !== null);
         Init::require(get_class($this->module) === CommentsModule::class);
         Init::accessRight($this->module->getName(), 'add');

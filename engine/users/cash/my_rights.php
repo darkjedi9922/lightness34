@@ -1,7 +1,7 @@
 <?php namespace engine\users\cash;
 
-use frame\core\Core;
 use frame\tools\Cash;
+use frame\modules\Modules;
 use frame\modules\UserRights;
 use engine\users\cash\user_me;
 
@@ -14,7 +14,7 @@ class my_rights extends Cash
     public static function get(string $module): UserRights
     {
         return self::cash($module, function() use ($module) {
-            $moduleInstance = Core::$app->getModule($module);
+            $moduleInstance = Modules::get()->findByName($module);
             if (!$moduleInstance)
                 throw new \Exception("There is no module $module.");
 

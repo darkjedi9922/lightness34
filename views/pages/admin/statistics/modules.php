@@ -1,11 +1,11 @@
 <?php /** @var frame\views\Page $self */
 
-use frame\core\Core;
 use frame\modules\Module;
 use engine\users\User;
+use frame\modules\Modules;
 
 $listProps = ['list' => []];
-$modules = Core::$app->getModules();
+$modules = Modules::get()->toArray();
 foreach ($modules as $name => $module) {
     /** @var Module $module */
     $parent = $module->getParent();

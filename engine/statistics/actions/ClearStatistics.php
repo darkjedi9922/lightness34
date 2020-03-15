@@ -2,7 +2,7 @@
 
 use frame\actions\ActionBody;
 use frame\tools\Init;
-use frame\core\Core;
+use frame\modules\Modules;
 use engine\statistics\BaseStatisticsSubModule;
 use frame\actions\fields\StringField;
 
@@ -21,7 +21,7 @@ class ClearStatistics extends ActionBody
     public function initialize(array $get)
     {
         Init::accessRight('stat', 'clear');
-        $this->module = Core::$app->getModule($get['module']->get());
+        $this->module = Modules::get()->findByName($get['module']->get());
         Init::require($this->module !== null);
         Init::require(is_subclass_of($this->module, BaseStatisticsSubModule::class));
     }

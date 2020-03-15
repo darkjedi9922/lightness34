@@ -5,7 +5,6 @@ use frame\views\Page;
 use frame\tools\Logger;
 use frame\errors\HttpError;
 use frame\config\Config;
-use frame\modules\Module;
 use frame\views\DynamicPage;
 use frame\macros\Events;
 
@@ -32,7 +31,6 @@ class Core
      */
     public $config;
 
-    private $modules = [];
     private $executed = false;
 
     public function __construct(Router $router)
@@ -104,35 +102,6 @@ class Core
     {
         $logger = new Logger(ROOT_DIR . '/' . $this->config->{'log.file'});
         $logger->write($type, $message);
-    }
-
-    /**
-     * @throws \Exception если модуль с таким именем уже существует.
-     */
-    public function setModule(Module $module)
-    {
-        if (isset($this->modules[$module->getName()])) throw new \Exception(
-            "The module with name {$module->getName()} have already been added.");
-        $this->modules[$module->getName()] = $module;
-    }
-
-    public function getModule(string $name): ?Module
-    {
-        return $this->modules[$name] ?? null;
-    }
-
-    public function getModules(): array
-    {
-        return $this->modules;
-    }
-
-    public function findModule(int $id): ?Module
-    {
-        foreach ($this->modules as $module) {
-            /** @var Module $module */
-            if ($module->getId() === $id) return $module;
-        }
-        return null;
     }
 
     public function exec()
