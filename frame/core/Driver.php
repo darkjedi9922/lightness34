@@ -1,10 +1,10 @@
 <?php namespace frame\core;
 
-abstract class Component
+abstract class Driver
 {
     /** @return static */
     public static function get()
     {
-        return Core::$app->getComponent(static::class);
+        return Core::$app->getDriver(static::class);
     }
 }

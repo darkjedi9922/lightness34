@@ -1,13 +1,13 @@
 <?php namespace frame\errors;
 
 use frame\core\Core;
-use frame\core\Component;
+use frame\core\Driver;
 use frame\macros\Events;
 use frame\tools\Debug;
 use frame\tools\Logger;
 use frame\cash\config;
 
-class Errors extends Component
+class Errors extends Driver
 {
     /**
      * Event of any uncaught error.

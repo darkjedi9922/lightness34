@@ -3,23 +3,23 @@ use PHPUnit\Framework\TestCase;
 use frame\core\Core;
 use frame\route\Router;
 use frame\macros\Events;
-use tests\core\examples\EventsComponentExample;
+use tests\core\examples\EventsDriverExample;
 
 /**
  * @runTestsInSeparateProcesses
  */
-class ComponentTest extends TestCase
+class DriverTest extends TestCase
 {
-    public function testReplacesEvents()
+    public function testReplacesDriver()
     {
         $app = new Core(new Router);
 
         // Можно было бы Events::use(), но тогда будет подключаться класс Events,
         // который мог бы и не понадобиться.
-        $app->replaceComponent(Events::class, EventsComponentExample::class);
+        $app->replaceDriver(Events::class, EventsDriverExample::class);
 
-        $this->assertEquals(0, EventsComponentExample::get()->counter);
+        $this->assertEquals(0, EventsDriverExample::get()->counter);
         Events::get()->emit('test');
-        $this->assertEquals(1, EventsComponentExample::get()->counter);
+        $this->assertEquals(1, EventsDriverExample::get()->counter);
     }
 }

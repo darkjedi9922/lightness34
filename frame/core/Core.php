@@ -47,37 +47,35 @@ class Core
         }
     }
 
-    public function replaceComponent(
-        string $componentClass,
-        string $replaceComponentClass
-    ) {
-        $this->uses[$componentClass] = [$replaceComponentClass];
+    public function replaceDriver(string $driverClass, string $newDriverClass)
+    {
+        $this->uses[$driverClass] = [$newDriverClass];
     }
 
-    public function decorateComponent(string $componentClass, string $decoratorClass)
+    public function decorateDriver(string $driverClass, string $decoratorClass)
     {
-        $use = $this->uses[$componentClass] ?? [];
+        $use = $this->uses[$driverClass] ?? [];
         if (is_object($use)) {
-            $this->uses[$componentClass] = new $decoratorClass($use);
+            $this->uses[$driverClass] = new $decoratorClass($use);
         } else {
             $use[] = $decoratorClass;
-            $this->uses[$componentClass] = $use;
+            $this->uses[$driverClass] = $use;
         } 
     }
 
-    public function getComponent(string $componentClass): object
+    public function getDriver(string $driverClass): object
     {
-        $use = $this->uses[$componentClass] ?? [];
+        $use = $this->uses[$driverClass] ?? [];
         // Элементом $use может быть либо строка с классом, либо уже готовый
         // экземпляр (объект) этого использования, либо null.
         if (is_object($use)) return $use;
         else if (empty($use)) {
-            // Тут создаем экземпляр компонента.
-            $this->uses[$componentClass] = new $componentClass;
-            return $this->uses[$componentClass];
+            // Тут создаем экземпляр драйвера.
+            $this->uses[$driverClass] = new $driverClass;
+            return $this->uses[$driverClass];
         } else {
-            // При i = 0 это Component.
-            $object = $this->getComponent($use[0]);
+            // При i = 0 это Driver.
+            $object = $this->getDriver($use[0]);
             for ($i = 1, $c = count($use); $i < $c; ++$i) {
                 // Оборачиваем в декораторы (i > 0).
                 $object = new $use[0]($object);

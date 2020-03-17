@@ -44,7 +44,7 @@ class StatisticsModule extends Module
 
     private function setupEventHandlers(array $submodules)
     {
-        Core::$app->decorateComponent(Events::class, StatEvents::class);
+        Core::$app->decorateDriver(Events::class, StatEvents::class);
         foreach ($submodules as $submodule) {
             /** @var BaseStatisticsSubModule $submodule */
             $macros = $submodule->getAppEventHandlers();

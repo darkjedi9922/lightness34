@@ -10,7 +10,7 @@ use tests\core\examples\EventsDecoratorExample;
  */
 class DecoratorTest extends TestCase
 {
-    public function testDecoratesEventsInRuntime()
+    public function testDecoratesDriverInRuntime()
     {
         $counter = 0;
         $app = new Core(new Router);
@@ -22,7 +22,7 @@ class DecoratorTest extends TestCase
         $this->assertEquals(1, $counter);
         $this->assertEquals(0, EventsDecoratorExample::$counter);
 
-        $app->decorateComponent(Events::class, EventsDecoratorExample::class);
+        $app->decorateDriver(Events::class, EventsDecoratorExample::class);
 
         Events::get()->emit('test');
         $this->assertEquals(2, $counter);

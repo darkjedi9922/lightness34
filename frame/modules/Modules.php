@@ -1,8 +1,8 @@
 <?php namespace frame\modules;
 
-use frame\core\Component;
+use frame\core\Driver;
 
-class Modules extends Component
+class Modules extends Driver
 {
     private $modules = [];
 

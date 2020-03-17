@@ -1,11 +1,11 @@
 <?php namespace frame\macros;
 
-use frame\core\Component;
+use frame\core\Driver;
 
 /**
  * Реализует механизм событий.
  */
-class Events extends Component
+class Events extends Driver
 {
     private $subscribers = [];
 
