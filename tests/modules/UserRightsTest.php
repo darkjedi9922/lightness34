@@ -7,14 +7,13 @@ use engine\users\User;
 use frame\core\Core;
 use frame\modules\RightsStore;
 use frame\modules\UserRights;
-use frame\route\Router;
 use tests\modules\drivers\RightsStoreStub;
 
 class UserRightsTest extends TestCase
 {
     public static function setUpBeforeClass(): void
     {
-        $app = new Core(new Router);
+        $app = new Core;
         $app->replaceDriver(RightsStore::class, RightsStoreStub::class);
     }
 

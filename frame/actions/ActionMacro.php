@@ -1,6 +1,5 @@
 <?php namespace frame\actions;
 
-use frame\core\Core;
 use frame\actions\Action;
 use frame\actions\ActionRouter;
 use frame\actions\ActionTransmitter;
@@ -21,7 +20,7 @@ class ActionMacro extends GetMacro
     {
         Events::get()->emit(self::EVENT_ACTION_TRIGGERED);
         $router = new ActionRouter;
-        $this->action = $router->fromTriggerUrl(Core::$app->router->url);
+        $this->action = $router->fromTriggerUrl(\frame\cash\router::get()->url);
         $tokenizer = new ActionToken($this->action);
         $tokenizer->validate();
         $this->action->exec();

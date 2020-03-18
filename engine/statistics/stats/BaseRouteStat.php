@@ -1,7 +1,7 @@
 <?php namespace engine\statistics\stats;
 
+use frame\cash\router;
 use frame\database\Identity;
-use frame\core\Core;
 
 abstract class BaseRouteStat extends Identity
 {
@@ -14,8 +14,7 @@ abstract class BaseRouteStat extends Identity
 
     public function collectCurrent()
     {
-        $router = Core::$app->router;
-        $this->route = $router->pagename;
+        $this->route = router::get()->pagename;
         $this->time = time();
     }
 }

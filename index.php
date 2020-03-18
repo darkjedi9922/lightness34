@@ -1,8 +1,6 @@
 <?php require_once __DIR__ . '/bootstrap.php';
 
 use frame\core\Core;
-use frame\route\Router;
-use frame\route\Request;
 use frame\errors\HttpError;
 use frame\errors\StrictException;
 use frame\errors\handlers\HttpErrorHandler;
@@ -28,7 +26,7 @@ use frame\macros\WidgetMacro;
 use frame\views\View;
 use frame\views\macros\ApplyDefaultLayout;
 
-$app = new Core(new Router(Request::getRequest()));
+$app = new Core;
 $app->replaceDriver(
     frame\modules\RightsStore::class,
     drivers\modules\DatabaseRightsStore::class

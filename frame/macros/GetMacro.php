@@ -1,6 +1,6 @@
 <?php namespace frame\macros;
 
-use frame\core\Core;
+use frame\cash\router;
 
 abstract class GetMacro extends Macro
 {
@@ -13,7 +13,7 @@ abstract class GetMacro extends Macro
 
     public function exec(...$args)
     {
-        $value = Core::$app->router->getArg($this->name);
+        $value = router::get()->getArg($this->name);
         if ($value !== null) $this->triggerExec($value);
     }
 

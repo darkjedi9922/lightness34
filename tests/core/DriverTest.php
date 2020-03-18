@@ -1,7 +1,6 @@
 <?php
 use PHPUnit\Framework\TestCase;
 use frame\core\Core;
-use frame\route\Router;
 use frame\macros\Events;
 use tests\core\examples\EventsDriverExample;
 
@@ -12,7 +11,7 @@ class DriverTest extends TestCase
 {
     public function testReplacesDriver()
     {
-        $app = new Core(new Router);
+        $app = new Core;
 
         // Можно было бы Events::use(), но тогда будет подключаться класс Events,
         // который мог бы и не понадобиться.

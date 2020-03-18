@@ -3,8 +3,8 @@
 use engine\users\cash\my_rights;
 use frame\errors\HttpError;
 use frame\auth\Auth;
-use frame\core\Core;
 use engine\users\cash\user_me;
+use frame\cash\router;
 
 class Init
 {
@@ -17,7 +17,7 @@ class Init
     /** @throws HttpError NOT_FOUND */
     public static function requireGet(string $name): string
     {
-        $router = Core::$app->router;
+        $router = router::get();
         if ($router->getArg($name) === null) throw new HttpError(
             HttpError::NOT_FOUND, 
             'The '.$name.' url argument does not exist.'

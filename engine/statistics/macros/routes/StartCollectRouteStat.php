@@ -1,10 +1,10 @@
 <?php namespace engine\statistics\macros\routes;
 
-use frame\core\Core;
 use frame\route\Request;
 use engine\statistics\stats\TimeStat;
 use engine\statistics\stats\RouteStat;
 use engine\statistics\macros\BaseStatCollector;
+use frame\cash\router;
 
 class StartCollectRouteStat extends BaseStatCollector
 {
@@ -20,8 +20,7 @@ class StartCollectRouteStat extends BaseStatCollector
     protected function collect(...$args)
     {
         $this->timer->start();
-        $router = Core::$app->router;
-        $this->stat->url = $router->url;
+        $this->stat->url = router::get()->url;
         $this->stat->type = RouteStat::ROUTE_TYPE_PAGE;
         $this->stat->ajax = Request::isAjax();
         $this->stat->time = time();

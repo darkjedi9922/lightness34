@@ -13,7 +13,6 @@ use frame\actions\Action;
 use frame\actions\fields\FileField;
 use frame\actions\UploadedFile;
 use frame\core\Core;
-use frame\route\Router;
 use tests\actions\examples\EmptyActionExample;
 use tests\actions\examples\FileFieldActionExample;
 
@@ -29,7 +28,7 @@ class ActionTest extends TestCase
 
     public static function setUpBeforeClass(): void
     {
-        $app = new Core(new Router);
+        $app = new Core;
     }
 
     public function testDefaultIdIsEmptyString()

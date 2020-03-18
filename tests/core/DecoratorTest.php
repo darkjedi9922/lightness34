@@ -1,7 +1,6 @@
 <?php
 use PHPUnit\Framework\TestCase;
 use frame\core\Core;
-use frame\route\Router;
 use frame\macros\Events;
 use tests\core\examples\EventsDecoratorExample;
 
@@ -13,7 +12,7 @@ class DecoratorTest extends TestCase
     public function testDecoratesDriverInRuntime()
     {
         $counter = 0;
-        $app = new Core(new Router);
+        $app = new Core;
         Events::get()->on('test', function() use (&$counter) {
             $counter += 1;
         });

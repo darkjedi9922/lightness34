@@ -1,6 +1,6 @@
 <?php namespace frame\lists;
 
-use frame\core\Core;
+use frame\cash\router;
 use frame\errors\HttpError;
 use frame\views\Pager as PageView;
 
@@ -72,7 +72,7 @@ class Pager
      * Возвращает ссылку на ту же страницу, но с другим номером страницы.
      */
     public function toLink(string $urlPageArgumentName, int $pageNumber): string {
-        return Core::$app->router->toUrl([$urlPageArgumentName => $pageNumber]);
+        return router::get()->toUrl([$urlPageArgumentName => $pageNumber]);
     }
     
     public function countPages(): int {

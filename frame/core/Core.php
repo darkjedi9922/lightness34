@@ -1,12 +1,12 @@
 <?php namespace frame\core;
 
-use frame\route\Router;
 use frame\views\Page;
 use frame\tools\Logger;
 use frame\errors\HttpError;
 use frame\views\DynamicPage;
 use frame\macros\Events;
 use frame\cash\config;
+use frame\cash\router;
 
 class Core
 {
@@ -20,22 +20,15 @@ class Core
     public static $app = null;
 
     private $uses = [];
-
-    /**
-     * @var Router Роутер текущего запроса
-     */
-    public $router;
-
     private $executed = false;
 
-    public function __construct(Router $router)
+    public function __construct()
     { 
         // Должно находится в самом начале т.к. последующие действия могут в своей
         // реализации обращаться в Core::$app.
         static::$app = $this;
 
         date_default_timezone_set('Europe/Kiev');
-        $this->router = $router;
     }
 
     public function __destruct()
@@ -100,7 +93,7 @@ class Core
     {
         $this->executed = true;
         Events::get()->emit(self::EVENT_APP_START);
-        $pagename = $this->router->pagename;
+        $pagename = router::get()->pagename;
         $page = $this->findPage($pagename);
         if ($page) $page->show();
         else throw new HttpError(404, 'Page ' . $pagename . ' does not exist.');

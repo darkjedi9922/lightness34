@@ -1,6 +1,6 @@
-<?php /** @var frame\views\Pager $self */ 
+<?php /** @var frame\views\Pager $self */
 
-use frame\core\Core;
+use frame\cash\router as current_router;
 use frame\route\Router;
 
 $pager = $self->getPager();
@@ -11,7 +11,7 @@ $last = $pager->getLast();
 
 // Дадим возможность принимать пользовательский маршрут вместо текущего.
 $customRoute = $self->getMeta('route');
-$router = $customRoute === null ? Core::$app->router : new Router($customRoute);
+$router = $customRoute === null ? current_router::get() : new Router($customRoute);
 ?>
 
 <div class="pager">

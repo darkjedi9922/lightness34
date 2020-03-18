@@ -13,7 +13,7 @@ class prev_router extends Cash
 {
     public static function get(): ?Router
     {
-        return self::cash('pr', function() {
+        return self::cash('prev-router', function() {
             if (Request::hasReferer()) return new Router(Request::getReferer());
             else return null;
         });

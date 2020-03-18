@@ -8,6 +8,7 @@ use engine\statistics\BaseStatisticsSubModule;
 use engine\statistics\macros\BaseStatCollector;
 use engine\statistics\tools\StatEvents;
 use frame\cash\config;
+use frame\cash\router;
 use frame\modules\Modules;
 
 class StatisticsModule extends Module
@@ -31,7 +32,7 @@ class StatisticsModule extends Module
 
         $config = config::get('statistics');
         if ($config->enabled) {
-            $router = Core::$app->router;
+            $router = router::get();
             if ($router->isInAnyNamespace($config->ignoreRouteNamespaces)) return;
             $this->setupEventHandlers($submodules);
         }

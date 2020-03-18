@@ -8,7 +8,6 @@ use tests\actions\examples\PostListActionExample;
 use tests\actions\examples\PasswordActionExample;
 use tests\actions\examples\AlwaysSucceedActionExample;
 use frame\core\Core;
-use frame\route\Router;
 
 /**
  * @runTestsInSeparateProcesses
@@ -17,7 +16,7 @@ class ActionTransmitterTest extends TestCase
 {
     protected function setUp(): void
     {
-        $app = new Core(new Router);
+        $app = new Core;
     }
 
     public function testSavesAndLoadsErrors()
