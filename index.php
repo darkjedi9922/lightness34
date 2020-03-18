@@ -29,6 +29,10 @@ use frame\views\View;
 use frame\views\macros\ApplyDefaultLayout;
 
 $app = new Core(new Router(Request::getRequest()));
+$app->replaceDriver(
+    frame\modules\RightsStore::class,
+    drivers\modules\DatabaseRightsStore::class
+);
 
 $errors = Errors::get();
 $errors->setDefaultHandler(DefaultErrorHandler::class);

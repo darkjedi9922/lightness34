@@ -1,26 +1,22 @@
 <?php namespace frame\modules;
 
-use frame\database\Records;
 use frame\modules\UserGroup;
 use frame\modules\RightsDesc;
 
 class GroupRights
 {
     private $desc;
+    private $moduleId;
     private $groupId;
     private $rights = 0;
-    private $record = null;
 
     public function __construct(RightsDesc $desc, int $moduleId, int $groupId)
     {
         $this->desc = $desc;
+        $this->moduleId = $moduleId;
         $this->groupId = $groupId;
         if ($groupId !== UserGroup::ROOT_ID) {
-            $this->record = Records::from('group_rights', [
-                'module_id' => $moduleId,
-                'group_id' => $groupId
-            ]);
-            $this->rights = $this->loadRights($this->record);
+            $this->rights = RightsStore::get()->loadRights($moduleId, $groupId);
         }
     }
 
@@ -53,21 +49,8 @@ class GroupRights
         if ($this->groupId === UserGroup::ROOT_ID) 
             throw new \Exception('The root rights cannot be modified.');
         
-        if ($this->rights === 0) $this->record->delete();
-
-        // Тут лучше снова сделать запрос, чтобы узнать существует ли запись.
-        // Потому что, может быть два процесса, в одном из которых запись уже
-        // вставили. Тогда получится, что в этом процессе мы снова вставляем такую
-        // запись. А если проверять сразу перед вставкой, задержка меньше ->
-        // вероятность такой ошибки меньше.
-        else if ($this->record->count('rights') === 0)
-            $this->record->insert(['rights' => $this->rights]);
-            
-        else $this->record->update(['rights' => $this->rights]);
-    }
-
-    protected function loadRights(Records $record): int
-    {
-        return (int) $record->select(['rights'])->readScalar();
+        RightsStore::get()->saveRights(
+            $this->moduleId, $this->groupId, $this->rights
+        );
     }
 }
