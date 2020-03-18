@@ -1,8 +1,8 @@
-<?php namespace frame\macros;
+<?php namespace frame\views\macros;
 
 use frame\macros\GetMacro;
-use frame\views\Block;
 use frame\route\Response;
+use frame\views\Block;
 
 class BlockMacro extends GetMacro
 {

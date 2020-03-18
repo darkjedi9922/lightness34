@@ -19,9 +19,9 @@ use frame\macros\Events;
 use frame\modules\Modules;
 
 use frame\actions\ActionMacro;
-use frame\macros\ValueMacro;
-use frame\macros\BlockMacro;
-use frame\macros\WidgetMacro;
+use frame\views\macros\ValueMacro;
+use frame\views\macros\BlockMacro;
+use frame\views\macros\WidgetMacro;
 
 use frame\views\View;
 use frame\views\macros\ShowPage;

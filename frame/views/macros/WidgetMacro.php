@@ -1,15 +1,15 @@
-<?php namespace frame\macros;
+<?php namespace frame\views\macros;
 
 use frame\macros\GetMacro;
-use frame\views\Value;
+use frame\views\Widget;
 use frame\route\Response;
 
-class ValueMacro extends GetMacro
+class WidgetMacro extends GetMacro
 {
     protected function triggerExec(string $value)
     {
         ob_clean();
-        (new Value($value))->show();
+        (new Widget($value))->show();
         Response::get()->finish();
     }
 }
