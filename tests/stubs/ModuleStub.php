@@ -1,7 +1,7 @@
 <?php namespace tests\stubs;
 
 use frame\modules\Module;
-use frame\modules\RightsDesc;
+use frame\auth\RightsDesc;
 
 class ModuleStub extends Module
 {

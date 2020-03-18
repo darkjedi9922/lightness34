@@ -1,5 +1,7 @@
 <?php namespace frame\modules;
 
+use frame\auth\RightsDesc;
+
 abstract class Module
 {
     private $parent;

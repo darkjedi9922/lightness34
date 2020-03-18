@@ -1,4 +1,4 @@
-<?php namespace frame\modules;
+<?php namespace frame\auth;
 
 abstract class RightsStore extends \frame\core\Driver
 {

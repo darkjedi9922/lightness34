@@ -1,6 +1,4 @@
-<?php namespace frame\modules;
-
-use frame\modules\GroupUser;
+<?php namespace frame\auth;
 
 abstract class RightsDesc
 {

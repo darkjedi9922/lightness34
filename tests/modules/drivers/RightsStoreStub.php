@@ -1,6 +1,6 @@
 <?php namespace tests\modules\drivers;
 
-use frame\modules\RightsStore;
+use frame\auth\RightsStore;
 use tests\stubs\ModuleStub;
 
 class RightsStoreStub extends RightsStore

@@ -1,8 +1,8 @@
-<?php namespace drivers\modules;
+<?php namespace drivers\auth;
 
 use frame\database\Records;
 
-class DatabaseRightsStore extends \frame\modules\RightsStore
+class DatabaseRightsStore extends \frame\auth\RightsStore
 {
     public function loadRights(int $moduleId, int $groupId): int
     {

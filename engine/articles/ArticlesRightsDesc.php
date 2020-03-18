@@ -1,7 +1,7 @@
 <?php namespace engine\articles;
 
-use frame\modules\RightsDesc;
-use frame\modules\GroupUser;
+use frame\auth\RightsDesc;
+use frame\auth\GroupUser;
 use engine\articles\Article;
 
 class ArticlesRightsDesc extends RightsDesc

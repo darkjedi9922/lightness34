@@ -5,8 +5,8 @@ use tests\stubs\RightsDescStub;
 use tests\stubs\ModuleStub;
 use engine\users\User;
 use frame\core\Core;
-use frame\modules\RightsStore;
-use frame\modules\UserRights;
+use frame\auth\RightsStore;
+use frame\auth\UserRights;
 use tests\modules\drivers\RightsStoreStub;
 
 class UserRightsTest extends TestCase

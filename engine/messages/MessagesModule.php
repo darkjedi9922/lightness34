@@ -1,7 +1,7 @@
 <?php namespace engine\messages;
 
 use frame\modules\Module;
-use frame\modules\RightsDesc;
+use frame\auth\RightsDesc;
 
 class MessagesModule extends Module
 {

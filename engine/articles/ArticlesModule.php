@@ -1,7 +1,7 @@
 <?php namespace engine\articles;
 
 use frame\modules\Module;
-use frame\modules\RightsDesc;
+use frame\auth\RightsDesc;
 
 class ArticlesModule extends Module
 {

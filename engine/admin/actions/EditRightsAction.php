@@ -6,7 +6,7 @@ use frame\tools\Init;
 use engine\users\Group;
 use frame\actions\fields\BaseField;
 use frame\actions\fields\IntegerField;
-use frame\modules\GroupRights;
+use frame\auth\GroupRights;
 use frame\modules\Module;
 use frame\modules\Modules;
 

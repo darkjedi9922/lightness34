@@ -1,7 +1,7 @@
 <?php namespace engine\users;
 
 use frame\database\Identity;
-use frame\modules\UserGroup;
+use frame\auth\UserGroup;
 
 class Group extends Identity implements UserGroup
 {

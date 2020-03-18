@@ -2,7 +2,7 @@
 
 use frame\core\Core;
 use frame\modules\Module;
-use frame\modules\RightsDesc;
+use frame\auth\RightsDesc;
 use frame\macros\Events;
 use engine\statistics\BaseStatisticsSubModule;
 use engine\statistics\macros\BaseStatCollector;

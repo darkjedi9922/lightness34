@@ -2,7 +2,7 @@
 
 use frame\tools\Cash;
 use frame\modules\Modules;
-use frame\modules\UserRights;
+use frame\auth\UserRights;
 use engine\users\cash\user_me;
 
 class my_rights extends Cash

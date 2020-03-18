@@ -4,7 +4,7 @@ use engine\admin\actions\EditRightsAction;
 use frame\actions\ViewAction;
 use frame\tools\JsonEncoder;
 use engine\users\Group;
-use frame\modules\GroupRights;
+use frame\auth\GroupRights;
 use frame\modules\Module;
 use frame\modules\Modules;
 use frame\tools\Init;

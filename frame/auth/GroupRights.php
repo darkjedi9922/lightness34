@@ -1,7 +1,4 @@
-<?php namespace frame\modules;
-
-use frame\modules\UserGroup;
-use frame\modules\RightsDesc;
+<?php namespace frame\auth;
 
 class GroupRights
 {

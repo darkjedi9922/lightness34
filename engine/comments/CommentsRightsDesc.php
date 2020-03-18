@@ -1,7 +1,7 @@
 <?php namespace engine\comments;
 
-use frame\modules\RightsDesc;
-use frame\modules\GroupUser;
+use frame\auth\RightsDesc;
+use frame\auth\GroupUser;
 
 class CommentsRightsDesc extends RightsDesc
 {

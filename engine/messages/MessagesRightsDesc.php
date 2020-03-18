@@ -1,6 +1,6 @@
 <?php namespace engine\messages;
 
-use frame\modules\RightsDesc;
+use frame\auth\RightsDesc;
 
 class MessagesRightsDesc extends RightsDesc
 {

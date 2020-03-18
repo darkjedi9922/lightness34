@@ -1,7 +1,7 @@
 <?php namespace engine\statistics;
 
 use frame\modules\Module;
-use frame\modules\RightsDesc;
+use frame\auth\RightsDesc;
 
 abstract class BaseStatisticsSubModule extends Module
 {

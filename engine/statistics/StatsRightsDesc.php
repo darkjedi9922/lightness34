@@ -1,8 +1,8 @@
 <?php namespace engine\statistics;
 
-use frame\modules\RightsDesc;
-use frame\modules\UserRights;
-use frame\modules\GroupUser;
+use frame\auth\RightsDesc;
+use frame\auth\UserRights;
+use frame\auth\GroupUser;
 use frame\modules\Modules;
 
 class StatsRightsDesc extends RightsDesc

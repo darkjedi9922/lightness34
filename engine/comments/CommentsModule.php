@@ -1,7 +1,7 @@
 <?php namespace engine\comments;
 
 use frame\modules\Module;
-use frame\modules\RightsDesc;
+use frame\auth\RightsDesc;
 
 class CommentsModule extends Module
 {

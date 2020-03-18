@@ -1,4 +1,4 @@
-<?php namespace frame\modules;
+<?php namespace frame\auth;
 
 interface GroupUser
 {

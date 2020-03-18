@@ -3,9 +3,9 @@
 use frame\core\Core;
 use frame\tools\init\AccessInit;
 use frame\modules\Module;
-use frame\modules\UserRights;
-use frame\modules\GroupUser;
-use frame\modules\RightsStore;
+use frame\auth\UserRights;
+use frame\auth\GroupUser;
+use frame\auth\RightsStore;
 use tests\modules\drivers\RightsStoreStub;
 
 class AccessInitStub extends AccessInit

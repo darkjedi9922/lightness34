@@ -1,6 +1,6 @@
 <?php namespace engine\admin;
 
-use frame\modules\RightsDesc;
+use frame\auth\RightsDesc;
 
 class AdminRightsDesc extends RightsDesc
 {

@@ -1,7 +1,7 @@
 <?php namespace engine\users;
 
 use frame\modules\Module;
-use frame\modules\RightsDesc;
+use frame\auth\RightsDesc;
 use frame\macros\Events;
 use engine\users\macros\UpdateUserStatus;
 use engine\users\macros\UpdateOfflineUsers;

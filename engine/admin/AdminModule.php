@@ -1,7 +1,7 @@
 <?php namespace engine\admin;
 
 use frame\modules\Module;
-use frame\modules\RightsDesc;
+use frame\auth\RightsDesc;
 
 class AdminModule extends Module
 {

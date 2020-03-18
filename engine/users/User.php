@@ -1,7 +1,7 @@
 <?php namespace engine\users;
 
 use frame\database\Identity;
-use frame\modules\GroupUser;
+use frame\auth\GroupUser;
 
 class User extends Identity implements GroupUser
 {
