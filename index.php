@@ -24,6 +24,7 @@ use frame\macros\BlockMacro;
 use frame\macros\WidgetMacro;
 
 use frame\views\View;
+use frame\views\macros\ShowPage;
 use frame\views\macros\ApplyDefaultLayout;
 
 $app = new Core;
@@ -52,6 +53,7 @@ $events->on(Core::EVENT_APP_START, new ActionMacro('action'));
 $events->on(Core::EVENT_APP_START, new ValueMacro('value'));
 $events->on(Core::EVENT_APP_START, new BlockMacro('block'));
 $events->on(Core::EVENT_APP_START, new WidgetMacro('widget'));
+$events->on(Core::EVENT_APP_START, new ShowPage);
 $events->on(View::EVENT_LOAD_START, new ApplyDefaultLayout);
 
 $app->exec();

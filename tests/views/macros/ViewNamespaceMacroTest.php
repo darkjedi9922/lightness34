@@ -1,13 +1,13 @@
 <?php
 use PHPUnit\Framework\TestCase;
-use tests\views\stubs\ViewStub;
+use frame\views\View;
 use tests\views\examples\ViewNamespaceMacroExample;
 
 class ViewNamespaceMacroTest extends TestCase
 {
     public function testRunsWhenSpecifiedNamespaceMatches()
     {
-        $view = new ViewStub('tree/twiced/leaf');
+        $view = new View('tree/twiced/leaf');
         $macro = new ViewNamespaceMacroExample('tree/twiced');
     
         $this->assertFalse($macro->isRun);
@@ -17,7 +17,7 @@ class ViewNamespaceMacroTest extends TestCase
 
     public function testDoesNotRunWhenSpecifiedNamespaceDoesNotMatch()
     {
-        $view = new ViewStub('tree/twiced/leaf');
+        $view = new View('tree/twiced/leaf');
         $macro = new ViewNamespaceMacroExample('flower/twiced');
 
         $this->assertFalse($macro->isRun);

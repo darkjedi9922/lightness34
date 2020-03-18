@@ -21,8 +21,6 @@ class View
      */
     const EVENT_LOAD_END = 'view-load-end';
 
-    const VIEWS_FOLDER = ROOT_DIR . '/views';
-
     /**
      * @var string Имя вида
      */
@@ -71,7 +69,8 @@ class View
     public static function find(string $name): ?string
     {
         $namespace = trim(static::getNamespace(), '/');
-        $folder = static::VIEWS_FOLDER . ($namespace ? "/$namespace" : '');
+        $baseFolder = ViewRouter::get()->getBaseFolder();
+        $folder = $baseFolder . ($namespace ? "/$namespace" : '');
         foreach (static::getExtensions() as $ext) {
             $file = "$folder/$name.$ext";
             if (file_exists($file)) return $file;
