@@ -31,7 +31,7 @@ class StartCollectActionStat extends BaseStatCollector
         
         $class = get_class($action->getBody());
         $this->stat->class = str_replace('\\', '\\\\', $class);
-        $this->stat->ajax = Request::isAjax();
+        $this->stat->ajax = Request::get()->isAjax();
         $this->stat->data_json = str_replace('\\', '\\\\', $this->jsonify($action));
         $this->stat->time = time();
 

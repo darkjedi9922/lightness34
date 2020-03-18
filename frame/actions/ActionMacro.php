@@ -29,7 +29,7 @@ class ActionMacro extends GetMacro
     
     private function result()
     {
-        if (Request::isAjax() || ($redirect = $this->getRedirect()) === null) {
+        if (Request::get()->isAjax() || ($redirect = $this->getRedirect()) === null) {
             $this->jsonify();
         } else $this->redirect($redirect);
     }
@@ -37,7 +37,7 @@ class ActionMacro extends GetMacro
     private function jsonify()
     {
         $redirect = $this->getRedirect();
-        Response::setText(json_encode([
+        Response::get()->setText(json_encode([
             'errors' => $this->action->getErrors(),
             'result' => $this->action->getResult(),
             'redirect' => !$this->isDefaultRedirect($redirect) ? $redirect : null
@@ -46,11 +46,13 @@ class ActionMacro extends GetMacro
 
     private function redirect(string $redirect)
     {
-        if ($this->isDefaultRedirect($redirect))
-            $redirect = Request::hasReferer() ? Request::getReferer() : '/';
+        if ($this->isDefaultRedirect($redirect)) {
+            $request = Request::get();
+            $redirect = $request->hasReferer() ? $request->getReferer() : '/';
+        }
         $transmitter = new ActionTransmitter;
         $transmitter->save($this->action);
-        Response::setUrl(Router::toUrlOf($redirect));
+        Response::get()->setUrl(Router::toUrlOf($redirect));
     }
 
     private function getRedirect(): ?string

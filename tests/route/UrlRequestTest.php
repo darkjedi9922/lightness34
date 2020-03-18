@@ -1,16 +1,19 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use frame\route\Request;
+use drivers\route\UrlRequest;
+use frame\core\Core;
 
-class RequestTest extends TestCase
+class UrlRequestTest extends TestCase
 {
     public function testDeterminesAjaxRequestWithTheSpecialAjaxHeader()
     {
+        $app = new Core;
+
         unset($_SERVER['HTTP_X_REQUESTED_WITH']);
-        $this->assertFalse(Request::isAjax());
+        $this->assertFalse(UrlRequest::get()->isAjax());
         
         $_SERVER['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
-        $this->assertTrue(Request::isAjax());
+        $this->assertTrue(UrlRequest::get()->isAjax());
     }
 }

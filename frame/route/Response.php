@@ -2,9 +2,7 @@
 
 use frame\macros\Events;
 
-use function lightlib\ob_end_clean_all;
-
-class Response
+abstract class Response extends \frame\core\Driver
 {
     /**
      * Выбрасывается прямо перед полным завершением скрипта, в случае такого запроса.
@@ -17,55 +15,27 @@ class Response
      */
     const EVENT_FINISH = 'response-force-finish';
 
-    private static $redirect = null;
-    private static $finish = false;
+    private $finish = false;
 
-    /**
-     * После выполнения скрипт завершается.
-     */
-    public static function setUrl(string $url)
-    {
-        self::$redirect = $url;
-        header('Location: ' . $url);
-        self::finish();
-    }
+    public abstract function setUrl(string $url);
+    public abstract function getUrl(): ?string;
 
-    public static function getUrl(): ?string
-    {
-        return self::$redirect;
-    }
+    public abstract function setText(string $text);
 
-    /**
-     * После выполнения скрипт завершается.
-     */
-    public static function setText(string $text)
-    {
-        ob_end_clean_all();
-        echo $text;
-        self::finish();
-    }
-
-    public static function setCode(int $code)
-    {
-        http_response_code($code);
-    }
-
-    public static function getCode(): int
-    {
-        return http_response_code();
-    }
+    public abstract function setCode(int $code);
+    public abstract function getCode(): int;
 
     /**
      * Полностью завершает обработку запроса. Предпочительнее, чем exit, потому что
      * этот метод учитывает корректное завершение приложения, в отличии от exit.
      */
-    public static function finish()
+    public function finish()
     {
         // Если этот метод уже был вызван, дабы не войти в рекурсию не будем
         // повторять все по новой.
-        if (self::$finish) return;
+        if ($this->finish) return;
        
-        self::$finish = true;
+        $this->finish = true;
         Events::get()->emit(self::EVENT_FINISH);
         exit;
     }

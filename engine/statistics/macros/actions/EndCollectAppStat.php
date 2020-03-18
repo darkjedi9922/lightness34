@@ -28,9 +28,9 @@ class EndCollectAppStat extends BaseStatCollector
         if (!$this->errorCollector->isExecuted()) {
             // Экшн может завершится редиректом. Был ли установлен url на редирект,
             // можно узнать в Response.
-            if (Response::getUrl() !== null) {
+            if (Response::get()->getUrl() !== null) {
                 $this->stat->response_type = ActionStat::RESPONSE_TYPE_REDIRECT;
-                $this->stat->response_info = Response::getUrl();
+                $this->stat->response_info = Response::get()->getUrl();
             } else {
                 // Если экшн завершается не редиректом, он выводит результат в json.
                 $this->stat->response_type = ActionStat::RESPONSE_TYPE_JSON;

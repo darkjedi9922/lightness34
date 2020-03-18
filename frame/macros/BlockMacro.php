@@ -10,6 +10,6 @@ class BlockMacro extends GetMacro
     {
         ob_clean();
         (new Block($value))->show();
-        Response::finish();
+        Response::get()->finish();
     }
 }

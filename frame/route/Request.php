@@ -1,44 +1,19 @@
 <?php namespace frame\route;
 
-class Request
+abstract class Request extends \frame\core\Driver
 {
     /**
-     * Предстоставляет запрос, который явно виден в адресной строке
+     * Возвращает url, который был запрошен (откуда бы ни было)
      */
-    public static function getUrl() : string
-    {
-        return $_SERVER['REQUEST_URI'];
-    }
-
-    /**
-     * Обычно идентичен url, но не всегда.
-     * Предоставляет запрос, который был запрошен (откуда бы ни было)
-     */
-    public static function getRequest() : string
-    {
-        // INFO: на хостинге может не быть REDIRECT_URL.
-        // Очевидно, это был плохой хостинг.
-        return $_SERVER['REDIRECT_URL'] . ($_SERVER['QUERY_STRING'] ? '?' . $_SERVER['QUERY_STRING'] : '');
-    }
+    public abstract function getRequest(): string;
 
     /**
      * Предыдущий url.
-     * 
      * @throws \Exception если предыдущего url не существует
      */
-    public static function getReferer() : string
-    {
-        if (!self::hasReferer()) throw new \Exception('The referer is not exist');
-        return $_SERVER['HTTP_REFERER'];
-    }
+    public abstract function getReferer(): string;
     
-    public static function hasReferer() : bool
-    {
-        return isset($_SERVER['HTTP_REFERER']);
-    }
+    public abstract function hasReferer(): bool;
 
-    public static function isAjax(): bool
-    {
-        return ($_SERVER['HTTP_X_REQUESTED_WITH'] ?? null) == 'XMLHttpRequest';
-    }
+    public abstract function isAjax(): bool;
 }

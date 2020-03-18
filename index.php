@@ -27,6 +27,8 @@ use frame\views\View;
 use frame\views\macros\ApplyDefaultLayout;
 
 $app = new Core;
+$app->replaceDriver(frame\route\Request::class, drivers\route\UrlRequest::class);
+$app->replaceDriver(frame\route\Response::class, drivers\route\UrlResponse::class);
 $app->replaceDriver(
     frame\modules\RightsStore::class,
     drivers\modules\DatabaseRightsStore::class

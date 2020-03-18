@@ -13,7 +13,7 @@ class HttpErrorHandler implements ErrorHandler
     {
         $code = $error->getCode();
         $page = config::get('core')->{"errors.$code.page"};
-        Response::setCode($code);
+        Response::get()->setCode($code);
         if (ErrorPage::find($page)) (new ErrorPage($page))->show();
         else {
             $defaultHandler = new DefaultErrorHandler;
