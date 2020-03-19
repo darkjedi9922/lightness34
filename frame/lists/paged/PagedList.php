@@ -1,14 +1,12 @@
 <?php namespace frame\lists\paged;
 
-use frame\lists\Pager;
-
 abstract class PagedList implements \IteratorAggregate
 {
     private $pager;
 
     public function __construct(int $page, int $countAll, int $pageLimit)
     {
-        $this->pager = new Pager($page, $countAll, $pageLimit);
+        $this->pager = new PagerModel($page, $countAll, $pageLimit);
     }
 
     public abstract function countOnPage(): int;
@@ -25,7 +23,7 @@ abstract class PagedList implements \IteratorAggregate
         return $this->pager->countPageLimit();
     }
 
-    public function getPager(): Pager
+    public function getPager(): PagerModel
     {
         return $this->pager;
     }

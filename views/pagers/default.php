@@ -1,4 +1,4 @@
-<?php /** @var frame\views\Pager $self */
+<?php /** @var frame\lists\paged\PagerView $self */
 $pager = $self->getPager();
 $current = $pager->getCurrent();
 $previous = $pager->getPevious();

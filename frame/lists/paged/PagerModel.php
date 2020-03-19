@@ -1,14 +1,14 @@
-<?php namespace frame\lists;
+<?php namespace frame\lists\paged;
 
 use frame\cash\router;
 use frame\errors\HttpError;
-use frame\views\Pager as PageView;
+use frame\lists\paged\PagerView;
 
 /**
 * Класс для реализации счетчика/переключателя страниц 
 * по номерам для списков материалов.
 */
-class Pager
+class PagerModel
 {
     private $current;
     private $allCount;
@@ -44,10 +44,10 @@ class Pager
     
     /**
      * Показывает вид, представляющий pager.
-     * @see frame\views\Pager::__construct()
+     * @see frame\lists\paged\PagerView::__construct()
      */
     public function show(string $name, string $layout = null) {
-        (new PageView($this, $name, $layout))->show();
+        (new PagerView($this, $name, $layout))->show();
     }
     
     public function getPevious(): ?int {

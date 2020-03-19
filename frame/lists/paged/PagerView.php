@@ -1,8 +1,6 @@
-<?php namespace frame\views;
+<?php namespace frame\lists\paged;
 
-use frame\lists\Pager as ListPager;
-
-class Pager extends Layouted
+class PagerView extends \frame\views\Layouted
 {
     private $pager;
 
@@ -18,13 +16,13 @@ class Pager extends Layouted
     }
 
     /** {@inheritDoc} */
-    public function __construct(ListPager $pager, string $name, string $layout = null)
+    public function __construct(PagerModel $pager, string $name, string $layout = null)
     {
         parent::__construct($name, $layout);
         $this->pager = $pager;
     }
 
-    public function getPager(): ListPager
+    public function getPager(): PagerModel
     {
         return $this->pager;
     }

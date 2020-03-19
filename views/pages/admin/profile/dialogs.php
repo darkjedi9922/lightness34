@@ -9,7 +9,7 @@ use frame\cash\pagenumber;
 use function lightlib\shorten;
 use engine\users\User;
 use frame\actions\ViewAction;
-use frame\views\Pager;
+use frame\lists\paged\PagerView;
 use frame\tools\JsonEncoder;
 
 Init::accessRight('messages', 'use');
@@ -22,7 +22,7 @@ $dialogListData = [
     'countAll' => $dialogs->countAll(),
     'list' => [],
     'pageCount' => $pageCount,
-    'pagerHtml' => ($pageCount > 1 ? (new Pager($dialogs->getPager(), 'admin'))->getHtml() : ''),
+    'pagerHtml' => ($pageCount > 1 ? (new PagerView($dialogs->getPager(), 'admin'))->getHtml() : ''),
     'userMe' => [
         'id' => $me->id,
         'login' => $me->login

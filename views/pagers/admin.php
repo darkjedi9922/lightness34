@@ -1,4 +1,4 @@
-<?php /** @var frame\views\Pager $self */
+<?php /** @var frame\lists\paged\PagerView $self */
 
 use frame\cash\router as current_router;
 use frame\route\Router;

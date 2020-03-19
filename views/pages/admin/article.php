@@ -7,7 +7,7 @@ use frame\cash\pagenumber;
 use engine\users\cash\user_me;
 use engine\users\Group;
 use frame\modules\Modules;
-use frame\views\Pager;
+use frame\lists\paged\PagerView;
 use frame\actions\ViewAction;
 use engine\comments\actions\AddComment;
 use engine\comments\CommentList;
@@ -45,7 +45,7 @@ $articleCommentsData = [
     // 'moduleId' => Modules::get()->findByName('articles/comments')->getId(),
     // 'materialId' => $article->id,
     'list' => [],
-    'pagerHtml' => ($pages > 1 ? (new Pager($comments->getPager(), 'admin'))->getHtml() : ''),
+    'pagerHtml' => ($pages > 1 ? (new PagerView($comments->getPager(), 'admin'))->getHtml() : ''),
     // 'page' => $page,
     'addUrl' => $add->getUrl()
 ];

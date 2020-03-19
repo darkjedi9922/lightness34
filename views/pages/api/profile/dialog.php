@@ -11,7 +11,7 @@ use engine\messages\actions\AddMessage;
 use engine\messages\Dialog;
 use frame\cash\prev_router;
 use frame\tools\JsonEncoder;
-use frame\views\Pager;
+use frame\lists\paged\PagerView;
 
 Init::accessRight('messages', 'use');
 
@@ -42,7 +42,7 @@ foreach ($list as $message) {
 
 $pagerHtml = null;
 if ($list->getPager()->countPages() > 1) {
-    $viewPager = new Pager($list->getPager(), 'admin');
+    $viewPager = new PagerView($list->getPager(), 'admin');
     $viewPager->setMeta('route', prev_router::get()->toUrl());
     $pagerHtml = $viewPager->getHtml();
 }
