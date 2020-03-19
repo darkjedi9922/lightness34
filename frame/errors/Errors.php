@@ -89,9 +89,12 @@ class Errors extends Driver
 
         Events::get()->emit(self::EVENT_ERROR, $e);
 
-        if (isset($this->handlers[get_class($e)])) 
-            (new $this->handlers[get_class($e)])->handle($e);
-        else if ($this->defaultHandler) (new $this->defaultHandler)->handle($e);
-        else throw $e;
+        if (isset($this->handlers[get_class($e)])) {
+            $handler = new $this->handlers[get_class($e)];
+            $handler->handle($e);
+        } else if ($this->defaultHandler) {
+            $handler = new $this->defaultHandler;
+            $handler->handle($e);
+        } else throw $e;
     }
 }

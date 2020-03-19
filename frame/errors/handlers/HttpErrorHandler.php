@@ -13,8 +13,10 @@ class HttpErrorHandler implements ErrorHandler
         $code = $error->getCode();
         $page = config::get('core')->{"errors.$code.page"};
         Response::get()->setCode($code);
-        if (ErrorPage::find($page)) (new ErrorPage($page))->show();
-        else {
+        if (ErrorPage::find($page)) {
+            $view = new ErrorPage($page);
+            $view->show();
+        } else {
             $defaultHandler = new DefaultErrorHandler;
             $defaultHandler->handle(new \Exception(
                 "Notice: This error can be hidden in $code page.",
