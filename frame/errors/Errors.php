@@ -5,6 +5,7 @@ use frame\events\Events;
 use frame\tools\Debug;
 use frame\cash\config;
 use frame\cash\logger;
+use frame\errors\handlers\ErrorHandler;
 
 class Errors extends Driver
 {
@@ -32,21 +33,27 @@ class Errors extends Driver
     }
 
     /**
-     * @param string $throwableClass Имя класса Throwable исключения
+     * @param string $throwableClass Имя класса Throwable исключения.
      * @param string $handlerClass Имя класса его обработчика. Обработчик
-     * должен реализовывать интерфейс ErrorHandler
+     * должен реализовывать интерфейс ErrorHandler.
+     * @throws Exception Если handlerClass это не ErrorHandler.
      */
     public function setHandler($throwableClass, $handlerClass)
     {
+        if (!is_subclass_of($handlerClass, ErrorHandler::class))
+            throw new \Exception("Class $handlerClass is not an ErrorHandler");
         $this->handlers[$throwableClass] = $handlerClass;
     }
 
     /**
      * Устанавливает обработчик ошибок, на которые не был задан обработчик
-     * @param string $handlerClass Имя класса обработчика
+     * @param string $handlerClass Имя класса обработчика.
+     * @throws Exception Если handlerClass это не ErrorHandler.
      */
     public function setDefaultHandler($handlerClass)
     {
+        if (!is_subclass_of($handlerClass, ErrorHandler::class))
+            throw new \Exception("Class $handlerClass is not an ErrorHandler");
         $this->defaultHandler = $handlerClass;
     }
 
