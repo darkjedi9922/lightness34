@@ -1,6 +1,7 @@
 <?php namespace frame\core;
 
 use frame\events\Events;
+use frame\errors\Errors;
 
 class Core
 {
@@ -30,7 +31,7 @@ class Core
         try {
             if ($this->executed) Events::get()->emit(self::EVENT_APP_END);
         } catch (\Throwable $error) {
-            $this->handleError($error);
+            Errors::get()->handleError($error); 
         }
     }
 

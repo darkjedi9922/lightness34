@@ -79,7 +79,7 @@ class Errors extends Driver
      * Абсолютно все необработанные ошибки и исключения всех видов
      * и уровней попадают сюда в виде Throwable
      */
-    private function handleError(\Throwable $e)
+    public function handleError(\Throwable $e)
     {
         $logging = config::get('core')->{'log.enabled'};
         if ($logging) {
