@@ -4,7 +4,6 @@ use frame\errors\StrictException;
 use frame\route\Response;
 use frame\errors\HttpError;
 use frame\tools\Debug;
-use frame\views\ErrorPage;
 use frame\cash\config;
 
 use function lightlib\ob_end_clean_all;

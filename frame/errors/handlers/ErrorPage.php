@@ -1,6 +1,6 @@
-<?php namespace frame\views;
+<?php namespace frame\errors\handlers;
 
-class ErrorPage extends Page
+class ErrorPage extends \frame\views\Page
 {
     public static function getNamespace(): string
     {
