@@ -1,7 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use frame\macros\Events;
+use frame\events\Events;
 use tests\macros\examples\MacroEmptyExample;
 use tests\macros\examples\MacroAccumulationExample;
 

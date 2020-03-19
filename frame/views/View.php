@@ -1,6 +1,6 @@
 <?php namespace frame\views;
 
-use frame\macros\Events;
+use frame\events\Events;
 
 function __show(View $self) 
 {

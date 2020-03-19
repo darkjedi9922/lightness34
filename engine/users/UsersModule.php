@@ -2,7 +2,7 @@
 
 use frame\modules\Module;
 use frame\auth\RightsDesc;
-use frame\macros\Events;
+use frame\events\Events;
 use engine\users\macros\UpdateUserStatus;
 use engine\users\macros\UpdateOfflineUsers;
 use frame\core\Core;

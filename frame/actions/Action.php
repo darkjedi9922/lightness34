@@ -3,7 +3,7 @@
 use frame\actions\fields\BaseField;
 use frame\actions\UploadedFile;
 use frame\errors\HttpError;
-use frame\macros\Events;
+use frame\events\Events;
 
 /**
  * Класс служит для обработки форм, но можно использовать для запуска других

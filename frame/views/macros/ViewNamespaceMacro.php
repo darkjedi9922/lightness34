@@ -1,7 +1,7 @@
 <?php namespace frame\views\macros;
 
 use frame\views\View;
-use frame\macros\Macro;
+use frame\events\Macro;
 
 abstract class ViewNamespaceMacro extends Macro
 {

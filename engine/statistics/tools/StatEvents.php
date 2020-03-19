@@ -1,7 +1,7 @@
 <?php namespace engine\statistics\tools;
 
 use frame\core\Decorator;
-use frame\macros\Events;
+use frame\events\Events;
 
 class StatEvents extends Decorator
 {

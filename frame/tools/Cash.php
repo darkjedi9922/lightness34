@@ -1,6 +1,6 @@
 <?php namespace frame\tools;
 
-use frame\macros\Events;
+use frame\events\Events;
 
 abstract class Cash
 {

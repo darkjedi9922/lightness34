@@ -1,7 +1,7 @@
 <?php namespace frame\core;
 
 use frame\tools\Logger;
-use frame\macros\Events;
+use frame\events\Events;
 use frame\cash\config;
 
 class Core

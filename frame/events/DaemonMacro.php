@@ -1,4 +1,4 @@
-<?php namespace frame\macros;
+<?php namespace frame\events;
 
 use frame\config\Json;
 use frame\tools\files\Directory;

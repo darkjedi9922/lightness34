@@ -1,6 +1,6 @@
 <?php namespace frame\views\macros;
 
-use frame\macros\GetMacro;
+use frame\events\GetMacro;
 use frame\views\Value;
 use frame\route\Response;
 

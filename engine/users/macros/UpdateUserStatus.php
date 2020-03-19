@@ -2,7 +2,7 @@
 
 use engine\users\cash\user_me;
 use frame\auth\Auth;
-use frame\macros\Macro;
+use frame\events\Macro;
 use frame\tools\Client;
 
 class UpdateUserStatus extends Macro

@@ -1,4 +1,4 @@
-<?php namespace frame\macros;
+<?php namespace frame\events;
 
 /**
  * Макросы - механизм фреймворка, позволяющий настраивать выполнение различных 

@@ -1,6 +1,6 @@
 <?php namespace frame\route;
 
-use frame\macros\Events;
+use frame\events\Events;
 
 abstract class Response extends \frame\core\Driver
 {

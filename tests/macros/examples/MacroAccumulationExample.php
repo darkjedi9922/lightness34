@@ -1,6 +1,6 @@
 <?php namespace tests\macros\examples;
 
-use frame\macros\Macro;
+use frame\events\Macro;
 
 class MacroAccumulationExample extends Macro
 {

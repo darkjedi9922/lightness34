@@ -1,7 +1,7 @@
 <?php
 use PHPUnit\Framework\TestCase;
 use frame\core\Core;
-use frame\macros\Events;
+use frame\events\Events;
 use tests\core\examples\EventsDecoratorExample;
 
 /**

@@ -3,7 +3,7 @@
 use frame\core\Core;
 use frame\modules\Module;
 use frame\auth\RightsDesc;
-use frame\macros\Events;
+use frame\events\Events;
 use engine\statistics\BaseStatisticsSubModule;
 use engine\statistics\macros\BaseStatCollector;
 use engine\statistics\tools\StatEvents;

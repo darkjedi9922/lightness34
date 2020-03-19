@@ -2,7 +2,7 @@
 
 use frame\core\Core;
 use frame\core\Driver;
-use frame\macros\Events;
+use frame\events\Events;
 use frame\tools\Debug;
 use frame\tools\Logger;
 use frame\cash\config;

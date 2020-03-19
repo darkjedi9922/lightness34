@@ -6,8 +6,8 @@ use frame\actions\ActionTransmitter;
 use frame\route\Response;
 use frame\route\Router;
 use frame\route\Request;
-use frame\macros\GetMacro;
-use frame\macros\Events;
+use frame\events\GetMacro;
+use frame\events\Events;
 
 class ActionMacro extends GetMacro
 {

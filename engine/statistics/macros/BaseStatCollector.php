@@ -1,6 +1,6 @@
 <?php namespace engine\statistics\macros;
 
-use frame\macros\Macro;
+use frame\events\Macro;
 use engine\statistics\stats\TimeStat;
 
 abstract class BaseStatCollector extends Macro

@@ -5,7 +5,7 @@ use frame\errors\HttpError;
 use frame\views\DynamicPage;
 use frame\views\Page;
 
-class ShowPage extends \frame\macros\Macro
+class ShowPage extends \frame\events\Macro
 {
     public function exec(...$args)
     {

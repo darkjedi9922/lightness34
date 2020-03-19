@@ -15,7 +15,7 @@ use engine\comments\CommentsModule;
 use engine\statistics\StatisticsModule;
 
 use frame\errors\Errors;
-use frame\macros\Events;
+use frame\events\Events;
 use frame\modules\Modules;
 
 use frame\actions\ActionMacro;

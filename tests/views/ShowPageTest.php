@@ -1,7 +1,7 @@
 <?php
 
 use frame\core\Core;
-use frame\macros\Events;
+use frame\events\Events;
 use frame\route\Request;
 use frame\views\macros\ShowPage;
 use PHPUnit\Framework\TestCase;

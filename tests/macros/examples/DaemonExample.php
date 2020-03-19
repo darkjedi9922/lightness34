@@ -1,6 +1,6 @@
 <?php namespace tests\macros\examples;
 
-use frame\macros\DaemonMacro;
+use frame\events\DaemonMacro;
 use frame\tools\files\Directory;
 
 class DaemonExample extends DaemonMacro

@@ -1,6 +1,6 @@
 <?php namespace frame\views\macros;
 
-use frame\macros\Macro;
+use frame\events\Macro;
 use frame\views\View;
 use frame\views\Layouted;
 

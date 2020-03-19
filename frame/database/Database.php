@@ -1,7 +1,7 @@
 <?php namespace frame\database;
 
 use frame\database\QueryResult;
-use frame\macros\Events;
+use frame\events\Events;
 
 /**
  * Данный класс использует MySQLi.

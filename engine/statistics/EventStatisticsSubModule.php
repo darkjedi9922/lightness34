@@ -9,7 +9,7 @@ use engine\statistics\macros\events\StartCollectHandles;
 use engine\statistics\macros\events\EndCollectHandles;
 use engine\statistics\macros\events\EndCollectEvents;
 use engine\statistics\tools\StatEvents;
-use frame\macros\Events;
+use frame\events\Events;
 use frame\database\Records;
 use frame\modules\Module;
 

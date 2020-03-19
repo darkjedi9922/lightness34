@@ -1,6 +1,6 @@
 <?php namespace tests\core\examples;
 
-use frame\macros\Events;
+use frame\events\Events;
 
 class EventsDriverExample extends Events
 {
