@@ -1,11 +1,10 @@
 <?php namespace frame\errors;
 
-use frame\core\Core;
 use frame\core\Driver;
 use frame\events\Events;
 use frame\tools\Debug;
-use frame\tools\Logger;
 use frame\cash\config;
+use frame\cash\logger;
 
 class Errors extends Driver
 {
@@ -84,7 +83,8 @@ class Errors extends Driver
     {
         $logging = config::get('core')->{'log.enabled'};
         if ($logging) {
-            Core::$app->writeInLog(Logger::ERROR, Debug::getErrorMessage($e));
+            $logger = logger::get();
+            $logger->write($logger::ERROR, Debug::getErrorMessage($e));
         }
 
         Events::get()->emit(self::EVENT_ERROR, $e);

@@ -1,8 +1,6 @@
 <?php namespace frame\core;
 
-use frame\tools\Logger;
 use frame\events\Events;
-use frame\cash\config;
 
 class Core
 {
@@ -71,18 +69,6 @@ class Core
             }
             return $object;
         }
-    }
-
-    /**
-     * Записывает сообщение в лог. Файл лога настраивается в конфиге фреймворка.
-     * @param string $type Тип сообщения. Класс Logger содержит константы
-     * с предопределенными названиями многих типов.
-     * @param string $message
-     */
-    public function writeInLog($type, $message)
-    {
-        $logger = new Logger(ROOT_DIR . '/' . config::get('core')->{'log.file'});
-        $logger->write($type, $message);
     }
 
     public function exec()
