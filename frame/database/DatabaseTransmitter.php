@@ -1,13 +1,12 @@
-<?php namespace frame\tools\transmitters;
+<?php namespace frame\database;
 
-use frame\database\Records;
 use frame\cash\database;
 
 /**
  * Так как этот класс использует базу данных, следует использовать его только 
  * в редких ситуациях, когда без БД не обойтись, во благо производительности.
  */
-class DatabaseTransmitter extends DataTransmitter
+class DatabaseTransmitter extends \frame\tools\transmitters\DataTransmitter
 {
     /**
      * Имя таблицы БД, используемая для трансмиттинга.
