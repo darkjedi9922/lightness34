@@ -1,6 +1,6 @@
 <?php namespace frame\views\macros;
 
-use frame\cash\router;
+use frame\stdlib\cash\router;
 use frame\errors\HttpError;
 use frame\views\DynamicPage;
 use frame\views\Page;

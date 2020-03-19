@@ -1,6 +1,6 @@
 <?php /** @var frame\views\Page $self */
 
-use frame\cash\config;
+use frame\stdlib\cash\config;
 use frame\tools\Init;
 use engine\users\User;
 use frame\lists\base\IdentityList;

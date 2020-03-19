@@ -1,7 +1,7 @@
 <?php namespace engine\comments;
 
 use frame\lists\paged\IdentityPagedList;
-use frame\cash\config;
+use frame\stdlib\cash\config;
 
 class CommentList extends IdentityPagedList
 {

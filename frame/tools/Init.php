@@ -4,7 +4,7 @@ use engine\users\cash\my_rights;
 use frame\errors\HttpError;
 use frame\auth\Auth;
 use engine\users\cash\user_me;
-use frame\cash\router;
+use frame\stdlib\cash\router;
 
 class Init
 {

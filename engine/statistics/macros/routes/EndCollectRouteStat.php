@@ -7,8 +7,8 @@ use engine\statistics\stats\RouteStat;
 use engine\statistics\stats\DynamicRouteParam;
 use engine\statistics\macros\BaseStatCollector;
 
-use frame\cash\config;
-use frame\cash\database;
+use frame\stdlib\cash\config;
+use frame\stdlib\cash\database;
 
 use function lightlib\encode_specials;
 

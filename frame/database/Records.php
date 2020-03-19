@@ -1,6 +1,6 @@
 <?php namespace frame\database;
 
-use frame\cash\database;
+use frame\stdlib\cash\database;
 use function lightlib\array_assemble;
 
 /**

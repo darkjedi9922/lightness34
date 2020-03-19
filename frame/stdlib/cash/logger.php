@@ -1,7 +1,7 @@
-<?php namespace frame\cash;
+<?php namespace frame\stdlib\cash;
 
 use frame\tools\Logger as FrameLogger;
-use frame\cash\config;
+use frame\stdlib\cash\config;
 
 class logger extends \frame\tools\Cash
 {

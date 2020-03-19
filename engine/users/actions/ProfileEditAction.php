@@ -7,7 +7,7 @@ use engine\users\cash\user_me;
 use frame\actions\fields\IntegerField;
 use frame\actions\fields\PasswordField;
 use frame\actions\fields\StringField;
-use frame\cash\database;
+use frame\stdlib\cash\database;
 use frame\auth\Auth;
 
 /**

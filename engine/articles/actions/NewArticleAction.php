@@ -6,7 +6,7 @@ use frame\actions\ActionBody;
 use frame\actions\fields\StringField;
 use frame\config\Json;
 use frame\tools\Init;
-use frame\cash\prev_router;
+use frame\stdlib\cash\prev_router;
 
 /**
  * Права: добавление статей

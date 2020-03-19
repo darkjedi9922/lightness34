@@ -1,7 +1,7 @@
 <?php namespace engine\users\actions\fields;
 
 use frame\actions\fields\PasswordField;
-use frame\cash\config;
+use frame\stdlib\cash\config;
 
 class UserPassword extends PasswordField
 {

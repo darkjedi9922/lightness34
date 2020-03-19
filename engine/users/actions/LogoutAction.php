@@ -4,7 +4,7 @@ use engine\users\cash\user_me;
 use frame\actions\ActionBody;
 use frame\tools\Init;
 use frame\auth\Auth;
-use frame\cash\database;
+use frame\stdlib\cash\database;
 
 /**
  * Права: нужно быть залогиненым.

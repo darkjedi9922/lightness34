@@ -1,6 +1,6 @@
 <?php namespace engine\admin\actions;
 
-use frame\cash\prev_router;
+use frame\stdlib\cash\prev_router;
 use engine\admin\Auth;
 use engine\users\Encoder;
 use frame\actions\ActionBody;

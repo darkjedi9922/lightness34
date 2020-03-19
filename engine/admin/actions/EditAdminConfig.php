@@ -4,7 +4,7 @@ use engine\users\Encoder;
 use engine\users\Group;
 use frame\actions\ActionBody;
 use frame\actions\fields\PasswordField;
-use frame\cash\config;
+use frame\stdlib\cash\config;
 use frame\tools\Init;
 use frame\config\Json;
 

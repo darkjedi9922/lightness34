@@ -3,7 +3,7 @@
 use frame\tools\Init;
 use engine\users\Group;
 use engine\users\cash\user_me;
-use frame\cash\config;
+use frame\stdlib\cash\config;
 use engine\admin\actions\EditConfigAction;
 use frame\actions\ViewAction;
 use frame\tools\JsonEncoder;

@@ -1,7 +1,7 @@
 <?php /** @var frame\views\Page $self */
 
 use frame\tools\Init;
-use frame\cash\pagenumber;
+use frame\stdlib\cash\pagenumber;
 use engine\messages\MessagePagedList;
 use engine\messages\Message;
 use engine\users\cash\user_me;
@@ -9,7 +9,7 @@ use engine\users\User;
 use frame\actions\ViewAction;
 use engine\messages\actions\AddMessage;
 use engine\messages\Dialog;
-use frame\cash\prev_router;
+use frame\stdlib\cash\prev_router;
 use frame\tools\JsonEncoder;
 use frame\lists\paged\PagerView;
 

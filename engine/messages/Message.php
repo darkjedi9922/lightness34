@@ -2,7 +2,7 @@
 
 use frame\database\Identity;
 use frame\database\Records;
-use frame\cash\database;
+use frame\stdlib\cash\database;
 
 class Message extends Identity
 {

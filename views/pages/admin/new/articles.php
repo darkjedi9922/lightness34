@@ -1,6 +1,6 @@
 <?php /** @var frame\views\Page $self */
 
-use frame\cash\pagenumber;
+use frame\stdlib\cash\pagenumber;
 use engine\articles\NewArticlePagedList;
 use engine\users\User;
 use function lightlib\shorten;

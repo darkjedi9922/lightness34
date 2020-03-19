@@ -1,9 +1,9 @@
 <?php namespace engine\messages;
 
 use frame\lists\paged\PagedList;
-use frame\cash\database;
+use frame\stdlib\cash\database;
 use engine\users\cash\user_me;
-use frame\cash\config;
+use frame\stdlib\cash\config;
 
 class DialogPagedList extends PagedList
 {	

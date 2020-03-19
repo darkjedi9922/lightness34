@@ -1,4 +1,4 @@
-<?php namespace drivers\route;
+<?php namespace frame\stdlib\drivers\route;
 
 class UrlRequest extends \frame\route\Request
 {

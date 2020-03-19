@@ -1,7 +1,7 @@
 <?php namespace engine\users\actions\fields;
 
 use frame\actions\fields\FileField;
-use frame\cash\config;
+use frame\stdlib\cash\config;
 use frame\tools\units\ByteUnit;
 
 class UserAvatarField extends FileField

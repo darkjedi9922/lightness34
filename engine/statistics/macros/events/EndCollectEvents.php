@@ -4,8 +4,8 @@ use engine\statistics\macros\BaseStatCollector;
 use engine\statistics\stats\EventRouteStat;
 use engine\statistics\stats\EventSubscriberStat;
 use engine\statistics\stats\EventEmitStat;
-use frame\cash\config;
-use frame\cash\database;
+use frame\stdlib\cash\config;
+use frame\stdlib\cash\database;
 use frame\database\Records;
 
 class EndCollectEvents extends BaseStatCollector

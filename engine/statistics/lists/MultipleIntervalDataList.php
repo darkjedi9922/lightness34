@@ -1,6 +1,6 @@
 <?php namespace engine\statistics\lists;
 
-use frame\cash\database;
+use frame\stdlib\cash\database;
 use ArrayIterator;
 
 use function lightlib\last;

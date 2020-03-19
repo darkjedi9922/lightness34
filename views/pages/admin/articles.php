@@ -1,6 +1,6 @@
 <?php /** @var frame\views\Page $self */
 
-use frame\cash\pagenumber;
+use frame\stdlib\cash\pagenumber;
 use engine\articles\Article;
 use engine\articles\ArticlePagedList;
 use engine\users\cash\my_rights;

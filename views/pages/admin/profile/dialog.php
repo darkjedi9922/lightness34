@@ -3,7 +3,7 @@
 use frame\tools\Init;
 use engine\users\cash\user_me;
 use engine\users\User;
-use frame\cash\pagenumber;
+use frame\stdlib\cash\pagenumber;
 use frame\tools\JsonEncoder;
 
 Init::accessRight('messages', 'use');

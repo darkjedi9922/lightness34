@@ -3,7 +3,7 @@
 use frame\tools\Init;
 use engine\articles\Article;
 use engine\users\User;
-use frame\cash\pagenumber;
+use frame\stdlib\cash\pagenumber;
 use engine\users\cash\user_me;
 use engine\users\Group;
 use frame\modules\Modules;

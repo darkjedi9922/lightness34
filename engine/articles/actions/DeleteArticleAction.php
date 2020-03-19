@@ -4,7 +4,7 @@ use engine\articles\Article;
 use frame\actions\ActionBody;
 use frame\actions\fields\IntegerField;
 use frame\tools\Init;
-use frame\cash\prev_router;
+use frame\stdlib\cash\prev_router;
 
 class DeleteArticleAction extends ActionBody
 {

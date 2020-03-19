@@ -4,8 +4,8 @@ use engine\statistics\macros\BaseStatCollector;
 use engine\statistics\stats\ActionStat;
 use frame\route\Response;
 
-use frame\cash\config;
-use frame\cash\database;
+use frame\stdlib\cash\config;
+use frame\stdlib\cash\database;
 
 class EndCollectAppStat extends BaseStatCollector
 {

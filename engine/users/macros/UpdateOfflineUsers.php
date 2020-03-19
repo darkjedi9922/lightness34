@@ -1,7 +1,7 @@
 <?php namespace engine\users\macros;
 
 use engine\users\User;
-use frame\cash\database;
+use frame\stdlib\cash\database;
 use frame\database\Records;
 use frame\events\DaemonMacro;
 

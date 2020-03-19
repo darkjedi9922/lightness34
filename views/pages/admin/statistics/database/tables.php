@@ -1,7 +1,7 @@
 <?php /** @var frame\views\Page $self */
 
 use frame\tools\JsonEncoder;
-use frame\cash\database;
+use frame\stdlib\cash\database;
 
 $tablesProps = ['tables' => []];
 $tables = database::get()->query("SHOW TABLES")->readColumn(0);

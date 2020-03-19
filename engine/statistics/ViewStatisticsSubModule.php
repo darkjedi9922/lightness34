@@ -11,8 +11,8 @@ use engine\statistics\stats\TimeStat;
 use frame\modules\Module;
 use frame\views\Layouted;
 use frame\views\View;
-use frame\cash\config;
-use frame\cash\database;
+use frame\stdlib\cash\config;
+use frame\stdlib\cash\database;
 use frame\errors\Errors;
 
 class ViewStatisticsSubModule extends BaseStatisticsSubModule

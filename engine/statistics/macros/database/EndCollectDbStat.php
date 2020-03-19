@@ -4,8 +4,8 @@ use engine\statistics\macros\BaseStatCollector;
 use engine\statistics\stats\QueryStat;
 use engine\statistics\stats\QueryRouteStat;
 use engine\statistics\stats\BaseRouteStat;
-use frame\cash\database;
-use frame\cash\config;
+use frame\stdlib\cash\database;
+use frame\stdlib\cash\config;
 
 class EndCollectDbStat extends BaseStatCollector
 {

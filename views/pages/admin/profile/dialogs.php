@@ -5,7 +5,7 @@ use engine\users\cash\user_me;
 use engine\messages\actions\DeleteDialog;
 use engine\messages\DialogPagedList;
 use engine\messages\Dialog;
-use frame\cash\pagenumber;
+use frame\stdlib\cash\pagenumber;
 use function lightlib\shorten;
 use engine\users\User;
 use frame\actions\ViewAction;

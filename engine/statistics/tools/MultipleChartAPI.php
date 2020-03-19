@@ -3,7 +3,7 @@
 use frame\tools\Init;
 use frame\tools\JsonEncoder;
 use engine\statistics\lists\MultipleIntervalDataList;
-use frame\cash\router;
+use frame\stdlib\cash\router;
 
 class MultipleChartAPI
 {

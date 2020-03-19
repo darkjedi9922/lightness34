@@ -1,6 +1,6 @@
 <?php namespace engine\statistics\stats;
 
-use frame\cash\database;
+use frame\stdlib\cash\database;
 
 class EventRouteStat extends BaseRouteStat
 {

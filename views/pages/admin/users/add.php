@@ -3,7 +3,7 @@
 use engine\users\actions\AddUser;
 use engine\users\Gender;
 use frame\actions\ViewAction;
-use frame\cash\config;
+use frame\stdlib\cash\config;
 use frame\lists\base\IdentityList;
 use frame\tools\JsonEncoder;
 use frame\tools\Init;

@@ -2,7 +2,7 @@
 
 use frame\lists\paged\IdentityPagedList;
 use engine\users\User;
-use frame\cash\config;
+use frame\stdlib\cash\config;
 
 class UserPagedList extends IdentityPagedList
 {

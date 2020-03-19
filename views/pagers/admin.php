@@ -1,6 +1,6 @@
 <?php /** @var frame\lists\paged\PagerView $self */
 
-use frame\cash\router as current_router;
+use frame\stdlib\cash\router as current_router;
 use frame\route\Router;
 
 $pager = $self->getPager();

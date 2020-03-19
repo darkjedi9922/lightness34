@@ -7,8 +7,8 @@ use frame\events\Events;
 use engine\statistics\BaseStatisticsSubModule;
 use engine\statistics\macros\BaseStatCollector;
 use engine\statistics\tools\StatEvents;
-use frame\cash\config;
-use frame\cash\router;
+use frame\stdlib\cash\config;
+use frame\stdlib\cash\router;
 use frame\modules\Modules;
 
 class StatisticsModule extends Module

@@ -1,6 +1,6 @@
 <?php /** @var frame\views\Layout $self */
 
-use frame\cash\config;
+use frame\stdlib\cash\config;
 
 use function lightlib\versionify;
 

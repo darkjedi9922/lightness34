@@ -2,7 +2,7 @@
 
 use frame\tools\Init;
 use engine\users\Group;
-use frame\cash\config;
+use frame\stdlib\cash\config;
 use frame\actions\ViewAction;
 use frame\tools\JsonEncoder;
 use engine\admin\actions\EditAdminConfig;

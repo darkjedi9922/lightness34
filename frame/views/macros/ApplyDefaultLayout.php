@@ -4,7 +4,7 @@ use frame\events\Macro;
 use frame\views\View;
 use frame\views\Layouted;
 
-use frame\cash\config;
+use frame\stdlib\cash\config;
 
 class ApplyDefaultLayout extends Macro
 {

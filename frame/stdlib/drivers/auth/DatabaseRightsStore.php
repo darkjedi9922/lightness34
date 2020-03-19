@@ -1,4 +1,4 @@
-<?php namespace drivers\auth;
+<?php namespace frame\stdlib\drivers\auth;
 
 use frame\database\Records;
 

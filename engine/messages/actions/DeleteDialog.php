@@ -5,7 +5,7 @@ use engine\users\cash\user_me;
 use engine\users\Group;
 use frame\actions\ActionBody;
 use frame\actions\fields\IntegerField;
-use frame\cash\database;
+use frame\stdlib\cash\database;
 use frame\tools\Init;
 
 class DeleteDialog extends ActionBody

@@ -1,7 +1,7 @@
 <?php namespace frame\errors\handlers;
 
 use frame\route\Response;
-use frame\cash\config;
+use frame\stdlib\cash\config;
 
 class HttpErrorHandler implements ErrorHandler
 {

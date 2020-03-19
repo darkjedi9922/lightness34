@@ -2,8 +2,8 @@
 
 use frame\lists\paged\PagedList;
 use frame\lists\iterators\IdentityIterator;
-use frame\cash\config;
-use frame\cash\database;
+use frame\stdlib\cash\config;
+use frame\stdlib\cash\database;
 use engine\users\cash\user_me;
 
 class NewArticlePagedList extends PagedList

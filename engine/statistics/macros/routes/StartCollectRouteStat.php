@@ -4,7 +4,7 @@ use frame\route\Request;
 use engine\statistics\stats\TimeStat;
 use engine\statistics\stats\RouteStat;
 use engine\statistics\macros\BaseStatCollector;
-use frame\cash\router;
+use frame\stdlib\cash\router;
 
 class StartCollectRouteStat extends BaseStatCollector
 {

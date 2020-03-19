@@ -3,8 +3,8 @@
 use frame\core\Driver;
 use frame\events\Events;
 use frame\tools\Debug;
-use frame\cash\config;
-use frame\cash\logger;
+use frame\stdlib\cash\config;
+use frame\stdlib\cash\logger;
 use frame\errors\handlers\ErrorHandler;
 
 class Errors extends Driver

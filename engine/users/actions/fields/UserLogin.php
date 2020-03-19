@@ -1,7 +1,7 @@
 <?php namespace engine\users\actions\fields;
 
 use frame\actions\fields\StringField;
-use frame\cash\config;
+use frame\stdlib\cash\config;
 use engine\users\User;
 
 class UserLogin extends StringField

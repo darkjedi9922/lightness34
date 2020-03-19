@@ -2,7 +2,7 @@
 
 use frame\route\Response;
 use frame\errors\HttpError;
-use frame\cash\config;
+use frame\stdlib\cash\config;
 
 class StrictExceptionHandler implements ErrorHandler
 {

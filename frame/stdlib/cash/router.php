@@ -1,4 +1,4 @@
-<?php namespace frame\cash;
+<?php namespace frame\stdlib\cash;
 
 use frame\route\Request;
 use frame\route\Router as FrameRouter;

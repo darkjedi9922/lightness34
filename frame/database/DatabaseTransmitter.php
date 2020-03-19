@@ -1,6 +1,6 @@
 <?php namespace frame\database;
 
-use frame\cash\database;
+use frame\stdlib\cash\database;
 
 /**
  * Так как этот класс использует базу данных, следует использовать его только 

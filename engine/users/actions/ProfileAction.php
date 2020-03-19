@@ -6,7 +6,7 @@ use frame\errors\NotImplementedException;
 use frame\tools\Init;
 use engine\users\User;
 use engine\users\Gender;
-use frame\cash\config;
+use frame\stdlib\cash\config;
 use frame\tools\units\ByteUnit;
 
 abstract class ProfileAction extends ActionBody

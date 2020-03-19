@@ -1,6 +1,6 @@
 <?php namespace engine\statistics\stats;
 
-use frame\cash\router;
+use frame\stdlib\cash\router;
 use frame\database\Identity;
 
 abstract class BaseRouteStat extends Identity

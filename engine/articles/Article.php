@@ -1,6 +1,6 @@
 <?php namespace engine\articles;
 
-use frame\cash\database;
+use frame\stdlib\cash\database;
 use frame\database\Identity;
 use engine\users\User;
 use engine\users\Group;

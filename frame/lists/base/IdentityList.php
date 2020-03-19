@@ -1,6 +1,6 @@
 <?php namespace frame\lists\base;
 
-use frame\cash\database;
+use frame\stdlib\cash\database;
 use function lightlib\array_assemble;
 use frame\lists\iterators\IdentityIterator;
 

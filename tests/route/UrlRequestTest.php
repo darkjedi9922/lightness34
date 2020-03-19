@@ -1,7 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use drivers\route\UrlRequest;
+use frame\stdlib\drivers\route\UrlRequest;
 use frame\core\Core;
 
 class UrlRequestTest extends TestCase

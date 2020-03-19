@@ -28,11 +28,17 @@ use frame\views\macros\ShowPage;
 use frame\views\macros\ApplyDefaultLayout;
 
 $app = new Core;
-$app->replaceDriver(frame\route\Request::class, drivers\route\UrlRequest::class);
-$app->replaceDriver(frame\route\Response::class, drivers\route\UrlResponse::class);
+$app->replaceDriver(
+    frame\route\Request::class,
+    frame\stdlib\drivers\route\UrlRequest::class
+);
+$app->replaceDriver(
+    frame\route\Response::class,
+    frame\stdlib\drivers\route\UrlResponse::class
+);
 $app->replaceDriver(
     frame\auth\RightsStore::class,
-    drivers\auth\DatabaseRightsStore::class
+    frame\stdlib\drivers\auth\DatabaseRightsStore::class
 );
 
 $errors = Errors::get();
