@@ -1,7 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use frame\tools\units\TimeUnit;
+use frame\stdlib\tools\units\TimeUnit;
 
 class TimeUnitTest extends TestCase
 {

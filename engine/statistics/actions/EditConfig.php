@@ -6,7 +6,7 @@ use frame\actions\fields\IntegerField;
 use frame\actions\fields\StringField;
 use frame\config\Json;
 use frame\tools\Init;
-use frame\tools\units\TimeUnit;
+use frame\stdlib\tools\units\TimeUnit;
 
 class EditConfig extends ActionBody
 {

@@ -1,6 +1,6 @@
-<?php namespace frame\tools\units;
+<?php namespace frame\stdlib\tools\units;
 
-class TimeUnit extends Unit
+class TimeUnit extends \frame\tools\Unit
 {
     const SECONDS = 'seconds';
     const MINUTES = 'minutes';

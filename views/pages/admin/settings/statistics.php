@@ -5,7 +5,7 @@ use frame\stdlib\cash\config;
 use frame\actions\ViewAction;
 use engine\statistics\actions\EditConfig;
 use frame\tools\JsonEncoder;
-use frame\tools\units\TimeUnit;
+use frame\stdlib\tools\units\TimeUnit;
 
 Init::accessRight('stat', 'configure');
 

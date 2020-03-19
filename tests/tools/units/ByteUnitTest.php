@@ -1,7 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use frame\tools\units\ByteUnit;
+use frame\stdlib\tools\units\ByteUnit;
 
 class ByteUnitTest extends TestCase
 {

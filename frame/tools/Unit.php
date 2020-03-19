@@ -1,4 +1,4 @@
-<?php namespace frame\tools\units;
+<?php namespace frame\tools;
 
 abstract class Unit
 {

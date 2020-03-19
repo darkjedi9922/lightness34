@@ -2,7 +2,7 @@
 
 use frame\actions\fields\FileField;
 use frame\stdlib\cash\config;
-use frame\tools\units\ByteUnit;
+use frame\stdlib\tools\units\ByteUnit;
 
 class UserAvatarField extends FileField
 {

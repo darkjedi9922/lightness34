@@ -6,7 +6,7 @@ use frame\lists\base\IdentityList;
 use engine\statistics\stats\ActionStat;
 use frame\actions\fields\PasswordField;
 use frame\actions\UploadedFile;
-use frame\tools\units\ByteUnit;
+use frame\stdlib\tools\units\ByteUnit;
 
 $clear = new ViewAction(ClearStatistics::class, ['module' => 'stat/actions']);
 

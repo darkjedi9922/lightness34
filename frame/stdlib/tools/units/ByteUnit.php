@@ -1,6 +1,6 @@
-<?php namespace frame\tools\units;
+<?php namespace frame\stdlib\tools\units;
 
-class ByteUnit extends Unit
+class ByteUnit extends \frame\tools\Unit
 {
     const BYTES = 'bytes';
     const KB = 'KB';
