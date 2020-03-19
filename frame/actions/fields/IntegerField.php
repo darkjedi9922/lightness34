@@ -1,6 +1,6 @@
 <?php namespace frame\actions\fields;
 
-class IntegerField extends BaseField
+class IntegerField extends \frame\actions\ActionField
 {
     public function __construct(int $value)
     {

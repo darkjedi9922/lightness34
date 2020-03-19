@@ -2,7 +2,7 @@
 
 use frame\actions\UploadedFile;
 
-class FileField extends BaseField
+class FileField extends \frame\actions\ActionField
 {
     public function __construct(UploadedFile $value)
     {

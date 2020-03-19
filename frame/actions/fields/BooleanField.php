@@ -1,6 +1,6 @@
 <?php namespace frame\actions\fields;
 
-class BooleanField extends BaseField
+class BooleanField extends \frame\actions\ActionField
 {
     public static function createDefault()
     {

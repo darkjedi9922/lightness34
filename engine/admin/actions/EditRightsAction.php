@@ -4,7 +4,7 @@ use engine\users\cash\my_group;
 use frame\actions\ActionBody;
 use frame\tools\Init;
 use engine\users\Group;
-use frame\actions\fields\BaseField;
+use frame\actions\fields\MixedField;
 use frame\actions\fields\IntegerField;
 use frame\auth\GroupRights;
 use frame\modules\Module;
@@ -37,7 +37,7 @@ class EditRightsAction extends ActionBody
     public function listPost(): array
     {
         return [
-            'rights' => BaseField::class
+            'rights' => MixedField::class
         ];
     }
 

@@ -2,7 +2,7 @@
 
 use function lightlib\encode_specials;
 
-class StringField extends BaseField
+class StringField extends \frame\actions\ActionField
 {
     public function __construct(string $value)
     {

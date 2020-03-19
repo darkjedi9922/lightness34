@@ -1,7 +1,6 @@
 <?php namespace frame\actions;
 
 use frame\tools\transmitters\SessionTransmitter;
-use frame\actions\fields\BaseField;
 
 class ActionTransmitter
 {
@@ -17,7 +16,7 @@ class ActionTransmitter
      * Файлы не сохраняются.
      * 
      * Среди post данных сохраняются лишь те, что указаны в ActionBody::listPost(),
-     * за исключением полей, у которых BaseField::canBeSaved() возвращает false.
+     * за исключением полей, у которых ActionField::canBeSaved() возвращает false.
      */
     public function save(Action $action)
     {
@@ -48,7 +47,7 @@ class ActionTransmitter
         $result = [];
         $post = $action->getDataArray()['post'];
         foreach ($post as $field => $value) {
-            if ($value instanceof BaseField && $value->canBeSaved())
+            if ($value instanceof ActionField && $value->canBeSaved())
                 $result[$field] = $value->get();
         }
         return $result;

@@ -13,8 +13,8 @@ abstract class ActionBody
      * listed in this method is not set when executing an action, then an error
      * HttpError:NOT_FOUND raised.
      * 
-     * Returns an array of the form ['param_name' => BaseField::class].
-     * All derived from BaseField classes also can be used here.
+     * Returns an array of the form ['param_name' => ActionField::class].
+     * All derived from ActionField classes also can be used here.
      */
     public function listGet(): array { return []; }
 

@@ -1,6 +1,5 @@
 <?php namespace frame\actions;
 
-use frame\actions\fields\BaseField;
 use frame\actions\UploadedFile;
 use frame\errors\HttpError;
 use frame\events\Events;
@@ -120,13 +119,13 @@ class Action
     {
         $value = $this->data[$type][$name] ?? null;
         if ($value === null) return $default;
-        if ($value instanceof BaseField) return $value->get();
+        if ($value instanceof ActionField) return $value->get();
         return $value;
     }
 
     /**
-     * Если unpack указан как true, будет возвращен массив значений всех BaseField,
-     * иначе будет возвращен массив самих BaseField.
+     * Если unpack указан как true, будет возвращен массив значений всех ActionField,
+     * иначе будет возвращен массив самих ActionField.
      */
     public function getDataArray(bool $unpack = false): array
     {
@@ -136,7 +135,7 @@ class Action
         foreach ($this->data as $type => $typedData) {
             if (!isset($result[$type])) $result[$type] = [];
             foreach ($typedData as $field => $value)
-                $result[$type][$field] = $value instanceof BaseField
+                $result[$type][$field] = $value instanceof ActionField
                     ? $value->get()
                     : $value;
         }

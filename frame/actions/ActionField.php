@@ -1,6 +1,6 @@
-<?php namespace frame\actions\fields;
+<?php namespace frame\actions;
 
-class BaseField
+class ActionField
 {
     private $value;
 
