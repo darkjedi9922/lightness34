@@ -37,3 +37,6 @@ public/npm-debug.log
 
 # other
 runtime
+
+# PHP Depend testing
+/_dev/metrics
