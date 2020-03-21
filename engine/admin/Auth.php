@@ -1,7 +1,7 @@
 <?php namespace engine\admin;
 
-use frame\tools\transmitters\SessionTransmitter;
-use frame\tools\transmitters\CookieTransmitter;
+use frame\stdlib\tools\transmitters\SessionTransmitter;
+use frame\stdlib\tools\transmitters\CookieTransmitter;
 
 /**
  * В качестве ключа используется admin.

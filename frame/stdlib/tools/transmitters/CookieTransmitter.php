@@ -1,6 +1,6 @@
-<?php namespace frame\tools\transmitters;
+<?php namespace frame\stdlib\tools\transmitters;
 
-class CookieTransmitter extends DataTransmitter
+class CookieTransmitter extends \frame\tools\DataTransmitter
 {
     /**
      * @var int Продолжительность жизни печенек в секундах

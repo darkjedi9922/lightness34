@@ -1,4 +1,4 @@
-<?php namespace frame\tools\transmitters;
+<?php namespace frame\tools;
 
 abstract class DataTransmitter
 {

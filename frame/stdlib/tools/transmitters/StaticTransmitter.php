@@ -1,6 +1,6 @@
-<?php namespace frame\tools\transmitters;
+<?php namespace frame\stdlib\tools\transmitters;
 
-class StaticTransmitter extends DataTransmitter
+class StaticTransmitter extends \frame\tools\DataTransmitter
 {
     /**
      * @var array Массив с данными
@@ -21,7 +21,8 @@ class StaticTransmitter extends DataTransmitter
      */
     public function getData($name)
     {
-        if (!$this->isSetData($name)) throw new \Exception('The '.$name.' is not set.');
+        if (!$this->isSetData($name)) 
+            throw new \Exception('The '.$name.' is not set.');
         return $this->data[$name];
     }
 

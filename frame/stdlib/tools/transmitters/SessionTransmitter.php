@@ -1,8 +1,8 @@
-<?php namespace frame\tools\transmitters;
+<?php namespace frame\stdlib\tools\transmitters;
 
 use function lightlib\session_start_once;
 
-class SessionTransmitter extends DataTransmitter
+class SessionTransmitter extends \frame\tools\DataTransmitter
 {
     /**
      * О конструкторе сказать нечего
@@ -25,7 +25,8 @@ class SessionTransmitter extends DataTransmitter
      */
     public function getData($name)
     {
-        if (!$this->isSetData($name)) throw new \Exception('The '.$name.' is not set.');
+        if (!$this->isSetData($name)) 
+            throw new \Exception('The '.$name.' is not set.');
         return $_SESSION[$name];
     }
 

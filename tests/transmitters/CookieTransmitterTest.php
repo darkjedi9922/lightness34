@@ -1,7 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use frame\tools\transmitters\CookieTransmitter;
+use frame\stdlib\tools\transmitters\CookieTransmitter;
 
 /** @runTestsInSeparateProcesses */
 class CookieTransmitterTest extends TestCase
