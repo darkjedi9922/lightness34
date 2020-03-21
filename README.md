@@ -87,14 +87,11 @@ The same password `0000` is used to login into the **admin panel**.
 
 ### Running the tests
 
-[PHPUnit Framework](https://phpunit.de) is used for testing.
+[PHPUnit Framework](https://phpunit.de) is used for testing. The configuration for running the tests is stored in `phpunit.xml`.
 
 ```bash
-# Go to the project's tests directory.
-cd tests
-
-# Run all the tests using PHPUnit.
-phpunit --bootstrap ./__bootstrap.php .
+cd lightness34 # Go to the project's directory.
+phpunit tests # Run all the tests using PHPUnit.
 ```
 
 ## Versioning
