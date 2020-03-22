@@ -5,48 +5,30 @@ use frame\tools\files\Directory;
 
 abstract class DaemonMacro extends Macro
 {
-    private static $semaphore = null;
-    private static $doRun = false;
-    private static $config;
-
+    /** @var Json */
+    private static $config = null;
     private $interval;
-    private $itIsTimeToRun = false;
 
     public function __construct(int $intervalInSeconds)
     {
         $this->interval = $intervalInSeconds;
-
-        if (self::$semaphore === null) {
-            // После завершения процесса семафор будет autoreleased.
-            self::$semaphore = sem_get(crc32('daemons-times'));
-            self::$doRun = self::$semaphore && sem_acquire(self::$semaphore, true);
-            if (!self::$doRun) return;
-            
-            $daemonsFolder = $this->getRuntimeFolder();
-            self::$config = new Json("$daemonsFolder/times.json");
-            if (!Directory::exists($daemonsFolder))
-                Directory::createRecursive($daemonsFolder);
-        }
-    }
-
-    public function __destruct()
-    {
-        if ($this->itIsTimeToRun && self::$config) {
-            self::$config->save();
-            self::$config = null;
-            // После этого семафор будет released.
-        }
     }
 
     public function exec(...$args)
     {
-        if (!self::$doRun) return;
-        $lastExecTime = self::$config->get(static::class) ?? 0;
-        $this->itIsTimeToRun = $lastExecTime < time() - $this->interval;
-        if ($this->itIsTimeToRun) {
+        $sem = sem_get(crc32('daemons-times'));
+        if (!$sem || !sem_acquire($sem, true)) return;
+        
+        $config = $this->getTimesConfig();
+        $lastExecTime = $config->get(static::class) ?? 0;
+        $itIsTimeToRun = $lastExecTime < time() - $this->interval;
+        if ($itIsTimeToRun) {
             $this->execDaemon();
-            self::$config->set(static::class, time());
+            $config->set(static::class, time());
+            $config->save();
         }
+
+        sem_release($sem);
     }
 
     protected abstract function execDaemon();
@@ -58,5 +40,16 @@ abstract class DaemonMacro extends Macro
     protected function getRuntimeFolder(): string
     {
         return ROOT_DIR . '/runtime/daemons';
+    }
+
+    private function getTimesConfig(): Json
+    {
+        if (!self::$config) {
+            $daemonsFolder = $this->getRuntimeFolder();
+            self::$config = new Json("$daemonsFolder/times.json");
+            if (!Directory::exists($daemonsFolder))
+                Directory::createRecursive($daemonsFolder);
+        }
+        return self::$config;
     }
 }
