@@ -1,8 +1,6 @@
 <?php namespace engine\users\macros;
 
-use engine\users\User;
 use frame\stdlib\cash\database;
-use frame\database\Records;
 use frame\events\DaemonMacro;
 
 class UpdateOfflineUsers extends DaemonMacro
