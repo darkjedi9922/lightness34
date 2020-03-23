@@ -56,7 +56,7 @@ class EditRightsAction extends ActionBody
     public function succeed(array $post, array $files)
     {
         $rights = $post['rights']->get();
-        $modules = Modules::get()->toArray();
+        $modules = Modules::getDriver()->toArray();
         foreach ($modules as $moduleName => $module) {
             /** @var Module $module */
             $desc = $module->createRightsDescription();

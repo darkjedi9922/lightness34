@@ -12,7 +12,7 @@ class router extends Cash
     public static function get(): ?FrameRouter
     {
         return self::cash('current-router', function() {
-           return new FrameRouter(Request::get()->getRequest());
+           return new FrameRouter(Request::getDriver()->getRequest());
         });
     }
 }

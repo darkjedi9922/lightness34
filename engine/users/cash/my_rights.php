@@ -14,7 +14,7 @@ class my_rights extends Cash
     public static function get(string $module): UserRights
     {
         return self::cash($module, function() use ($module) {
-            $moduleInstance = Modules::get()->findByName($module);
+            $moduleInstance = Modules::getDriver()->findByName($module);
             if (!$moduleInstance)
                 throw new \Exception("There is no module $module.");
 

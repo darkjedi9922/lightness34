@@ -27,7 +27,7 @@ class StatisticsModule extends Module
         ];
 
         foreach ($submodules as $submodule) {
-            Modules::get()->set($submodule);
+            Modules::getDriver()->set($submodule);
         }
 
         $config = config::get('statistics');
@@ -50,7 +50,7 @@ class StatisticsModule extends Module
             /** @var BaseStatisticsSubModule $submodule */
             $macros = $submodule->getAppEventHandlers();
             foreach ($macros as $event => $macro) 
-                Events::get()->on($event, $macro);
+                Events::getDriver()->on($event, $macro);
         }
 
         // Нужно закончить сбор статистики (сохранить все в БД) после ее выключения. 
@@ -66,7 +66,7 @@ class StatisticsModule extends Module
         // В этом обработчике конца убираем все установленные обработчики событий
         // статистики (выключаем сбор статистики) и только после этого уже добавляем
         // все в БД.
-        Events::get()->on(
+        Events::getDriver()->on(
             Core::EVENT_APP_START, 
             new class($submodules) extends BaseStatCollector {
                 private $statModules = [];
@@ -74,7 +74,7 @@ class StatisticsModule extends Module
                     $this->statModules = $statModules;
                 }
                 protected function collect(...$args) {
-                    Events::get()->on(
+                    Events::getDriver()->on(
                         Core::EVENT_APP_END, 
                         new class($this->statModules) extends BaseStatCollector {
                             private $statModules;
@@ -86,7 +86,7 @@ class StatisticsModule extends Module
                                     /** @var BaseStatisticsSubModule $module */
                                     $macros = $module->getAppEventHandlers();
                                     foreach ($macros as $event => $macro) {
-                                        Events::get()->off($event, $macro);
+                                        Events::getDriver()->off($event, $macro);
                                     }
                                 }
                                 foreach ($this->statModules as $module) {

@@ -40,7 +40,7 @@ class EndCollectRouteStat extends BaseStatCollector
 
     private function collectCodeInfo()
     {
-        $this->stat->code = Response::get()->getCode();
+        $this->stat->code = Response::getDriver()->getCode();
         switch ((int)($this->stat->code / 100)) {
             case 1:
             case 2:
@@ -49,7 +49,7 @@ class EndCollectRouteStat extends BaseStatCollector
         }
         switch ($this->stat->code) {
             case 302:
-                $redirect = Response::get()->getUrl();
+                $redirect = Response::getDriver()->getUrl();
                 $this->stat->code_info = encode_specials(
                     "Redirect to url: $redirect"
                 );

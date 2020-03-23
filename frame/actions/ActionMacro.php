@@ -18,7 +18,7 @@ class ActionMacro extends GetMacro
 
     protected function triggerExec(string $value)
     {
-        Events::get()->emit(self::EVENT_ACTION_TRIGGERED);
+        Events::getDriver()->emit(self::EVENT_ACTION_TRIGGERED);
         $router = new ActionRouter;
         $this->action = $router->fromTriggerUrl(\frame\stdlib\cash\router::get()->url);
         $tokenizer = new ActionToken($this->action);
@@ -29,7 +29,7 @@ class ActionMacro extends GetMacro
     
     private function result()
     {
-        if (Request::get()->isAjax() || ($redirect = $this->getRedirect()) === null) {
+        if (Request::getDriver()->isAjax() || ($redirect = $this->getRedirect()) === null) {
             $this->jsonify();
         } else $this->redirect($redirect);
     }
@@ -37,7 +37,7 @@ class ActionMacro extends GetMacro
     private function jsonify()
     {
         $redirect = $this->getRedirect();
-        Response::get()->setText(json_encode([
+        Response::getDriver()->setText(json_encode([
             'errors' => $this->action->getErrors(),
             'result' => $this->action->getResult(),
             'redirect' => !$this->isDefaultRedirect($redirect) ? $redirect : null
@@ -47,12 +47,12 @@ class ActionMacro extends GetMacro
     private function redirect(string $redirect)
     {
         if ($this->isDefaultRedirect($redirect)) {
-            $request = Request::get();
+            $request = Request::getDriver();
             $redirect = $request->hasReferer() ? $request->getReferer() : '/';
         }
         $transmitter = new ActionTransmitter;
         $transmitter->save($this->action);
-        Response::get()->setUrl(Router::toUrlOf($redirect));
+        Response::getDriver()->setUrl(Router::toUrlOf($redirect));
     }
 
     private function getRedirect(): ?string

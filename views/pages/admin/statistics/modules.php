@@ -5,7 +5,7 @@ use engine\users\User;
 use frame\modules\Modules;
 
 $listProps = ['list' => []];
-$modules = Modules::get()->toArray();
+$modules = Modules::getDriver()->toArray();
 foreach ($modules as $name => $module) {
     /** @var Module $module */
     $parent = $module->getParent();

@@ -10,6 +10,6 @@ class ValueMacro extends GetMacro
     {
         ob_clean();
         (new Value($value))->show();
-        Response::get()->finish();
+        Response::getDriver()->finish();
     }
 }

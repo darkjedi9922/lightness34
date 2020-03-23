@@ -71,7 +71,7 @@ class EventStatisticsSubModule extends BaseStatisticsSubModule
 
     private function collectAlreadySubscribers(CollectEventSubscribers $collector)
     {
-        $subscribers = Events::get()->getSubscribers();
+        $subscribers = Events::getDriver()->getSubscribers();
         foreach ($subscribers as $event => $eventSubscribers) {
             foreach ($eventSubscribers as $subscriber) {
                 $collector->exec($event, $subscriber);

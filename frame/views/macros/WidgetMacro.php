@@ -10,6 +10,6 @@ class WidgetMacro extends GetMacro
     {
         ob_clean();
         (new Widget($value))->show();
-        Response::get()->finish();
+        Response::getDriver()->finish();
     }
 }

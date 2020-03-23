@@ -16,7 +16,7 @@ $group = Group::selectIdentity($id);
 
 Init::require((bool) $group);
 
-$modules = Modules::get()->toArray();
+$modules = Modules::getDriver()->toArray();
 $edit = new ViewAction(EditRightsAction::class, ['id' => $id]);
 
 $fieldGroups = [];

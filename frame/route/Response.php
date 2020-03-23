@@ -36,7 +36,7 @@ abstract class Response extends \frame\core\Driver
         if ($this->finish) return;
        
         $this->finish = true;
-        Events::get()->emit(self::EVENT_FINISH);
+        Events::getDriver()->emit(self::EVENT_FINISH);
         exit;
     }
 }

@@ -34,7 +34,7 @@ class AddComment extends ActionBody
 
     public function initialize(array $get)
     {
-        $this->module = Modules::get()->findById($get['module_id']->get());
+        $this->module = Modules::getDriver()->findById($get['module_id']->get());
         Init::require($this->module !== null);
         Init::require(get_class($this->module) === CommentsModule::class);
         Init::accessRight($this->module->getName(), 'add');

@@ -69,7 +69,7 @@ class View
     public static function find(string $name): ?string
     {
         $namespace = trim(static::getNamespace(), '/');
-        $baseFolder = ViewRouter::get()->getBaseFolder();
+        $baseFolder = ViewRouter::getDriver()->getBaseFolder();
         $folder = $baseFolder . ($namespace ? "/$namespace" : '');
         foreach (static::getExtensions() as $ext) {
             $file = "$folder/$name.$ext";
@@ -99,11 +99,11 @@ class View
     protected function getContent()
     {
         if ($this->cachedContent === null) {
-            Events::get()->emit(self::EVENT_LOAD_START, $this);
+            Events::getDriver()->emit(self::EVENT_LOAD_START, $this);
             ob_start();
             __show($this);
             $this->cachedContent = ob_get_clean();
-            Events::get()->emit(self::EVENT_LOAD_END, $this);
+            Events::getDriver()->emit(self::EVENT_LOAD_END, $this);
         }
         return $this->cachedContent;
     }

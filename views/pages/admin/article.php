@@ -25,7 +25,7 @@ $author = User::selectIdentity($article->author_id);
 $group = Group::selectIdentity($author->group_id);
 $prevPagenumber = pagenumber::get(true);
 $page = pagenumber::get();
-$moduleId = Modules::get()->findByName('articles/comments')->getId();
+$moduleId = Modules::getDriver()->findByName('articles/comments')->getId();
 $materialId = $article->id;
 $comments = new CommentList($moduleId, $materialId, $page);
 $pages = $comments->getPager()->countPages();
@@ -42,7 +42,7 @@ $articleCommentsData = [
         'avatarUrl' => '/' . $me->getAvatarUrl(),
         'login' => $me->login
     ],
-    // 'moduleId' => Modules::get()->findByName('articles/comments')->getId(),
+    // 'moduleId' => Modules::getDriver()->findByName('articles/comments')->getId(),
     // 'materialId' => $article->id,
     'list' => [],
     'pagerHtml' => ($pages > 1 ? (new PagerView($comments->getPager(), 'admin'))->getHtml() : ''),

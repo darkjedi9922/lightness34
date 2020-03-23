@@ -14,7 +14,7 @@ class Comment extends Identity
     public static function count(string $module, int $materialId): int
     {
         return Records::from(static::getTable(), [
-            'module_id' => Modules::get()->findByName($module)->getId(),
+            'module_id' => Modules::getDriver()->findByName($module)->getId(),
             'material_id' => $materialId
         ])->count('id');
     }

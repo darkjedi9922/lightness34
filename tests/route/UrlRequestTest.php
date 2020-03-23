@@ -11,9 +11,9 @@ class UrlRequestTest extends TestCase
         $app = new Core;
 
         unset($_SERVER['HTTP_X_REQUESTED_WITH']);
-        $this->assertFalse(UrlRequest::get()->isAjax());
+        $this->assertFalse(UrlRequest::getDriver()->isAjax());
         
         $_SERVER['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
-        $this->assertTrue(UrlRequest::get()->isAjax());
+        $this->assertTrue(UrlRequest::getDriver()->isAjax());
     }
 }

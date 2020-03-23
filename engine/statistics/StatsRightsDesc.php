@@ -20,7 +20,7 @@ class StatsRightsDesc extends RightsDesc
     {
         return [
             'configure' => function() use ($user) {
-                $statsModule = Modules::get()->findByName('stat')->getId();
+                $statsModule = Modules::getDriver()->findByName('stat')->getId();
                 $statsRights = new UserRights($this, $statsModule, $user);
                 return $statsRights->can('see');
             }

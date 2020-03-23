@@ -26,7 +26,7 @@ abstract class Cash
      */
     protected static function cash(string $key, callable $creator)
     {
-        Events::get()->emit(self::EVENT_CALL, static::class, $key, $creator);
+        Events::getDriver()->emit(self::EVENT_CALL, static::class, $key, $creator);
         return self::$storage[static::class][$key] ?? 
             self::$storage[static::class][$key] = $creator();
     }

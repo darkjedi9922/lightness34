@@ -17,8 +17,8 @@ class DriverTest extends TestCase
         // который мог бы и не понадобиться.
         $app->replaceDriver(Events::class, EventsDriverExample::class);
 
-        $this->assertEquals(0, EventsDriverExample::get()->counter);
-        Events::get()->emit('test');
-        $this->assertEquals(1, EventsDriverExample::get()->counter);
+        $this->assertEquals(0, EventsDriverExample::getDriver()->counter);
+        Events::getDriver()->emit('test');
+        $this->assertEquals(1, EventsDriverExample::getDriver()->counter);
     }
 }

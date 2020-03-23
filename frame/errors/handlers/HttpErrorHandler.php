@@ -12,7 +12,7 @@ class HttpErrorHandler implements ErrorHandler
     {
         $code = $error->getCode();
         $page = config::get('core')->{"errors.$code.page"};
-        Response::get()->setCode($code);
+        Response::getDriver()->setCode($code);
         if (ErrorPage::find($page)) {
             $view = new ErrorPage($page);
             $view->show();

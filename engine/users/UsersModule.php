@@ -12,7 +12,7 @@ class UsersModule extends Module
     public function __construct(string $name, ?Module $parent = null)
     {
         parent::__construct($name, $parent);
-        $events = Events::get();
+        $events = Events::getDriver();
         $events->on(Core::EVENT_APP_END, new UpdateUserStatus);
         $events->on(Core::EVENT_APP_END, new UpdateOfflineUsers);
     }

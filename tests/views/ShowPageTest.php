@@ -16,8 +16,8 @@ class ShowPageTest extends TestCase
         $app = new Core;
         $app->replaceDriver(Request::class, RequestStub::class);
         $app->replaceDriver(ViewRouter::class, ViewRouterStub::class);
-        RequestStub::get()->setRequest('/profile/');
-        Events::get()->on(Core::EVENT_APP_START, new ShowPage);
+        RequestStub::getDriver()->setRequest('/profile/');
+        Events::getDriver()->on(Core::EVENT_APP_START, new ShowPage);
 
         $this->expectOutputString('Jed');
         $app->exec();

@@ -41,12 +41,12 @@ $app->replaceDriver(
     frame\stdlib\drivers\auth\DatabaseRightsStore::class
 );
 
-$errors = Errors::get();
+$errors = Errors::getDriver();
 $errors->setDefaultHandler(DefaultErrorHandler::class);
 $errors->setHandler(HttpError::class, HttpErrorHandler::class);
 $errors->setHandler(StrictException::class, StrictExceptionHandler::class);
 
-$modules = Modules::get();
+$modules = Modules::getDriver();
 $modules->set(new StatisticsModule('stat'));
 $modules->set(new AdminModule('admin'));
 $modules->set(new UsersModule('users'));
@@ -54,7 +54,7 @@ $modules->set(new MessagesModule('messages'));
 $modules->set(new ArticlesModule('articles'));
 $modules->set(new CommentsModule('comments', $modules->findByName('articles')));
 
-$events = Events::get();
+$events = Events::getDriver();
 $events->on(Core::EVENT_APP_START, new ActionMacro('action'));
 $events->on(Core::EVENT_APP_START, new ValueMacro('value'));
 $events->on(Core::EVENT_APP_START, new BlockMacro('block'));

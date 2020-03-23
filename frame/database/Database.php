@@ -37,9 +37,9 @@ class Database
      */
     public function query(string $sql)
     {
-        Events::get()->emit(self::EVENT_QUERY_START, $sql);
+        Events::getDriver()->emit(self::EVENT_QUERY_START, $sql);
         $result = $this->mysqli->query($sql);
-        Events::get()->emit(self::EVENT_QUERY_END, $sql);
+        Events::getDriver()->emit(self::EVENT_QUERY_END, $sql);
         if ($this->mysqli->errno) {
             throw new QueryException(
                 $sql,

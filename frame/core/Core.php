@@ -29,9 +29,9 @@ class Core
     public function __destruct()
     {
         try {
-            if ($this->executed) Events::get()->emit(self::EVENT_APP_END);
+            if ($this->executed) Events::getDriver()->emit(self::EVENT_APP_END);
         } catch (\Throwable $error) {
-            Errors::get()->handleError($error); 
+            Errors::getDriver()->handleError($error); 
         }
     }
 
@@ -75,6 +75,6 @@ class Core
     public function exec()
     {
         $this->executed = true;
-        Events::get()->emit(self::EVENT_APP_START);
+        Events::getDriver()->emit(self::EVENT_APP_START);
     }
 }

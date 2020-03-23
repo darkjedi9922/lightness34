@@ -94,7 +94,7 @@ class Errors extends Driver
             $logger->write($logger::ERROR, Debug::getErrorMessage($e));
         }
 
-        Events::get()->emit(self::EVENT_ERROR, $e);
+        Events::getDriver()->emit(self::EVENT_ERROR, $e);
 
         if (isset($this->handlers[get_class($e)])) {
             $handler = new $this->handlers[get_class($e)];

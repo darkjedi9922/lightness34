@@ -15,8 +15,8 @@ class DefaultErrorHandler implements ErrorHandler
      */
     public function handle($error)
     {
-        if (Response::get()->getCode() === HttpError::OK) 
-            Response::get()->setCode(HttpError::INTERNAL_SERVER_ERROR);
+        if (Response::getDriver()->getCode() === HttpError::OK) 
+            Response::getDriver()->setCode(HttpError::INTERNAL_SERVER_ERROR);
 
         $page = config::get('core')->{'errors.errorPage'};
         if ($page !== null) {
@@ -36,7 +36,7 @@ class DefaultErrorHandler implements ErrorHandler
              */
             ob_end_clean_all();
             echo str_replace("\n", endl, Debug::getErrorMessage($error));
-            Response::get()->finish();
+            Response::getDriver()->finish();
         }
     }
 }

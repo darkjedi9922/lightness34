@@ -22,7 +22,7 @@ class StartCollectRouteStat extends BaseStatCollector
         $this->timer->start();
         $this->stat->url = router::get()->url;
         $this->stat->type = RouteStat::ROUTE_TYPE_PAGE;
-        $this->stat->ajax = Request::get()->isAjax();
+        $this->stat->ajax = Request::getDriver()->isAjax();
         $this->stat->time = time();
     }
 }
