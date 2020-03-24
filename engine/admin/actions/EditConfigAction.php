@@ -2,8 +2,8 @@
 
 use frame\actions\ActionBody;
 use frame\tools\Init;
-use frame\config\Json;
 use frame\actions\fields\StringField;
+use frame\stdlib\configs\JsonConfig;
 
 /**
  * Параметр name: имя конфига (например, 'core').
@@ -19,7 +19,7 @@ use frame\actions\fields\StringField;
  */
 class EditConfigAction extends ActionBody
 {
-    /** @var Json */
+    /** @var JsonConfig */
     private $config;
 
     public function listGet(): array
@@ -32,7 +32,7 @@ class EditConfigAction extends ActionBody
     public function initialize(array $get)
     {
         $name = $get['name']->get();
-        $this->config = new Json(ROOT_DIR . '/config/' . $name . '.json');
+        $this->config = new JsonConfig(ROOT_DIR . '/config/' . $name . '.json');
         Init::require(!empty($this->config->getData()));
     }
     

@@ -4,9 +4,9 @@ use engine\articles\Article;
 use frame\actions\ActionBody;
 use frame\actions\fields\IntegerField;
 use frame\actions\fields\StringField;
-use frame\config\Json;
 use frame\tools\Init;
 use frame\stdlib\cash\prev_router;
+use frame\stdlib\configs\JsonConfig;
 
 class EditArticleAction extends ActionBody
 {
@@ -44,7 +44,7 @@ class EditArticleAction extends ActionBody
     public function validate(array $post, array $files): array
     {
         $errors = [];
-        $config = new Json('config/articles.json');
+        $config = new JsonConfig('config/articles.json');
         /** @var StringField $title */ $title = $post['title'];
         /** @var StringField $text */ $text = $post['text'];
 

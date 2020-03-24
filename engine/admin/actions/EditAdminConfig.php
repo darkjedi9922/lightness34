@@ -6,14 +6,14 @@ use frame\actions\ActionBody;
 use frame\actions\fields\PasswordField;
 use frame\stdlib\cash\config;
 use frame\tools\Init;
-use frame\config\Json;
+use frame\config\Config as FrameConfig;
 
 class EditAdminConfig extends ActionBody
 {
     const E_WRONG_CURRENT_PASSWORD = 1;
     const E_EMPTY_NEW_PASSWORD = 2;
 
-    /** @var Json */
+    /** @var FrameConfig */
     private $config;
 
     public function listPost(): array

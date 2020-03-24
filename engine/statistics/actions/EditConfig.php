@@ -4,7 +4,7 @@ use frame\actions\ActionBody;
 use frame\actions\fields\BooleanField;
 use frame\actions\fields\IntegerField;
 use frame\actions\fields\StringField;
-use frame\config\Json;
+use frame\stdlib\configs\JsonConfig;
 use frame\tools\Init;
 use frame\stdlib\tools\units\TimeUnit;
 
@@ -30,7 +30,7 @@ class EditConfig extends ActionBody
             $post['storeTimeValue']->get(),
             $post['storeTimeUnit']->get()
         );
-        $config = new Json(ROOT_DIR . '/config/statistics.json');
+        $config = new JsonConfig(ROOT_DIR . '/config/statistics.json');
         $config->enabled = $post['enabled']->get();
         $config->storeTimeInSeconds = $storeTime->convertTo(TimeUnit::SECONDS);
         $config->save();

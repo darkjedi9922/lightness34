@@ -5,7 +5,7 @@ use engine\admin\Auth;
 use engine\users\Encoder;
 use frame\actions\ActionBody;
 use frame\actions\fields\PasswordField;
-use frame\config\Json;
+use frame\stdlib\configs\JsonConfig;
 use frame\tools\Init;
 
 /**
@@ -36,7 +36,7 @@ class LoginAction extends ActionBody
     public function validate(array $post, array $files): array
     {
         $errors = [];
-        $config = new Json('config/admin.json');
+        $config = new JsonConfig('config/admin.json');
 
         $password = Encoder::getPassword($post['password']->get());
 

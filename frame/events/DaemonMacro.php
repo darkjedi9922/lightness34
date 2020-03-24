@@ -1,11 +1,11 @@
 <?php namespace frame\events;
 
-use frame\config\Json;
+use frame\stdlib\configs\JsonConfig;
 use frame\tools\files\Directory;
 
 abstract class DaemonMacro extends Macro
 {
-    /** @var Json */
+    /** @var JsonConfig */
     private static $config = null;
     private $interval;
 
@@ -42,11 +42,11 @@ abstract class DaemonMacro extends Macro
         return ROOT_DIR . '/runtime/daemons';
     }
 
-    private function getTimesConfig(): Json
+    private function getTimesConfig(): JsonConfig
     {
         if (!self::$config) {
             $daemonsFolder = $this->getRuntimeFolder();
-            self::$config = new Json("$daemonsFolder/times.json");
+            self::$config = new JsonConfig("$daemonsFolder/times.json");
             if (!Directory::exists($daemonsFolder))
                 Directory::createRecursive($daemonsFolder);
         }

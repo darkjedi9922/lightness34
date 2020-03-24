@@ -4,9 +4,9 @@ use engine\articles\Article;
 use engine\users\cash\user_me;
 use frame\actions\ActionBody;
 use frame\actions\fields\StringField;
-use frame\config\Json;
 use frame\tools\Init;
 use frame\stdlib\cash\prev_router;
+use frame\stdlib\configs\JsonConfig;
 
 /**
  * Права: добавление статей
@@ -39,7 +39,7 @@ class NewArticleAction extends ActionBody
     public function validate(array $post, array $files): array
     {
         $errors = [];
-        $config = new Json('config/articles.json');
+        $config = new JsonConfig('config/articles.json');
         /** @var StringField $title */ $title = $post['title'];
         /** @var StringField $text */ $text = $post['text'];
 

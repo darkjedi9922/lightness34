@@ -1,7 +1,7 @@
 <?php namespace engine\articles;
 
-use frame\config\Json;
 use frame\lists\paged\IdentityPagedList;
+use frame\stdlib\configs\JsonConfig;
 
 class ArticlePagedList extends IdentityPagedList
 {
@@ -17,6 +17,6 @@ class ArticlePagedList extends IdentityPagedList
 
     protected function loadPageLImit(): int
     {
-        return (new Json('config/articles.json'))->{'list.amount'};
+        return (new JsonConfig('config/articles.json'))->{'list.amount'};
     }
 }
