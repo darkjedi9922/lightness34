@@ -7,7 +7,7 @@ class DaemonTest extends TestCase
 {
     public function testExecutesOneTimeWithinSpecifiedIntervalInSeconds()
     {
-        $intervalInSeconds = 60 * 60;
+        $intervalInSeconds = 5;
         $daemon = new DaemonExample($intervalInSeconds);
 
         $this->assertEquals(0, $daemon->executeCount);

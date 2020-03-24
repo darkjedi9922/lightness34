@@ -9,7 +9,6 @@ class DaemonExample extends DaemonMacro
 
     public function __destruct()
     {
-        parent::__destruct();
         Directory::deleteNonEmpty($this->getRuntimeFolder());
     }
 
