@@ -41,6 +41,12 @@ $app->replaceDriver(
     frame\stdlib\drivers\auth\DatabaseRightsStore::class
 );
 
+$configRouter = frame\config\ConfigRouter::getDriver();
+$configRouter->addSupport([
+    frame\stdlib\configs\JsonConfig::class,
+    frame\stdlib\configs\PhpConfig::class
+]);
+
 $errors = Errors::getDriver();
 $errors->setDefaultHandler(DefaultErrorHandler::class);
 $errors->setHandler(HttpError::class, HttpErrorHandler::class);

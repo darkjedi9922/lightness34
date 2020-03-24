@@ -1,14 +1,15 @@
 <?php namespace frame\stdlib\cash;
 
 use frame\tools\Cash;
-use frame\stdlib\configs\JsonConfig;
+use frame\config\ConfigRouter;
+use frame\config\NamedConfig;
 
 class config extends Cash
 {
-    public static function get(string $name): JsonConfig
+    public static function get(string $name): NamedConfig
     {
         return self::cash($name, function() use ($name) {
-            return new JsonConfig(ROOT_DIR . "/config/$name");
+            return ConfigRouter::getDriver()->findConfig($name);
         });
     }
 }
