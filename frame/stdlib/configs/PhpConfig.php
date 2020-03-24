@@ -1,24 +1,19 @@
 <?php namespace frame\stdlib\configs;
 
-use frame\config\NamedConfig;
+use frame\config\FileConfig;
 use frame\errors\NotSupportedException;
 
-/**
- * {@inheritdoc}
- * Конфиг PHP возвращает массив.
- * Имя конфига в методах это путь к файлу конфига (с расширением).
- */
-class PhpConfig extends NamedConfig
+class PhpConfig extends FileConfig
 {
-    public static function exists(string $name): bool
+    public static function getFileFormat(): string
     {
-        return file_exists($name);
+        return 'php';
     }
 
     protected function loadConfig(): array
     {
         if (!self::exists($this->getName())) return [];
-        return require $this->getName();    
+        return require $this->getFile();
     }
 
     protected function saveConfig()

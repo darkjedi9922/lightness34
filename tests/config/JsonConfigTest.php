@@ -5,7 +5,7 @@ use frame\stdlib\configs\JsonConfig;
 
 class JsonConfigTest extends TestCase
 {
-    private static $file = ROOT_DIR.'/tests/config/examples/json.json';
+    private static $file = ROOT_DIR.'/tests/config/examples/json';
     private $filedata = [
         'a' => 1,
         'b' => [
@@ -15,7 +15,7 @@ class JsonConfigTest extends TestCase
 
     public static function setUpBeforeClass(): void
     {
-        $handle = fopen(self::$file, 'w');
+        $handle = fopen(self::$file . '.json', 'w');
         $data = [
             'a' => 1,
             'b' => [
@@ -28,7 +28,7 @@ class JsonConfigTest extends TestCase
 
     public static function tearDownAfterClass(): void
     {
-        unlink(self::$file);
+        unlink(self::$file . '.json');
     }
 
     public function testLoadsDataFromFile()

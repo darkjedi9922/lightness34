@@ -39,7 +39,7 @@ class NewArticleAction extends ActionBody
     public function validate(array $post, array $files): array
     {
         $errors = [];
-        $config = new JsonConfig('config/articles.json');
+        $config = new JsonConfig('config/articles');
         /** @var StringField $title */ $title = $post['title'];
         /** @var StringField $text */ $text = $post['text'];
 

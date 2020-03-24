@@ -17,6 +17,6 @@ class ArticlePagedList extends IdentityPagedList
 
     protected function loadPageLImit(): int
     {
-        return (new JsonConfig('config/articles.json'))->{'list.amount'};
+        return (new JsonConfig('config/articles'))->{'list.amount'};
     }
 }

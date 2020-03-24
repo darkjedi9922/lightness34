@@ -30,7 +30,7 @@ class EditConfig extends ActionBody
             $post['storeTimeValue']->get(),
             $post['storeTimeUnit']->get()
         );
-        $config = new JsonConfig(ROOT_DIR . '/config/statistics.json');
+        $config = new JsonConfig(ROOT_DIR . '/config/statistics');
         $config->enabled = $post['enabled']->get();
         $config->storeTimeInSeconds = $storeTime->convertTo(TimeUnit::SECONDS);
         $config->save();

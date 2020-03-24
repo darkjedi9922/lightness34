@@ -46,7 +46,7 @@ abstract class DaemonMacro extends Macro
     {
         if (!self::$config) {
             $daemonsFolder = $this->getRuntimeFolder();
-            self::$config = new JsonConfig("$daemonsFolder/times.json");
+            self::$config = new JsonConfig("$daemonsFolder/times");
             if (!Directory::exists($daemonsFolder))
                 Directory::createRecursive($daemonsFolder);
         }

@@ -2,6 +2,10 @@
 
 use frame\errors\NotSupportedException;
 
+/**
+ * При создании объекта, если конфига не существует, ошибки не будет - объект
+ * конфига просто будет пуст.
+ */
 abstract class Config
 {
     private $data;

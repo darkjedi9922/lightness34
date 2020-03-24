@@ -32,7 +32,7 @@ class EditConfigAction extends ActionBody
     public function initialize(array $get)
     {
         $name = $get['name']->get();
-        $this->config = new JsonConfig(ROOT_DIR . '/config/' . $name . '.json');
+        $this->config = new JsonConfig(ROOT_DIR . '/config/' . $name);
         Init::require(!empty($this->config->getData()));
     }
     

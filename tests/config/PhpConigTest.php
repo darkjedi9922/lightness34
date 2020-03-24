@@ -5,8 +5,8 @@ use PHPUnit\Framework\TestCase;
 
 class PhpConfigTest extends TestCase
 {
-    private $existenceFile = ROOT_DIR . '/tests/config/examples/phpconfig.php';
-    private $nonExistenceFile = ROOT_DIR . '/tests/config/examples/neversee.php';
+    private $existenceFile = ROOT_DIR . '/tests/config/examples/phpconfig';
+    private $nonExistenceFile = ROOT_DIR . '/tests/config/examples/neversee';
 
     public function testChecksExistenceOfTheConfig()
     {

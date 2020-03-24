@@ -36,7 +36,7 @@ class LoginAction extends ActionBody
     public function validate(array $post, array $files): array
     {
         $errors = [];
-        $config = new JsonConfig('config/admin.json');
+        $config = new JsonConfig('config/admin');
 
         $password = Encoder::getPassword($post['password']->get());
 
