@@ -1,31 +1,12 @@
 <?php require_once __DIR__ . '/bootstrap.php';
 
 use frame\core\Core;
+use frame\views\View;
 use frame\errors\HttpError;
 use frame\errors\StrictException;
 use frame\errors\handlers\HttpErrorHandler;
 use frame\errors\handlers\DefaultErrorHandler;
 use frame\errors\handlers\StrictExceptionHandler;
-
-use engine\admin\AdminModule;
-use engine\users\UsersModule;
-use engine\messages\MessagesModule;
-use engine\articles\ArticlesModule;
-use engine\comments\CommentsModule;
-use engine\statistics\StatisticsModule;
-
-use frame\errors\Errors;
-use frame\events\Events;
-use frame\modules\Modules;
-
-use frame\actions\ActionMacro;
-use frame\views\macros\ValueMacro;
-use frame\views\macros\BlockMacro;
-use frame\views\macros\WidgetMacro;
-
-use frame\views\View;
-use frame\views\macros\ShowPage;
-use frame\views\macros\ApplyDefaultLayout;
 
 $app = new Core;
 $app->replaceDriver(
@@ -47,25 +28,25 @@ $configRouter->addSupport([
     frame\stdlib\configs\PhpConfig::class
 ]);
 
-$errors = Errors::getDriver();
+$errors = frame\errors\Errors::getDriver();
 $errors->setDefaultHandler(DefaultErrorHandler::class);
 $errors->setHandler(HttpError::class, HttpErrorHandler::class);
 $errors->setHandler(StrictException::class, StrictExceptionHandler::class);
 
-$modules = Modules::getDriver();
-$modules->set(new StatisticsModule('stat'));
-$modules->set(new AdminModule('admin'));
-$modules->set(new UsersModule('users'));
-$modules->set(new MessagesModule('messages'));
-$modules->set(new ArticlesModule('articles'));
-$modules->set(new CommentsModule('comments', $modules->findByName('articles')));
+$modules = frame\modules\Modules::getDriver();
+$modules->set(new engine\statistics\StatisticsModule('stat'));
+$modules->set(new engine\admin\AdminModule('admin'));
+$modules->set(new engine\users\UsersModule('users'));
+$modules->set(new engine\messages\MessagesModule('messages'));
+$modules->set($articles = new engine\articles\ArticlesModule('articles'));
+$modules->set(new engine\comments\CommentsModule('comments', $articles));
 
-$events = Events::getDriver();
-$events->on(Core::EVENT_APP_START, new ActionMacro('action'));
-$events->on(Core::EVENT_APP_START, new ValueMacro('value'));
-$events->on(Core::EVENT_APP_START, new BlockMacro('block'));
-$events->on(Core::EVENT_APP_START, new WidgetMacro('widget'));
-$events->on(Core::EVENT_APP_START, new ShowPage);
-$events->on(View::EVENT_LOAD_START, new ApplyDefaultLayout);
+$events = frame\events\Events::getDriver();
+$events->on(Core::EVENT_APP_START, new frame\actions\ActionMacro('action'));
+$events->on(Core::EVENT_APP_START, new frame\views\macros\ValueMacro('value'));
+$events->on(Core::EVENT_APP_START, new frame\views\macros\BlockMacro('block'));
+$events->on(Core::EVENT_APP_START, new frame\views\macros\WidgetMacro('widget'));
+$events->on(Core::EVENT_APP_START, new frame\views\macros\ShowPage);
+$events->on(View::EVENT_LOAD_START, new frame\views\macros\ApplyDefaultLayout);
 
 $app->exec();
