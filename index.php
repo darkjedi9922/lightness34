@@ -1,52 +1,64 @@
 <?php require_once __DIR__ . '/bootstrap.php';
 
+use engine\admin\AdminModule;
+use engine\articles\ArticlesModule;
+use engine\comments\CommentsModule;
+use engine\messages\MessagesModule;
+use engine\statistics\StatisticsModule;
+use engine\users\UsersModule;
+use frame\actions\ActionMacro;
+use frame\auth\RightsStore;
+use frame\config\ConfigRouter;
 use frame\core\Core;
-use frame\views\View;
+use frame\errors\Errors;
+use frame\errors\handlers\DefaultErrorHandler;
+use frame\errors\handlers\HttpErrorHandler;
+use frame\errors\handlers\StrictExceptionHandler;
 use frame\errors\HttpError;
 use frame\errors\StrictException;
-use frame\errors\handlers\HttpErrorHandler;
-use frame\errors\handlers\DefaultErrorHandler;
-use frame\errors\handlers\StrictExceptionHandler;
+use frame\events\Events;
+use frame\modules\Modules;
+use frame\route\Request;
+use frame\route\Response;
+use frame\stdlib\configs\JsonConfig;
+use frame\stdlib\configs\PhpConfig;
+use frame\stdlib\drivers\auth\DatabaseRightsStore;
+use frame\stdlib\drivers\route\UrlRequest;
+use frame\stdlib\drivers\route\UrlResponse;
+use frame\views\macros\ApplyDefaultLayout;
+use frame\views\macros\BlockMacro;
+use frame\views\macros\ShowPage;
+use frame\views\macros\ValueMacro;
+use frame\views\macros\WidgetMacro;
+use frame\views\View;
 
 $app = new Core;
-$app->replaceDriver(
-    frame\route\Request::class,
-    frame\stdlib\drivers\route\UrlRequest::class
-);
-$app->replaceDriver(
-    frame\route\Response::class,
-    frame\stdlib\drivers\route\UrlResponse::class
-);
-$app->replaceDriver(
-    frame\auth\RightsStore::class,
-    frame\stdlib\drivers\auth\DatabaseRightsStore::class
-);
+$app->replaceDriver(Request::class, UrlRequest::class);
+$app->replaceDriver(Response::class, UrlResponse::class);
+$app->replaceDriver(RightsStore::class, DatabaseRightsStore::class);
 
-$configRouter = frame\config\ConfigRouter::getDriver();
-$configRouter->addSupport([
-    frame\stdlib\configs\JsonConfig::class,
-    frame\stdlib\configs\PhpConfig::class
-]);
+$configRouter = ConfigRouter::getDriver();
+$configRouter->addSupport([JsonConfig::class, PhpConfig::class]);
 
-$errors = frame\errors\Errors::getDriver();
+$errors = Errors::getDriver();
 $errors->setDefaultHandler(DefaultErrorHandler::class);
 $errors->setHandler(HttpError::class, HttpErrorHandler::class);
 $errors->setHandler(StrictException::class, StrictExceptionHandler::class);
 
-$modules = frame\modules\Modules::getDriver();
-$modules->set(new engine\statistics\StatisticsModule('stat'));
-$modules->set(new engine\admin\AdminModule('admin'));
-$modules->set(new engine\users\UsersModule('users'));
-$modules->set(new engine\messages\MessagesModule('messages'));
-$modules->set($articles = new engine\articles\ArticlesModule('articles'));
-$modules->set(new engine\comments\CommentsModule('comments', $articles));
+$modules = Modules::getDriver();
+$modules->set(new StatisticsModule('stat'));
+$modules->set(new AdminModule('admin'));
+$modules->set(new UsersModule('users'));
+$modules->set(new MessagesModule('messages'));
+$modules->set($articles = new ArticlesModule('articles'));
+$modules->set(new CommentsModule('comments', $articles));
 
-$events = frame\events\Events::getDriver();
-$events->on(Core::EVENT_APP_START, new frame\actions\ActionMacro('action'));
-$events->on(Core::EVENT_APP_START, new frame\views\macros\ValueMacro('value'));
-$events->on(Core::EVENT_APP_START, new frame\views\macros\BlockMacro('block'));
-$events->on(Core::EVENT_APP_START, new frame\views\macros\WidgetMacro('widget'));
-$events->on(Core::EVENT_APP_START, new frame\views\macros\ShowPage);
-$events->on(View::EVENT_LOAD_START, new frame\views\macros\ApplyDefaultLayout);
+$events = Events::getDriver();
+$events->on(Core::EVENT_APP_START, new ActionMacro('action'));
+$events->on(Core::EVENT_APP_START, new ValueMacro('value'));
+$events->on(Core::EVENT_APP_START, new BlockMacro('block'));
+$events->on(Core::EVENT_APP_START, new WidgetMacro('widget'));
+$events->on(Core::EVENT_APP_START, new ShowPage);
+$events->on(View::EVENT_LOAD_START, new ApplyDefaultLayout);
 
 $app->exec();
