@@ -2,9 +2,17 @@
 
 По сути - это обработчики форм. Но могут использоваться вне контекста форм для обработки **C**R**UD** запросов.
 
+Алгоритм действия состоит из следующих частей:
+1. Инициализация/валидация GET: `initialize()`
+2. Валидация POST/FILES: `validate()`
+3. Если нет ошибок POST/FILES, выполнение `succeed()`, иначе `fail()`
+4. Если нет ошибок POST/FILES, редирект на `getSuccessRedirect()`, иначе `getFailRedirect()`. 
+
+По умолчанию редирект при успехе и неудаче ведет на предыдущую страницу, если она есть, иначе на главную.
+
 ## Создание
 
-Нужно создать класс, унаследованный от `frame\actions\ActionBody`. В нем нужно определить абстрактный метод `succeed()` и, если нужно, переопределить стандартную реализацию других. **В этом классе можно переопределять любые методы.**
+Нужно создать класс, унаследованный от `frame\actions\ActionBody`. В нем нужно определить **один абстрактный метод** `succeed()` и, если нужно, переопределить стандартную реализацию других. **В этом классе можно переопределять любые методы.**
 
 В методе `succeed()` указывается само ядро этого действия.
 
@@ -34,7 +42,7 @@ class AddArticle extends frame\actions\ActionBody
 
 Затем, GET-поля передаются в метод `initialize()`, а POST и FILES в `succeed()` и `fail()`. Подробнее о `fail()` в описании *валидации*. 
 
-**Значения передаются в тех же обертках**, для получения примитива нужно обращаться к нему через метод `$field->get()`.
+**Значения передаются в тех же обертках**, для получения примитива нужно обращаться к нему через метод `$field->get()`. Для FILES тип примитива - это объект `frame\actions\UploadedFile`.
 
 ```php
 <?php namespace engine\comments\actions;
@@ -42,23 +50,24 @@ class AddArticle extends frame\actions\ActionBody
 use frame\actions\fields\IntegerField;
 use frame\actions\fields\StringField;
 use frame\actions\fields\FileField;
+use frame\actions\UploadedFile;
 
 class AddArticle extends frame\actions\ActionBody
 {
-    public listGet(): array
+    public function listGet(): array
     {
         return ['category_id' => IntegerField::class];
     }
 
-    public listPost(): array
+    public function listPost(): array
     {
         return [
-            'title' => STringField::class,
+            'title' => StringField::class,
             'text' => StringField::class
         ];
     }
 
-    public listFiles(): array
+    public function listFiles(): array
     {
         return ['image' => FileField::class];
     }
@@ -75,6 +84,9 @@ class AddArticle extends frame\actions\ActionBody
         $title = $post['title']->get();
         $text = $post['text']->get();
         
+        /** @var UploadedFile $image */
+        $image = $files['image']->get();
+
         // ...   
     }
 }
@@ -84,89 +96,134 @@ class AddArticle extends frame\actions\ActionBody
 
 Обертки типов полей используются для упрощения валидации зачений и дополнительных действий с ними (например, автоматическое кодирование спец. символов HTML).
 
-## Реальный пример
+## Валидация GET
+
+Выполняется в методе `initialize()`. Так как GET-поля - часть запроса, в них следует выдавать HTTP-ошибки. Это делается с помощью выброса исключения `frame\errors\HttpError`. Для упрощения проверок и генерации ошибок 403 и 404 используется класс `frame\tools\Init`.
+
+Также типы-обертки полей могут иметь встроенные методы для упрощения синтаксиа или сложности проверок.
 
 ```php
-<?php namespace engine\articles\actions;
+<?php namespace engine\comments\actions;
+
+use frame\actions\fields\StringField;
+use frame\actions\UploadedFile;
+use frame\errors\HttpError;
+use frame\tools\Init;
+
+class AddArticle extends frame\actions\ActionBody
+{
+    public function listGet(): array
+    {
+        return ['category_name' => StringField::class];
+    }
+
+    public function initialize(array $get)
+    {
+        $category = $get['category_name'];
+
+        // Способ 1. Самый примитивный.
+        if (strlen($category->get()) < 3)
+            throw new HttpError(404);
+
+        // Способ 2. Есть встроенная проверка.
+        if ($category->isTooShort(3))
+            throw new HttpError(404);
+
+        // Способ 3. Комбинация с Init (более желательно).
+        // Init::require методы выбрасывают ошибку 404.
+        Init::require(!$category->isTooShort(3));
+    }
+
+    public function succeed(array $post, array $files)
+    {
+        // ...   
+    }
+}
+```
+
+## Валидация POST/FILES
+
+Выполняется в методе `validate()`, который должен вернуть `array` с кодами возникших ошибок. Коды ошибок следует выделять в константы класса.
+
+Если есть хоть одна ошибка, то вместо `succeed()` выполняется `fail()`. Обычно нет необходимости его указывать, все зависит от специфики задачи. 
+
+В примере ниже показана валидация POST, но с FILES схема та же.
+
+```php
+<?php namespace engine\comments\actions;
 
 use frame\actions\fields\StringField;
 
-// Действие условно определяется глаголом. В данном примере
-// будем создавать действие ДобавитьСтатью.
-
-// Создаем класс, наследуясь от ActionBody.
-class AddArticle extends frame\actions\ActionBody
+class AddComment extends frame\actions\ActionBody
 {
-    // Определяем константы возможных ошибок.
-    // Значения этих констант - уникальные целые числа.
-    // Порядок не важен.
-    const E_NO_TITLE = 1;
-    const E_NO_TEXT = 2;
-    const E_LONG_TITLE = 3;
+    const E_NO_TEXT = 1;
+    const E_LONG_TEXT = 2;
 
-    // Приватные данные, которые можем использовать
-    // во время обработки.
-    private $id;
-
-    // Указываем массив требуемых POST данных и их типов.
-    // Если какое-либо значение не будет передано, приложение
-    // завершится ошибкой с кодом 404.
     public function listPost(): array
     {
-        return [
-            // Стандартные типы определены в frame\actions\fields.
-            // В данном случае мы ожидаем строки. При этом,
-            // строковые поля сразу кодируют спецсимволы HTML.
-            'title' => StringField::class,
-            'text' => StringField::class
-        ];
+        return ['text' => StringField::class];
     }
 
-    // В инициализации проверяются GET значения.
-    public function initialize(array $get)
-    {
-        // В данном примере не запрашиваем никаких GET данных,
-        // но проверяем право на создание статьи. Если юзер
-        // не может этого делать, Init автоматически завершит
-        // выполнение ошибкой 403.
-        Init::accessRight('articles', 'add');
-    }
-
-    // Валидируем пришедшие POST-данные и загружаемые файлы.
-    // Никаких файлов не запрашивали, значит массив файлов
-    // будет пуст.
     public function validate(array $post, array $files): array
     {
         $errors = [];
-        $config = new JsonConfig('config/articles');
-        /** @var StringField $title */ $title = $post['title'];
+        
         /** @var StringField $text */ $text = $post['text'];
-
-        if ($title->isEmpty()) $errors[] = static::E_NO_TITLE;
-        else if ($title->isTooLong($config->{'title.maxLength'})) 
-            $errors[] = static::E_LONG_TITLE;
-
+        
         if ($text->isEmpty()) $errors[] = static::E_NO_TEXT;
+        else if ($text->isTooLong(255)) 
+            $errors[] = static::E_LONG_TEXT;
 
         return $errors;
     }
 
     public function succeed(array $post, array $files)
     {
+        // ...
+    }
+
+    public function fail(array $post, array $files)
+    {
+        // ...
+    }
+}
+```
+
+*Замечание:* **выброс исключений где-либо в действии не приведет к `fail()`.** Ошибка просто обработается на верхнем уровне приложения.
+
+## Редирект после успешного/неудачного завершения
+
+После `succeed()` выполняется редирект, возвращаемый в методе `getSuccessRedirect()`, а после `fail()` - на `getFailRedirect()`. По умолчанию оба редиректа возвращают предыдущий URL, если он есть.
+
+Если нужно отключить редирект по умолчанию, нужно вернуть `null`.
+
+```php
+<?php namespace engine\articles\actions;
+
+use frame\actions\fields\StringField;
+
+class AddArticle extends frame\actions\ActionBody
+{
+    private $id;
+
+    public function succeed(array $post, array $files)
+    {
         $article = new Article;
-        $article->title = $post['title']->get();
-        $article->content = $post['text']->get();
-        $article->author_id = user_me::get()->id;
-        $article->date = time();
+        $article->title = 'Some constant title';
+        $article->content = 'Some constant text';
         $this->id = $article->insert();
     }
 
-    public function getSuccessRedirect(): string
+    public function getSuccessRedirect(): ?string
     {
-        $prevRouter = prev_router::get();
-        if ($prevRouter && $prevRouter->isInNamespace('admin'))
-            return '/admin/article?id=' . $this->id;
         return '/article?id=' . $this->id;
     }
-}
+
+    // В данном примере нет валидации, значит действие
+    // всегда будет завершаться успешно. Этого редиректа
+    // тут никогда не будет.
+    public function getFailRedirect(): ?string
+    {
+        // ...
+    }
 ```
