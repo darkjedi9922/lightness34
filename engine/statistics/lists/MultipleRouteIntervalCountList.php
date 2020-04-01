@@ -19,7 +19,6 @@ class MultipleRouteIntervalCountList extends MultipleIntervalDataList
                 FROM `stat_routes` 
                 GROUP BY url, interval_time 
                 HAVING interval_time >= $minInterval
-                ORDER BY id ASC
             ) as intervalled
             GROUP BY url
             ORDER BY sort_field {$this->getSortOrder()}
