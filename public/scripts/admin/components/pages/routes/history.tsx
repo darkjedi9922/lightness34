@@ -22,18 +22,18 @@ interface Route {
 }
 
 interface RouteHistoryAPIResult {
-    clearActionUrl?: string,
     routes: Route[]
 }
 
-interface RouteHistoryState extends RouteHistoryAPIResult {}
+interface RouteHistoryState extends RouteHistoryAPIResult {
+    isLoaded: boolean
+}
 
 class RouteHistory extends React.Component<{}, RouteHistoryState> {
     public constructor(props) {
         super(props);
         this.state = {
-            // Поле используется также как флаг окончания получения ответа с сервера.
-            clearActionUrl: null,
+            isLoaded: false,
             routes: []
         }
     }
@@ -43,7 +43,10 @@ class RouteHistory extends React.Component<{}, RouteHistoryState> {
             url: '/api/stats/routes/history',
             dataType: 'json',
             success: (result: RouteHistoryState) => {
-                this.setState(result)
+                this.setState({
+                    ...result,
+                    isLoaded: true
+                })
             }
         })
     }
@@ -55,18 +58,14 @@ class RouteHistory extends React.Component<{}, RouteHistoryState> {
                 <Breadcrumbs items={[
                     { name: 'Мониторинг' },
                     { name: 'Маршруты' },
-                    { name: `История ${state.clearActionUrl 
+                    { name: `История ${state.isLoaded 
                         ? '(' + state.routes.length + ')' 
                         : ''}`
                     }
                 ]} />
-                {state.clearActionUrl && <a
-                    href={state.clearActionUrl}
-                    className="button"
-                >Очистить статистику</a>}
             </ContentHeader>
             <LoadingContent>
-                {state.clearActionUrl && <div className="box box--table">
+                {state.isLoaded && <div className="box box--table">
                     <Table
                         className="routes"
                         collapsable={true}

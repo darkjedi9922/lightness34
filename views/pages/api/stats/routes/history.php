@@ -4,7 +4,6 @@ use frame\database\Records;
 use frame\lists\base\IdentityList;
 use frame\actions\ViewAction;
 use frame\lists\iterators\IdentityIterator;
-use engine\statistics\actions\ClearStatistics;
 use engine\statistics\stats\RouteStat;
 use engine\statistics\stats\DynamicRouteParam;
 use frame\route\Router;
@@ -50,9 +49,6 @@ foreach ($routeList as $route) {
     ];
 }
 
-$clear = new ViewAction(ClearStatistics::class, ['module' => 'stat/routes']);
-
 echo JsonEncoder::forViewText([
     'routes' => $routes,
-    'clearActionUrl' => $clear->getUrl()
 ]);

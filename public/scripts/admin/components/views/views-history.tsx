@@ -34,7 +34,6 @@ interface ViewRoute {
 
 interface ViewsHistoryProps {
     routes: ViewRoute[],
-    clearStatsUrl: string
 }
 
 class ViewsHistory extends React.Component<ViewsHistoryProps> {
@@ -46,9 +45,6 @@ class ViewsHistory extends React.Component<ViewsHistoryProps> {
                     { name: 'Виды' },
                     { name: `История (${this.props.routes.length})`}
                 ]} />
-                <a href={this.props.clearStatsUrl} className="button">
-                    Очистить статистику
-                </a>
             </div>
             <div className="box box--table">
                 <Table 

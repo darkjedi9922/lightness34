@@ -1,14 +1,11 @@
 <?php
 use frame\tools\JsonEncoder;
 use frame\actions\ViewAction;
-use engine\statistics\actions\ClearStatistics;
 use frame\lists\base\IdentityList;
 use engine\statistics\stats\ActionStat;
 use frame\actions\fields\PasswordField;
 use frame\actions\UploadedFile;
 use frame\stdlib\tools\units\ByteUnit;
-
-$clear = new ViewAction(ClearStatistics::class, ['module' => 'stat/actions']);
 
 $resultHistory = [];
 $history = new IdentityList(ActionStat::class, ['id' => 'DESC']);
@@ -102,6 +99,5 @@ foreach ($history as $action) {
 }
 
 echo JsonEncoder::forViewText([
-    'clearUrl' => $clear->getUrl(),
     'history' => $resultHistory
 ]);

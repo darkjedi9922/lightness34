@@ -6,10 +6,8 @@ use frame\lists\iterators\IdentityIterator;
 use frame\database\Records;
 use engine\statistics\stats\QueryStat;
 use frame\actions\ViewAction;
-use engine\statistics\actions\ClearStatistics;
 use frame\tools\JsonEncoder;
 
-$clear = new ViewAction(ClearStatistics::class, ['module' => 'stat/db']);
 $queryHistoryProps = ['routes' => []];
 $queryRoutes = new IdentityList(QueryRouteStat::class, ['id' => 'DESC']);
 foreach ($queryRoutes as $routeStat) {
@@ -51,6 +49,5 @@ $queryHistoryProps = JsonEncoder::forHtmlAttribute($queryHistoryProps);
             История запросов (<?= $queryHistoryCount ?>)
         </span>
     </div>
-    <a href="<?= $clear->getUrl() ?>" class="button">Очистить статистику</a>
 </div>
 <div id="query-history" data-props="<?= $queryHistoryProps ?>"></div>

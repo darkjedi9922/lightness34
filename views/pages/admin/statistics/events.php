@@ -8,9 +8,6 @@ use engine\statistics\stats\EventSubscriberStat;
 use engine\statistics\stats\EventEmitStat;
 use frame\lists\iterators\IdentityIterator;
 use frame\actions\ViewAction;
-use engine\statistics\actions\ClearStatistics;
-
-$clear = new ViewAction(ClearStatistics::class, ['module' => 'stat/events']);
 
 $eventsProps = [
     'routes' => []
@@ -75,7 +72,6 @@ $eventsProps = JsonEncoder::forHtmlAttribute($eventsProps);
         <span class="breadcrumbs__divisor"></span>
         <span class="breadcrumbs__item breadcrumbs__item--current">События</span>
     </div>
-    <a href="<?= $clear->getUrl() ?>" class="button">Очистить статистику</a>
 </div>
 
 <div id="events" data-props="<?= $eventsProps ?>"></div>

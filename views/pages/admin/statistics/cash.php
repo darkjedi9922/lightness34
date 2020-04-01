@@ -5,11 +5,9 @@ use engine\statistics\stats\CashRouteStat;
 use engine\statistics\stats\CashValueStat;
 use frame\tools\JsonEncoder;
 use frame\actions\ViewAction;
-use engine\statistics\actions\ClearStatistics;
 use frame\database\Records;
 use frame\lists\iterators\IdentityIterator;
 
-$clear = new ViewAction(ClearStatistics::class, ['module' => 'stat/cash']);
 $routes = new IdentityList(CashRouteStat::class, ['id' => 'DESC']);
 $routesProps = [];
 foreach ($routes as $route) {
@@ -49,7 +47,6 @@ $historyProps = JsonEncoder::forHtmlAttribute([
         <span class="breadcrumbs__divisor"></span>
         <span class="breadcrumbs__item breadcrumbs__item--current">Кеш</span>
     </div>
-    <a href="<?= $clear->getUrl() ?>" class="button">Очистить статистику</a>
 </div>
 <span class="content__title">История вызовов (<?= $historyRouteCount ?>)</span>
 <div id="cash-use-history" data-props="<?= $historyProps ?>"></div>

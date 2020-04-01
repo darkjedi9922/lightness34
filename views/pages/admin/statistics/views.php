@@ -1,7 +1,6 @@
 <?php /** @var frame\views\Page $self */
 
 use frame\actions\ViewAction;
-use engine\statistics\actions\ClearStatistics;
 use frame\lists\iterators\IdentityIterator;
 use frame\tools\JsonEncoder;
 use frame\database\Records;
@@ -9,7 +8,6 @@ use engine\statistics\stats\ViewRouteStat;
 use engine\statistics\stats\ViewStat;
 use engine\statistics\stats\ViewMetaStat;
 
-$clear = new ViewAction(ClearStatistics::class, ['module' => 'stat/views']);
 $routes = [];
 $routesIt = new IdentityIterator(
     Records::from(ViewRouteStat::getTable())
@@ -64,7 +62,6 @@ foreach ($routesIt as $routeStat) {
 
 $viewHistoryProps = [
     'routes' => $routes,
-    'clearStatsUrl' => $clear->getUrl()
 ];
 $viewHistoryProps = JsonEncoder::forHtmlAttribute($viewHistoryProps);
 ?>

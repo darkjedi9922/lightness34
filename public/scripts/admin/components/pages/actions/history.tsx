@@ -56,7 +56,6 @@ export interface ActionStat {
 }
 
 interface ActionHistoryAPIResult {
-    clearUrl: string,
     history: ActionStat[]
 }
 
@@ -69,7 +68,6 @@ class ActionHistory extends React.Component<{}, ActionHistoryState> {
         super(props);
         this.state = {
             isLoading: true,
-            clearUrl: null,
             history: []
         }
     }
@@ -98,11 +96,6 @@ class ActionHistory extends React.Component<{}, ActionHistoryState> {
                         { name: 'История' }
                     ]} />
                 </ContentHeaderGroup>
-                {!state.isLoading &&
-                    <ContentHeaderGroup>
-                        <Button href={state.clearUrl}>Очистить статистику</Button>
-                    </ContentHeaderGroup>
-                }
             </ContentHeader>
             {state.isLoading
                 ? <LoadingContent></LoadingContent>
