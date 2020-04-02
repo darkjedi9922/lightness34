@@ -1,17 +1,14 @@
-<?php /** @var frame\views\Page $self */
+<?php
 
-use frame\tools\JsonEncoder;
 use frame\lists\base\IdentityList;
 use engine\statistics\stats\EventRouteStat;
 use frame\database\Records;
 use engine\statistics\stats\EventSubscriberStat;
-use engine\statistics\stats\EventEmitStat;
 use frame\lists\iterators\IdentityIterator;
-use frame\actions\ViewAction;
+use engine\statistics\stats\EventEmitStat;
+use frame\tools\JsonEncoder;
 
-$eventsProps = [
-    'routes' => []
-];
+$result = [];
 
 $routes = new IdentityList(EventRouteStat::class, ['id' => 'DESC']);
 foreach ($routes as $routeStat) {
@@ -60,18 +57,7 @@ foreach ($routes as $routeStat) {
         ];
     }
 
-    $eventsProps['routes'][$routeStat->id] = $route;
+    $result[] = $route;
 }
 
-$eventsProps = JsonEncoder::forHtmlAttribute($eventsProps);
-?>
-
-<div class="content__header">
-    <div class="breadcrumbs">
-        <span class="breadcrumbs__item">Мониторинг</span>
-        <span class="breadcrumbs__divisor"></span>
-        <span class="breadcrumbs__item breadcrumbs__item--current">События</span>
-    </div>
-</div>
-
-<div id="events" data-props="<?= $eventsProps ?>"></div>
+echo JsonEncoder::forViewText($result);

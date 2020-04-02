@@ -16,7 +16,7 @@ import UsersTable from './components/users-table';
 import LogPage from './components/pages/log';
 import Comments from './components/comments';
 import Form from './components/form/Form';
-import Events from './components/events';
+import EventHistory from './components/events/event-history';
 import Menu from './components/menu';
 import ActionHistory from './components/pages/actions/history';
 
@@ -36,7 +36,7 @@ setupReactComponent('#modules', ModulesList);
 setupReactComponent('#queries', QueriesPage);
 setupReactComponent('#log-page', LogPage);
 setupReactComponent('#users', UsersTable);
-setupReactComponent('#events', Events);
+setupReactComponent('#events', EventHistory);
 setupReactComponent('#menu', Menu);
 setupReactComponent('#action-history', ActionHistory);
 
