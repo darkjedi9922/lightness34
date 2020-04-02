@@ -1,6 +1,5 @@
-<?php /** @var frame\views\Page $self */
+<?php
 
-use frame\actions\ViewAction;
 use frame\lists\iterators\IdentityIterator;
 use frame\tools\JsonEncoder;
 use frame\database\Records;
@@ -60,10 +59,4 @@ foreach ($routesIt as $routeStat) {
     ];
 }
 
-$viewHistoryProps = [
-    'routes' => $routes,
-];
-$viewHistoryProps = JsonEncoder::forHtmlAttribute($viewHistoryProps);
-?>
-
-<div id="views-stat-page" data-props="<?= $viewHistoryProps ?>"></div>
+echo JsonEncoder::forViewText($routes);

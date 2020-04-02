@@ -3,7 +3,7 @@ import QueryHistory from './components/database/query-history';
 import QueriesPage from './components/pages/database/queries';
 import RouteHistory from './components/pages/routes/history';
 import DatabaseTables from './components/database/db-tables';
-import ViewsHistory from './components/views/views-history';
+import ViewHistory from './components/views/view-history';
 import RoutesCharts from './components/pages/routes/charts';
 import CashUseHistory from './components/cash/use-history';
 import ArticlesTable from './components/articles-table';
@@ -21,7 +21,7 @@ import Menu from './components/menu';
 import ActionHistory from './components/pages/actions/history';
 
 setupReactComponent('#cash-use-history', CashUseHistory);
-setupReactComponent('#views-stat-page', ViewsHistory);
+setupReactComponent('#views-stat-page', ViewHistory);
 setupReactComponent('#routes-charts', RoutesCharts);
 setupReactComponent('#messages-page', MessagesPage);
 setupReactComponent('#route-history', RouteHistory);
