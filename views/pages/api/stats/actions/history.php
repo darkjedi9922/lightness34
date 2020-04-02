@@ -1,6 +1,5 @@
 <?php
 use frame\tools\JsonEncoder;
-use frame\actions\ViewAction;
 use frame\lists\base\IdentityList;
 use engine\statistics\stats\ActionStat;
 use frame\actions\fields\PasswordField;
@@ -98,6 +97,4 @@ foreach ($history as $action) {
     ];
 }
 
-echo JsonEncoder::forViewText([
-    'history' => $resultHistory
-]);
+echo JsonEncoder::forViewText($resultHistory);
