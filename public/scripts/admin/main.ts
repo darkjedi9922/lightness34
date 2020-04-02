@@ -20,12 +20,12 @@ import EventHistory from './components/events/event-history';
 import Menu from './components/menu';
 import ActionHistory from './components/pages/actions/history';
 
-setupReactComponent('#cash-use-history', CashUseHistory);
-setupReactComponent('#views-stat-page', ViewHistory);
+setupReactComponent('#stat-cash-history', CashUseHistory);
+setupReactComponent('#stat-views-history', ViewHistory);
 setupReactComponent('#routes-charts', RoutesCharts);
 setupReactComponent('#messages-page', MessagesPage);
-setupReactComponent('#route-history', RouteHistory);
-setupReactComponent('#query-history', QueryHistory);
+setupReactComponent('#stat-routes-history', RouteHistory);
+setupReactComponent('#stat-queries-history', QueryHistory);
 setupReactComponent('#article-comments', Comments);
 setupReactComponent('#add-user-page', AddUserPage);
 setupReactComponent('#profile-page', ProfilePage);
@@ -36,8 +36,8 @@ setupReactComponent('#modules', ModulesList);
 setupReactComponent('#queries', QueriesPage);
 setupReactComponent('#log-page', LogPage);
 setupReactComponent('#users', UsersTable);
-setupReactComponent('#events', EventHistory);
+setupReactComponent('#stat-events-history', EventHistory);
 setupReactComponent('#menu', Menu);
-setupReactComponent('#action-history', ActionHistory);
+setupReactComponent('#stat-actions-history', ActionHistory);
 
 setupReactComponent('.react-form', Form);

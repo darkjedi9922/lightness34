@@ -124,7 +124,7 @@ if ($statsRights->can('see')) $globalItems[] = [
     ], [
         'name' => 'События',
         'icon' => 'flash-1',
-        'link' => '/admin/statistics/events'
+        'link' => '/admin/statistics/events/history'
     ], [
         'name' => 'Модули',
         'icon' => 'cube',
@@ -132,7 +132,7 @@ if ($statsRights->can('see')) $globalItems[] = [
     ], [
         'name' => 'Виды',
         'icon' => 'television',
-        'link' => '/admin/statistics/views'
+        'link' => '/admin/statistics/views/history'
     ], [
         'name' => 'Действия',
         'icon' => 'superpowers',
@@ -151,7 +151,7 @@ if ($statsRights->can('see')) $globalItems[] = [
         'submenu' => [[
             'name' => 'История',
             'icon' => 'clock',
-            'link' => '/admin/statistics/database/history'
+            'link' => '/admin/statistics/queries/history'
         ], [
             'name' => 'Запросы',
             'icon' => 'flag',
@@ -162,9 +162,9 @@ if ($statsRights->can('see')) $globalItems[] = [
             'link' => '/admin/statistics/database/tables'
         ]]
     ], [
-        'name' => 'Кеш',
+        'name' => 'Кэш',
         'icon' => 'floppy',
-        'link' => '/admin/statistics/cash'
+        'link' => '/admin/statistics/cash/history'
     ]]
 ];
 
