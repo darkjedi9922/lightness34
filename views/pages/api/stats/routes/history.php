@@ -2,7 +2,6 @@
 use frame\tools\JsonEncoder;
 use frame\database\Records;
 use frame\lists\base\IdentityList;
-use frame\actions\ViewAction;
 use frame\lists\iterators\IdentityIterator;
 use engine\statistics\stats\RouteStat;
 use engine\statistics\stats\DynamicRouteParam;
@@ -49,6 +48,4 @@ foreach ($routeList as $route) {
     ];
 }
 
-echo JsonEncoder::forViewText([
-    'routes' => $routes,
-]);
+echo JsonEncoder::forViewText($routes);
