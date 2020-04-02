@@ -1,14 +1,13 @@
-<?php /** @var frame\views\Page $self */
+<?php
 
 use frame\lists\base\IdentityList;
 use engine\statistics\stats\QueryRouteStat;
 use frame\lists\iterators\IdentityIterator;
 use frame\database\Records;
 use engine\statistics\stats\QueryStat;
-use frame\actions\ViewAction;
 use frame\tools\JsonEncoder;
 
-$queryHistoryProps = ['routes' => []];
+$routes = [];
 $queryRoutes = new IdentityList(QueryRouteStat::class, ['id' => 'DESC']);
 foreach ($queryRoutes as $routeStat) {
     /** @var QueryRouteStat $routeStat */
@@ -33,21 +32,7 @@ foreach ($queryRoutes as $routeStat) {
         ];
     }
 
-    $queryHistoryProps['routes'][] = $route;
+    $routes[] = $route;
 }
-$queryHistoryCount = count($queryHistoryProps['routes']);
-$queryHistoryProps = JsonEncoder::forHtmlAttribute($queryHistoryProps);
-?>
 
-<div class="content__header">
-    <div class="breadcrumbs">
-        <span class="breadcrumbs__item">Мониторинг</span>
-        <span class="breadcrumbs__divisor"></span>
-        <span class="breadcrumbs__item">База данных</span>
-        <span class="breadcrumbs__divisor"></span>
-        <span class="breadcrumbs__item breadcrumbs__item--current">
-            История запросов (<?= $queryHistoryCount ?>)
-        </span>
-    </div>
-</div>
-<div id="query-history" data-props="<?= $queryHistoryProps ?>"></div>
+echo JsonEncoder::forViewText($routes);
