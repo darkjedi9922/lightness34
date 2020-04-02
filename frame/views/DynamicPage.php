@@ -29,9 +29,9 @@ class DynamicPage extends Page
         return $this->args;
     }
 
-    public function getArgument(int $index): string
+    public function getArgument(int $index): ?string
     {
-        return $this->args[$index];
+        return $this->args[$index] ?? null;
     }
 
     public function hasArgument(int $index): bool
