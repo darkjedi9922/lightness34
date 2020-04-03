@@ -17,6 +17,8 @@ class ShowPage extends \frame\events\Macro
 
     private function findPage(string $pagename): ?Page
     {
+        if (Page::find($pagename)) return new Page($pagename);
+
         $parts = explode('/', $pagename);
 
         // Если в url вообще не будет задано частей страницы, то она точно не
@@ -34,7 +36,6 @@ class ShowPage extends \frame\events\Macro
             $page .= $parts[$i] . '/';
         }
 
-        if (Page::find($pagename)) return new Page($pagename);
         return null;
     }
 }
