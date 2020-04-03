@@ -1,5 +1,7 @@
 <?php namespace frame\views;
 
+use frame\events\Events;
+
 /**
  * @see parent
  */
@@ -9,6 +11,8 @@ class Layouted extends View
      * @var string|null Имя шаблона
      */
     private $layoutname = null;
+
+    private $isRendering = false;
 
     /**
      * @param string $name Имя вида - путь к файлу без расширения. 
@@ -23,13 +27,15 @@ class Layouted extends View
     }
 
     /**
-     * Метод может быть вызван внутри своего же файла вида. Тогда он переопределит
-     * шаблон, заданный изначально
-     * 
-     * @param string|null $name Имя шаблона или null, чтобы убрать его
+     * @param string|null $name Имя шаблона или null, чтобы убрать его.
+     * @throws \Exception При попытке изменить шаблон уже во время рендеринга
+     * (изнутри файла вида).
      */
     public function setLayout(?string $name)
     {
+        if ($this->isRendering) throw new \Exception(
+            "View {$this->name} is rendering yet. " .
+            "You cannot change the layout during its rendering.");
         $this->layoutname = $name;
     }
 
@@ -44,10 +50,13 @@ class Layouted extends View
      */
     public function show()
     {
-        $content = $this->getContent(); // загружаем на случай, если внутри шаблон изменился
+        Events::getDriver()->emit(self::EVENT_BEFORE_RENDER, $this);
+        $this->isRendering = true;
         if ($this->layoutname !== null) {
             $layout = new Layout($this->layoutname, $this);
             $layout->show(); // внутри layout сам выведет содержимое текущего вида
-        } else echo $content;
+        } else echo $this->getContent();
+        $this->isRendering = false;
+        Events::getDriver()->emit(self::EVENT_AFTER_RENDER, $this);
     }
 }

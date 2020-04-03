@@ -59,6 +59,6 @@ $events->on(Core::EVENT_APP_START, new ValueMacro('value'));
 $events->on(Core::EVENT_APP_START, new BlockMacro('block'));
 $events->on(Core::EVENT_APP_START, new WidgetMacro('widget'));
 $events->on(Core::EVENT_APP_START, new ShowPage);
-$events->on(View::EVENT_LOAD_START, new ApplyDefaultLayout);
+$events->on(View::EVENT_BEFORE_RENDER, new ApplyDefaultLayout);
 
 $app->exec();

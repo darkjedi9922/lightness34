@@ -32,6 +32,19 @@ class Layout extends Layouted
         echo $this->child->getContent();
     }
 
+    public function hasChild(string $name): bool
+    {
+        if ($this->getChildName() === $name) return true;
+        else if ($this->child instanceof self) $this->child->hasChild($name);
+        return false; 
+    }
+
+    public function getChildName(): string
+    {
+        $namespace = $this->child->getNamespace();
+        return ($namespace ? $namespace . '/' : '') . $this->child->name;
+    }
+
     /** @return mixed|null */
     public function getChildMeta(string $name)
     {

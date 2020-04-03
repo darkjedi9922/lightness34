@@ -10,8 +10,8 @@ Init::accessRight('admin', 'enter');
 
 $auth = new Auth;
 
-// Если нет авторзации и при этом не находимся на странице `admin` (там задаем флаг).
-if (!$auth->isLogged() && !$self->getChildMeta('admin-login-page-flag')) {
+// Если нет авторзации и при этом не показываем страницу `admin`.
+if (!$auth->isLogged() && !$self->hasChild('pages/admin')) {
     (new Page('admin'))->show();
     return;
 }
