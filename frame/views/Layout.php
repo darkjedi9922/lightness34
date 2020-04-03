@@ -27,9 +27,12 @@ class Layout extends Layouted
         parent::__construct($name, $layout);
     }
 
-    public function showChild()
+    public function loadChild(array $meta = []): LayoutChild
     {
-        echo $this->child->getContent();
+        foreach ($meta as $key => $value) $this->child->setMeta($key, $value);
+        // Предзагружаем сразу содержимое, чтобы все настройки внутри отработали.
+        $this->child->getContent();
+        return new LayoutChild($this->child);
     }
 
     public function hasChild(string $name): bool
@@ -43,11 +46,5 @@ class Layout extends Layouted
     {
         $namespace = $this->child->getNamespace();
         return ($namespace ? $namespace . '/' : '') . $this->child->name;
-    }
-
-    /** @return mixed|null */
-    public function getChildMeta(string $name)
-    {
-        return $this->child->getMeta($name);
     }
 }

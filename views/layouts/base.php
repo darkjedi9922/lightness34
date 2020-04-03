@@ -18,7 +18,7 @@ $config = config::get('core');
     <link rel="stylesheet" href="<?= versionify('public/styles/site.css') ?>">
 </head>
 <body>
-    <?php $self->showChild() ?>
+    <?php $self->loadChild()->show() ?>
     <div class="footer">
         <span class="footer__info">Created by Jed Sidious Alex Everdeen Dark</span>
         <span class="footer__info">2015 - 2019</span>

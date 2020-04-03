@@ -20,7 +20,7 @@ $doShowWelcomeWidget = !$auth->isLogged() && $userRights->can('add');
 </div>
 <div class="container">
     <div class="container__content">
-        <?= $self->showChild() ?>
+        <?= $self->loadChild()->show() ?>
     </div>
     <?php if ($doShowMiniProfile || $doShowWelcomeWidget): ?>
     <div class="container__sidebox">

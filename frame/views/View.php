@@ -54,6 +54,7 @@ class View
     private $meta = [];
 
     /**
+     * @var string|null
      * Содержимое файла вида кешируется при первом обращении к нему.
      */
     private $cachedContent = null;
@@ -110,7 +111,7 @@ class View
      * Это нужно, чтобы перед показом, загрузить само содержимое, внутри которого 
      * могли изменится настройки вида, чтобы успеть подстроиться под новые настройки.
      */
-    protected function getContent()
+    protected function getContent(): string
     {
         if ($this->cachedContent === null) {
             Events::getDriver()->emit(self::EVENT_LOAD_START, $this);

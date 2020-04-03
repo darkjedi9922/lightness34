@@ -59,4 +59,12 @@ class Layouted extends View
         $this->isRendering = false;
         Events::getDriver()->emit(self::EVENT_AFTER_RENDER, $this);
     }
+
+    public function getHtmlWithoutLayout(): string
+    {
+        $this->isRendering = true;
+        $result = $this->getContent();
+        $this->isRendering = false;
+        return $result;
+    }
 }

@@ -10,7 +10,7 @@ Init::accessRight('admin', 'enter');
 
 $auth = new Auth;
 
-// Если нет авторзации и при этом не показываем страницу `admin`.
+// Если нет авторизации, показываем страницу `admin` если сейчас еще не она.
 if (!$auth->isLogged() && !$self->hasChild('pages/admin')) {
     (new Page('admin'))->show();
     return;
@@ -28,7 +28,7 @@ $config = config::get('core');
     <title><?= $config->{'site.name'} ?></title>
 </head>
 <body>
-    <?php $self->showChild() ?>
+    <?php $self->loadChild()->show() ?>
     <script src="<?= versionify('public/build/admin.js') ?>"></script>
 </body>
 </html>
