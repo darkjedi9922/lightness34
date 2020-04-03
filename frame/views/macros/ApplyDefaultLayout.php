@@ -13,17 +13,24 @@ class ApplyDefaultLayout extends Macro
     public function __construct()
     {
         $this->layouts = config::get('layouts')->getData();
-        krsort($this->layouts);
+        if (isset($this->layouts['namespaces']))
+            krsort($this->layouts['namespaces']);
     }
 
     public function exec(...$args)
     {
         /** @var View $view */
         $view = $args[0];
+        $namespace = $view->getNamespace();
+        $name = ($namespace ? $namespace . '/' : '') . $view->name;
         if ($view instanceof Layouted) {
             /** @var Layouted $view */
             if ($view->getLayout() === null) {
-                foreach ($this->layouts as $namespace => $layout) {
+                if (isset($this->layouts['names'][$name])) {
+                    $view->setLayout($this->layouts['names'][$name]);
+                    return;
+                }
+                foreach ($this->layouts['namespaces'] as $namespace => $layout) {
                     if ($view->isInNamespace($namespace)) {
                         $view->setLayout($layout);
                         return;

@@ -1,8 +1,6 @@
 <?php /** @var frame\views\Page $self */
 
 use frame\views\Block;
-
-$self->setLayout('base');
 ?>
 
 <div class="header">

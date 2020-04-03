@@ -5,8 +5,6 @@ use frame\views\Widget;
 use engine\users\cash\my_rights;
 use engine\users\cash\user_me;
 
-$self->setLayout('base');
-
 $userRights = my_rights::get('users');
 $auth = new Auth;
 $me = user_me::get();

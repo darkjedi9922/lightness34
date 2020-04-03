@@ -1,8 +1,6 @@
 <?php /** @var frame\views\Layout $self */
 
 use frame\views\Block;
-
-$self->setLayout('admin-base');
 ?>
 
 <div class="container">

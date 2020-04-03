@@ -1,9 +1,17 @@
 {
-    "pages": "main",
-    "pages/admin": "admin",
-    "pages/admin/statistics": "admin-stats",
-    "pages/api": null,
-    "pages/api/stats": "api-stats",
-    "widgets": "widget",
-    "layouts/admin-stats": "admin"
+    "names": {
+        "pages/": "base",
+        "pages/admin": "admin-base",
+        "layouts/main": "base",
+        "layouts/admin": "admin-base",
+        "layouts/admin-stats": "admin"
+    },
+    "namespaces": {
+        "pages": "main",
+        "pages/admin": "admin",
+        "pages/admin/statistics": "admin-stats",
+        "pages/api": null,
+        "pages/api/stats": "api-stats",
+        "widgets": "widget"
+    }
 }
