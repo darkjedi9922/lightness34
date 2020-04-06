@@ -1,6 +1,5 @@
 <?php namespace frame\actions;
 
-use frame\actions\UploadedFile;
 use frame\errors\HttpError;
 use frame\events\Events;
 
@@ -82,8 +81,7 @@ class Action
 
     /**
      * @param string $type post|get.
-     * @param string|UploadedFile|null $value Если передано null, считается что 
-     * значения нет совсем.
+     * @param mixed|null $value Если null, считается что значения нет совсем.
      */
     public function setData(string $type, string $name, $value)
     {
@@ -112,8 +110,8 @@ class Action
      * его нет.
      * 
      * @param string $type post|get|files
-     * @param mixed $default
-     * @return string|UploadedFile|null
+     * @param mixed|null $default
+     * @return mixed|null
      */
     public function getData(string $type, string $name, $default = null)
     {
