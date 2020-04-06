@@ -2,7 +2,7 @@
 
 use frame\route\Router;
 use frame\actions\Action;
-use frame\actions\UploadedFile;
+use frame\actions\fields\UploadedFile;
 
 class ActionRouter
 {

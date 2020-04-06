@@ -1,4 +1,4 @@
-<?php namespace frame\actions;
+<?php namespace frame\actions\fields;
 
 use frame\tools\files\File;
 use function lightlib\generate_unique_filename;

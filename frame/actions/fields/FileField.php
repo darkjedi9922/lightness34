@@ -1,6 +1,6 @@
 <?php namespace frame\actions\fields;
 
-use frame\actions\UploadedFile;
+use frame\actions\fields\UploadedFile;
 
 class FileField extends \frame\actions\ActionField
 {

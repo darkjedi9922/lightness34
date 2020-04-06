@@ -11,7 +11,7 @@ use frame\errors\HttpError;
 use frame\actions\ActionRouter;
 use frame\actions\Action;
 use frame\actions\fields\FileField;
-use frame\actions\UploadedFile;
+use frame\actions\fields\UploadedFile;
 use frame\core\Core;
 use tests\actions\examples\EmptyActionExample;
 use tests\actions\examples\FileFieldActionExample;

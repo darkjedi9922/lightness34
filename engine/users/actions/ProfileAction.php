@@ -1,7 +1,7 @@
 <?php namespace engine\users\actions;
 
 use frame\actions\ActionBody;
-use frame\actions\UploadedFile;
+use frame\actions\fields\UploadedFile;
 use frame\errors\NotImplementedException;
 use frame\tools\Init;
 use engine\users\User;

@@ -3,7 +3,7 @@ use frame\tools\JsonEncoder;
 use frame\lists\base\IdentityList;
 use engine\statistics\stats\ActionStat;
 use frame\actions\fields\PasswordField;
-use frame\actions\UploadedFile;
+use frame\actions\fields\UploadedFile;
 use frame\stdlib\tools\units\ByteUnit;
 
 $resultHistory = [];

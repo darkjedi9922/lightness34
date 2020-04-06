@@ -3,7 +3,7 @@
 use frame\route\Request;
 use frame\actions\Action;
 use frame\actions\ActionBody;
-use frame\actions\UploadedFile;
+use frame\actions\fields\UploadedFile;
 use engine\statistics\stats\ActionStat;
 use engine\statistics\stats\TimeStat;
 use engine\statistics\macros\BaseStatCollector;
