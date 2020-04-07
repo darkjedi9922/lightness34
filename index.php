@@ -28,7 +28,6 @@ use frame\stdlib\drivers\route\UrlResponse;
 use frame\views\macros\ApplyDefaultLayout;
 use frame\views\macros\BlockMacro;
 use frame\views\macros\ShowPage;
-use frame\views\macros\ValueMacro;
 use frame\views\macros\WidgetMacro;
 use frame\views\View;
 
@@ -55,7 +54,6 @@ $modules->set(new CommentsModule('comments', $articles));
 
 $events = Events::getDriver();
 $events->on(Core::EVENT_APP_START, new ActionMacro('action'));
-$events->on(Core::EVENT_APP_START, new ValueMacro('value'));
 $events->on(Core::EVENT_APP_START, new BlockMacro('block'));
 $events->on(Core::EVENT_APP_START, new WidgetMacro('widget'));
 $events->on(Core::EVENT_APP_START, new ShowPage);
