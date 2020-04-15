@@ -1,5 +1,7 @@
 <?php namespace frame\stdlib\drivers\route;
 
+use function lightlib\ob_end_clean_all;
+
 class UrlResponse extends \frame\route\Response
 {
     private $redirect = null;

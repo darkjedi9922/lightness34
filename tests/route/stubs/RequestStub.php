@@ -1,4 +1,4 @@
-<?php namespace tests\views\stubs;
+<?php namespace tests\route\stubs;
 
 class RequestStub extends \frame\route\Request
 {

@@ -28,6 +28,15 @@ $formProps = [
         )
     ], [
         'type' => 'checkbox',
+        'title' => 'Режим отладки',
+        'name' => 'mode->debug',
+        'label' => 'Включить',
+        'defaultChecked' => $edit->getPost(
+            'mode->debug',
+            $config->{'mode.debug'}
+        )
+    ], [
+        'type' => 'checkbox',
         'title' => 'Логирование',
         'name' => 'log->enabled',
         'label' => 'Включить',
