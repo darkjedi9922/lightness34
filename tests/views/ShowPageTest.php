@@ -5,7 +5,7 @@ use frame\events\Events;
 use frame\route\Request;
 use frame\views\macros\ShowPage;
 use PHPUnit\Framework\TestCase;
-use tests\views\stubs\RequestStub;
+use tests\route\stubs\RequestStub;
 use frame\views\ViewRouter;
 use tests\views\stubs\ViewRouterStub;
 
