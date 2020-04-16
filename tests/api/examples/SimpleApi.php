@@ -2,7 +2,7 @@
 
 use frame\api\Api;
 
-class Simple extends Api
+class SimpleApi extends Api
 {
     public static $expectedResult = 'All OK';
 

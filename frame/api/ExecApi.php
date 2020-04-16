@@ -27,10 +27,9 @@ class ExecApi extends RouteNamespaceMacro
 
     private function getApiClass(): string
     {
-        $router = router::get();
-        $parts = $router->getPathParts();
+        $parts = router::get()->getPathParts();
         $lastIndex = count($parts) - 1;
         $parts[$lastIndex] = str_replace('-', '', ucwords($parts[$lastIndex], '-'));
-        return '\\' . implode('\\', $parts);
+        return '\\' . implode('\\', $parts) . 'Api';
     }
 }

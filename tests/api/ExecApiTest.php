@@ -10,7 +10,7 @@ use frame\stdlib\cash\config;
 use frame\stdlib\configs\JsonConfig;
 use frame\tools\JsonEncoder;
 use PHPUnit\Framework\TestCase;
-use tests\api\examples\Simple;
+use tests\api\examples\SimpleApi;
 use tests\route\stubs\RequestStub;
 use tests\route\stubs\ResponseStub;
 
@@ -28,7 +28,7 @@ class ExecApiTest extends TestCase
         $app->exec();
 
         $prettyJson = config::get('core')->{'mode.debug'};
-        $expectedResult = Simple::$expectedResult;
+        $expectedResult = SimpleApi::$expectedResult;
         $expectedOutput = JsonEncoder::forViewText($expectedResult, $prettyJson);
 
         $this->assertEquals($expectedOutput, ResponseStub::getDriver()->text);
