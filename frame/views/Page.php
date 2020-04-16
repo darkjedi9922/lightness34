@@ -1,5 +1,7 @@
 <?php namespace frame\views;
 
+use function lightlib\ob_end_clean_all;
+
 class Page extends Layouted
 {
     public static function getNamespace(): string
@@ -12,7 +14,7 @@ class Page extends Layouted
      */
     public function show()
     {
-        ob_clean();
+        ob_end_clean_all();
         parent::show();
     }
 }
