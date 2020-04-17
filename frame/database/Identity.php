@@ -12,6 +12,7 @@ abstract class Identity
     private $exists = false;
 
     private $data;
+    private $modifiedData = [];
 
     public abstract static function getTable(): string;
 
@@ -66,9 +67,10 @@ abstract class Identity
 
     public function __set(string $name, $value)
     {
-        if ($name === 'id' && $this->exists) throw new \Exception(
-            'It is not possible to change primary key 
-            value on already inserted record.');
+        if ($name === 'id') throw new \Exception(
+            'It is not possible to change id field of Identity.');
+        if (isset($this->data[$name]) && $this->data[$name] !== $value)
+            $this->modifiedData[$name] = $value;
         $this->data[$name] = $value;
     }
 
@@ -76,9 +78,8 @@ abstract class Identity
     {
         if (!$this->exists) throw new \Exception('The record does not exist yet.');
         $records = Records::from(static::getTable(), ['id' => $this->id]);
-        $newData = $this->data;
-        unset($newData['id']);
-        $records->update($newData);
+        $records->update($this->modifiedData);
+        $this->modifiedData = [];
     }
 
     public function insert(): int
