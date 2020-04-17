@@ -1,5 +1,7 @@
 <?php namespace tests\route\stubs;
 
+use frame\stdlib\cash\router;
+
 class RequestStub extends \frame\route\Request
 {
     private $request = '';
@@ -14,6 +16,11 @@ class RequestStub extends \frame\route\Request
     public function setRequest(string $request)
     {
         $this->request = $request;
+
+        // Между тестами в кэше может оставаться роутер с предыдущим URL.
+        // Чтобы не запускать для каждого теста отдельный процесс, сами 
+        // на всякий заменим его. 
+        router::get()->setUrl($request);
     }
 
     public function setReferer(string $referer)
