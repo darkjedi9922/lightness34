@@ -1,6 +1,6 @@
 <?php namespace frame\stdlib\drivers\route;
 
-use function lightlib\ob_end_clean_all;
+use function lightlib\ob_restart_all;
 
 class UrlResponse extends \frame\route\Response
 {
@@ -26,7 +26,7 @@ class UrlResponse extends \frame\route\Response
      */
     public function setText(string $text)
     {
-        ob_end_clean_all();
+        ob_restart_all();
         echo $text;
         $this->finish();
     }

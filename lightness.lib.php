@@ -205,19 +205,14 @@ function array_rename_key(array $array, string $key_old_name, string $key_new_na
     return $array;
 }
 
-function ob_restart()
-{
-    if (ob_get_length() != 0) ob_clean();
-    ob_start();
-}
-
 /**
  * Стирает содержимое со всех уровней output buffer'а,
  * выходя на самый первый
  */
-function ob_end_clean_all()
+function ob_restart_all()
 {
-    while (ob_get_level() > 0) ob_end_clean();
+    if (ob_get_level() > 0) ob_end_clean();
+    ob_start();
 }
 
 function http_parse_query($query, $arg_separator)

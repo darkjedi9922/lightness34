@@ -6,7 +6,7 @@ use frame\errors\HttpError;
 use frame\tools\Debug;
 use frame\stdlib\cash\config;
 
-use function lightlib\ob_end_clean_all;
+use function lightlib\ob_restart_all;
 
 class DefaultErrorHandler implements ErrorHandler
 {
@@ -34,7 +34,7 @@ class DefaultErrorHandler implements ErrorHandler
              * Благодаря этому при ошибке, стираем все что должно было быть выведено
              * на каждом из уровней, потом выводим ошибку и прекращаем выполнение скрипта.
              */
-            ob_end_clean_all();
+            ob_restart_all();
             echo str_replace("\n", endl, Debug::getErrorMessage($error));
             Response::getDriver()->finish();
         }

@@ -1,6 +1,6 @@
 <?php namespace frame\views;
 
-use function lightlib\ob_end_clean_all;
+use function lightlib\ob_restart_all;
 
 class Page extends Layouted
 {
@@ -14,7 +14,7 @@ class Page extends Layouted
      */
     public function show()
     {
-        ob_end_clean_all();
+        ob_restart_all();
         parent::show();
     }
 }
