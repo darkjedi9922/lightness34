@@ -53,6 +53,14 @@ $formProps = [
             'storeTimeUnit',
             $maxStoreTimeIntUnit
         )
+    ], [
+        'type' => 'text',
+        'title' => 'Лимит записей на странице истории',
+        'name' => 'historyListLimit',
+        'defaultValue' => (string)$edit->getPost(
+            'historyListLimit',
+            $config->{'historyListLimit'}
+        )
     ]],
     'buttonText' => 'Сохранить',
     'className' => 'form--short'

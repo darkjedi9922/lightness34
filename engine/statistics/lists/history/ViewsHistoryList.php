@@ -1,7 +1,6 @@
 <?php namespace engine\statistics\lists\history;
 
 use engine\statistics\stats\ViewRouteStat;
-use frame\lists\base\IdentityList;
 use frame\lists\iterators\IdentityIterator;
 use frame\database\Records;
 use engine\statistics\stats\ViewStat;
@@ -14,7 +13,7 @@ class ViewsHistoryList extends HistoryList
         return ViewRouteStat::class;
     }
 
-    protected function assembleArray(IdentityList $list): array
+    protected function assembleArray(IdentityIterator $list): array
     {
         $routes = [];
         foreach ($list as $routeStat) {

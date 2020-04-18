@@ -1,7 +1,6 @@
 <?php namespace engine\statistics\lists\history;
 
 use engine\statistics\stats\CashRouteStat;
-use frame\lists\base\IdentityList;
 use engine\statistics\stats\CashValueStat;
 use frame\database\Records;
 use frame\lists\iterators\IdentityIterator;
@@ -13,7 +12,7 @@ class CashHistoryList extends HistoryList
         return CashRouteStat::class;
     }
 
-    protected function assembleArray(IdentityList $list): array
+    protected function assembleArray(IdentityIterator $list): array
     {
         $routes = [];
         foreach ($list as $route) {

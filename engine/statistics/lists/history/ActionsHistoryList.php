@@ -1,10 +1,10 @@
 <?php namespace engine\statistics\lists\history;
 
 use engine\statistics\stats\ActionStat;
-use frame\lists\base\IdentityList;
 use frame\actions\fields\PasswordField;
 use frame\actions\UploadedFile;
 use frame\stdlib\tools\units\ByteUnit;
+use frame\lists\iterators\IdentityIterator;
 
 class ActionsHistoryList extends HistoryList
 {
@@ -13,7 +13,7 @@ class ActionsHistoryList extends HistoryList
         return ActionStat::class;
     }
 
-    protected function assembleArray(IdentityList $list): array
+    protected function assembleArray(IdentityIterator $list): array
     {
         $resultHistory = [];
         foreach ($list as $action) {

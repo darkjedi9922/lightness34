@@ -1,7 +1,6 @@
 <?php namespace engine\statistics\lists\history;
 
 use engine\statistics\stats\RouteStat;
-use frame\lists\base\IdentityList;
 use frame\database\Records;
 use frame\lists\iterators\IdentityIterator;
 use engine\statistics\stats\DynamicRouteParam;
@@ -14,7 +13,7 @@ class RoutesHistoryList extends HistoryList
         return RouteStat::class;
     }
 
-    protected function assembleArray(IdentityList $list): array
+    protected function assembleArray(IdentityIterator $list): array
     {
         $routes = [];
         foreach ($list as $route) {

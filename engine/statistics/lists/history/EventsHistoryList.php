@@ -1,7 +1,6 @@
 <?php namespace engine\statistics\lists\history;
 
 use engine\statistics\stats\EventRouteStat;
-use frame\lists\base\IdentityList;
 use frame\database\Records;
 use engine\statistics\stats\EventSubscriberStat;
 use frame\lists\iterators\IdentityIterator;
@@ -14,7 +13,7 @@ class EventsHistoryList extends HistoryList
         return EventRouteStat::class;
     }
 
-    protected function assembleArray(IdentityList $list): array
+    protected function assembleArray(IdentityIterator $list): array
     {
         $result = [];
         foreach ($list as $routeStat) {

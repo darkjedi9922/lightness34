@@ -1,10 +1,11 @@
 import React from 'react';
-import ContentHeader from '../content-header';
+import ContentHeader, { ContentHeaderGroup } from '../content-header';
 import Breadcrumbs from '../common/Breadcrumbs';
 import LoadingContent from '../loading-content';
 import Table, { SortOrder } from '../table/table';
 import { DetailsProps } from '../details';
 import $ from 'jquery';
+import parseUrl from 'url-parse';
 
 interface TableBuilder {
     className?: string,
@@ -16,6 +17,12 @@ interface TableBuilder {
     buildRowDetails: (dataItem: object) => DetailsProps[]
 }
 
+interface ApiResult {
+    list: object[],
+    countAll: number,
+    pagerHtml: string
+}
+
 interface HistoryProps {
     breadcrumbsNamePart: string,
     apiDataUrl: string,
@@ -24,7 +31,9 @@ interface HistoryProps {
 
 interface HistoryState {
     isLoaded: boolean,
-    data: object[]
+    data: object[],
+    countAll: number,
+    pagerHtml: string
 }
 
 class History extends React.Component<HistoryProps, HistoryState> {
@@ -32,17 +41,24 @@ class History extends React.Component<HistoryProps, HistoryState> {
         super(props);
         this.state = {
             isLoaded: false,
-            data: []
+            data: [],
+            countAll: 0,
+            pagerHtml: null
         }
     }
 
     public componentDidMount(): void {
         $.ajax({
             url: this.props.apiDataUrl,
+            data: {
+                p: parseUrl(window.location.search, true).query['p'] || 1
+            },
             dataType: 'json',
-            success: (result: object[]) => {
+            success: (result: ApiResult) => {
                 this.setState({
-                    data: result,
+                    data: result.list,
+                    countAll: result.countAll,
+                    pagerHtml: result.pagerHtml,
                     isLoaded: true
                 })
             }
@@ -55,11 +71,18 @@ class History extends React.Component<HistoryProps, HistoryState> {
         const builder = props.tableBuilder;
         return <>
             <ContentHeader>
-                <Breadcrumbs items={[
-                    { name: 'Мониторинг' },
-                    { name: props.breadcrumbsNamePart },
-                    { name: `История ${state.isLoaded ? '(' + state.data.length + ')' : ''}` }
-                ]} />
+                <ContentHeaderGroup>
+                    <Breadcrumbs items={[
+                        { name: 'Мониторинг' },
+                        { name: props.breadcrumbsNamePart },
+                        { name: `История ${state.isLoaded ? '(' + state.countAll + ')' : ''}` }
+                    ]} />
+                </ContentHeaderGroup>
+                {state.isLoaded &&
+                    <ContentHeaderGroup>
+                        <div dangerouslySetInnerHTML={{ __html: state.pagerHtml}} />
+                    </ContentHeaderGroup>
+                }
             </ContentHeader>
             <LoadingContent>
                 {state.isLoaded && <div className="box box--table">
