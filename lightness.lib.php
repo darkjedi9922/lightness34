@@ -211,7 +211,7 @@ function array_rename_key(array $array, string $key_old_name, string $key_new_na
  */
 function ob_restart_all()
 {
-    if (ob_get_level() > 0) ob_end_clean();
+    while (ob_get_level() > 0) ob_end_clean();
     ob_start();
 }
 
