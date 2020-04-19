@@ -1,76 +1,53 @@
 <?php namespace engine\statistics\lists\count;
 
-use engine\statistics\lists\IntervalList;
 use engine\statistics\lists\TimeIntervalList;
 use frame\database\QueryResult;
 use frame\stdlib\cash\database;
-use Iterator;
-use ArrayIterator;
+use Generator;
 
 /**
  * Каждый элемент списка это массив вида ['time' => string, 'count' => int].
  */
-abstract class IntervalCountList extends IntervalList
+abstract class IntervalCountList extends TimeIntervalList
 {
     private $limit;
     private $result;
 
     public function __construct(int $secondsInterval, int $limit)
     {
-        parent::__construct($secondsInterval);
+        $currentInterval = (int)(time() / $secondsInterval) * $secondsInterval 
+            + $secondsInterval;
+        $minInterval = $currentInterval - $secondsInterval * ($limit + 1);
+        parent::__construct($minInterval, $currentInterval, $secondsInterval);
         $this->limit = $limit;
         $this->result = $this->query();
     }
 
-    public function count(): int
+    public function getIterator(): Generator
     {
-        return $this->result->count();
-    }
+        $result = array_reverse($this->result->readAll());
+        $currentRow = 0;
+        $times = parent::getIterator();
 
-    public function getIterator(): Iterator
-    {
-        return new ArrayIterator($this->assembleArray());
+        foreach ($times as $interval) {
+            $count = 0;
+            if (($result[$currentRow]['interval_time'] ?? null) === $interval) {
+                $count = $result[$currentRow]["COUNT({$this->getCountField()})"];
+                $currentRow += 1;
+            }
+
+            yield [
+                'time' => $this->getIntervalDate($interval),
+                'value' => $count
+            ];
+        }
     }
 
     public function assembleArray(): array
     {
-        $this->result->seek(0);
         $result = [];
-
-        // Для расчета количества интервальных промежутков между значениями.
-        $resultCount = 0;
-        $lastTime = 0;
-
-        // Идем по времени с конца в начало.
-        while (($line = $this->result->readLine()) !== null) {
-            // Заполняем промежуток до следующего значения нулями по количеству
-            // интервальных промежутков между текущим и следующим.
-            $currentTime = $line['interval_time'];
-            if ($lastTime) {
-                $times = new TimeIntervalList(
-                    $lastTime, $currentTime, $this->getSecondInterval()
-                );
-                foreach ($times as $time) {
-                    if ($resultCount === $this->limit) break;
-                    $result[] = [
-                        'time' => $this->getIntervalDate($time),
-                        'value' => 0
-                    ];
-                    $resultCount += 1;
-                }
-            }
-            if ($resultCount === $this->limit) break;
-
-            // Затем добавляем текущее время.
-            $result[] = [
-                'time' => $this->getIntervalDate($currentTime),
-                'value' => $line["COUNT({$this->getCountField()})"]
-            ];
-            $resultCount += 1;
-            $lastTime = $currentTime;
-        }
-
-        return array_reverse($result);
+        foreach ($this->getIterator() as $value) $result[] = $value;
+        return $result;
     }
 
     protected abstract function getCountField(): string;
