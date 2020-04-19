@@ -1,23 +1,24 @@
 <?php namespace engine\statistics\lists\history;
 
-use engine\statistics\stats\ViewRouteStat;
 use frame\lists\iterators\IdentityIterator;
 use frame\database\Records;
 use engine\statistics\stats\ViewStat;
 use engine\statistics\stats\ViewMetaStat;
+use engine\statistics\stats\RouteStat;
+use frame\route\Router;
 
 class ViewsHistoryList extends HistoryList
 {
     public function getStatIdentityClass(): string
     {
-        return ViewRouteStat::class;
+        return RouteStat::class;
     }
 
     protected function assembleArray(IdentityIterator $list): array
     {
         $routes = [];
         foreach ($list as $routeStat) {
-            /** @var ViewRouteStat $routeStat */
+            /** @var RouteStat $routeStat */
             $routeViews = [];
             $viewsIt = new IdentityIterator(
                 Records::from(ViewStat::getTable(), ['route_id' => $routeStat->id])
@@ -55,7 +56,7 @@ class ViewsHistoryList extends HistoryList
                 ];
             }
             $routes[] = [
-                'route' => $routeStat->route,
+                'route' => (new Router($routeStat->url))->pagename,
                 'views' => $routeViews,
                 'time' => date('d.m.Y H:i', $routeStat->time)
             ];

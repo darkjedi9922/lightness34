@@ -9,12 +9,12 @@ class QueryIntervalCountList extends IntervalCountList
 
     protected function getTimeField(): string
     {
-        return 'stat_query_routes.time';
+        return 'stat_routes.time';
     }
 
     protected function getFrom(): string
     {
-        return 'stat_queries INNER JOIN stat_query_routes 
-            ON stat_queries.route_id = stat_query_routes.id';
+        return 'stat_queries INNER JOIN stat_routes 
+            ON stat_queries.route_id = stat_routes.id';
     }
 }

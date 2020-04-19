@@ -2,7 +2,7 @@
 
 use engine\statistics\macros\BaseStatCollector;
 use engine\statistics\stats\CashValueStat;
-use engine\statistics\stats\BaseRouteStat;
+use engine\statistics\stats\RouteStat;
 
 class EndCollectCashStats extends BaseStatCollector
 {
@@ -10,7 +10,7 @@ class EndCollectCashStats extends BaseStatCollector
     private $valuesCollector;
 
     public function __construct(
-        BaseRouteStat $routeStat,
+        RouteStat $routeStat,
         CollectCashCalls $valuesCollector
     ) {
         $this->routeStat = $routeStat;
@@ -19,8 +19,7 @@ class EndCollectCashStats extends BaseStatCollector
 
     protected function collect(...$args)
     {
-        $routeId = $this->routeStat->insert();
-        $this->insertValueStats($routeId);
+        $this->insertValueStats($this->routeStat->getId());
     }
 
     private function insertValueStats(int $routeId)

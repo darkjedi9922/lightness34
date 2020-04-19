@@ -2,7 +2,7 @@
 
 use engine\statistics\macros\BaseStatCollector;
 use engine\statistics\stats\QueryStat;
-use engine\statistics\stats\BaseRouteStat;
+use engine\statistics\stats\RouteStat;
 
 class EndCollectDbStat extends BaseStatCollector
 {
@@ -10,7 +10,7 @@ class EndCollectDbStat extends BaseStatCollector
     private $startQueryCollector;
 
     public function __construct(
-        BaseRouteStat $routeStat,
+        RouteStat $routeStat,
         StartCollectQueryStat $startQueryCollector
     ) {
         $this->routeStat = $routeStat;
@@ -19,8 +19,7 @@ class EndCollectDbStat extends BaseStatCollector
 
     protected function collect(...$args)
     {
-        $routeId = $this->routeStat->insert();
-        $this->insertQueryStats($routeId);
+        $this->insertQueryStats($this->routeStat->getId());
     }
 
     private function insertQueryStats(int $routeId)

@@ -2,7 +2,6 @@
 
 use frame\database\Records;
 use engine\statistics\stats\ViewStat;
-use engine\statistics\stats\ViewRouteStat;
 use engine\statistics\stats\ViewMetaStat;
 use engine\statistics\macros\views\StartCollectViewStats;
 use engine\statistics\macros\views\EndCollectViewStats;
@@ -12,16 +11,20 @@ use frame\modules\Module;
 use frame\views\Layouted;
 use frame\views\View;
 use frame\errors\Errors;
+use engine\statistics\stats\RouteStat;
 
 class ViewStatisticsSubModule extends BaseStatisticsSubModule
 {
     private $routeStat;
     private $viewStartCollector;
 
-    public function __construct(string $name, ?Module $parent = null)
-    {
+    public function __construct(
+        string $name,
+        RouteStat $routeStat,
+        ?Module $parent = null
+    ) {
         parent::__construct($name, $parent);
-        $this->routeStat = new ViewRouteStat;
+        $this->routeStat = $routeStat;
         $this->viewStartCollector = new StartCollectViewStats;
     }
 
@@ -29,12 +32,11 @@ class ViewStatisticsSubModule extends BaseStatisticsSubModule
     {
         Records::from(ViewMetaStat::getTable())->delete();
         Records::from(ViewStat::getTable())->delete();
-        Records::from(ViewRouteStat::getTable())->delete();
     }
 
     public function endCollecting()
     {
-        $routeId = $this->routeStat->insert();
+        $routeId = $this->routeStat->getId();
         $stats = $this->viewStartCollector->getViewStats();
         foreach ($stats as $view) {
             /** @var View $view */
@@ -74,7 +76,6 @@ class ViewStatisticsSubModule extends BaseStatisticsSubModule
 
     public function getAppEventHandlers(): array
     {
-        $this->routeStat->collectCurrent();
         $endViewCollector = new EndCollectViewStats($this->viewStartCollector);
 
         return [

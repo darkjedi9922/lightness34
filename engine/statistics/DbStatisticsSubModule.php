@@ -2,7 +2,6 @@
 
 use frame\database\Records;
 use frame\database\Database;
-use engine\statistics\stats\QueryRouteStat;
 use engine\statistics\stats\QueryStat;
 use engine\statistics\macros\database\EndCollectDbStat;
 use engine\statistics\macros\database\StartCollectQueryStat;
@@ -10,23 +9,26 @@ use engine\statistics\macros\database\EndCollectQueryStat;
 use engine\statistics\macros\database\CollectDbError;
 use frame\modules\Module;
 use frame\errors\Errors;
+use engine\statistics\stats\RouteStat;
 
 class DbStatisticsSubModule extends BaseStatisticsSubModule
 {
     private $routeStat;
     private $startQueryCollector;
 
-    public function __construct(string $name, ?Module $parent = null)
-    {
+    public function __construct(
+        string $name,
+        RouteStat $routeStat,
+        ?Module $parent = null
+    ) {
         parent::__construct($name, $parent);
-        $this->routeStat = new QueryRouteStat;
+        $this->routeStat = $routeStat;
         $this->startQueryCollector = new StartCollectQueryStat;
     }
 
     public function clearStats()
     {
         Records::from(QueryStat::getTable())->delete();
-        Records::from(QueryRouteStat::getTable())->delete();
     }
 
     public function endCollecting()
@@ -39,7 +41,6 @@ class DbStatisticsSubModule extends BaseStatisticsSubModule
 
     public function getAppEventHandlers(): array
     {
-        $this->routeStat->collectCurrent();
         $endQueryCollector = new EndCollectQueryStat($this->startQueryCollector);
         $errorCollector = new CollectDbError($this->startQueryCollector);
 

@@ -29,6 +29,11 @@ class RouteStatisticsSubModule extends BaseStatisticsSubModule
         $this->collectPage = new CollectPageRouteStat;
     }
 
+    public function getRouteStat()
+    {
+        return $this->routeStat;
+    }
+
     public function clearStats()
     {
         Records::from(DynamicRouteParam::getTable())->delete();

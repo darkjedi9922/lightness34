@@ -1,25 +1,27 @@
 <?php namespace engine\statistics\lists\history;
 
-use engine\statistics\stats\EventRouteStat;
 use frame\database\Records;
 use engine\statistics\stats\EventSubscriberStat;
 use frame\lists\iterators\IdentityIterator;
 use engine\statistics\stats\EventEmitStat;
+use engine\statistics\stats\RouteStat;
+use frame\stdlib\cash\database;
+use frame\route\Router;
 
 class EventsHistoryList extends HistoryList
 {
     public function getStatIdentityClass(): string
     {
-        return EventRouteStat::class;
+        return RouteStat::class;
     }
 
     protected function assembleArray(IdentityIterator $list): array
     {
         $result = [];
         foreach ($list as $routeStat) {
-            /** @var EventRouteStat $routeStat */
+            /** @var RouteStat $routeStat */
             $route = [
-                'route' => $routeStat->route,
+                'route' => (new Router($routeStat->url))->pagename,
                 'subscribers' => [],
                 'emits' => [],
                 'handles' => [],
@@ -53,7 +55,7 @@ class EventsHistoryList extends HistoryList
                 ];
             }
 
-            $handles = $routeStat->loadHandles();
+            $handles = $this->loadHandles($routeStat);
             foreach ($handles as $handle) {
                 $route['handles'][] = [
                     'emitId' => $handle['emit_id'],
@@ -66,5 +68,21 @@ class EventsHistoryList extends HistoryList
         }
 
         return $result;
+    }
+
+    private function loadHandles(RouteStat $routeStat): array
+    {
+        $routeTable = $routeStat::getTable();
+        $emitsTable = EventEmitStat::getTable();
+        $handlesTable = 'stat_event_emit_handles';
+        return database::get()->query(
+            "SELECT $handlesTable.*
+            FROM 
+                $handlesTable 
+                INNER JOIN $emitsTable ON $handlesTable.emit_id = $emitsTable.id
+                INNER JOIN $routeTable ON $emitsTable.route_id = $routeTable.id
+            WHERE $routeTable.id = {$routeStat->id}
+            ORDER BY $handlesTable.id ASC"
+        )->readAll();
     }
 }

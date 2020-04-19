@@ -1,24 +1,25 @@
 <?php namespace engine\statistics\lists\history;
 
-use engine\statistics\stats\QueryRouteStat;
 use frame\lists\iterators\IdentityIterator;
 use frame\database\Records;
 use engine\statistics\stats\QueryStat;
+use engine\statistics\stats\RouteStat;
+use frame\route\Router;
 
 class QueriesHistoryList extends HistoryList
 {
     public function getStatIdentityClass(): string
     {
-        return QueryRouteStat::class;
+        return RouteStat::class;
     }
 
     protected function assembleArray(IdentityIterator $list): array
     {
         $routes = [];
         foreach ($list as $routeStat) {
-            /** @var QueryRouteStat $routeStat */
+            /** @var RouteStat $routeStat */
             $route = [
-                'route' => $routeStat->route,
+                'route' => (new Router($routeStat->url))->pagename,
                 'queries' => [],
                 'time' => date('d.m.Y H:i', $routeStat->time)
             ];

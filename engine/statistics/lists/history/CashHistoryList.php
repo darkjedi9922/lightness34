@@ -1,22 +1,23 @@
 <?php namespace engine\statistics\lists\history;
 
-use engine\statistics\stats\CashRouteStat;
 use engine\statistics\stats\CashValueStat;
 use frame\database\Records;
 use frame\lists\iterators\IdentityIterator;
+use engine\statistics\stats\RouteStat;
+use frame\route\Router;
 
 class CashHistoryList extends HistoryList
 {
     public function getStatIdentityClass(): string
     {
-        return CashRouteStat::class;
+        return RouteStat::class;
     }
 
     protected function assembleArray(IdentityIterator $list): array
     {
         $routes = [];
         foreach ($list as $route) {
-            /** @var CashRouteStat $route */
+            /** @var RouteStat $route */
             $cashValues = [];
             $cashValuesIterator = new IdentityIterator(
                 Records::from(CashValueStat::getTable(), ['route_id' => $route->id])
@@ -35,7 +36,7 @@ class CashHistoryList extends HistoryList
                 ];
             }
             $routes[] = [
-                'route' => $route->route,
+                'route' => (new Router($route->url))->pagename,
                 'values' => $cashValues,
                 'time' => date('d.m.Y H:i', $route->time)
             ];

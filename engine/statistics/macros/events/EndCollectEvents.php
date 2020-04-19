@@ -1,10 +1,10 @@
 <?php namespace engine\statistics\macros\events;
 
 use engine\statistics\macros\BaseStatCollector;
-use engine\statistics\stats\EventRouteStat;
 use engine\statistics\stats\EventSubscriberStat;
 use engine\statistics\stats\EventEmitStat;
 use frame\database\Records;
+use engine\statistics\stats\RouteStat;
 
 class EndCollectEvents extends BaseStatCollector
 {
@@ -14,7 +14,7 @@ class EndCollectEvents extends BaseStatCollector
     private $startHandleCollector;
 
     public function __construct(
-        EventRouteStat $routeStat,
+        RouteStat $routeStat,
         CollectEventSubscribers $subscriberCollector,
         CollectEventEmits $emitCollector,
         StartCollectHandles $startHandleCollector
@@ -27,7 +27,7 @@ class EndCollectEvents extends BaseStatCollector
 
     protected function collect(...$args)
     {
-        $routeId = $this->routeStat->insert();
+        $routeId = $this->routeStat->getId();
         $this->insertSubscribers($routeId);
         $this->insertEmits($routeId);
         $this->insertHandles();
