@@ -137,13 +137,17 @@ if ($statsRights->can('see')) $globalItems[] = [
         'name' => 'Действия',
         'icon' => 'superpowers',
         'submenu' => [[
+            'name' => 'Каталог',
+            'icon' => 'folder',
+            'link' => '/admin/statistics/actions/catalog'
+        ], [
             'name' => 'История',
             'icon' => 'clock',
             'link' => '/admin/statistics/actions/history'
         ], [
-            'name' => 'Каталог',
-            'icon' => 'folder',
-            'link' => '/admin/statistics/actions/catalog'
+            'name' => 'Статистика',
+            'icon' => 'chart-area',
+            'link' => '/admin/statistics/actions/charts'
         ]]
     ], [
         'name' => 'База данных',

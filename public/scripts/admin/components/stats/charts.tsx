@@ -1,11 +1,11 @@
 import React from 'react';
-import ContentHeader, { ContentHeaderGroup } from '../../content-header';
-import LoadingContent from '../../loading-content';
-import Breadcrumbs from '../../common/Breadcrumbs';
+import ContentHeader  from '../content-header';
+import LoadingContent from '../loading-content';
+import Breadcrumbs from '../common/Breadcrumbs';
 import $ from 'jquery';
-import MultipleChart, { TimeIntervalValues, SortColumn } from '../../charts/MultipleChart';
-import SingleChart, { TimeIntervalValue } from '../../charts/SingleChart';
-import { SortOrder } from '../../table/table';
+import MultipleChart, { TimeIntervalValues, SortColumn } from '../charts/MultipleChart';
+import SingleChart, { TimeIntervalValue } from '../charts/SingleChart';
+import { SortOrder } from '../table/table';
 
 enum SecondInterval {
     HOUR = 60 * 60,
@@ -34,35 +34,40 @@ interface MultipleChartData extends ChartData {
     columnUpdating?: SortColumn
 }
 
-interface RoutesChartsState {
+interface ChartsProps {
+    name: string,
+    stat: string
+}
+
+interface ChartsState {
     charts: (SingleChartData|MultipleChartData)[]
 }
 
-interface RouteCountsAPIResultItem extends TimeIntervalValue {}
+interface CountsAPIResultItem extends TimeIntervalValue {}
 
-interface RoutesMultipleStatsAPIResult {
-    [url: string]: [{
+interface MultipleStatsAPIResult {
+    [object: string]: [{
         value?: number,
         time: string,
         timestamp: number
     }]
 }
 
-class RoutesCharts extends React.Component<{}, RoutesChartsState> {
-    public constructor(props) {
+class StatCharts extends React.Component<ChartsProps, ChartsState> {
+    public constructor(props: ChartsProps) {
         super(props);
         this.state = {
             charts: [{
                 title: 'Общее количество',
                 type: 'single',
-                apiUrl: '/api/stats/routes/summary',
+                apiUrl: `/api/stats/${props.stat}/summary`,
                 intervals: null,
                 secondInterval: SecondInterval.DAY,
                 intervalCount: 10
             } as SingleChartData, {
                 title: 'Макс. количество',
                 type: 'multiple',
-                apiUrl: '/api/stats/routes/count',
+                apiUrl: `/api/stats/${props.stat}/count`,
                 intervals: null,
                 secondInterval: SecondInterval.DAY,
                 intervalCount: 10,
@@ -73,7 +78,7 @@ class RoutesCharts extends React.Component<{}, RoutesChartsState> {
             } as MultipleChartData, {
                 title: 'Макс. время',
                 type: 'multiple',
-                apiUrl: '/api/stats/routes/durations',
+                apiUrl: `/api/stats/${props.stat}/durations`,
                 intervals: null,
                 secondInterval: SecondInterval.DAY,
                 intervalCount: 10,
@@ -95,7 +100,7 @@ class RoutesCharts extends React.Component<{}, RoutesChartsState> {
     public render(): React.ReactNode {
         const basePaths = [
             { 'name': 'Мониторинг' },
-            { 'name': 'Маршруты' },
+            { 'name': this.props.name },
             { 'name': 'Статистика' }
         ];
         return this.areAllChartsLoaded()
@@ -162,7 +167,7 @@ class RoutesCharts extends React.Component<{}, RoutesChartsState> {
             $.ajax({
                 url: chart.apiUrl,
                 dataType: 'json',
-                success: (result: RouteCountsAPIResultItem[]) => {
+                success: (result: CountsAPIResultItem[]) => {
                     resolve(result);
                 },
                 error: (jqXHR, textStatus, errorThrown) => {
@@ -187,7 +192,7 @@ class RoutesCharts extends React.Component<{}, RoutesChartsState> {
                     sec_interval: chart.secondInterval
                 },
                 dataType: 'json',
-                success: (result: RoutesMultipleStatsAPIResult) => {
+                success: (result: MultipleStatsAPIResult) => {
                     const intervals: TimeIntervalValues[] = [];
                     for (const objectName in result) {
                         if (result.hasOwnProperty(objectName)) {
@@ -240,4 +245,4 @@ class RoutesCharts extends React.Component<{}, RoutesChartsState> {
     }
 }
 
-export default RoutesCharts;
+export default StatCharts;
