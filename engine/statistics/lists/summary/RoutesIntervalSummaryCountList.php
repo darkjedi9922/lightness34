@@ -1,8 +1,8 @@
-<?php namespace engine\statistics\lists\count;
+<?php namespace engine\statistics\lists\summary;
 
 use engine\statistics\stats\RouteStat;
 
-class RouteIntervalCountList extends IntervalCountList
+class RoutesIntervalSummaryCountList extends IntervalSummaryCountList
 {
     protected function getCountField(): string
     {

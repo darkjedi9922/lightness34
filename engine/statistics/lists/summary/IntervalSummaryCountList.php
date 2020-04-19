@@ -1,4 +1,4 @@
-<?php namespace engine\statistics\lists\count;
+<?php namespace engine\statistics\lists\summary;
 
 use engine\statistics\lists\TimeIntervalList;
 use frame\database\QueryResult;
@@ -8,7 +8,7 @@ use Generator;
 /**
  * Каждый элемент списка это массив вида ['time' => string, 'count' => int].
  */
-abstract class IntervalCountList extends TimeIntervalList
+abstract class IntervalSummaryCountList extends TimeIntervalList
 {
     private $limit;
     private $result;

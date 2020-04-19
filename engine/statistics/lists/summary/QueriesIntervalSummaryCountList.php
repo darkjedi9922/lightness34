@@ -1,6 +1,6 @@
-<?php namespace engine\statistics\lists\count;
+<?php namespace engine\statistics\lists\summary;
 
-class QueryIntervalCountList extends IntervalCountList
+class QueriesIntervalSummaryCountList extends IntervalSummaryCountList
 {
     protected function getCountField(): string
     {

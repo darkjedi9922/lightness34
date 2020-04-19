@@ -55,7 +55,7 @@ class RoutesCharts extends React.Component<{}, RoutesChartsState> {
             charts: [{
                 title: 'Общее количество',
                 type: 'single',
-                apiUrl: '/api/stats/counts/route',
+                apiUrl: '/api/stats/routes/summary',
                 intervals: null,
                 secondInterval: SecondInterval.DAY,
                 intervalCount: 10
