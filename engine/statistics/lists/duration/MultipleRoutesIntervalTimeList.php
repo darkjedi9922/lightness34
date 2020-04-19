@@ -1,4 +1,6 @@
-<?php namespace engine\statistics\lists;
+<?php namespace engine\statistics\lists\duration;
+
+use engine\statistics\lists\MultipleIntervalDataList;
 
 class MultipleRoutesIntervalTimeList extends MultipleIntervalDataList
 {

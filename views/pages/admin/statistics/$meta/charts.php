@@ -7,9 +7,9 @@ use frame\tools\Init;
 $stat = ucfirst($self->getArgument(0));
 $summaryClass = "engine\\statistics\\lists\\summary\\{$stat}IntervalSummaryCountList";
 Init::require(is_subclass_of($summaryClass, IntervalSummaryCountList::class));
-$countClass = "engine\\statistics\\lists\\Multiple{$stat}IntervalCountList";
+$countClass = "engine\\statistics\\lists\\count\\Multiple{$stat}IntervalCountList";
 Init::require(is_subclass_of($countClass, MultipleIntervalDataList::class));
-$timeClass = "engine\\statistics\\lists\\Multiple{$stat}IntervalTimeList";
+$timeClass = "engine\\statistics\\lists\\duration\\Multiple{$stat}IntervalTimeList";
 Init::require(is_subclass_of($timeClass, MultipleIntervalDataList::class));
 ?>
 
