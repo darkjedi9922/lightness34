@@ -4,8 +4,6 @@ use engine\statistics\macros\BaseStatCollector;
 use engine\statistics\stats\EventRouteStat;
 use engine\statistics\stats\EventSubscriberStat;
 use engine\statistics\stats\EventEmitStat;
-use frame\stdlib\cash\config;
-use frame\stdlib\cash\database;
 use frame\database\Records;
 
 class EndCollectEvents extends BaseStatCollector
@@ -33,7 +31,6 @@ class EndCollectEvents extends BaseStatCollector
         $this->insertSubscribers($routeId);
         $this->insertEmits($routeId);
         $this->insertHandles();
-        $this->deleteOldStats();
     }
 
     private function insertSubscribers(int $routeId)
@@ -82,26 +79,5 @@ class EndCollectEvents extends BaseStatCollector
                 ]);
             }
         }
-    }
-
-    private function deleteOldStats()
-    {
-        $routeTable = EventRouteStat::getTable();
-        $subscribersTable = EventSubscriberStat::getTable();
-        $emitsTable = EventEmitStat::getTable();
-        $time = time() - config::get('statistics')->storeTimeInSeconds;
-        database::get()->query(
-            "DELETE $routeTable, $subscribersTable, $emitsTable, 
-                stat_event_emit_handles
-            FROM
-                $routeTable 
-                LEFT OUTER JOIN $subscribersTable 
-                    ON $routeTable.id = $subscribersTable.route_id
-                LEFT OUTER JOIN $emitsTable
-                    ON $routeTable.id = $emitsTable.route_id 
-                LEFT OUTER JOIN stat_event_emit_handles
-                    ON $emitsTable.id = stat_event_emit_handles.emit_id
-            WHERE $routeTable.time < $time"
-        );
     }
 }

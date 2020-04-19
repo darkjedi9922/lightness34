@@ -2,10 +2,7 @@
 
 use engine\statistics\macros\BaseStatCollector;
 use engine\statistics\stats\QueryStat;
-use engine\statistics\stats\QueryRouteStat;
 use engine\statistics\stats\BaseRouteStat;
-use frame\stdlib\cash\database;
-use frame\stdlib\cash\config;
 
 class EndCollectDbStat extends BaseStatCollector
 {
@@ -24,7 +21,6 @@ class EndCollectDbStat extends BaseStatCollector
     {
         $routeId = $this->routeStat->insert();
         $this->insertQueryStats($routeId);
-        $this->deleteOldStats();
     }
 
     private function insertQueryStats(int $routeId)
@@ -34,18 +30,5 @@ class EndCollectDbStat extends BaseStatCollector
             $queryStat->route_id = $routeId;
             $queryStat->insert();
         }
-    }
-
-    private function deleteOldStats()
-    {
-        $routeTable = QueryRouteStat::getTable();
-        $queryTable = QueryStat::getTable();
-        $time = time() - config::get('statistics')->storeTimeInSeconds;
-        database::get()->query(
-            "DELETE $routeTable, $queryTable
-            FROM $routeTable LEFT OUTER JOIN $queryTable 
-                ON $routeTable.id = $queryTable.route_id
-            WHERE $routeTable.time < $time"
-        );
     }
 }

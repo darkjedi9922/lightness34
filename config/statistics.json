@@ -1,6 +1,5 @@
 {
     "enabled": true,
-    "storeTimeInSeconds": 864000,
     "ignoreRouteNamespaces": [
         "api/stats",
         "admin/statistics",

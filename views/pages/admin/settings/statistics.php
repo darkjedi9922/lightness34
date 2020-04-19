@@ -6,16 +6,11 @@ use frame\stdlib\cash\config;
 use frame\actions\ViewAction;
 use engine\statistics\actions\EditConfig;
 use frame\tools\JsonEncoder;
-use frame\stdlib\tools\units\TimeUnit;
 
 Init::accessRight('stat', 'configure');
 
 $config = config::get('statistics');
 $edit = new ViewAction(EditConfig::class, ['name' => 'statistics']);
-$storeTime = new TimeUnit($config->storeTimeInSeconds, TimeUnit::SECONDS);
-list($maxStoreTimeIntValue, $maxStoreTimeIntUnit) = $storeTime->calcMaxInt([
-    TimeUnit::HOURS, TimeUnit::DAYS, TimeUnit::MONTHS
-]);
 $clearAll = new ViewAction(ClearAllStats::class);
 
 $formProps = [
@@ -27,32 +22,6 @@ $formProps = [
         'name' => 'enabled',
         'label' => 'Собирать',
         'defaultChecked' => $edit->getPost('enabled', $config->{'enabled'})
-    ], [
-        'type' => 'text',
-        'title' => 'Хранить данные за последние',
-        'name' => 'storeTimeValue',
-        'defaultValue' => (string)$edit->getPost(
-            'storeTimeValue',
-            $maxStoreTimeIntValue
-        )
-    ], [
-        'type' => 'radio',
-        'name' => 'storeTimeUnit',
-        'title' => '',
-        'values' => [[
-            'label' => 'Часы',
-            'value' => TimeUnit::HOURS
-        ], [
-            'label' => 'Дни',
-            'value' => TimeUnit::DAYS
-        ], [
-            'label' => 'Месяцы',
-            'value' => TimeUnit::MONTHS
-        ]],
-        'currentValue' => $edit->getPost(
-            'storeTimeUnit',
-            $maxStoreTimeIntUnit
-        )
     ], [
         'type' => 'text',
         'title' => 'Лимит записей на странице истории',

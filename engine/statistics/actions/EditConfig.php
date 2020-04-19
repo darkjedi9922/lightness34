@@ -3,10 +3,8 @@
 use frame\actions\ActionBody;
 use frame\actions\fields\BooleanField;
 use frame\actions\fields\IntegerField;
-use frame\actions\fields\StringField;
 use frame\stdlib\configs\JsonConfig;
 use frame\tools\Init;
-use frame\stdlib\tools\units\TimeUnit;
 
 class EditConfig extends ActionBody
 {
@@ -14,8 +12,6 @@ class EditConfig extends ActionBody
     {
         return [
             'enabled' => BooleanField::class,
-            'storeTimeValue' => IntegerField::class,
-            'storeTimeUnit' => StringField::class,
             'historyListLimit' => IntegerField::class
         ];
     }
@@ -27,13 +23,8 @@ class EditConfig extends ActionBody
 
     public function succeed(array $post, array $files)
     {
-        $storeTime = new TimeUnit(
-            $post['storeTimeValue']->get(),
-            $post['storeTimeUnit']->get()
-        );
         $config = new JsonConfig(ROOT_DIR . '/config/statistics');
         $config->enabled = $post['enabled']->get();
-        $config->storeTimeInSeconds = $storeTime->convertTo(TimeUnit::SECONDS);
         $config->historyListLimit = $post['historyListLimit']->get();
         $config->save();
     }

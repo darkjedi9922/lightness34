@@ -7,9 +7,6 @@ use engine\statistics\stats\RouteStat;
 use engine\statistics\stats\DynamicRouteParam;
 use engine\statistics\macros\BaseStatCollector;
 
-use frame\stdlib\cash\config;
-use frame\stdlib\cash\database;
-
 use function lightlib\encode_specials;
 
 class EndCollectRouteStat extends BaseStatCollector
@@ -35,7 +32,6 @@ class EndCollectRouteStat extends BaseStatCollector
         $this->stat->duration_sec = $this->timer->resultInSeconds();
         $this->stat->insert();
         $this->collectDynamicParams();
-        $this->deleteOldStats();
     }
 
     private function collectCodeInfo()
@@ -83,18 +79,5 @@ class EndCollectRouteStat extends BaseStatCollector
                 $param->insert();
             }
         }
-    }
-
-    private function deleteOldStats()
-    {
-        $routeTable = RouteStat::getTable();
-        $paramTable = DynamicRouteParam::getTable();
-        $time = time() - config::get('statistics')->storeTimeInSeconds;
-        database::get()->query(
-            "DELETE $routeTable, $paramTable
-            FROM $routeTable LEFT OUTER JOIN $paramTable
-                ON $routeTable.id = $paramTable.route_id
-            WHERE $routeTable.time < $time"
-        );
     }
 }

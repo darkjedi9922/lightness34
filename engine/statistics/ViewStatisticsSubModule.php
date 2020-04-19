@@ -11,8 +11,6 @@ use engine\statistics\stats\TimeStat;
 use frame\modules\Module;
 use frame\views\Layouted;
 use frame\views\View;
-use frame\stdlib\cash\config;
-use frame\stdlib\cash\database;
 use frame\errors\Errors;
 
 class ViewStatisticsSubModule extends BaseStatisticsSubModule
@@ -72,7 +70,6 @@ class ViewStatisticsSubModule extends BaseStatisticsSubModule
                 $metaStat->insert();
             }
         }
-        $this->deleteOldStats();
     }
 
     public function getAppEventHandlers(): array
@@ -85,21 +82,5 @@ class ViewStatisticsSubModule extends BaseStatisticsSubModule
             View::EVENT_LOAD_START => $this->viewStartCollector,
             View::EVENT_LOAD_END => $endViewCollector
         ];
-    }
-
-    private function deleteOldStats()
-    {
-        $routeTable = ViewRouteStat::getTable();
-        $viewTable = ViewStat::getTable();
-        $metaTable = ViewMetaStat::getTable();
-        $time = time() - config::get('statistics')->storeTimeInSeconds;
-        database::get()->query(
-            "DELETE $routeTable
-            FROM
-                $routeTable
-                LEFT JOIN $viewTable ON $routeTable.id = $viewTable.route_id
-                LEFT JOIN $metaTable ON $viewTable.id = $metaTable.view_id
-            WHERE $routeTable.time < $time"
-        );
     }
 }
