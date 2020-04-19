@@ -1,6 +1,6 @@
 <?php namespace engine\statistics\lists;
 
-class MultipleRouteIntervalCountList extends MultipleIntervalDataList
+class MultipleRoutesIntervalCountList extends MultipleIntervalDataList
 {
     protected function getQuery(): string
     {
