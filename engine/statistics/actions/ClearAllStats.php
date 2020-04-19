@@ -20,7 +20,7 @@ class ClearAllStats extends ActionBody
         foreach ($modules as $module) {
             /** @var Module $module */
             $parent = $module->getParent();
-            if ($parent->getName() instanceof StatisticsModule) {
+            if ($parent instanceof StatisticsModule) {
                 /** @var BaseStatisticsSubModule $module */
                 $module->clearStats();
             }
