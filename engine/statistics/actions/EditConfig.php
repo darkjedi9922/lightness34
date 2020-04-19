@@ -15,7 +15,8 @@ class EditConfig extends ActionBody
         return [
             'enabled' => BooleanField::class,
             'storeTimeValue' => IntegerField::class,
-            'storeTimeUnit' => StringField::class
+            'storeTimeUnit' => StringField::class,
+            'historyListLimit' => IntegerField::class
         ];
     }
 
@@ -33,6 +34,7 @@ class EditConfig extends ActionBody
         $config = new JsonConfig(ROOT_DIR . '/config/statistics');
         $config->enabled = $post['enabled']->get();
         $config->storeTimeInSeconds = $storeTime->convertTo(TimeUnit::SECONDS);
+        $config->historyListLimit = $post['historyListLimit']->get();
         $config->save();
     }
 }
