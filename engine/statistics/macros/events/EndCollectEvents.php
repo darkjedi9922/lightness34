@@ -68,7 +68,7 @@ class EndCollectEvents extends BaseStatCollector
         $emits = $this->emitCollector->getEmits();
         foreach ($handles as $innerEmitId => $emitHandles) {
             if (   !isset($emits[$innerEmitId]) 
-                || $emits[$innerEmitId]->id === null) {
+                || $emits[$innerEmitId]->getId() === null) {
                 // Некоторые события сознательно не были учтены но могут тут
                 // появиться, поэтому, просто проигнорируем их (например события
                 // о запросах в БД на вставку данных о самом сборе статистики).

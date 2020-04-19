@@ -54,6 +54,11 @@ abstract class Identity
         $this->data = $data;
     }
 
+    public function getId(): ?int
+    {
+        return $this->data['id'] ?? null;
+    }
+
     /** 
      * @throws Exception if there is no such value.
      * @return string|int|null

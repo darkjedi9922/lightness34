@@ -30,7 +30,6 @@ class CollectEventEmits extends BaseStatCollector
         $argsJson = JsonEncoder::toValidJson($this->prepareArgs($params));
 
         $emitStat = new EventEmitStat;
-        $emitStat->id = null;
         $emitStat->event = $event;
         $emitStat->args_json = str_replace('\\', '\\\\', $argsJson);
 
