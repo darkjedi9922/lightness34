@@ -3,6 +3,7 @@
     "ignoreRouteNamespaces": [
         "api/stats",
         "admin/statistics",
+        "admin/settings/statistics",
         "engine/statistics/actions"
     ],
     "historyListLimit": 30
