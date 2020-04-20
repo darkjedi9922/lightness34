@@ -138,9 +138,17 @@ if ($statsRights->can('see')) $globalItems[] = [
         'icon' => 'cube',
         'link' => '/admin/statistics/modules'
     ], [
-        'name' => 'Виды',
+        'name' => 'Представления',
         'icon' => 'television',
-        'link' => '/admin/statistics/views/history'
+        'submenu' => [[
+            'name' => 'История',
+            'icon' => 'clock',
+            'link' => '/admin/statistics/views/history'
+        ], [
+            'name' => 'Статистика',
+            'icon' => 'chart-area',
+            'link' => '/admin/statistics/views/charts'
+        ]],
     ], [
         'name' => 'Действия',
         'icon' => 'superpowers',

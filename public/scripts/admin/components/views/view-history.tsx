@@ -48,7 +48,7 @@ class ViewHistory extends React.Component<ViewsHistoryProps> {
 
     public render(): React.ReactNode {
         return <History
-            breadcrumbsNamePart="Виды"
+            breadcrumbsNamePart="Представления"
             apiDataUrl="/api/stats/views/history"
             tableBuilder={{
                 className: "routes",
