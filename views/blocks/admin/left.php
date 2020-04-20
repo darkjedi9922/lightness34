@@ -124,7 +124,15 @@ if ($statsRights->can('see')) $globalItems[] = [
     ], [
         'name' => 'События',
         'icon' => 'flash-1',
-        'link' => '/admin/statistics/events/history'
+        'submenu' => [[
+            'name' => 'История',
+            'icon' => 'clock',
+            'link' => '/admin/statistics/events/history'
+        ], [
+            'name' => 'Обработка',
+            'icon' => 'chart-area',
+            'link' => '/admin/statistics/events/charts'
+        ]]
     ], [
         'name' => 'Модули',
         'icon' => 'cube',
