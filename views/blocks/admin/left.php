@@ -180,11 +180,19 @@ if ($statsRights->can('see')) $globalItems[] = [
             'name' => 'Статистика',
             'icon' => 'chart-area',
             'link' => '/admin/statistics/queries/charts'
-        ], ]
+        ],]
     ], [
         'name' => 'Кэш',
         'icon' => 'floppy',
-        'link' => '/admin/statistics/cash/history'
+        'submenu' => [[
+            'name' => 'История',
+            'icon' => 'clock',
+            'link' => '/admin/statistics/cash/history',
+        ], [
+            'name' => 'Вызовы',
+            'icon' => 'chart-area',
+            'link' => '/admin/statistics/cash/charts'
+        ]]
     ]]
 ];
 
