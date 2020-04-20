@@ -169,18 +169,18 @@ if ($statsRights->can('see')) $globalItems[] = [
         'name' => 'База данных',
         'icon' => 'database',
         'submenu' => [[
+            'name' => 'Таблицы',
+            'icon' => 'folder',
+            'link' => '/admin/statistics/database/tables'
+        ], [
             'name' => 'История',
             'icon' => 'clock',
             'link' => '/admin/statistics/queries/history'
         ], [
-            'name' => 'Запросы',
-            'icon' => 'flag',
-            'link' => '/admin/statistics/database/queries'
-        ], [
-            'name' => 'Таблицы',
-            'icon' => 'folder',
-            'link' => '/admin/statistics/database/tables'
-        ]]
+            'name' => 'Статистика',
+            'icon' => 'chart-area',
+            'link' => '/admin/statistics/queries/charts'
+        ], ]
     ], [
         'name' => 'Кэш',
         'icon' => 'floppy',

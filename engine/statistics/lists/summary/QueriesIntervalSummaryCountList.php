@@ -2,19 +2,15 @@
 
 class QueriesIntervalSummaryCountList extends IntervalSummaryCountList
 {
-    protected function getCountField(): string
+    protected function getQuery(int $secondsInterval, int $limit): string
     {
-        return 'stat_queries.id';
-    }
-
-    protected function getTimeField(): string
-    {
-        return 'stat_routes.time';
-    }
-
-    protected function getFrom(): string
-    {
-        return 'stat_queries INNER JOIN stat_routes 
-            ON stat_queries.route_id = stat_routes.id';
+        return "SELECT 
+            COUNT(stat_queries.id) as value,
+            FLOOR(stat_routes.time / $secondsInterval) * $secondsInterval as interval_time
+        FROM stat_queries
+            INNER JOIN stat_routes ON stat_queries.route_id = stat_routes.id 
+        GROUP BY interval_time
+        ORDER BY interval_time DESC
+        LIMIT $limit";
     }
 }
