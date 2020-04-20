@@ -1,7 +1,6 @@
 <?php namespace engine\statistics\lists\summary;
 
 use engine\statistics\lists\TimeIntervalList;
-use frame\database\QueryResult;
 use frame\stdlib\cash\database;
 use Generator;
 
@@ -10,7 +9,6 @@ use Generator;
  */
 abstract class IntervalSummaryCountList extends TimeIntervalList
 {
-    private $limit;
     private $result;
 
     public function __construct(int $secondsInterval, int $limit)
@@ -19,8 +17,9 @@ abstract class IntervalSummaryCountList extends TimeIntervalList
             + $secondsInterval;
         $minInterval = $currentInterval - $secondsInterval * ($limit + 1);
         parent::__construct($minInterval, $currentInterval, $secondsInterval);
-        $this->limit = $limit;
-        $this->result = $this->query();
+        
+        $query = $this->getQuery($secondsInterval, $limit);
+        $this->result = database::get()->query($query);
     }
 
     public function getIterator(): Generator
@@ -32,7 +31,7 @@ abstract class IntervalSummaryCountList extends TimeIntervalList
         foreach ($times as $interval) {
             $count = 0;
             if (($result[$currentRow]['interval_time'] ?? null) === $interval) {
-                $count = $result[$currentRow]["COUNT({$this->getCountField()})"];
+                $count = $result[$currentRow]['value'];
                 $currentRow += 1;
             }
 
@@ -50,27 +49,17 @@ abstract class IntervalSummaryCountList extends TimeIntervalList
         return $result;
     }
 
-    protected abstract function getCountField(): string;
-    protected abstract function getTimeField(): string;
-    protected abstract function getFrom(): string;
-
-    private function query(): QueryResult
-    {
-        $intervalField = $this->getTimeField();
-        $interval = $this->getSecondInterval();
-
-        // Чтобы получить целое время запроса округленное к интервалу, нужно сначала
-        // разделить его на время интервала, отбросив получившуюся дробную часть, и
-        // умножить на то же время интервала, чтобы заполнить ту часть нулями целой
-        // части.
-        return database::get()->query(
-            "SELECT 
-                COUNT({$this->getCountField()}),
-                FLOOR($intervalField / $interval) * $interval as interval_time
-            FROM {$this->getFrom()}
-            GROUP BY interval_time
-            ORDER BY interval_time DESC
-            LIMIT {$this->limit}"
-        );
-    }
+    /**
+     * Запрос должен возвращать таблицу с колонками [value|interval_time],
+     * где value - собственно, количество того, что считается, а interval_time - его
+     * время интервала, которое считается как FLOOR(timestamp / interval) * interval.
+     * 
+     * В формуле timestamp - это время записи, interval - переданный в аргументах
+     * данной функции $secondsInterval.
+     * 
+     * Вся выборка должна ограничиваться лимитом в $limit записей, быть
+     * сгруппированной по колонке interval_time и отсортировано по ней же в DESC
+     * порядке.
+     */
+    protected abstract function getQuery(int $secondsInterval, int $limit): string;
 }

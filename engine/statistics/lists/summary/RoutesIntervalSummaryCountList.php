@@ -1,21 +1,15 @@
 <?php namespace engine\statistics\lists\summary;
 
-use engine\statistics\stats\RouteStat;
-
 class RoutesIntervalSummaryCountList extends IntervalSummaryCountList
 {
-    protected function getCountField(): string
+    protected function getQuery(int $secondsInterval, int $limit): string
     {
-        return 'id';
-    }
-
-    protected function getTimeField(): string
-    {
-        return 'time';
-    }
-
-    protected function getFrom(): string
-    {
-        return RouteStat::getTable();
+        return "SELECT 
+            COUNT(id) as value,
+            FLOOR(time / $secondsInterval) * $secondsInterval as interval_time
+        FROM stat_routes
+        GROUP BY interval_time
+        ORDER BY interval_time DESC
+        LIMIT $limit";
     }
 }
