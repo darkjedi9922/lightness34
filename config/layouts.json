@@ -4,7 +4,8 @@
         "pages/admin": "admin-base",
         "layouts/main": "base",
         "layouts/admin": "admin-base",
-        "layouts/admin-stats": "admin"
+        "layouts/admin-stats": "admin",
+        "layouts/admin-base": "admin-style"
     },
     "namespaces": {
         "pages": "main",
@@ -12,6 +13,7 @@
         "pages/admin/statistics": "admin-stats",
         "pages/api": null,
         "pages/api/stats": "api-stats",
+        "errors": "admin-style",
         "widgets": "widget"
     }
 }
