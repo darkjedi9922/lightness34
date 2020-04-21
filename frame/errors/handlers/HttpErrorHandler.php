@@ -14,7 +14,7 @@ class HttpErrorHandler implements ErrorHandler
         $page = config::get('core')->{"errors.$code.page"};
         Response::getDriver()->setCode($code);
         if (ErrorPage::find($page)) {
-            $view = new ErrorPage($page);
+            $view = new ErrorPage($page, $error);
             $view->show();
         } else {
             $defaultHandler = new DefaultErrorHandler;

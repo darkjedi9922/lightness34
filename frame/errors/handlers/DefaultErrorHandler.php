@@ -21,7 +21,7 @@ class DefaultErrorHandler implements ErrorHandler
         $page = config::get('core')->{'errors.errorPage'};
         if ($page !== null) {
             try {
-                (new ErrorPage($page))->show();
+                (new ErrorPage($page, $error))->show();
             } catch (\Exception $pe) {
                 (new StrictExceptionHandler)->handle(new StrictException(
                     'Error page does not exist',
