@@ -19,6 +19,10 @@ module.exports = {
             './styles/admin.css',
             './styles/admin.scss'
         ]),
+        'site.css': globs([
+            './styles/site.css',
+            './styles/site.scss'
+        ]),
         'admin.js': './scripts/admin/main.ts'
     },
     output: {

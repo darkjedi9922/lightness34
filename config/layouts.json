@@ -5,7 +5,8 @@
         "layouts/main": "base",
         "layouts/admin": "admin-base",
         "layouts/admin-stats": "admin",
-        "layouts/admin-base": "admin-style"
+        "layouts/admin-base": "admin-style",
+        "widgets/welcome": null
     },
     "namespaces": {
         "pages": "main",

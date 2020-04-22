@@ -25,6 +25,7 @@ public/images/avatars
 
 # fontello
 /public/fonts/fontello*.zip
+/public/fonts/fontello/*.zip
 /public/fonts/fontello/*.json
 /public/fonts/fontello/*.txt
 /public/fonts/fontello/css/*

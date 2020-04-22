@@ -3,18 +3,14 @@
     src: local("Lato"),url(../fonts/Lato-Regular.ttf) format("truetype")
 }
 
-/* подключение fontello */
-@font-face {font-family: "fontello";src: url("/public/fonts/fontello/font/fontello.ttf");font-style: normal;font-weight: normal;}
-.fontello{font-family:fontello;font-style:normal}
-.icon-ok:before { content: '\e808'; } /* '' */
-
 html {
     font-size: 20px;
     font-family: Lato
 }
 
 body {
-    background: #293133
+    background: #293133;
+    color: white;
 }
 
 /* header */
@@ -94,31 +90,10 @@ body {
     color: #ccc
 }
 
-/* slide */
-.slide {
-    padding: 40px 0
-}
-.slide__container {
-    width: 75%;
-    margin: auto
-}
-.slide:nth-of-type(odd) {
-    background: #293133
-}
-.slide:nth-of-type(even) {
-    background: #f6f7f9
-}
-.slide__header {
-    display: block;
-    text-transform: uppercase;
-    font-weight: 700;
-    font-size: 1.2rem;
-    color: #000
-}
-
 /* content */
 .content {
     background: #f6f7f9;
+    color: black;
     margin-right: 1rem;
     padding: 0.8rem;
     font-size: 0.9rem;
@@ -155,61 +130,6 @@ body {
     text-decoration: underline;
 }
 
-.fundamentals {
-    margin-top: 30px;
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -moz-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-flex-wrap: wrap;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
-    -webkit-box-pack: justify;
-    -webkit-justify-content: space-between;
-    -moz-box-pack: justify;
-    -ms-flex-pack: justify;
-    justify-content: space-between
-}
-
-.fundamentals__item {
-    width: 48%
-}
-
-.fundamentals__title {
-    text-transform: uppercase;
-    font-size: .9rem;
-    font-weight: 700;
-    color: #81d481
-}
-
-.fundamentals__desc {
-    font-size: .9rem;
-    color: grey;
-    text-align: justify;
-    padding-bottom: 20px;
-    font-family: Calibri
-}
-
-.fundamentals__icon {
-    float: left;
-    margin-right: 20px;
-    padding-bottom: 50px
-}
-
-.footer {
-    width: 75%;
-    margin: auto;
-    color: #fff;
-    padding: 30px 0;
-    font-size: .85rem
-}
-
-.footer__info {
-    display: block;
-    margin: 2px 0
-}
-
 .container {
     display: flex;
     flex-direction: row;
@@ -244,6 +164,7 @@ body {
 .widget {
     background: #f6f7f9;
     font-family: 'Lato';
+    color: black;
 }
 .widget__title {
     text-transform: uppercase;
@@ -257,109 +178,6 @@ body {
 .widget__content {
     font-size: 0.9rem;
     padding: 0 1rem 1rem;
-}
-
-/* формы */
-.form__button {
-    background: none;
-    color: #7f9faa;
-    padding: 8px 14px;
-    border: solid 2px #7f9faa;
-    text-decoration: none;
-    text-transform: uppercase;
-    font-weight: 700;
-    font-size: .8rem
-}
-.form__button:hover {
-    color: #9ac2cf;
-    border-color: #9ac2cf;
-}
-.form__input {
-    font-family: 'Calibri';
-    font-size: 0.8rem;
-    outline: none;
-    border: solid 1px #81d481;
-    padding: 0.2rem;
-}
-.form__label {
-    font-family: 'Calibri';
-}
-.form__require {
-    color: red;
-}
-
-/* login-form */
-.login-form__input {
-    background: #293133;
-    border: none;
-    border-radius: 0.4rem;
-    box-sizing: border-box;
-    color: #81d481;
-    font-family: "Calibri";
-    font-size: 0.9rem;
-    outline: none;
-    padding: 5px 10px;
-    margin-bottom: 7px;
-    padding-left: 1.6rem;
-    display: block;
-    width: 100%;
-    background-size: 1rem;
-    background-repeat: no-repeat;
-    background-position: 0.5rem center;
-}
-.login-form__input--login {
-    background-image: url('/public/images/icons/user_login.png');
-    
-}
-.login-form__input--password {
-    background-image: url('/public/images/icons/lock.png');
-}
-
-/**
- * label checkbox.
- * В одном div'e можно вставлять множество чекбоксов.
- * i - это сама иконка: вставлять i.fontello.icon-ok
- * Текст чекбокса вставлять в span сразу после label.
- */
-.login-form__checkbox {
-    -moz-user-select:none;
-    -webkit-user-select:none;
-}
-.login-form__checkbox input {
-    display:none;
-}
-.login-form__checkbox label {
-    display:inline-block;
-    width:20px;
-    height:20px;
-    color: #81d481;
-    margin-right:5px;
-    position:relative;
-    top:3px;
-    border:solid 1px red
-}
-.login-form__checkbox label:hover {
-    cursor: pointer;
-}
-.login-form__checkbox label i {
-    position:absolute;
-    font-family:fontello;
-    display:none;
-    cursor: default;
-}
-.login-form__checkbox span {
-    position:relative;
-    bottom:2px;
-    font-family:Calibri;
-}
-.login-form__checkbox input:checked + label {
-    border-color: #81d481;
-}
-.login-form__checkbox input:checked + label i {
-    display:inline;
-}
-.login-form__checkbox input:checked + label + span {
-    color: #81d481;
 }
 
 /* mini-profile */

@@ -15,7 +15,7 @@ $config = config::get('core');
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title><?= $config->{'site.name'} ?></title>
     <link rel="stylesheet" href="<?= versionify('public/styles/normalize.css') ?>">
-    <link rel="stylesheet" href="<?= versionify('public/styles/site.css') ?>">
+    <link rel="stylesheet" href="<?= versionify('public/build/site.css') ?>">
 </head>
 <body>
     <?php $self->loadChild()->show() ?>

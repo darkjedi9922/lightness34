@@ -1,6 +1,10 @@
 <?php /** @var frame\views\Page $self */
 
 use frame\views\Block;
+use frame\views\Widget;
+use frame\auth\Auth;
+
+$auth = new Auth;
 ?>
 
 <div class="header">
@@ -13,8 +17,8 @@ use frame\views\Block;
     </div>
 </div>
 <div class="slide">
-    <div class="slide__container">
-        <span class="slide__header">Основные характеристики Lightness:</span>
+    <span class="slide__header">Основные характеристики Lightness:</span>
+    <div class="slide__content">
         <div class="fundamentals">
             <div class="fundamentals__item">
                 <img src="/public/images/icons/toolbox.png" class="fundamentals__icon">
@@ -56,3 +60,11 @@ use frame\views\Block;
         </div>
     </div>
 </div>
+<?php if (!$auth->isLogged()): ?>
+<div class="slide slide--dark">
+    <span class="slide__header">Вход</span>
+    <div class="slide__content">
+        <?php (new Widget('welcome'))->show() ?>
+    </div>
+</div>
+<?php endif ?>

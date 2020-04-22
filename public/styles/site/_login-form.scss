@@ -1,0 +1,90 @@
+.login-form {
+    &__fields {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        &:not(:first-of-type) {
+            margin-top: 0.6rem;
+        }
+
+        & > * {
+            margin-right: 0.8rem;
+        }
+    }
+
+    &__field {
+        display: flex;
+        flex-direction: row;
+        border: solid 1px $color-label;
+        border-radius: 0.4rem;
+        align-items: center;
+    }
+
+    &__icon {
+        color: $color-label;
+    }
+
+    &__input {
+        background: none;
+        border: none;
+        box-sizing: border-box;
+        color: #81d481;
+        font-family: "Calibri";
+        font-size: 0.9rem;
+        outline: none;
+        padding: 0.2rem;
+    }
+}
+
+/**
+ * label checkbox.
+ * В одном div'e можно вставлять множество чекбоксов.
+ * i - это сама иконка: вставлять i.fontello.icon-ok
+ * Текст чекбокса вставлять в span сразу после label.
+ */
+
+.login-form__checkbox {
+    -moz-user-select:none;
+    -webkit-user-select:none;
+
+    i:before {
+        margin-left: 0;
+    }
+}
+.login-form__checkbox input {
+    display:none;
+}
+.login-form__checkbox label {
+    display:inline-block;
+    width:20px;
+    height:20px;
+    color: #81d481;
+    margin-right:5px;
+    position:relative;
+    top:3px;
+    border:solid 1px $color-button;
+}
+.login-form__checkbox label:hover {
+    cursor: pointer;
+}
+.login-form__checkbox label i {
+    position:absolute;
+    font-family:fontello;
+    display:none;
+    cursor: default;
+}
+.login-form__checkbox span {
+    position:relative;
+    bottom:2px;
+    font-family:Calibri;
+}
+.login-form__checkbox input:checked + label {
+    border-color: #81d481;
+}
+.login-form__checkbox input:checked + label i {
+    display:inline;
+}
+.login-form__checkbox input:checked + label + span {
+    color: #81d481;
+}

@@ -20,12 +20,23 @@ $self->setMeta('title', 'Вход');
     <span class='error' style="margin-bottom:10px">Неверный пароль</span>
 <?php endif ?>
 <form class="login-form" action="<?= $action->getUrl() ?>" method="post">
-    <input class="login-form__input login-form__input--login" name="login" type="text" placeholder="Логин" value="<?= $action->getPost('login') ?>">
-    <input class="login-form__input login-form__input--password" name="password" type="password" placeholder="Пароль">
-    <div class="login-form__checkbox" style="margin-bottom:10px">
-        <input type="checkbox" name="remember" id="remember-checkbox" <?= $action->getPost('remember') ? 'checked' : '' ?>>
-        <label for="remember-checkbox"><i class="fontello icon-ok"></i></label><span>Запомнить меня</span>
+    <div class="login-form__fields">
+        <div class="login-form__field">
+            <i class="login-form__icon icon-user"></i>
+            <input class="login-form__input" name="login" type="text" placeholder="Логин" value="<?= $action->getPost('login') ?>">
+        </div>
     </div>
-    <button class="form__button">Войти</button>
-    <a class="link" style="margin-left:5px;" href="/registration">Регистрация</a>
+    <div class="login-form__fields">
+        <div class="login-form__field">
+            <i class="login-form__icon icon-key"></i>
+            <input class="login-form__input" name="password" type="password" placeholder="Пароль">
+        </div>
+    </div>
+    <div class="login-form__fields">
+        <button class="form__button">Войти</button>
+        <div class="login-form__checkbox">
+            <input type="checkbox" name="remember" id="remember-checkbox" <?= $action->getPost('remember') ? 'checked' : '' ?>>
+            <label for="remember-checkbox"><i class="icon-ok"></i></label><span>Запомнить меня</span>
+        </div>
+    </div>
 </form>

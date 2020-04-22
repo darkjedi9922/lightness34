@@ -1,0 +1,22 @@
+.slide {
+    padding: $slide-padding;
+    background: $color-light;
+    color: black;
+    margin: auto;
+    
+    &__header {
+        display: block;
+        text-transform: uppercase;
+        font-weight: 700;
+        font-size: 1.2rem;
+    }
+
+    &__content {
+        margin-top: 1.8rem;
+    }
+
+    &--dark {
+        background: $color-dark;
+        color: $color-light;
+    }
+}
