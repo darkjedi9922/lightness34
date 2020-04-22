@@ -3,10 +3,12 @@ $color-dark: #293133;
 $color-label: #81d481;
 $color-button: #9ac2cf;
 $slide-padding: 1.8rem 10%;
+$header-padding: 1rem 10%;
 
 @import '../fonts/fontello/css/fontello-embedded.css';
 @import '../fonts/fontello/css/animation.css';
 
+@import 'site/header';
 @import 'site/slide';
 @import 'site/fundamentals';
 @import 'site/login-form';

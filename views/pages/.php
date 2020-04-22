@@ -17,10 +17,6 @@ if ($auth->isLogged()) {
 <div class="header">
     <div class="header__container">
         <?php (new Block('header-menu'))->show() ?>
-        <div class="header__content">
-            <span class="header__text">Легкий, гибкий фреймворк для создания сайтов</span>
-            <span class="header__subtext">Ничего лишнего</span>
-        </div>
     </div>
 </div>
 <div class="slide">
