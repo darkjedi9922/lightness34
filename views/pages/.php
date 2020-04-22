@@ -3,8 +3,15 @@
 use frame\views\Block;
 use frame\views\Widget;
 use frame\auth\Auth;
+use frame\actions\ViewAction;
+use engine\users\actions\LogoutAction;
+use engine\users\cash\my_rights;
 
 $auth = new Auth;
+if ($auth->isLogged()) {
+    $logout = new ViewAction(LogoutAction::class);
+    $adminRights = my_rights::get('admin');
+}
 ?>
 
 <div class="header">
@@ -60,11 +67,20 @@ $auth = new Auth;
         </div>
     </div>
 </div>
-<?php if (!$auth->isLogged()): ?>
 <div class="slide slide--dark">
-    <span class="slide__header">Вход</span>
+    <span class="slide__header">Профиль</span>
     <div class="slide__content">
-        <?php (new Widget('welcome'))->show() ?>
+        <?php if ($auth->isLogged()) : ?>
+            <?php if ($adminRights->can('enter')) : ?>
+                <div class="footer__info">
+                    <a href="/admin" class="footer__link">Перейти в админ-панель</a>
+                </div>
+            <?php endif ?>
+            <div class="footer__info">
+                <a href="<?= $logout->getUrl() ?>" class="footer__link">Выйти из профиля</a>
+            </div>
+        <?php else : ?>
+            <?php (new Widget('welcome'))->show() ?>
+        <?php endif ?>
     </div>
 </div>
-<?php endif ?>
