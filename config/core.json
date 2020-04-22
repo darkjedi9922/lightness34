@@ -1,5 +1,6 @@
 {
     "site.name": "Lightness 3.4 Framework",
+    "mode.debug": true,
     "log.enabled": true,
     "log.file": "log.txt",
     "errors.errorPage": null,

@@ -19,7 +19,7 @@ class QueriesPage extends React.Component<{}, QueriesPageState> {
 
     public componentDidMount(): void {
         $.ajax({
-            url: '/api/stats/counts/query',
+            url: '/api/stats/queries/summary',
             dataType: 'json',
             success: (result: APIQueriesResultItem[]) => {
                 this.setState({

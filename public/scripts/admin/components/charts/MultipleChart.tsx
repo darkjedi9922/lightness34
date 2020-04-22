@@ -56,8 +56,7 @@ class MultipleChart extends React.Component<MultipleChartProps> {
                                     for (const name in interval.values) {
                                         if (interval.values.hasOwnProperty(name)) {
                                             const value = interval.values[name];
-                                            result[name] = value !== null ?
-                                                value : 0;
+                                            result[name.split('.').join('&point;')] = value !== null ? value : 0;
                                         }
                                     }
                                     return result;
@@ -76,8 +75,8 @@ class MultipleChart extends React.Component<MultipleChartProps> {
                                 <Area
                                     key={index}
                                     type="monotone"
-                                    name={name}
-                                    dataKey={`values[${name}]`}
+                                    name={name.split('&point;').join('.')}
+                                    dataKey={`values[${name.split('.').join('&point;')}]`}
                                     fill={this.getColorByNumber(index)}
                                     stroke={this.getColorByNumber(index)}
                                     fillOpacity={0.05}

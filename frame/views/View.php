@@ -22,6 +22,20 @@ class View
     const EVENT_LOAD_END = 'view-load-end';
 
     /**
+     * Происходит перед рендерингом.
+     * Аргумент события: View object.
+     * @see show
+     */
+    const EVENT_BEFORE_RENDER = 'view-before-render';
+
+    /**
+     * Происходит после рендеринга.
+     * Аргумент события: View object.
+     * @see show
+     */
+    const EVENT_AFTER_RENDER = 'view-after-render';
+
+    /**
      * @var string Имя вида
      */
     public $name;
@@ -40,6 +54,7 @@ class View
     private $meta = [];
 
     /**
+     * @var string|null
      * Содержимое файла вида кешируется при первом обращении к нему.
      */
     private $cachedContent = null;
@@ -96,7 +111,7 @@ class View
      * Это нужно, чтобы перед показом, загрузить само содержимое, внутри которого 
      * могли изменится настройки вида, чтобы успеть подстроиться под новые настройки.
      */
-    protected function getContent()
+    protected function getContent(): string
     {
         if ($this->cachedContent === null) {
             Events::getDriver()->emit(self::EVENT_LOAD_START, $this);
@@ -114,7 +129,9 @@ class View
      */
     public function show()
     {
+        Events::getDriver()->emit(self::EVENT_BEFORE_RENDER, $this);
         echo $this->getContent();
+        Events::getDriver()->emit(self::EVENT_AFTER_RENDER, $this);
     }
 
     /**

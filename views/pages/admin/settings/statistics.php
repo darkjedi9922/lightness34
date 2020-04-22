@@ -1,20 +1,17 @@
 <?php /** @var frame\views\Page $self */
 
+use engine\statistics\actions\ClearAllStats;
 use frame\tools\Init;
 use frame\stdlib\cash\config;
 use frame\actions\ViewAction;
 use engine\statistics\actions\EditConfig;
 use frame\tools\JsonEncoder;
-use frame\stdlib\tools\units\TimeUnit;
 
 Init::accessRight('stat', 'configure');
 
 $config = config::get('statistics');
 $edit = new ViewAction(EditConfig::class, ['name' => 'statistics']);
-$storeTime = new TimeUnit($config->storeTimeInSeconds, TimeUnit::SECONDS);
-list($maxStoreTimeIntValue, $maxStoreTimeIntUnit) = $storeTime->calcMaxInt([
-    TimeUnit::HOURS, TimeUnit::DAYS, TimeUnit::MONTHS
-]);
+$clearAll = new ViewAction(ClearAllStats::class);
 
 $formProps = [
     'actionUrl' => $edit->getUrl(),
@@ -27,29 +24,11 @@ $formProps = [
         'defaultChecked' => $edit->getPost('enabled', $config->{'enabled'})
     ], [
         'type' => 'text',
-        'title' => 'Хранить данные за последние',
-        'name' => 'storeTimeValue',
+        'title' => 'Лимит записей на странице истории',
+        'name' => 'historyListLimit',
         'defaultValue' => (string)$edit->getPost(
-            'storeTimeValue',
-            $maxStoreTimeIntValue
-        )
-    ], [
-        'type' => 'radio',
-        'name' => 'storeTimeUnit',
-        'title' => '',
-        'values' => [[
-            'label' => 'Часы',
-            'value' => TimeUnit::HOURS
-        ], [
-            'label' => 'Дни',
-            'value' => TimeUnit::DAYS
-        ], [
-            'label' => 'Месяцы',
-            'value' => TimeUnit::MONTHS
-        ]],
-        'currentValue' => $edit->getPost(
-            'storeTimeUnit',
-            $maxStoreTimeIntUnit
+            'historyListLimit',
+            $config->{'historyListLimit'}
         )
     ]],
     'buttonText' => 'Сохранить',
@@ -63,6 +42,11 @@ $formProps = JsonEncoder::forHtmlAttribute($formProps);
         <span class="breadcrumbs__item">Настройки</span>
         <span class="breadcrumbs__divisor"></span>
         <span class="breadcrumbs__item breadcrumbs__item--current">Мониторинг</span>
+    </div>
+    <div class="actions">
+        <a href="<?= $clearAll->getUrl() ?>" class="button button--red">
+            <i class="icon-attention button__icon"></i>Очистить статистику
+        </a>
     </div>
 </div>
 <div class="box">

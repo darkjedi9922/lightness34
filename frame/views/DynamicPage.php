@@ -2,40 +2,18 @@
 
 class DynamicPage extends Page
 {
-    private $args;
-
     public static function getExtensions(): array
     {
         return ['php'];
     }
 
-    /** {@inheritdoc} */
-    public static function find(string $name): ?string
-    {
-        $parts = explode('/', $name);
-        $lastIndex = count($parts) - 1;
-        $parts[$lastIndex] = '$'.$parts[$lastIndex];
-        return parent::find(implode('/', $parts));
-    }
-
-    public function __construct(string $name, array $args, ?string $layout = null)
-    {
-        $this->args = $args;
-        parent::__construct($name, $layout);
-    }
-
     public function getArguments(): array
     {
-        return $this->args;
+        return $this->getMeta('$') ?? [];
     }
 
-    public function getArgument(int $index): string
+    public function getArgument(int $index): ?string
     {
-        return $this->args[$index];
-    }
-
-    public function hasArgument(int $index): bool
-    {
-        return isset($this->args[$index]);
+        return $this->getMeta('$')[$index] ?? null;
     }
 }

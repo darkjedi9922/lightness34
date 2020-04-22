@@ -1,11 +1,8 @@
 <?php namespace engine\statistics\macros\cash;
 
 use engine\statistics\macros\BaseStatCollector;
-use engine\statistics\stats\CashRouteStat;
 use engine\statistics\stats\CashValueStat;
-use engine\statistics\stats\BaseRouteStat;
-use frame\stdlib\cash\database;
-use frame\stdlib\cash\config;
+use engine\statistics\stats\RouteStat;
 
 class EndCollectCashStats extends BaseStatCollector
 {
@@ -13,7 +10,7 @@ class EndCollectCashStats extends BaseStatCollector
     private $valuesCollector;
 
     public function __construct(
-        BaseRouteStat $routeStat,
+        RouteStat $routeStat,
         CollectCashCalls $valuesCollector
     ) {
         $this->routeStat = $routeStat;
@@ -22,9 +19,7 @@ class EndCollectCashStats extends BaseStatCollector
 
     protected function collect(...$args)
     {
-        $routeId = $this->routeStat->insert();
-        $this->insertValueStats($routeId);
-        $this->deleteOldStats();
+        $this->insertValueStats($this->routeStat->getId());
     }
 
     private function insertValueStats(int $routeId)
@@ -37,18 +32,5 @@ class EndCollectCashStats extends BaseStatCollector
                 $stat->insert();
             }
         }
-    }
-
-    private function deleteOldStats()
-    {
-        $routeTable = CashRouteStat::getTable();
-        $cashTable = CashValueStat::getTable();
-        $time = time() - config::get('statistics')->storeTimeInSeconds;
-        database::get()->query(
-            "DELETE $routeTable
-            FROM $routeTable LEFT JOIN $cashTable
-                ON $routeTable.id = $cashTable.route_id
-            WHERE $routeTable.time < $time"
-        );
     }
 }

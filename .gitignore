@@ -2,8 +2,10 @@
 log.txt
 
 # umls
-_dev/uml/*.bak*
 _dev/uml/*.png
+_dev/uml/*.jpg
+_dev/uml/*.jpeg
+_dev/uml/*.svg
 
 # other
 *.fuse_*

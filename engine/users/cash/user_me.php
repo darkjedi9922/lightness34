@@ -18,11 +18,11 @@ class user_me extends Cash
                 if ($user) return $user;
             }
 
-            $guest = new User;
-            $guest->id = Client::getId();
-            $guest->login = 'Гость';
-            $guest->group_id = Group::GUEST_ID;
-            return $guest;
+            return new User([
+                'id' => Client::getId(),
+                'login' => 'Гость',
+                'group_id' => Group::GUEST_ID
+            ]);
         });
     }
 }

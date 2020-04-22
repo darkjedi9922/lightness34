@@ -2,6 +2,7 @@
 
 use frame\stdlib\configs\JsonConfig;
 use frame\tools\files\Directory;
+use frame\tools\Semaphores;
 
 abstract class DaemonMacro extends Macro
 {
@@ -16,8 +17,8 @@ abstract class DaemonMacro extends Macro
 
     public function exec(...$args)
     {
-        $sem = sem_get(crc32('daemons-times'));
-        if (!$sem || !sem_acquire($sem, true)) return;
+        $sem = Semaphores::get(crc32('daemons-times'));
+        if (!$sem || !Semaphores::acquire($sem, true)) return;
         
         $config = $this->getTimesConfig();
         $lastExecTime = $config->get(static::class) ?? 0;
@@ -28,7 +29,7 @@ abstract class DaemonMacro extends Macro
             $config->save();
         }
 
-        sem_release($sem);
+        Semaphores::release($sem);
     }
 
     protected abstract function execDaemon();

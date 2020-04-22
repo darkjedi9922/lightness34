@@ -5,8 +5,6 @@ use frame\views\Widget;
 use engine\users\cash\my_rights;
 use engine\users\cash\user_me;
 
-$self->setLayout('base');
-
 $userRights = my_rights::get('users');
 $auth = new Auth;
 $me = user_me::get();
@@ -22,7 +20,7 @@ $doShowWelcomeWidget = !$auth->isLogged() && $userRights->can('add');
 </div>
 <div class="container">
     <div class="container__content">
-        <?= $self->showChild() ?>
+        <?= $self->loadChild()->show() ?>
     </div>
     <?php if ($doShowMiniProfile || $doShowWelcomeWidget): ?>
     <div class="container__sidebox">

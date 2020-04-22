@@ -7,14 +7,14 @@ class Directory
         return File::exists($path);
     }
 
-    public static function create(string $path)
+    public static function create(string $path): bool
     {
         return mkdir($path);
     }
-
-    public static function createRecursive(string $path)
+    
+    public static function createRecursive(string $path): bool
     {
-        mkdir($path, 0777, true);
+        return mkdir($path, 0777, true);
     }
 
     public static function deleteNonEmpty(string $path): bool

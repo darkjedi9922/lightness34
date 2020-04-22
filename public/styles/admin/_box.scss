@@ -8,7 +8,7 @@
     flex-grow: 1;
     color: black;
     font-size: 14px;
-    overflow: auto;
+    overflow: hidden;
 
     &--login {
         padding: 10px 1.5rem;
@@ -19,6 +19,9 @@
 
     &--table {
         padding: 0;
+        // После добавления пагинатора над таблицей, в ней начал 
+        // появляться скроллбар о_О. Скроем его.
+        overflow: hidden;
     }
 
     &--headed {

@@ -2,22 +2,18 @@
 
 use engine\statistics\macros\BaseStatCollector;
 use engine\statistics\stats\EventSubscriberStat;
-use engine\statistics\stats\EventRouteStat;
 use SplObjectStorage;
 
 class CollectEventSubscribers extends BaseStatCollector
 {
-    private $routeStat;
-
     /**
      * Key: callable macro.
      * Value: EventSubscriberStat.
      */
     private $subscriberStats;
 
-    public function __construct(EventRouteStat $routeStat)
+    public function __construct()
     {
-        $this->routeStat = $routeStat;
         $this->subscriberStats = new SplObjectStorage;
     }
 

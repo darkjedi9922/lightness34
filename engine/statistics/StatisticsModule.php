@@ -17,13 +17,20 @@ class StatisticsModule extends Module
     {
         parent::__construct($name, $parent);
 
+        // Все подмодули будут привязываться к одному RouteStat маршрутизации.
+        // К тому времени, как до них дойдет очередь вставлять записи, RouteStat
+        // уже будет вставлен (помодуль статистики маршрутов указан ниже первым),
+        // а значит уже будет иметь ID для привязки к нему.
+        $routesSubmodule = new RouteStatisticsSubModule('routes', $this);
+        $routeStat = $routesSubmodule->getRouteStat();
+
         $submodules = [
-            new EventStatisticsSubModule('events', $this),
-            new RouteStatisticsSubModule('routes', $this),
+            $routesSubmodule,
+            new EventStatisticsSubModule('events', $routeStat, $this),
             new ActionStatisticsSubModule('actions', $this),
-            new DbStatisticsSubModule('db', $this),
-            new CashStatisticsSubModule('cash', $this),
-            new ViewStatisticsSubModule('views', $this)
+            new DbStatisticsSubModule('db', $routeStat, $this),
+            new CashStatisticsSubModule('cash', $routeStat, $this),
+            new ViewStatisticsSubModule('views', $routeStat, $this)
         ];
 
         foreach ($submodules as $submodule) {

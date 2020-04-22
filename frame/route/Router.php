@@ -79,18 +79,14 @@ class Router
         else return null;
     }
 
-    /**
-     * Возвращает часть имени страницы.
-     * Вернет пустую строку, если заданной части нет.
-     * 
-     * @param int $index
-     * @return string
-     * @see $pathElements
-     */
-    public function getPathPart($index)
+    public function getPathPart(int $index): ?string
     {
-        if (isset($this->pathElements[$index])) return $this->pathElements[$index];
-        else return '';
+        return $this->pathElements[$index] ?? null;
+    }
+
+    public function getPathParts(): array
+    {
+        return $this->pathElements;
     }
 
     public function isInNamespace(string $namespace): bool

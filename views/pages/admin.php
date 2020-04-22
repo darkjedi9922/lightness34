@@ -6,9 +6,6 @@ use frame\actions\ViewAction;
 use engine\admin\Auth;
 use frame\tools\JsonEncoder;
 
-$self->setLayout('admin-base');
-$self->setMeta('admin-login-page-flag', true);
-
 $action = new ViewAction(LoginAction::class);
 $auth = new Auth;
 $prevRoute = prev_router::get();

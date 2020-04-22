@@ -124,47 +124,75 @@ if ($statsRights->can('see')) $globalItems[] = [
     ], [
         'name' => 'События',
         'icon' => 'flash-1',
-        'link' => '/admin/statistics/events'
+        'submenu' => [[
+            'name' => 'История',
+            'icon' => 'clock',
+            'link' => '/admin/statistics/events/history'
+        ], [
+            'name' => 'Обработка',
+            'icon' => 'chart-area',
+            'link' => '/admin/statistics/events/charts'
+        ]]
     ], [
         'name' => 'Модули',
         'icon' => 'cube',
         'link' => '/admin/statistics/modules'
     ], [
-        'name' => 'Виды',
+        'name' => 'Представления',
         'icon' => 'television',
-        'link' => '/admin/statistics/views'
+        'submenu' => [[
+            'name' => 'История',
+            'icon' => 'clock',
+            'link' => '/admin/statistics/views/history'
+        ], [
+            'name' => 'Статистика',
+            'icon' => 'chart-area',
+            'link' => '/admin/statistics/views/charts'
+        ]],
     ], [
         'name' => 'Действия',
         'icon' => 'superpowers',
         'submenu' => [[
+            'name' => 'Каталог',
+            'icon' => 'folder',
+            'link' => '/admin/statistics/actions/catalog'
+        ], [
             'name' => 'История',
             'icon' => 'clock',
             'link' => '/admin/statistics/actions/history'
         ], [
-            'name' => 'Каталог',
-            'icon' => 'folder',
-            'link' => '/admin/statistics/actions/catalog'
+            'name' => 'Статистика',
+            'icon' => 'chart-area',
+            'link' => '/admin/statistics/actions/charts'
         ]]
     ], [
         'name' => 'База данных',
         'icon' => 'database',
         'submenu' => [[
-            'name' => 'История',
-            'icon' => 'clock',
-            'link' => '/admin/statistics/database/history'
-        ], [
-            'name' => 'Запросы',
-            'icon' => 'flag',
-            'link' => '/admin/statistics/database/queries'
-        ], [
             'name' => 'Таблицы',
             'icon' => 'folder',
             'link' => '/admin/statistics/database/tables'
-        ]]
+        ], [
+            'name' => 'История',
+            'icon' => 'clock',
+            'link' => '/admin/statistics/queries/history'
+        ], [
+            'name' => 'Статистика',
+            'icon' => 'chart-area',
+            'link' => '/admin/statistics/queries/charts'
+        ],]
     ], [
-        'name' => 'Кеш',
+        'name' => 'Кэш',
         'icon' => 'floppy',
-        'link' => '/admin/statistics/cash'
+        'submenu' => [[
+            'name' => 'История',
+            'icon' => 'clock',
+            'link' => '/admin/statistics/cash/history',
+        ], [
+            'name' => 'Вызовы',
+            'icon' => 'chart-area',
+            'link' => '/admin/statistics/cash/charts'
+        ]]
     ]]
 ];
 

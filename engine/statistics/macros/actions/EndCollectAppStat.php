@@ -4,9 +4,6 @@ use engine\statistics\macros\BaseStatCollector;
 use engine\statistics\stats\ActionStat;
 use frame\route\Response;
 
-use frame\stdlib\cash\config;
-use frame\stdlib\cash\database;
-
 class EndCollectAppStat extends BaseStatCollector
 {
     private $stat;
@@ -39,16 +36,5 @@ class EndCollectAppStat extends BaseStatCollector
         }
 
         $this->stat->insert();
-        $this->deleteOldStats();
-    }
-
-    private function deleteOldStats()
-    {
-        $actionTable = ActionStat::getTable();
-        $time = time() - config::get('statistics')->storeTimeInSeconds;
-        database::get()->query(
-            "DELETE $actionTable FROM $actionTable
-            WHERE $actionTable.time < $time"
-        );
     }
 }

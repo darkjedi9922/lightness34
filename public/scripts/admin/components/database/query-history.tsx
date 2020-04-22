@@ -1,11 +1,10 @@
 import React from 'react'
-import Table from '../table/table';
-import { TableItem } from '../table/item';
+import { SortOrder } from '../table/table';
 import Parameter from '../parameter';
 import RouteRequest from '../routes/request';
 import Status, { Type } from '../status';
 import { isNil } from 'lodash';
-import classNames from 'classnames';
+import History from '../stats/history';
 
 interface Query {
     sql: string,
@@ -23,74 +22,65 @@ interface QueryHistoryProps {
     routes: QueryRoute[]
 }
 
-class QueryHistory extends React.Component<QueryHistoryProps> {
-    public render(): React.ReactNode {
-        const items: TableItem[] = [];
-        this.props.routes.map((route, i) => {
-            let status: React.ReactNode;
-            if (route.queries.length === 0) 
-                status = <span className="mark2 mark2--grey">No queries</span>;
-            else if (route.queries.find((query) => !isNil(query.error)))
-                status = <span className="mark2 mark2--red">Has errors</span>;
-            else
-                status = <span className="mark2 mark2--green">All OK</span>;
+enum QueryRouteStatus { NO_QUERIES = 0, ALL_OK = 1, HAS_ERRORS = 2 }
 
-            const details = [];
-            if (route.queries.length) {
-                const queryList = (
-                    <>
-                        {route.queries.map((query, i) =>
-                            <div key={i} className="query">
-                                <div className="query__sql">
-                                    <Parameter
-                                        number={i + 1}
-                                        value={query.sql}
-                                    ></Parameter>
-                                    <span className="query__duration">
-                                        {`${query.durationSec} sec`}
-                                    </span>
-                                </div>
-                                {!isNil(query.error) &&
-                                    <Status 
-                                        type={Type.ERROR}
-                                        name="Error "
-                                        message={query.error}
-                                    ></Status>
-                                }
-                            </div>
-                        )}
-                    </>
-                );
-                details.push({
-                    title: 'Queries',
-                    content: queryList
-                })
-            }
-            items.push({
-                cells: [
-                    <RouteRequest route={route.route}></RouteRequest>,
+class QueryHistory extends React.Component<QueryHistoryProps> {
+    // MAP к значениям QueryRouteStatus
+    private statusMarks = [
+        <span className="mark2 mark2--grey">No queries</span>,
+        <span className="mark2 mark2--green">All OK</span>,
+        <span className="mark2 mark2--red">Has errors</span>
+    ]
+    public render(): React.ReactNode {
+        return <History
+            breadcrumbsNamePart="Запросы"
+            apiDataUrl="/api/stats/queries/history"
+            tableBuilder={{
+                className: 'routes queries',
+                headers: ['Route', 'Queries', 'Sum load', 'Status', 'Time'],
+                defaultSortColumnIndex: 4,
+                defaultSortOrder: SortOrder.DESC,
+                buildPureValuesToSort: (route: QueryRoute) => [
+                    route.route,
                     route.queries.length,
-                    <span className="table__duration">
-                        {Math.round(route.queries.reduce<number>(
-                            (sum, query) => sum + query.durationSec, 0
-                        ) * 1000000) / 1000000} sec
-                    </span>,
-                    <div className="stat-status">{status}</div>,
+                    this.calcSumLoad(route),
+                    this.getStatus(route),
                     route.time
                 ],
-                details
-            })
-        });
-        return (
-            <div className="box box--table">
-                <Table
-                    className="routes queries"
-                    headers={['Route', 'Queries', 'Sum load', 'Status', 'Time']}
-                    items={items}
-                    collapsable={true}
-                ></Table>
-            </div>
-        )
+                buildRowCells: (route: QueryRoute) => [
+                    <RouteRequest route={route.route}></RouteRequest>,
+                    route.queries.length,
+                    <span className="table__duration">{this.calcSumLoad(route)} sec</span>,
+                    <div className="stat-status">{this.statusMarks[this.getStatus(route)]}</div>,
+                    route.time
+                ],
+                buildRowDetails: (route: QueryRoute) => [{
+                    title: 'Queries',
+                    content: route.queries.map((query, i) =>
+                        <div key={i} className="query">
+                            <div className="query__sql">
+                                <Parameter number={i + 1} value={query.sql} />
+                                <span className="query__duration">{query.durationSec} sec</span>
+                            </div>
+                            {!isNil(query.error) && <Status type={Type.ERROR} name="Error " message={query.error} />}
+                        </div>
+                    )
+                }]
+            }}
+        />
+    }
+
+    private calcSumLoad(route: QueryRoute): number {
+        return Math.round(route.queries.reduce<number>(
+            (sum, query) => sum + query.durationSec, 0
+        ) * 1000000) / 1000000;
+    }
+
+    private getStatus(route: QueryRoute): QueryRouteStatus {
+        if (route.queries.length === 0) return QueryRouteStatus.NO_QUERIES;
+        else if (route.queries.find((query) => !isNil(query.error))) 
+            return QueryRouteStatus.HAS_ERRORS;
+        else return QueryRouteStatus.ALL_OK;
     }
 }
 

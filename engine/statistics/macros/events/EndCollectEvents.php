@@ -1,12 +1,10 @@
 <?php namespace engine\statistics\macros\events;
 
 use engine\statistics\macros\BaseStatCollector;
-use engine\statistics\stats\EventRouteStat;
 use engine\statistics\stats\EventSubscriberStat;
 use engine\statistics\stats\EventEmitStat;
-use frame\stdlib\cash\config;
-use frame\stdlib\cash\database;
 use frame\database\Records;
+use engine\statistics\stats\RouteStat;
 
 class EndCollectEvents extends BaseStatCollector
 {
@@ -16,7 +14,7 @@ class EndCollectEvents extends BaseStatCollector
     private $startHandleCollector;
 
     public function __construct(
-        EventRouteStat $routeStat,
+        RouteStat $routeStat,
         CollectEventSubscribers $subscriberCollector,
         CollectEventEmits $emitCollector,
         StartCollectHandles $startHandleCollector
@@ -29,11 +27,10 @@ class EndCollectEvents extends BaseStatCollector
 
     protected function collect(...$args)
     {
-        $routeId = $this->routeStat->insert();
+        $routeId = $this->routeStat->getId();
         $this->insertSubscribers($routeId);
         $this->insertEmits($routeId);
         $this->insertHandles();
-        $this->deleteOldStats();
     }
 
     private function insertSubscribers(int $routeId)
@@ -68,7 +65,7 @@ class EndCollectEvents extends BaseStatCollector
         $emits = $this->emitCollector->getEmits();
         foreach ($handles as $innerEmitId => $emitHandles) {
             if (   !isset($emits[$innerEmitId]) 
-                || $emits[$innerEmitId]->id === null) {
+                || $emits[$innerEmitId]->getId() === null) {
                 // Некоторые события сознательно не были учтены но могут тут
                 // появиться, поэтому, просто проигнорируем их (например события
                 // о запросах в БД на вставку данных о самом сборе статистики).
@@ -82,26 +79,5 @@ class EndCollectEvents extends BaseStatCollector
                 ]);
             }
         }
-    }
-
-    private function deleteOldStats()
-    {
-        $routeTable = EventRouteStat::getTable();
-        $subscribersTable = EventSubscriberStat::getTable();
-        $emitsTable = EventEmitStat::getTable();
-        $time = time() - config::get('statistics')->storeTimeInSeconds;
-        database::get()->query(
-            "DELETE $routeTable, $subscribersTable, $emitsTable, 
-                stat_event_emit_handles
-            FROM
-                $routeTable 
-                LEFT OUTER JOIN $subscribersTable 
-                    ON $routeTable.id = $subscribersTable.route_id
-                LEFT OUTER JOIN $emitsTable
-                    ON $routeTable.id = $emitsTable.route_id 
-                LEFT OUTER JOIN stat_event_emit_handles
-                    ON $emitsTable.id = stat_event_emit_handles.emit_id
-            WHERE $routeTable.time < $time"
-        );
     }
 }
