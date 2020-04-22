@@ -26,7 +26,7 @@ class ApplyDefaultLayout extends Macro
         if ($view instanceof Layouted) {
             /** @var Layouted $view */
             if ($view->getLayout() === null) {
-                if (isset($this->layouts['names'][$name])) {
+                if (array_key_exists($name, $this->layouts['names'] ?? [])) {
                     $view->setLayout($this->layouts['names'][$name]);
                     return;
                 }
