@@ -97,6 +97,7 @@ $global-box-radius: 10px;
 @import 'admin/database/query';
 @import 'admin/events/emit-list/executed-subscriber';
 @import 'admin/modules/module-right';
+@import 'admin/pages/error-page';
 
 html {
     height: 100%;
