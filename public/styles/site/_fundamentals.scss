@@ -1,4 +1,6 @@
 .fundamentals {
+    $rows-spacing: 2rem;
+
     display: -webkit-box;
     display: -webkit-flex;
     display: -moz-box;
@@ -11,30 +13,32 @@
     -webkit-justify-content: space-between;
     -moz-box-pack: justify;
     -ms-flex-pack: justify;
-    justify-content: space-between
-}
+    justify-content: space-between;
+    margin-bottom: -$rows-spacing;
 
-.fundamentals__item {
-    width: 48%
-}
+    &__item {
+        width: 33%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: $rows-spacing;
+    }
 
-.fundamentals__title {
-    text-transform: uppercase;
-    font-size: .9rem;
-    font-weight: 700;
-    color: #81d481
-}
+    &__title {
+        text-transform: uppercase;
+        font-size: .9rem;
+        font-weight: 700;
+        color: $color-label;
+    }
 
-.fundamentals__desc {
-    font-size: .9rem;
-    color: grey;
-    text-align: justify;
-    padding-bottom: 20px;
-    font-family: Calibri
-}
+    &__desc {
+        font-size: .9rem;
+        color: grey;
+        padding: 0 0.75rem;
+        font-family: Calibri
+    }
 
-.fundamentals__icon {
-    float: left;
-    margin-right: 20px;
-    padding-bottom: 50px
+    &__icon {
+        margin-bottom: 0.5rem;
+    }
 }
