@@ -14,13 +14,16 @@
     -moz-box-pack: justify;
     -ms-flex-pack: justify;
     justify-content: space-between;
-    margin-bottom: -$rows-spacing;
+    margin-top: -$rows-spacing;
 
     &__item {
         width: 33%;
         display: flex;
         flex-direction: column;
         align-items: center;
+    }
+
+    &__anchor {
         margin-bottom: $rows-spacing;
     }
 

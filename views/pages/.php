@@ -94,32 +94,48 @@ $mechanisms = [[
     </div>
 </div>
 <div class="slide">
-    <span class="slide__header">Механизмы фреймворка</span>
-    <div class="slide__content">
-        <div class="fundamentals">
-            <?php foreach ($mechanisms as $mechanism) {
-                $widget = new Widget('fundamental');
-                foreach ($mechanism as $key => $value)
-                    $widget->setMeta($key, $value);
-                $widget->show();
-            } ?>
+    <div class="slide__column">
+        <span class="slide__header">Механизмы фреймворка</span>
+        <div class="slide__content">
+            <div class="fundamentals">
+                <?php foreach ($mechanisms as $mechanism) {
+                    $widget = new Widget('fundamental');
+                    foreach ($mechanism as $key => $value)
+                        $widget->setMeta($key, $value);
+                    $widget->show();
+                } ?>
+            </div>
         </div>
     </div>
 </div>
 <div class="slide slide--dark">
-    <span class="slide__header">Профиль</span>
-    <div class="slide__content">
-        <?php if ($auth->isLogged()) : ?>
-            <?php if ($adminRights->can('enter')) : ?>
+    <div class="slide__column">
+        <span class="slide__header">Профиль</span>
+        <div class="slide__content">
+            <?php if ($auth->isLogged()) : ?>
+                <?php if ($adminRights->can('enter')) : ?>
+                    <div class="footer__info">
+                        <a href="/admin" class="footer__link">Перейти в админ-панель</a>
+                    </div>
+                <?php endif ?>
                 <div class="footer__info">
-                    <a href="/admin" class="footer__link">Перейти в админ-панель</a>
+                    <a href="<?= $logout->getUrl() ?>" class="footer__link">Выйти из профиля</a>
                 </div>
+            <?php else : ?>
+                <?php (new Widget('welcome'))->show() ?>
             <?php endif ?>
-            <div class="footer__info">
-                <a href="<?= $logout->getUrl() ?>" class="footer__link">Выйти из профиля</a>
-            </div>
-        <?php else : ?>
-            <?php (new Widget('welcome'))->show() ?>
-        <?php endif ?>
+        </div>
+    </div>
+    <div class="slide__column">
+        <span class="slide__header">Механизмы</span>
+        <div class="slide__content">
+            <?php foreach ($mechanisms as $mechanism) : ?>
+                <div class="footer__info">
+                    <a href="#<?= $mechanism['icon'] ?>" class="footer__link">
+                        <?= $mechanism['title'] ?>
+                    </a>
+                </div>
+            <?php endforeach ?>
+        </div>
     </div>
 </div>

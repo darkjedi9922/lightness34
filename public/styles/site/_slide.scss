@@ -3,6 +3,8 @@
     background: $color-light;
     color: black;
     margin: auto;
+    display: flex;
+    justify-content: space-around;
     
     &__header {
         display: block;
