@@ -155,6 +155,23 @@ $modules = [[
     'desc' => 'Просмотр информации о модулях, их данных, в частности
         статистики работы механизмов приложения, а также выполнение их конфигурации.'
 ]];
+
+$security = [[
+    'icon' => 'security',
+    'title' => 'Защита от CSRF',
+    'desc' => 'В действия автоматически встраиваются уникальные токены, которые
+        выдаются каждому пользователю.'
+], [
+    'icon' => 'interstate',
+    'title' => 'Защита от XSS',
+    'desc' => 'Во входных данных в действиях автоматически кодируются 
+        спецсимволы HTML.'
+], [
+    'icon' => 'magicwand',
+    'title' => 'SQL-инъекции',
+    'desc' => 'В действиях и при использовании построителя запросов автоматически
+        кодируются спецсимволы SQL.'
+]];
 ?>
 
 <div class="header">
@@ -207,6 +224,21 @@ $modules = [[
         </div>
     </div>
 </div>
+<div class="slide">
+    <div class="slide__column">
+        <span class="slide__header">Средства защиты</span>
+        <div class="slide__content">
+            <div class="fundamentals">
+                <?php foreach ($security as $info) {
+                    $widget = new Widget('fundamental');
+                    foreach ($info as $key => $value)
+                        $widget->setMeta($key, $value);
+                    $widget->show();
+                } ?>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Футер -->
 <div class="slide slide--dark">
@@ -225,6 +257,16 @@ $modules = [[
             <?php else : ?>
                 <?php (new Widget('welcome'))->show() ?>
             <?php endif ?>
+        </div>
+        <span class="slide__header">Безопасность</span>
+        <div class="slide__content">
+            <?php foreach ($security as $info) : ?>
+                <div class="footer__info">
+                    <a href="#<?= $info['icon'] ?>" class="footer__link">
+                        <?= $info['title'] ?>
+                    </a>
+                </div>
+            <?php endforeach ?>
         </div>
     </div>
     <div class="slide__column">

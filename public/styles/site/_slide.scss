@@ -1,5 +1,5 @@
 .slide {
-    padding: $slide-padding;
+    padding: 0 $slide-padding-x $slide-padding-y;
     background: $color-light;
     color: black;
     margin: auto;
@@ -11,6 +11,7 @@
         text-transform: uppercase;
         font-weight: 700;
         font-size: 1.2rem;
+        margin: $slide-padding-y 0;
     }
 
     &__content {
