@@ -8,7 +8,7 @@
             margin-top: 0.6rem;
         }
 
-        & > * {
+        & > *:not(:last-child) {
             margin-right: 0.8rem;
         }
     }
@@ -19,6 +19,7 @@
         border: solid 1px $color-label;
         border-radius: 0.4rem;
         align-items: center;
+        width: 100%;
     }
 
     &__icon {

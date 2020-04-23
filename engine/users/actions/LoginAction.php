@@ -61,4 +61,14 @@ class LoginAction extends ActionBody
         $me->online = true;
         $me->update();
     }
+
+    public function getSuccessRedirect(): ?string
+    {
+        return '/';
+    }
+
+    public function getFailRedirect(): ?string
+    {
+        return '/#loginform';
+    }
 }

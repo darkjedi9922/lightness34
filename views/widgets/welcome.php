@@ -10,6 +10,8 @@ $action = new ViewAction(LoginAction::class);
 $self->setMeta('title', 'Вход');
 ?>
 
+<a name="loginform"></a>
+
 <?php if ($action->hasError(LoginAction::E_NO_LOGIN)) : ?>
     <span class='error' style="margin-bottom:10px">Логин не указан</span>
 <?php endif ?>
