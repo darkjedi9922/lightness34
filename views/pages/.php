@@ -92,7 +92,7 @@ $additions = [[
     'desc' => 'Возможность прикреплять отслеживание состояния и прогресса прочтения
         контента веб-сайта для каждого пользователя.'
 ], [
-    'icon' => 'contacts',
+    'icon' => 'booklet',
     'title' => 'Cookie и cессии',
     'desc' => 'Во фреймворке предоставлены утилиты для работы с cookie и сессиями
         клиентов. При чем данные в cookie имитируют мгновенное обновление.'
@@ -122,6 +122,38 @@ $additions = [[
     'desc' => 'Разбиение списков по номерам страниц.
         Сами пагинаторы это представления, поэтому можно настроить
         их вид с использованием логики.'
+]];
+
+$modules = [[
+    'icon' => 'contacts',
+    'title' => 'Пользователи',
+    'desc' => 'Добавление, редактирование пользователей. Просмотр списков профилей
+        пользователей. Включает управление их генедрами и группами.'
+], [
+    'icon' => 'mail',
+    'title' => 'Сообщения',
+    'desc' => 'Пользователи могут вести друг с другом диалоги. Модуль дает
+        возможности управлять списками диалогов и сообщениями в них.'
+], [
+    'icon' => 'news',
+    'title' => 'Статьи',
+    'desc' => 'Добавление, редактирование, удаление статей, просмотр списков всех
+        статей, а также списков новых для пользователя статей.'
+], [
+    'icon' => 'megaphone2',
+    'title' => 'Комментарии',
+    'desc' => 'Добавление комментариев к материалам модуля. 
+        Реализованы как подмодуль и могут быть присоединены к любому модулю.'
+], [
+    'icon' => 'pie-chart',
+    'title' => 'Статистика',
+    'desc' => 'Динамически подключает сбор статистики работы основных функций
+        фреймворка и получать ее с помощью API запросов.'
+], [
+    'icon' => 'browser',
+    'title' => 'Админ-панель',
+    'desc' => 'Просмотр информации о модулях, их данных, в частности
+        статистики работы механизмов приложения, а также выполнение их конфигурации.'
 ]];
 ?>
 
@@ -160,6 +192,23 @@ $additions = [[
         </div>
     </div>
 </div>
+<div class="slide">
+    <div class="slide__column">
+        <span class="slide__header">Встроенные пользовательские модули</span>
+        <div class="slide__content">
+            <div class="fundamentals">
+                <?php foreach ($modules as $info) {
+                    $widget = new Widget('fundamental');
+                    foreach ($info as $key => $value)
+                        $widget->setMeta($key, $value);
+                    $widget->show();
+                } ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Футер -->
 <div class="slide slide--dark">
     <div class="slide__column">
         <span class="slide__header">Профиль</span>
@@ -194,6 +243,18 @@ $additions = [[
         <span class="slide__header">Дополнительно</span>
         <div class="slide__content">
             <?php foreach ($additions as $info) : ?>
+                <div class="footer__info">
+                    <a href="#<?= $info['icon'] ?>" class="footer__link">
+                        <?= $info['title'] ?>
+                    </a>
+                </div>
+            <?php endforeach ?>
+        </div>
+    </div>
+    <div class="slide__column">
+        <span class="slide__header">Модули</span>
+        <div class="slide__content">
+            <?php foreach ($modules as $info) : ?>
                 <div class="footer__info">
                     <a href="#<?= $info['icon'] ?>" class="footer__link">
                         <?= $info['title'] ?>
