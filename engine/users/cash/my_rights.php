@@ -1,17 +1,25 @@
 <?php namespace engine\users\cash;
 
-use frame\tools\Cash;
+use frame\cash\CashValue;
 use frame\modules\Modules;
 use frame\auth\UserRights;
 use engine\users\cash\user_me;
+use frame\cash\CashStorage;
+use frame\stdlib\drivers\cash\StaticCashStorage;
 
-class my_rights extends Cash
+class my_rights extends CashValue
 {
+    public static function getStorage(): CashStorage
+    {
+        return StaticCashStorage::getDriver();
+    }
+
     /**
      * @throws \Exception if there is not such module.
      * @throws \Exception if there is no such module rights.
+     * @return UserRights
      */
-    public static function get(string $module): UserRights
+    public static function get(string $module)
     {
         return self::cash($module, function() use ($module) {
             $moduleInstance = Modules::getDriver()->findByName($module);

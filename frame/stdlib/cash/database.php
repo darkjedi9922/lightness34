@@ -1,11 +1,21 @@
 <?php namespace frame\stdlib\cash;
 
-use frame\tools\Cash;
+use frame\cash\CashValue;
 use frame\database\Database as DB;
+use frame\cash\CashStorage;
+use frame\stdlib\drivers\cash\StaticCashStorage;
 
-class database extends Cash 
+class database extends CashValue 
 {
-    public static function get(): DB
+    public static function getStorage(): CashStorage
+    {
+        return StaticCashStorage::getDriver();
+    }
+
+    /**
+     * @return DB
+     */
+    public static function get()
     {
         return self::cash('db', function() {
             $config = config::get('db');

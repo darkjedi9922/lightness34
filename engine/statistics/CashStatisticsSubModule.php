@@ -6,7 +6,7 @@ use engine\statistics\macros\cash\CollectCashCalls;
 use engine\statistics\macros\cash\CollectCashError;
 use frame\modules\Module;
 use frame\errors\Errors;
-use frame\tools\Cash;
+use frame\cash\CashValue;
 use engine\statistics\stats\RouteStat;
 use engine\statistics\stats\CashValueStat;
 
@@ -43,7 +43,7 @@ class CashStatisticsSubModule extends BaseStatisticsSubModule
         $errorCollector = new CollectCashError($this->callsCollector);
 
         return [
-            Cash::EVENT_CALL => $this->callsCollector,
+            CashValue::EVENT_CALL => $this->callsCollector,
             Errors::EVENT_ERROR => $errorCollector
         ];
     }
