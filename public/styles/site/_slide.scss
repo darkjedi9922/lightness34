@@ -18,6 +18,10 @@
         margin-top: 1.8rem;
     }
 
+    &__column--wide {
+        width: 100%;
+    }
+
     &--dark {
         background: $color-dark;
         color: $color-light;

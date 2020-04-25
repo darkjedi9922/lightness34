@@ -184,10 +184,12 @@ $security = [[
         <span class="slide__header">Механизмы фреймворка</span>
         <div class="slide__content">
             <div class="fundamentals">
-                <?php foreach ($mechanisms as $mechanism) {
+                <?php foreach ($mechanisms as $info) {
                     $widget = new Widget('fundamental');
-                    foreach ($mechanism as $key => $value)
-                        $widget->setMeta($key, $value);
+                    $widget->setMeta('anchor', $info['icon']);
+                    $widget->setMeta('icon', '/public/images/icons/' . $info['icon'] . '.png');
+                    $widget->setMeta('title', $info['title']);
+                    $widget->setMeta('desc', $info['desc']);
                     $widget->show();
                 } ?>
             </div>
@@ -201,8 +203,10 @@ $security = [[
             <div class="fundamentals">
                 <?php foreach ($additions as $info) {
                     $widget = new Widget('fundamental');
-                    foreach ($info as $key => $value)
-                        $widget->setMeta($key, $value);
+                    $widget->setMeta('anchor', $info['icon']);
+                    $widget->setMeta('icon', '/public/images/icons/' . $info['icon'] . '.png');
+                    $widget->setMeta('title', $info['title']);
+                    $widget->setMeta('desc', $info['desc']);
                     $widget->show();
                 } ?>
             </div>
@@ -216,8 +220,10 @@ $security = [[
             <div class="fundamentals">
                 <?php foreach ($modules as $info) {
                     $widget = new Widget('fundamental');
-                    foreach ($info as $key => $value)
-                        $widget->setMeta($key, $value);
+                    $widget->setMeta('anchor', $info['icon']);
+                    $widget->setMeta('icon', '/public/images/icons/' . $info['icon'] . '.png');
+                    $widget->setMeta('title', $info['title']);
+                    $widget->setMeta('desc', $info['desc']);
                     $widget->show();
                 } ?>
             </div>
@@ -231,10 +237,43 @@ $security = [[
             <div class="fundamentals">
                 <?php foreach ($security as $info) {
                     $widget = new Widget('fundamental');
-                    foreach ($info as $key => $value)
-                        $widget->setMeta($key, $value);
+                    $widget->setMeta('anchor', $info['icon']);
+                    $widget->setMeta('icon', '/public/images/icons/' . $info['icon'] . '.png');
+                    $widget->setMeta('title', $info['title']);
+                    $widget->setMeta('desc', $info['desc']);
                     $widget->show();
                 } ?>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="slide">
+    <div class="slide__column slide__column--wide">
+        <span class="slide__header">Сравнение с архитектурой MVC-фреймворков</span>
+        <div class="slide__content">
+            <div class="fundamentals fundamentals--two-parts">
+                <?php
+                $mvcWidget = new Widget('fundamental');
+                $mvcWidget->setMeta('icon', '/images/diagrams/mvc.png');
+                $mvcWidget->setMeta('title', 'MVC-фреймворк');
+                $mvcWidget->setMeta('desc', 'В архитектуре MVC-фреймворков
+                    запрос приходит в контроллер, а дальше
+                    разработчику нужно самому решать что с ним делать, какой ответ
+                    возвращать и в каком формате. Это дает большую гибкость,
+                    но также разработчику приходится писать много тривиального 
+                    кода.');
+                $mvcWidget->show();
+
+                $lightnessWidget = new Widget('fundamental');
+                $lightnessWidget->setMeta('icon', '/images/diagrams/strict.png');
+                $lightnessWidget->setMeta('title', 'Данный фреймворк');
+                $lightnessWidget->setMeta('desc', 'Фреймворком реализовано
+                    разные типы запросов. Разработчику остается лишь определить часть ответа,
+                    специфическую для конкретной задачи, а ответ сам сгенерируется
+                    в нужном формате. Расширяемость остается, так как можно независимо добавлять другие
+                    алгоритмы обработки запросов.');
+                $lightnessWidget->show();
+                ?>
             </div>
         </div>
     </div>
