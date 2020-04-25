@@ -3,10 +3,13 @@ import $ from 'jquery';
 import { encodeHTML, decodeHTML } from 'buk';
 import Form, { TextField } from './form/Form';
 import FormTextarea from './form/FormTextarea';
+import Table from './table/table';
+import UserCell from './table/user-cell';
 
 interface User {
     avatarUrl: string
-    login: string
+    login: string,
+    isOnline: boolean
 };
 
 interface Comment {
@@ -69,22 +72,23 @@ class Comments extends React.Component<CommentsProps, CommentsState> {
                     <span className="content__title">
                         Комментарии ({this.state.list.length})
                     </span>
-                        <div className="box">
-                            {this.state.list.map((comment, index) => 
-                                <div key={index} className="comment">
-                                    <div className="comment__author author">
-                                        <div className="author__data">
-                                            <img src={comment.author.avatarUrl} className="author__avatar"/>
-                                            <div className="author__info">
-                                                <a href={"/admin/users/profile/" + comment.author.login}
-                                                    className="author__login">{comment.author.login}</a>
-                                                <span className="author__date">{comment.date}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="comment__content">{decodeHTML(comment.text)}</div>
-                                </div>
-                            )}
+                        <div className="box box--table">
+                            <Table
+                                headers={['Автор', 'Дата']}
+                                items={this.state.list.map((comment) => ({
+                                    cells: [
+                                        <UserCell
+                                            login={comment.author.login}
+                                            avatarUrl={comment.author.avatarUrl}
+                                            isOnline={comment.author.isOnline}
+                                        />,
+                                        comment.date
+                                    ],
+                                    details: [{
+                                        content: decodeHTML(comment.text)
+                                    }]
+                                }))}
+                            />
                         </div>
                     </>
                 }

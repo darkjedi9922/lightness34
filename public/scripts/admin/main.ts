@@ -6,7 +6,7 @@ import DatabaseTables from './components/database/db-tables';
 import ViewHistory from './components/views/view-history';
 import StatCharts from './components/stats/charts';
 import CashUseHistory from './components/cash/use-history';
-import ArticlesTable from './components/articles-table';
+import ArticlesTable from './components/articles/articles-table';
 import MessagesPage from './components/pages/messages';
 import AddUserPage from './components/pages/users/add';
 import ProfilePage from './components/pages/profile';
@@ -19,6 +19,7 @@ import Form from './components/form/Form';
 import EventHistory from './components/events/event-history';
 import Menu from './components/menu';
 import ActionHistory from './components/pages/actions/history';
+import ArticlePage from './components/articles/article-page';
 
 setupReactComponent('#stat-cash-history', CashUseHistory);
 setupReactComponent('#stat-views-history', ViewHistory);
@@ -39,5 +40,6 @@ setupReactComponent('#users', UsersTable);
 setupReactComponent('#stat-events-history', EventHistory);
 setupReactComponent('#menu', Menu);
 setupReactComponent('#stat-actions-history', ActionHistory);
+setupReactComponent('#article-page', ArticlePage);
 
 setupReactComponent('.react-form', Form);

@@ -3,6 +3,7 @@ import Table from './table/table';
 import { TableItem } from './table/item';
 import { isNil } from 'lodash';
 import Status, { Type } from './status';
+import UserCell from './table/user-cell';
 
 interface User {
     id: number,
@@ -30,16 +31,7 @@ class UsersTable extends React.Component<Props> {
             items.push({
                 cells: [
                     user.id,
-                    <div className="users__user-cell">
-                        <img
-                            className="users__avatar"
-                            src={user.avatarUrl}
-                        />
-                        <a
-                            href={`/admin/users/profile/${user.login}`} 
-                            className="table__link"
-                        >{user.login}</a>
-                    </div>,
+                    <UserCell login={user.login} avatarUrl={user.avatarUrl} />,
                     (name || surname)
                         ? `${name} ${surname}`
                         : <Status type={Type.NONE} message="None" />,

@@ -4,6 +4,7 @@ import Breadcrumbs from '../common/Breadcrumbs';
 import classNames from 'classnames';
 import Table from '../table/table';
 import Mark from '../mark';
+import UserCell from '../table/user-cell';
 
 interface Message {
     text: string,
@@ -74,21 +75,7 @@ class DialogsPage extends React.Component<DialogsPageProps> {
                         ]}
                         items={this.props.list.map((dialog) => ({
                             cells: [
-                                <div className="users__user-cell">
-                                    <a 
-                                        href={`/admin/users/profile/${dialog.whoLogin}`}
-                                        className="users__avatar-link"
-                                    >
-                                        <img
-                                            className="users__avatar"
-                                            src={dialog.whoAvatar}
-                                        />
-                                    </a>
-                                    <a
-                                        href={`/admin/users/profile/${dialog.whoLogin}`}
-                                        className="table__link"
-                                    >{dialog.whoLogin}</a>
-                                </div>,
+                                <UserCell login={dialog.whoLogin} avatarUrl={dialog.whoAvatar} />,
                                 <span className="dialogs__message-preview">
                                     {decodeHTML(dialog.lastMessage.text)}
                                     &nbsp;

@@ -37,6 +37,17 @@ $add = new ViewAction(AddComment::class, [
     'material_id' => $materialId
 ]);
 
+$articleProps = [
+    'title' => $article->title,
+    'author' => [
+        'login' => $author->login,
+        'avatarUrl' => '/' . $author->getAvatarUrl(),
+        'isOnline' => (bool) $author->online
+    ],
+    'text' => $article->content,
+    'date' => date('d.m.Y H:i', $article->date)
+];
+
 $articleCommentsData = [
     'me' => [
         'avatarUrl' => '/' . $me->getAvatarUrl(),
@@ -56,7 +67,8 @@ foreach ($comments as $comment) {
     $articleCommentsData['list'][] = [
         'author' => [
             'avatarUrl' => '/' . $commentAuthor->getAvatarUrl(),
-            'login' => $commentAuthor->login
+            'login' => $commentAuthor->login,
+            'isOnline' => (bool) $commentAuthor->online
         ],
         'date' => date('d.m.Y H:i', $comment->date),
         'text' => $comment->text
@@ -95,20 +107,5 @@ $article->setReaded(user_me::get());
         </div>
     </div>
 </div>
-<div class="box article">
-    <h2 class="article__title"><?= $article->title ?></h2>
-    <div class="article__container">
-        <div class="author">
-            <div class="author__data">
-                <img src="/<?= $author->getAvatarUrl() ?>" class="author__avatar">
-                <div class="author__info">
-                    <a href="/admin/users/profile/<?= $author->login ?>" class="author__login"><?= $author->login ?></a>
-                    <span class="author__group"><?= $group->name ?></span>
-                </div>
-            </div>
-            <span class="author__date"><?= date('d.m.Y', $article->date) ?></span>
-        </div>
-        <p class="article__content"><?= $article->content ?></p>
-    </div>
-</div>
+<div id="article-page" data-props="<?= JsonEncoder::forHtmlAttribute($articleProps) ?>"></div>
 <div id="article-comments" data-props='<?= $articleCommentsData ?>'></div>

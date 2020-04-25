@@ -1,6 +1,6 @@
 import React from 'react'
-import Table from './table/table';
-import { TableItem } from './table/item';
+import Table from '../table/table';
+import { TableItem } from '../table/item';
 import { decodeHTML } from 'buk'
 
 interface Article {
