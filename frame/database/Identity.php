@@ -74,7 +74,7 @@ abstract class Identity
     {
         if ($name === 'id') throw new \Exception(
             'It is not possible to change id field of Identity.');
-        if (isset($this->data[$name]) && $this->data[$name] !== $value)
+        if (array_key_exists($name, $this->data) && $this->data[$name] !== $value)
             $this->modifiedData[$name] = $value;
         $this->data[$name] = $value;
     }
@@ -82,6 +82,7 @@ abstract class Identity
     public function update()
     {
         if (!$this->exists) throw new \Exception('The record does not exist yet.');
+        if (empty($this->modifiedData)) return;
         $records = Records::from(static::getTable(), ['id' => $this->id]);
         $records->update($this->modifiedData);
         $this->modifiedData = [];
