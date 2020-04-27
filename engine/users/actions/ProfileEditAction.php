@@ -28,7 +28,7 @@ class ProfileEditAction extends ProfileAction
     /** @var User */
     private $user = null;
     private $me = null;
-    /** @var Database */
+    /** @var SqlDriver */
     private $database = null;
     /** @var UploadedFile */
     private $avatar = null;

@@ -30,13 +30,13 @@ use frame\views\macros\BlockMacro;
 use frame\views\macros\ShowPage;
 use frame\views\macros\WidgetMacro;
 use frame\views\View;
-use frame\database\Database;
+use frame\database\SqlDriver;
 use frame\stdlib\drivers\database\MySqlDriver;
 
 $app = new Core;
 $app->replaceDriver(Request::class, UrlRequest::class);
 $app->replaceDriver(Response::class, UrlResponse::class);
-$app->replaceDriver(Database::class, MySqlDriver::class);
+$app->replaceDriver(SqlDriver::class, MySqlDriver::class);
 $app->replaceDriver(RightsStore::class, DatabaseRightsStore::class);
 
 $configRouter = ConfigRouter::getDriver();

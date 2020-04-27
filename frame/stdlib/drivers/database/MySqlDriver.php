@@ -1,9 +1,9 @@
 <?php namespace frame\stdlib\drivers\database;
 
-use frame\database\Database;
+use frame\database\SqlDriver;
 use frame\stdlib\cash\config;
 
-class MySqlDriver extends Database
+class MySqlDriver extends SqlDriver
 {
     private $mysqli;
 

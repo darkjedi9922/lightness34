@@ -4,7 +4,7 @@ use frame\core\Driver;
 use frame\events\Events;
 use frame\database\QueryResult;
 
-abstract class Database extends Driver
+abstract class SqlDriver extends Driver
 {
     const EVENT_QUERY_START = 'db-query-start';
     const EVENT_QUERY_END = 'db-query-end';

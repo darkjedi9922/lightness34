@@ -6,7 +6,7 @@ use frame\stdlib\drivers\database\MySqlDriver;
  * Так как этот класс использует базу данных, следует использовать его только 
  * в редких ситуациях, когда без БД не обойтись, во благо производительности.
  */
-class DatabaseTransmitter extends \frame\tools\DataTransmitter
+class SqlDbTransmitter extends \frame\tools\DataTransmitter
 {
     /**
      * Имя таблицы БД, используемая для трансмиттинга.

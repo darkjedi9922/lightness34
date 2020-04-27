@@ -1,7 +1,7 @@
 <?php namespace engine\statistics;
 
 use frame\database\Records;
-use frame\database\Database;
+use frame\database\SqlDriver;
 use engine\statistics\stats\QueryStat;
 use engine\statistics\macros\database\EndCollectDbStat;
 use engine\statistics\macros\database\StartCollectQueryStat;
@@ -46,8 +46,8 @@ class DbStatisticsSubModule extends BaseStatisticsSubModule
 
         return [
             Errors::EVENT_ERROR => $errorCollector,
-            Database::EVENT_QUERY_START => $this->startQueryCollector,
-            Database::EVENT_QUERY_END => $endQueryCollector
+            SqlDriver::EVENT_QUERY_START => $this->startQueryCollector,
+            SqlDriver::EVENT_QUERY_END => $endQueryCollector
         ];
     }
 }
