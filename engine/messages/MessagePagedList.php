@@ -2,7 +2,7 @@
 
 use engine\users\cash\user_me;
 use frame\lists\paged\PagedList;
-use frame\stdlib\drivers\database\MySqlDriver;
+use frame\database\SqlDriver;
 use frame\stdlib\cash\config;
 use frame\lists\iterators\IdentityIterator;
 
@@ -14,7 +14,7 @@ class MessagePagedList extends PagedList
     public function __construct(int $page, int $userId)
     {
         $me = user_me::get();
-        $db = MySqlDriver::getDriver();
+        $db = SqlDriver::getDriver();
         $config = config::get('messages');
 
         $countAll = (int) $db->query(

@@ -1,6 +1,6 @@
 <?php namespace engine\users\macros;
 
-use frame\stdlib\drivers\database\MySqlDriver;
+use frame\database\SqlDriver;
 use frame\events\DaemonMacro;
 
 class UpdateOfflineUsers extends DaemonMacro
@@ -15,7 +15,7 @@ class UpdateOfflineUsers extends DaemonMacro
     protected function execDaemon()
     {
         $theIntervalTimeAgo = time() - $this->intervalInSeconds;
-        MySqlDriver::getDriver()->query(
+        SqlDriver::getDriver()->query(
             "UPDATE users SET online = 0 
             WHERE online = 1 AND last_online_time <= $theIntervalTimeAgo"
         );

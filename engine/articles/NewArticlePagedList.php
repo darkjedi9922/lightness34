@@ -3,7 +3,7 @@
 use frame\lists\paged\PagedList;
 use frame\lists\iterators\IdentityIterator;
 use frame\stdlib\cash\config;
-use frame\stdlib\drivers\database\MySqlDriver;
+use frame\database\SqlDriver;
 use engine\users\cash\user_me;
 
 class NewArticlePagedList extends PagedList
@@ -19,7 +19,7 @@ class NewArticlePagedList extends PagedList
 
         parent::__construct($page, $countAll, $pageLimit);
 
-        $this->result = MySqlDriver::getDriver()->query(
+        $this->result = SqlDriver::getDriver()->query(
             "SELECT articles.*
             FROM articles LEFT OUTER JOIN 
                 (SELECT article_id FROM readed_articles 

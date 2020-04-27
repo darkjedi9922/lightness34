@@ -1,6 +1,6 @@
 <?php namespace engine\articles;
 
-use frame\stdlib\drivers\database\MySqlDriver;
+use frame\database\SqlDriver;
 use frame\database\Identity;
 use engine\users\User;
 use engine\users\Group;
@@ -16,7 +16,7 @@ class Article extends Identity
 
     public static function countUnreaded(int $userId): int
     {
-        return (int) MySqlDriver::getDriver()->query(
+        return (int) SqlDriver::getDriver()->query(
             "SELECT COUNT(id)
             FROM articles LEFT OUTER JOIN 
                 (SELECT article_id FROM readed_articles WHERE user_id = $userId) AS readed

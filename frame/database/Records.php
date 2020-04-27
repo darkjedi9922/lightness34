@@ -1,6 +1,6 @@
 <?php namespace frame\database;
 
-use frame\stdlib\drivers\database\MySqlDriver;
+use frame\database\SqlDriver;
 use function lightlib\array_assemble;
 
 /**
@@ -89,7 +89,7 @@ class Records
     {
         $from = $this->table;
         $where = $this->assembleWhere();
-        return MySqlDriver::getDriver()->query("SELECT COUNT(`$field`) FROM `$from` $where")
+        return SqlDriver::getDriver()->query("SELECT COUNT(`$field`) FROM `$from` $where")
             ->readScalar();
     }
 
@@ -105,7 +105,7 @@ class Records
         $where = $this->assembleWhere();
         $orderBy = $this->assembleOrderBy();
         $limit = $this->assembleLimit();
-        return MySqlDriver::getDriver()->query(
+        return SqlDriver::getDriver()->query(
             "SELECT $fields FROM $from $where $orderBy $limit"
         );
     }
@@ -121,7 +121,7 @@ class Records
             $what = $this->table;
             $set = array_assemble($this->addAssocQuotes($data), ', ', ' = ');
             $where = $this->assembleWhere();
-            MySqlDriver::getDriver()->query("UPDATE `$what` SET $set $where");
+            SqlDriver::getDriver()->query("UPDATE `$what` SET $set $where");
         }
     }
 
@@ -138,7 +138,7 @@ class Records
         $set = $this->addAssocQuotes(array_merge($this->where, $values));
         $keys = implode(', ', array_keys($set));
         $values = implode(', ', array_values($set));
-        $db = MySqlDriver::getDriver();
+        $db = SqlDriver::getDriver();
         $db->query("INSERT INTO `$into` ($keys) VALUES ($values)");
         return $db->getLastInsertedId();
     }
@@ -150,7 +150,7 @@ class Records
     {
         $from = $this->table;
         $where = $this->assembleWhere();
-        return MySqlDriver::getDriver()->query("DELETE FROM `$from` $where");
+        return SqlDriver::getDriver()->query("DELETE FROM `$from` $where");
     }
 
     /**
