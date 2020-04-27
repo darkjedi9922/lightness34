@@ -1,7 +1,7 @@
 <?php namespace engine\statistics\macros\database;
 
 use engine\statistics\macros\BaseStatCollector;
-use frame\database\QueryException;
+use frame\stdlib\drivers\database\QueryException;
 
 class CollectDbError extends BaseStatCollector
 {

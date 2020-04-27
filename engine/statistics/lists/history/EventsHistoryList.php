@@ -5,7 +5,7 @@ use engine\statistics\stats\EventSubscriberStat;
 use frame\lists\iterators\IdentityIterator;
 use engine\statistics\stats\EventEmitStat;
 use engine\statistics\stats\RouteStat;
-use frame\stdlib\cash\database;
+use frame\stdlib\drivers\database\MySqlDriver;
 use frame\route\Router;
 
 class EventsHistoryList extends HistoryList
@@ -75,7 +75,7 @@ class EventsHistoryList extends HistoryList
         $routeTable = $routeStat::getTable();
         $emitsTable = EventEmitStat::getTable();
         $handlesTable = 'stat_event_emit_handles';
-        return database::get()->query(
+        return MySqlDriver::getDriver()->query(
             "SELECT $handlesTable.*
             FROM 
                 $handlesTable 

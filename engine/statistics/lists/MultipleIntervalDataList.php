@@ -1,6 +1,6 @@
 <?php namespace engine\statistics\lists;
 
-use frame\stdlib\cash\database;
+use frame\stdlib\drivers\database\MySqlDriver;
 use ArrayIterator;
 
 use function lightlib\last;
@@ -54,7 +54,7 @@ abstract class MultipleIntervalDataList extends TimeIntervalList
     public function assembleArray(): array
     {
         $result = [];
-        $queryResult = database::get()->query($this->getQuery());
+        $queryResult = MySqlDriver::getDriver()->query($this->getQuery());
         $interval = $this->getSecondInterval();
         while (($line = $queryResult->readLine()) !== null) {
             $url = $line['object'];

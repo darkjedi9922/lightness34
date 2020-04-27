@@ -1,4 +1,4 @@
-<?php namespace frame\database;
+<?php namespace frame\stdlib\drivers\database;
 
 use Throwable;
 

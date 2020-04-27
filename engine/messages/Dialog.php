@@ -1,6 +1,6 @@
 <?php namespace engine\messages;
 
-use frame\stdlib\cash\database;
+use frame\stdlib\drivers\database\MySqlDriver;
 use frame\database\Records;
 
 /**
@@ -12,7 +12,7 @@ class Dialog
 
     public static function countUnreaded(int $userId): int
     {
-        return (int)database::get()->query(
+        return (int)MySqlDriver::getDriver()->query(
             "SELECT COUNT(DISTINCT from_id) FROM messages
             WHERE to_id = $userId AND readed = 0
                 AND (removed_by_id IS NULL OR removed_by_id <> {$userId})"
@@ -37,7 +37,7 @@ class Dialog
 
     public function countNewMessages(int $userId): int
     {
-        return (int)database::get()->query(
+        return (int)MySqlDriver::getDriver()->query(
             "SELECT COUNT(id) FROM messages
             WHERE to_id = $userId 
                 AND from_id = {$this->getWhoId($userId)} 

@@ -2,7 +2,7 @@
 
 use frame\database\Identity;
 use frame\database\Records;
-use frame\stdlib\cash\database;
+use frame\stdlib\drivers\database\MySqlDriver;
 
 class Message extends Identity
 {
@@ -13,7 +13,7 @@ class Message extends Identity
 
     public static function countUnreaded(int $userId): int
     {
-        return (int) database::get()->query(
+        return (int) MySqlDriver::getDriver()->query(
             "SELECT COUNT(id) FROM messages
             WHERE to_id = $userId AND readed = 0
                 AND (removed_by_id IS NULL OR removed_by_id <> {$userId})"

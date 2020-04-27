@@ -1,16 +1,16 @@
 <?php /** @var frame\views\Page $self */
 
 use frame\tools\JsonEncoder;
-use frame\stdlib\cash\database;
+use frame\stdlib\drivers\database\MySqlDriver;
 
 $tablesProps = ['tables' => []];
-$tables = database::get()->query("SHOW TABLES")->readColumn(0);
+$tables = MySqlDriver::getDriver()->query("SHOW TABLES")->readColumn(0);
 foreach ($tables as $table) {
     $tableProps = [
         'name' => $table,
         'fields' => []
     ];
-    $fields = database::get()->query("DESCRIBE `$table`")->readAll();
+    $fields = MySqlDriver::getDriver()->query("DESCRIBE `$table`")->readAll();
     foreach ($fields as $field) {
         $tableProps['fields'][] = [
             'name' => $field['Field'],
@@ -20,7 +20,7 @@ foreach ($tables as $table) {
             'default' => $field['Default']
         ];
     }
-    $tableProps['rowCount'] = database::get()
+    $tableProps['rowCount'] = MySqlDriver::getDriver()
         ->query("SELECT COUNT(*) FROM `$table`")
         ->readScalar();
     $tablesProps['tables'][] = $tableProps;

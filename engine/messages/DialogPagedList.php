@@ -1,7 +1,7 @@
 <?php namespace engine\messages;
 
 use frame\lists\paged\PagedList;
-use frame\stdlib\cash\database;
+use frame\stdlib\drivers\database\MySqlDriver;
 use engine\users\cash\user_me;
 use frame\stdlib\cash\config;
 
@@ -13,7 +13,7 @@ class DialogPagedList extends PagedList
     {
         $me = user_me::get();
 
-        $countAll = (int) database::get()->query(
+        $countAll = (int) MySqlDriver::getDriver()->query(
             "SELECT COUNT(`COUNT(id)`) FROM (
                 SELECT COUNT(id) FROM `messages`
                 WHERE (member1_sorted_id = {$me->id} 
@@ -33,7 +33,7 @@ class DialogPagedList extends PagedList
         // Запрос такой страшный, потому что в MySQL ORDER BY работает только после
         // GROUP BY. Из-за этого в более простом запросе в каждой группе выбиралось
         // всегда первое сообщение, игнорируя сортировку.
-        $this->result = database::get()->query(
+        $this->result = MySqlDriver::getDriver()->query(
             "SELECT * FROM messages INNER JOIN (
                 SELECT MAX(id) AS max_id FROM messages
                 WHERE (member1_sorted_id = {$me->id} 

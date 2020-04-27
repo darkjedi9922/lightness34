@@ -7,7 +7,7 @@ use engine\users\cash\user_me;
 use frame\actions\fields\IntegerField;
 use frame\actions\fields\PasswordField;
 use frame\actions\fields\StringField;
-use frame\stdlib\cash\database;
+use frame\stdlib\drivers\database\MySqlDriver;
 use frame\auth\Auth;
 
 /**
@@ -65,7 +65,7 @@ class ProfileEditAction extends ProfileAction
         ]);
 
         $this->me = user_me::get();
-        $this->database = database::get();
+        $this->database = MySqlDriver::getDriver();
     }
 
     public function validate(array $post, array $files): array

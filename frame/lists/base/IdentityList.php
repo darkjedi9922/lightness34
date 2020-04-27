@@ -1,6 +1,6 @@
 <?php namespace frame\lists\base;
 
-use frame\stdlib\cash\database;
+use frame\stdlib\drivers\database\MySqlDriver;
 use function lightlib\array_assemble;
 use frame\lists\iterators\IdentityIterator;
 
@@ -23,7 +23,7 @@ class IdentityList implements BaseList
         $orderBy = !empty($orderFields) ?
             'ORDER BY ' . array_assemble($orderFields, ', ', ' ') : '';
         
-        $this->query = database::get()->query(
+        $this->query = MySqlDriver::getDriver()->query(
             "SELECT * FROM {$identityClass::getTable()} $orderBy"
         );
         $this->iterator = new IdentityIterator($this->query, $identityClass);

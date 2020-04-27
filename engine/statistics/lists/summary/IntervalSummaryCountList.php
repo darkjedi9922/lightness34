@@ -1,7 +1,7 @@
 <?php namespace engine\statistics\lists\summary;
 
 use engine\statistics\lists\TimeIntervalList;
-use frame\stdlib\cash\database;
+use frame\stdlib\drivers\database\MySqlDriver;
 use Generator;
 
 /**
@@ -19,7 +19,7 @@ abstract class IntervalSummaryCountList extends TimeIntervalList
         parent::__construct($minInterval, $currentInterval, $secondsInterval);
         
         $query = $this->getQuery($secondsInterval, $limit);
-        $this->result = database::get()->query($query);
+        $this->result = MySqlDriver::getDriver()->query($query);
     }
 
     public function getIterator(): Generator

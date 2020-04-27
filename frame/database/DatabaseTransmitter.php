@@ -1,6 +1,6 @@
 <?php namespace frame\database;
 
-use frame\stdlib\cash\database;
+use frame\stdlib\drivers\database\MySqlDriver;
 
 /**
  * Так как этот класс использует базу данных, следует использовать его только 
@@ -93,7 +93,7 @@ class DatabaseTransmitter extends \frame\tools\DataTransmitter
                 $end = [];
                 foreach ($this->data as $name => $value) $end[] = '"'.$name.'", "'.$value.'"';
                 $end = implode(' UNION ALL SELECT ', $end);
-                database::get()->query('INSERT INTO '.self::TABLE.' SELECT '.$end);
+                MySqlDriver::getDriver()->query('INSERT INTO '.self::TABLE.' SELECT '.$end);
             }
             $this->changed = false;
         }
