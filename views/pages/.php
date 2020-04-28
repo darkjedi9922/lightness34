@@ -181,6 +181,59 @@ $security = [[
 </div>
 <div class="slide">
     <div class="slide__column">
+        <span class="slide__header">Принципы фреймворка</span>
+        <div class="slide__content">
+            <div class="features">
+                <div class="feature features__item">
+                    <div class="feature__icon feature__icon--blue"><i class="icon-paper-plane"></i></div>
+                    <h3 class="feature__title">Упор на простоту</h3>
+                    <p class="feature__desc">
+                        Стремление избавится от сложных оберток над возможностями,
+                        которые можно использовать с помощью нативных средств.
+                    </p>
+                    <p class="feature__desc">
+                        Например, использование нативного функционала SQL для
+                        написания сложных запросов, вместо создания громадных
+                        построителей, избавление от генерации графического интерфейса
+                        с помощью классов в PHP, когда его можно написать напрямую на HTML.
+                    </p>
+                </div>
+                <div class="feature features__item">
+                    <div class="feature__icon feature__icon--red"><i class="icon-link"></i></div>
+                    <h3 class="feature__title">Статическая типизация</h3>
+                    <p class="feature__desc">
+                        Стремление к меньшей степени использования динамических
+                        возможностей языка с упором на статическую типизацию.
+                    </p>
+                    <p class="feature__desc">
+                        Таким образом, среды разработки (IDE), применяемые в процессе разработки,
+                        могут дать больше подсказок при статическом анализе кода и избавить
+                        разработчика от поиска типов переменных и
+                        частого обращения к документации API, а также помогает
+                        избежать многих ошибок.
+                    </p>
+                </div>
+                <div class="feature features__item">
+                    <div class="feature__icon feature__icon--green"><i class="icon-cube"></i></div>
+                    <h3 class="feature__title">Шаблонные методы</h3>
+                    <p class="feature__desc">
+                        Упор на использование паттернов проектирования,
+                        выделяющие сложные алгоритмы,
+                        отдавая разработчку лишь его части.
+                    </p>
+                    <p class="feature__desc">
+                        Так, использование фреймворка превращается в простую реализацию
+                        небольших абстрактных методов, которые дают удобный способ
+                        пошагово определять простые части алгоритмов, не заставляя
+                        разработчика думать как их собирать воедино.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="slide">
+    <div class="slide__column">
         <span class="slide__header">Механизмы фреймворка</span>
         <div class="slide__content">
             <div class="fundamentals">

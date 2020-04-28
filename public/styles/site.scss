@@ -2,7 +2,8 @@ $color-light: #f6f7f9;
 $color-dark: #293133;
 $color-label: #81d481;
 $color-button: #9ac2cf;
-$color-grey: #717171;
+$color-grey-dark: #717171;
+$color-grey-light: #e0e0d1;
 
 $slide-padding-x: 10%;
 $slide-padding-y: 1.8rem;
@@ -17,3 +18,4 @@ $header-padding: 1rem 10%;
 @import 'site/login-form';
 @import 'site/footer';
 @import 'site/form';
+@import 'site/features';
