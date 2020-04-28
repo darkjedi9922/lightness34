@@ -1,6 +1,8 @@
 <?php namespace frame\errors;
 
-class HttpError extends \Exception
+use frame\tools\Logger;
+
+class HttpError extends \Exception implements LogLevel
 {
     const OK                    = 200;
     const BAD_REQUEST           = 400;
@@ -14,5 +16,17 @@ class HttpError extends \Exception
         \Throwable $previous = null
     ) {
         parent::__construct($message, $code, $previous);
+    }
+
+    public function getLogLevel(): string
+    {
+        $type = (int) ($this->code / 100);
+        switch ($type) {
+            case 1: return Logger::INFO;
+            case 2: return Logger::INFO;
+            case 3: return Logger::INFO;
+            case 4: return Logger::NOTICE;
+            case 5: return Logger::ERROR;
+        }
     }
 }

@@ -1,3 +1,11 @@
 <?php namespace frame\errors;
 
-class NotSupportedException extends \Exception {}
+use frame\tools\Logger;
+
+class NotSupportedException extends \Exception implements LogLevel
+{
+    public function getLogLevel(): string
+    {
+        return Logger::WARNING;
+    }
+}

@@ -6,6 +6,7 @@ use frame\tools\Debug;
 use frame\stdlib\cash\config;
 use frame\stdlib\cash\logger;
 use frame\errors\handlers\ErrorHandler;
+use frame\tools\Logger as FrameLogger;
 
 class Errors extends Driver
 {
@@ -69,10 +70,11 @@ class Errors extends Driver
         });
         // shutdown error
         register_shutdown_function(function () {
-            $e = error_get_last();
-            if ($e && in_array($e['type'], ErrorException::FATAL_ERRORS)) {
+            if (!($e = error_get_last())) return;
+            $type = ErrorException::LEVEL_ERRORS[$e['type']] ?? null;
+            if ($type === FrameLogger::CRITICAL) {
                 $this->handleError(new ErrorException(
-                    $e['type'], $e['message'], $e['file'], $e['line'])
+                    $type, $e['message'], $e['file'], $e['line'])
                 );
             }
         });
@@ -91,7 +93,10 @@ class Errors extends Driver
         $logging = config::get('core')->{'log.enabled'};
         if ($logging) {
             $logger = logger::get();
-            $logger->write($logger::ERROR, Debug::getErrorMessage($e));
+            $level = is_subclass_of($e, LogLevel::class) 
+                ? $e->getLogLevel()
+                : $logger::ERROR;
+            $logger->write($level, Debug::getErrorMessage($e));
         }
 
         Events::getDriver()->emit(self::EVENT_ERROR, $e);

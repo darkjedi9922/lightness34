@@ -1,38 +1,41 @@
 <?php namespace frame\errors;
 
-class ErrorException extends \ErrorException
+use frame\tools\Logger;
+
+class ErrorException extends \ErrorException implements LogLevel
 {
     /**
      * Ключи являются числовыми константами, а значения - именами констант
      */
-    const TYPES = [
-        E_ERROR => 'E_ERROR',
-        E_WARNING => 'E_WARNING',
-        E_PARSE => 'E_PARSE',
-        E_NOTICE => 'E_NOTICE',
-        E_CORE_ERROR => 'E_CORE_ERROR',
-        E_CORE_WARNING => 'E_CORE_WARNING',
-        E_COMPILE_ERROR => 'E_COMPILE_ERROR',
-        E_COMPILE_WARNING => 'E_COMPILE_WARNING',
-        E_USER_ERROR => 'E_USER_ERROR',
-        E_USER_WARNING => 'E_USER_WARNING',
-        E_USER_NOTICE => 'E_USER_NOTICE',
-        E_STRICT => 'E_STRICT',
-        E_RECOVERABLE_ERROR => 'E_RECOVERABLE_ERROR',
-        E_DEPRECATED => 'E_DEPRECATED'
+    const LEVEL_ERRORS = [
+        E_ERROR => Logger::CRITICAL,
+        E_WARNING => Logger::WARNING,
+        E_PARSE => Logger::CRITICAL,
+        E_NOTICE => Logger::NOTICE,
+        E_CORE_ERROR => Logger::CRITICAL,
+        E_CORE_WARNING => Logger::WARNING,
+        E_COMPILE_ERROR => Logger::CRITICAL,
+        E_COMPILE_WARNING => Logger::WARNING,
+        E_USER_ERROR => Logger::ERROR,
+        E_USER_WARNING => Logger::WARNING,
+        E_USER_NOTICE => Logger::NOTICE,
+        E_STRICT => Logger::NOTICE,
+        E_RECOVERABLE_ERROR => Logger::ERROR,
+        E_DEPRECATED => Logger::NOTICE
     ];
 
-    const FATAL_ERRORS = [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR];
-
-    /**
-     * @param int $type
-     * @param string $message
-     * @param string $file
-     * @param int $line
-     * @param \Exception $previous
-     */
-    public function __construct($type, $message, $file, $line, $previous = null)
-    {
+    public function __construct(
+        int $type,
+        string $message,
+        string $file,
+        int $line,
+        \Exception $previous = null
+    ) {
         parent::__construct($message, 0, $type, $file, $line, $previous);
+    }
+
+    public function getLogLevel(): string
+    {
+        return static::LEVEL_ERRORS[$this->severity] ?? Logger::ERROR;
     }
 }
