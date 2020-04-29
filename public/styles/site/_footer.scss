@@ -1,8 +1,12 @@
 .footer {
+    $text-color: white;
+
     width: 75%;
-    color: #fff;
+    color: $text-color;
     padding: $slide-padding-y $slide-padding-x;
     font-size: .85rem;
+    display: flex;
+    justify-content: space-between;
 
     &__info {
         display: block;
@@ -16,5 +20,9 @@
         &:hover {
             color: $color-label;
         }
+    }
+
+    &__icon {
+        color: $text-color;
     }
 }

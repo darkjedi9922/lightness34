@@ -1,7 +1,6 @@
 <?php /** @var frame\views\Layout $self */
 
 use frame\stdlib\cash\config;
-
 use function lightlib\versionify;
 
 $config = config::get('core');
@@ -20,8 +19,15 @@ $config = config::get('core');
 <body>
     <?php $self->loadChild()->show() ?>
     <div class="footer">
-        <span class="footer__info">Created by Jed Sidious Alex Everdeen Dark</span>
-        <span class="footer__info">2015 - 2020</span>
+        <div class="footer__column">
+            <span class="footer__info">Created by Jed Sidious Alex Everdeen Dark</span>
+            <span class="footer__info">2015 - 2020</span>
+        </div>
+        <div class="footer__column">
+            <a class="footer__link" href="https://github.com/darkjedi9922/lightness34" target="__blank">
+                <i class="icon-github footer__icon"></i>Repository
+            </a>
+        </div>
     </div>
 </body>
 </html>
