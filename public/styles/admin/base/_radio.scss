@@ -12,7 +12,7 @@
         display:inline-block;
         width:20px;
         height:20px;
-        background: #1e4469;
+        background: $global-button-color;
         margin-right:5px;
         border-radius: 50%;
         position:relative;
@@ -20,7 +20,7 @@
     }
     
     &__mark {
-        background:#c4c5c6;
+        background: $clr-grey-light;
         display:none;
         width:70%;
         height:70%;
