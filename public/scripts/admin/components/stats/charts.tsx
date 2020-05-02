@@ -32,7 +32,6 @@ interface MultipleChartData extends ChartData {
     limit: number,
     sortField: SortColumn,
     sortOrder: SortOrder,
-    columnUpdating?: SortColumn
 }
 
 interface ChartsProps {
@@ -75,7 +74,6 @@ class StatCharts extends React.Component<ChartsProps, ChartsState> {
                 limit: 5,
                 sortField: SortColumn.MAX,
                 sortOrder: SortOrder.DESC,
-                columnUpdating: null
             } as MultipleChartData, {
                 title: 'Макс. время',
                 type: 'multiple',
@@ -86,7 +84,6 @@ class StatCharts extends React.Component<ChartsProps, ChartsState> {
                 limit: 5,
                 sortField: SortColumn.MAX,
                 sortOrder: SortOrder.DESC,
-                columnUpdating: null
             } as MultipleChartData]
         };
     }
@@ -117,7 +114,6 @@ class StatCharts extends React.Component<ChartsProps, ChartsState> {
                         intervals={chart.intervals as TimeIntervalValues[]}
                         sortColumn={(chart as MultipleChartData).sortField}
                         sortOrder={(chart as MultipleChartData).sortOrder}
-                        columnUpdating={(chart as MultipleChartData).columnUpdating}
                         onUpdate={(newSettings, setFinished) => {
                             this.onMultipleChartUpdate(index, newSettings, setFinished)
                         }}
@@ -157,9 +153,6 @@ class StatCharts extends React.Component<ChartsProps, ChartsState> {
             const newState = { ...state };
             const newChart = newState.charts[chartIndex];
             newChart.intervals = newIntervals;
-            if (newChart.type === 'multiple') {
-                (newChart as MultipleChartData).columnUpdating = null;
-            }
             return newState;
         })
     }

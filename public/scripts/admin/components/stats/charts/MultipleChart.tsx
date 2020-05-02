@@ -22,7 +22,6 @@ export interface MultipleChartProps {
     intervals: TimeIntervalValues[],
     sortColumn: SortColumn,
     sortOrder: SortOrder,
-    columnUpdating?: SortColumn,
     onUpdate: (newData: MultipleChartSettingsData, setFinished: () => void) => void
 }
 
@@ -91,23 +90,11 @@ class MultipleChart extends React.Component<MultipleChartProps> {
                     className="chart-table"
                     headers={[
                         'Route',
-                        <span>Max {props.columnUpdating == SortColumn.MAX && <i 
-                            className="icon-spin1 animate-spin chart-table__loading"
-                        />
-                        }</span>,
-                        <span>Avg {props.columnUpdating === SortColumn.AVG && <i
-                            className="icon-spin1 animate-spin chart-table__loading"
-                        />
-                        }</span>
+                        <span>{this.props.sortColumn === SortColumn.AVG ? 'Avg' : 'Max'}</span>
                     ]}
                     items={(this.props.intervals.length ? Object.keys(this.props.intervals[0].values) : [])
                         .map((name: string, index: number) => {
                             return {
-                                pureCellsToSort: [
-                                    name,
-                                    this.findMaxOf(name),
-                                    this.findAverageOf(name)
-                                ],
                                 cells: [
                                     <>
                                         <i 
@@ -116,8 +103,9 @@ class MultipleChart extends React.Component<MultipleChartProps> {
                                         ></i>
                                         {name}
                                     </>,
-                                    this.findMaxOf(name),
-                                    this.findAverageOf(name)
+                                    this.props.sortColumn === SortColumn.AVG 
+                                        ? this.findAverageOf(name)
+                                        : this.findMaxOf(name)
                                 ]
                             }
                         })
