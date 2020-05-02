@@ -38,7 +38,8 @@ export interface CheckboxField extends Field {
 export interface RadioField extends Field {
     type: 'radio',
     values: RadioValue[],
-    currentValue: string
+    currentValue: string,
+    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 export interface FileField extends Field {
@@ -63,7 +64,7 @@ interface FormProps {
     fields: (Field|Group)[],
     errors?: string[],
     short?: boolean,
-    buttonText: string,
+    buttonText?: string,
     className?: string,
     onSubmit?: (event: React.FormEvent<HTMLFormElement>, form?: Form) => void
 }
@@ -102,7 +103,9 @@ class Form extends React.Component<FormProps> {
                     </span>
                 ))}
                 {this.renderFields(this.props.fields)}
-                <button className="form__button">{this.props.buttonText}</button>
+                {!isNil(this.props.buttonText) &&
+                    <button className="form__button">{this.props.buttonText}</button>
+                }
             </form>
         );
     }

@@ -2,8 +2,9 @@ import React from 'react';
 import {
     AreaChart, Area, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer
 } from 'recharts';
-import Table, { SortOrder } from '../table/table';
+import Table, { SortOrder } from '../../table/table';
 import { round } from 'lodash';
+import MultipleChartSettings, { MultipleChartSettingsData } from './MultipleChartSettings';
 
 export enum SortColumn {
     MAX = 'max',
@@ -22,13 +23,12 @@ export interface MultipleChartProps {
     sortColumn: SortColumn,
     sortOrder: SortOrder,
     columnUpdating?: SortColumn,
-    onSort?: (column: SortColumn, order: SortOrder) => void
+    onUpdate: (newData: MultipleChartSettingsData, setFinished: () => void) => void
 }
 
 class MultipleChart extends React.Component<MultipleChartProps> {
     public constructor(props: MultipleChartProps) {
         super(props);
-        this.handleSort = this.handleSort.bind(this);
     }
 
     private lineColors = [
@@ -100,17 +100,8 @@ class MultipleChart extends React.Component<MultipleChartProps> {
                         />
                         }</span>
                     ]}
-                    sort={{
-                        sortableCells: [1, 2],
-                        defaultCellIndex: this.props.sortColumn === SortColumn.MAX
-                            ? 1 : 2,
-                        defaultOrder: this.props.sortOrder,
-                        isAlreadySorted: false,
-                        onSort: this.handleSort
-                    }}
-                    items={(this.props.intervals.length ?
-                            Object.keys(this.props.intervals[0].values) : []
-                        ).map((name: string, index: number) => {
+                    items={(this.props.intervals.length ? Object.keys(this.props.intervals[0].values) : [])
+                        .map((name: string, index: number) => {
                             return {
                                 pureCellsToSort: [
                                     name,
@@ -119,12 +110,10 @@ class MultipleChart extends React.Component<MultipleChartProps> {
                                 ],
                                 cells: [
                                     <>
-                                        <i className="
-                                            icon-bookmark 
-                                            chart-table__color-icon
-                                        " style={{
-                                            color: this.getColorByNumber(index)
-                                        }}></i>
+                                        <i 
+                                            className="icon-bookmark chart-table__color-icon"
+                                            style={{color: this.getColorByNumber(index)}}
+                                        ></i>
                                         {name}
                                     </>,
                                     this.findMaxOf(name),
@@ -141,6 +130,10 @@ class MultipleChart extends React.Component<MultipleChartProps> {
                         })
                     }
                 />
+                <div className="box__details">
+                    <span className="box__header">Настройки</span>
+                    <MultipleChartSettings onUpdate={this.props.onUpdate} />
+                </div>
             </div>
         </>
     }
@@ -171,14 +164,6 @@ class MultipleChart extends React.Component<MultipleChartProps> {
             count += 1;
         }
         return round(average / count, 3);
-    }
-
-    private handleSort(column: number, order: SortOrder): void {
-        if (!this.props.onSort) return;
-        switch (column) {
-            case 1: this.props.onSort(SortColumn.MAX, order); break;
-            case 2: this.props.onSort(SortColumn.AVG, order); break;
-        }
     }
 }
 

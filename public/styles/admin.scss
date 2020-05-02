@@ -60,11 +60,13 @@ $global-box-radius: 10px;
 @import 'admin/base/textarea';
 
 @import 'admin/stats/stat-status';
+@import 'admin/stats/chart-form';
 
 @import 'admin/actions';
 @import 'admin/author';
 @import 'admin/box-actions';
 @import 'admin/box-form';
+@import 'admin/box-settings';
 @import 'admin/box';
 @import 'admin/breadcrumbs-wrapper';
 @import 'admin/breadcrumbs';

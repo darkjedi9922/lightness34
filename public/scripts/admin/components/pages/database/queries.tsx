@@ -3,7 +3,7 @@ import Breadcrumbs from '../../common/Breadcrumbs';
 import $ from 'jquery';
 import { isNil } from 'lodash';
 import LoadingContent from '../../loading-content';
-import SingleChart, { TimeIntervalValue } from '../../charts/SingleChart';
+import SingleChart, { TimeIntervalValue } from '../../stats/charts/SingleChart';
 
 interface APIQueriesResultItem extends TimeIntervalValue {}
 

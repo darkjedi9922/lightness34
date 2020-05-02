@@ -1,0 +1,38 @@
+.box-settings {
+    $button-size: 5rem;
+    $icon-size: 2rem;
+
+    display: flex;
+    justify-content: space-between;
+
+    &__button {
+        @extend .box-actions__item;
+        width: $button-size;
+        height: $button-size;
+        background: none;
+        display: flex;
+        justify-content: center;
+        align-self: center;
+
+        &:hover {
+            box-shadow: none;
+        }
+
+        i {
+            width: $icon-size;
+            height: $icon-size;
+            font-size: $icon-size;
+
+            &:before {
+                line-height: unset;
+                margin-left: unset;
+                margin-right: unset;
+                width: unset;
+            }
+        }
+    }
+
+    .radio__mark-container {
+        background: $box-blue;
+    }
+}

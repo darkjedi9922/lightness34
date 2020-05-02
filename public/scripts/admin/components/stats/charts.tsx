@@ -3,9 +3,10 @@ import ContentHeader  from '../content-header';
 import LoadingContent from '../loading-content';
 import Breadcrumbs from '../common/Breadcrumbs';
 import $ from 'jquery';
-import MultipleChart, { TimeIntervalValues, SortColumn } from '../charts/MultipleChart';
-import SingleChart, { TimeIntervalValue } from '../charts/SingleChart';
+import MultipleChart, { TimeIntervalValues, SortColumn } from './charts/MultipleChart';
+import SingleChart, { TimeIntervalValue } from './charts/SingleChart';
 import { SortOrder } from '../table/table';
+import { MultipleChartSettingsData } from './charts/MultipleChartSettings';
 
 enum SecondInterval {
     HOUR = 60 * 60,
@@ -117,8 +118,8 @@ class StatCharts extends React.Component<ChartsProps, ChartsState> {
                         sortColumn={(chart as MultipleChartData).sortField}
                         sortOrder={(chart as MultipleChartData).sortOrder}
                         columnUpdating={(chart as MultipleChartData).columnUpdating}
-                        onSort={(column, order) => {
-                            return this.onMultipleChartSort(index, column, order)
+                        onUpdate={(newSettings, setFinished) => {
+                            this.onMultipleChartUpdate(index, newSettings, setFinished)
                         }}
                     />
                 }
@@ -131,7 +132,7 @@ class StatCharts extends React.Component<ChartsProps, ChartsState> {
             </>
     }
 
-    private loadChartData(chart: SingleChartData|MultipleChartData) {
+    private loadChartData(chart: SingleChartData|MultipleChartData, setFinished?: () => void) {
         let promise: Promise<TimeIntervalValue[] | TimeIntervalValues[]> = null;
         switch (chart.type) {
             case 'single':
@@ -142,7 +143,10 @@ class StatCharts extends React.Component<ChartsProps, ChartsState> {
                 break;
         }
         const chartIndex = this.state.charts.indexOf(chart);
-        promise.then((result) => this.updateChartIntervals(chartIndex, result));
+        promise.then((result) => {
+            this.updateChartIntervals(chartIndex, result);
+            setFinished && setFinished();
+        });
     }
 
     private updateChartIntervals(
@@ -226,22 +230,16 @@ class StatCharts extends React.Component<ChartsProps, ChartsState> {
         ) === -1;
     }
 
-    private onMultipleChartSort(
+    private onMultipleChartUpdate(
         chartIndexInState: number,
-        column: SortColumn,
-        order: SortOrder
-    ): void {
-        this.setState((state) => {
-            const newState = { ...state };
-            const chart = newState.charts[chartIndexInState] as MultipleChartData;
-            chart.columnUpdating = column;
-            return newState;
-        }, () => {
-            const chart = this.state.charts[chartIndexInState] as MultipleChartData;
-            chart.sortField = column;
-            chart.sortOrder = order;
-            this.loadChartData(chart);
-        })
+        newSettings: MultipleChartSettingsData,
+        setFinished: () => void
+    ) {
+        const chart = this.state.charts[chartIndexInState] as MultipleChartData;
+        chart.sortField = newSettings.sortField;
+        chart.sortOrder = newSettings.sortOrder;
+        chart.secondInterval = newSettings.secondInterval;
+        this.loadChartData(chart, setFinished);
     }
 }
 

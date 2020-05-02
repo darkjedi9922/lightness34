@@ -2,7 +2,7 @@ import React from 'react';
 import {
     AreaChart, Area, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer
 } from 'recharts';
-import Table from '../table/table';
+import Table from '../../table/table';
 import { round, maxBy, meanBy, sumBy } from 'lodash';
 
 export interface TimeIntervalValue {

@@ -1,0 +1,14 @@
+.chart-form {
+    .form {
+        &__row {
+            flex-direction: column;
+            margin-bottom: 0.75rem;
+        }
+
+        &__key {
+            font-weight: normal;
+            color: black;
+            margin-bottom: 0.25rem;
+        }
+    }
+}

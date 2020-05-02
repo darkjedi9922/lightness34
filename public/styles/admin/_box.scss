@@ -32,4 +32,17 @@
     &__actions {
         margin-top: 0.5rem;
     }
+
+    &__details {
+        padding: 1rem 1rem 0.5rem;
+    }
+
+    &__header {
+        text-transform: uppercase;
+        font-size: 1.1rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+        display: inline-block;
+        font-family: $global-font;
+    }
 }
