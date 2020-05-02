@@ -1,5 +1,6 @@
 import React from 'react';
 import { RadioField } from './Form';
+import classNames from 'classnames';
 
 interface FormRadioProps {
     field: RadioField
@@ -11,21 +12,20 @@ class FormRadio extends React.Component<FormRadioProps> {
             <div className="radio">
                 {this.props.field.values.map((value, i) => (
                     <div key={i} className="radio__item">
-                        <input
-                            type="radio"
-                            name={this.props.field.name}
-                            value={value.value}
-                            id={`${this.props.field.name}-${value.value}`}
-                            defaultChecked={this.props.field
-                                .currentValue === value.value
-                            }
-                            className="radio__input"
-                        />
-                        <label
-                            className="radio__mark-container"
-                            htmlFor={`${this.props.field.name}-${value.value}`}
-                        >
-                            <i className="radio__mark"></i>
+                        <label className="radio__mark-container">
+                            <input
+                                type="radio"
+                                name={this.props.field.name}
+                                value={value.value}
+                                defaultChecked={this.props.field.currentValue === value.value}
+                                className="radio__input"
+                                onChange={this.props.field.onChange}
+                            />
+                            <i className={classNames([
+                                'radio__mark',
+                                {'radio__mark--checked': this.props.field.currentValue === value.value},
+                                {'radio__mark--unchecked': this.props.field.currentValue !== value.value}
+                            ])}></i>
                         </label>
                         <span className="radio__label">{value.label}</span>
                     </div>

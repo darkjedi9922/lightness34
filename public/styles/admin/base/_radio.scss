@@ -21,19 +21,23 @@
     
     &__mark {
         background: $clr-grey-light;
-        display:none;
+        display: none;
         width:70%;
         height:70%;
         position:absolute;
         border-radius: 50%;
         margin:15%;
+
+        &--checked {
+            display: inline-block;
+        }
+
+        &--unchecked {
+            display: none;
+        }
     }
     
     &__input {
         display:none;
-    }
-
-    &__input:checked + &__mark-container &__mark {
-        display:inline-block;
     }
 }
