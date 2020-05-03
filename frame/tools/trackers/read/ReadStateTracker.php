@@ -1,7 +1,5 @@
 <?php namespace frame\tools\trackers\read;
 
-use frame\database\Records;
-
 class ReadStateTracker extends ReadTracker
 {
     public function isReaded(): bool
@@ -15,6 +13,6 @@ class ReadStateTracker extends ReadTracker
     public function setReaded()
     {
         if ($this->isReaded()) return;
-        Records::from(static::TABLE)->insert();
+        $this->getRecords()->insert();
     }
 }
