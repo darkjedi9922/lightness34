@@ -21,11 +21,12 @@ class NewArticlePagedList extends PagedList
 
         $this->result = SqlDriver::getDriver()->query(
             "SELECT articles.*
-            FROM articles LEFT OUTER JOIN 
-                (SELECT article_id FROM readed_articles 
-                    WHERE user_id = {$me->id}) AS readed
-                ON id = article_id
-            WHERE article_id IS NULL AND author_id <> {$me->id}"
+            FROM articles
+            LEFT OUTER JOIN (
+                SELECT what_id FROM read_tracking
+                WHERE `name` = 'articles' AND `for_id` = {$me->id}
+            ) AS readed ON articles.id = readed.what_id
+            WHERE what_id IS NULL AND author_id <> {$me->id}"
         );
         $this->iterator = new IdentityIterator($this->result, Article::class);
     }

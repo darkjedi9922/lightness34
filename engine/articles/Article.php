@@ -4,8 +4,7 @@ use frame\database\SqlDriver;
 use frame\database\Identity;
 use engine\users\User;
 use engine\users\Group;
-use frame\database\Records;
-use engine\articles\cash\is_article_new;
+use frame\tools\trackers\read\ReadStateTracker;
 
 class Article extends Identity
 {
@@ -17,11 +16,13 @@ class Article extends Identity
     public static function countUnreaded(int $userId): int
     {
         return (int) SqlDriver::getDriver()->query(
-            "SELECT COUNT(id)
-            FROM articles LEFT OUTER JOIN 
-                (SELECT article_id FROM readed_articles WHERE user_id = $userId) AS readed
-                ON id = article_id
-            WHERE article_id IS NULL AND author_id <> $userId"
+            "SELECT COUNT(articles.id)
+            FROM articles
+            LEFT OUTER JOIN (
+                SELECT what_id FROM read_tracking 
+                WHERE name = 'articles' AND for_id = $userId
+            ) AS readed ON articles.id = readed.what_id
+            WHERE readed.what_id IS NULL AND author_id <> $userId"
         )->readScalar();
     }
 
@@ -34,10 +35,7 @@ class Article extends Identity
             || $for->id === $this->author_id
         ) return;
 
-        if (is_article_new::get($this, $for)) Records::from('readed_articles', [
-            'article_id' => $this->id,
-            'user_id' => $for->id
-        ])->insert();
+        $this->createReadTracker($for)->setReaded();
     }
 
     /**
@@ -49,9 +47,11 @@ class Article extends Identity
             || $for->id === $this->author_id
         ) return false;
         
-        return Records::from('readed_articles', [
-            'article_id' => $this->id,
-            'user_id' => $for->id
-        ])->count('article_id') === 0;
+        return !$this->createReadTracker($for)->isReaded();
+    }
+
+    private function createReadTracker(User $for): ReadStateTracker
+    {
+        return new ReadStateTracker('articles', $this->id, $for->id);
     }
 }
