@@ -6,15 +6,6 @@ use engine\users\Group;
 use frame\actions\fields\IntegerField;
 use frame\actions\fields\StringField;
 
-/**
- * Параметры:
- * id: id группы пользователя.
- * Она должна существовать.
- * Права: root.
- * Данные:
- * name (не обязательно): название
- * icon (не обязательно): путь к файлу иконке
- */
 class EditUserGroupAction extends ActionBody
 {
     /** @var Group */
@@ -30,8 +21,7 @@ class EditUserGroupAction extends ActionBody
     public function listPost(): array
     {
         return [
-            'name' => StringField::class,
-            'icon' => StringField::class
+            'name' => StringField::class
         ];
     }
 
@@ -45,7 +35,6 @@ class EditUserGroupAction extends ActionBody
     public function succeed(array $post, array $files)
     {
         $this->group->name = $post['name']->get();
-        $this->group->icon = $post['icon']->get();
         $this->group->update();
     }
 }

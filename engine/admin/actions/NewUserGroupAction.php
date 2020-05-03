@@ -7,12 +7,6 @@ use frame\actions\fields\StringField;
 use frame\database\Records;
 use frame\tools\Init;
 
-/**
- * Права: root.
- * Данные:
- * name: название группы (обязательно)
- * icon: путь к иконке (необязательно)
- */
 class NewUserGroupAction extends ActionBody
 {
     const E_NO_NAME = 1;
@@ -20,8 +14,7 @@ class NewUserGroupAction extends ActionBody
     public function listPost(): array
     {
         return [
-            'name' => StringField::class,
-            'icon' => StringField::class
+            'name' => StringField::class
         ];
     }
 
@@ -43,9 +36,8 @@ class NewUserGroupAction extends ActionBody
 
     public function succeed(array $post, array $files)
     {
-        Records::from('user_groups', [
-            'name' => $post['name']->get(),
-            'icon' => $post['icon']->get()
-        ])->insert();
+        Records::from('user_groups')->insert([
+            'name' => $post['name']->get()
+        ]);
     }
 }

@@ -22,11 +22,6 @@ $formProps = [
         'title' => 'Название',
         'name' => 'name',
         'defaultValue' => $action->getPost('name', $group->name)
-    ], [
-        'type' => 'text',
-        'title' => 'Иконка',
-        'name' => 'icon',
-        'defaultValue' => $action->getPost('icon', $group->icon)
     ]],
     'buttonText' => 'Сохранить',
     'className' => 'form--short'
