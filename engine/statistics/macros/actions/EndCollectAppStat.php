@@ -3,15 +3,21 @@
 use engine\statistics\macros\BaseStatCollector;
 use engine\statistics\stats\ActionStat;
 use frame\route\Response;
+use engine\statistics\stats\RouteStat;
 
 class EndCollectAppStat extends BaseStatCollector
 {
     private $stat;
+    private $routeStat;
     private $errorCollector;
 
-    public function __construct(ActionStat $stat, CollectActionError $errorCollector)
-    {
+    public function __construct(
+        ActionStat $stat,
+        RouteStat $routeStat,
+        CollectActionError $errorCollector
+    ) {
         $this->stat = $stat;
+        $this->routeStat = $routeStat;
         $this->errorCollector = $errorCollector;
     }
 
@@ -35,6 +41,7 @@ class EndCollectAppStat extends BaseStatCollector
             }
         }
 
+        $this->stat->route_id = $this->routeStat->getId();
         $this->stat->insert();
     }
 }

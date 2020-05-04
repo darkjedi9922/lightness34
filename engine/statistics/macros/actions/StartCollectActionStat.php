@@ -1,8 +1,6 @@
 <?php namespace engine\statistics\macros\actions;
 
-use frame\route\Request;
 use frame\actions\Action;
-use frame\actions\ActionBody;
 use frame\actions\UploadedFile;
 use engine\statistics\stats\ActionStat;
 use engine\statistics\stats\TimeStat;
@@ -31,9 +29,7 @@ class StartCollectActionStat extends BaseStatCollector
         
         $class = get_class($action->getBody());
         $this->stat->class = str_replace('\\', '\\\\', $class);
-        $this->stat->ajax = Request::getDriver()->isAjax();
         $this->stat->data_json = str_replace('\\', '\\\\', $this->jsonify($action));
-        $this->stat->time = time();
 
         $this->timer->start();
     }

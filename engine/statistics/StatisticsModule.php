@@ -27,7 +27,7 @@ class StatisticsModule extends Module
         $submodules = [
             $routesSubmodule,
             new EventStatisticsSubModule('events', $routeStat, $this),
-            new ActionStatisticsSubModule('actions', $this),
+            new ActionStatisticsSubModule('actions', $routeStat, $this),
             new DbStatisticsSubModule('db', $routeStat, $this),
             new CashStatisticsSubModule('cash', $routeStat, $this),
             new ViewStatisticsSubModule('views', $routeStat, $this)

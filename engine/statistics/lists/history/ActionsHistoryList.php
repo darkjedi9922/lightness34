@@ -5,6 +5,7 @@ use frame\actions\fields\PasswordField;
 use frame\actions\UploadedFile;
 use frame\stdlib\tools\units\ByteUnit;
 use frame\lists\iterators\IdentityIterator;
+use engine\statistics\stats\RouteStat;
 
 class ActionsHistoryList extends HistoryList
 {
@@ -94,14 +95,16 @@ class ActionsHistoryList extends HistoryList
                     $responseType = 'redirect';
                     break;
             }
+
+            $routeStat = RouteStat::selectIdentity($action->route_id);
             $resultHistory[] = [
                 'class' => $action->class,
                 'data' => $actionData,
                 'responseType' => $responseType,
                 'responseInfo' => $action->response_info,
-                'isAjax' => (bool)$action->ajax,
+                'isAjax' => (bool) $routeStat->ajax,
                 'secondDuration' => $action->duration_sec,
-                'time' => date('d.m.Y H:i', $action->time)
+                'time' => date('d.m.Y H:i', $routeStat->time)
             ];
         }
 

@@ -10,19 +10,25 @@ use frame\database\Records;
 use frame\actions\Action;
 use frame\modules\Module;
 use frame\errors\Errors;
+use engine\statistics\stats\RouteStat;
 
 class ActionStatisticsSubModule extends BaseStatisticsSubModule
 {
     private $stat;
     private $timer;
+    private $routeStat;
     private $collectActionError;
 
-    public function __construct(string $name, ?Module $parent = null)
-    {
+    public function __construct(
+        string $name,
+        RouteStat $routeStat,
+        ?Module $parent = null
+    ) {
         parent::__construct($name, $parent);
 
         $this->stat = new ActionStat;
         $this->timer = new TimeStat;
+        $this->routeStat = $routeStat;
         $this->collectActionError = new CollectActionError(
             $this->stat,
             $this->timer
@@ -38,6 +44,7 @@ class ActionStatisticsSubModule extends BaseStatisticsSubModule
     {
         (new EndCollectAppStat(
             $this->stat,
+            $this->routeStat,
             $this->collectActionError
         ))->exec();
     }
