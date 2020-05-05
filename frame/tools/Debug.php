@@ -80,8 +80,8 @@ class Debug
         }
         if ($message !== '') $result .= "$type #$code: $message in $file($line)";
         else $result .= "$type #$code in $file($line)";
-        $result .= "\nStack trace:\n" . static::getBackTrace($e->getTrace());
-        return $result;
+        $result .= "\n\nStack trace:\n" . static::getBackTrace($e->getTrace());
+        return $result . "\n";
     }
 
     /**
