@@ -20,6 +20,7 @@ function ArticlePage(props: ArticleProps): JSX.Element {
     return <>
         <div className="box box--table">
             <Table
+                className="article"
                 headers={['Автор', 'Название', 'Дата']}
                 items={[{
                     cells: [
@@ -32,7 +33,7 @@ function ArticlePage(props: ArticleProps): JSX.Element {
                         props.date
                     ],
                     details: [{
-                        content: decodeHTML(props.text)
+                        content: <span className="article__text">{decodeHTML(props.text)}</span>
                     }]
                 }]}
             />
