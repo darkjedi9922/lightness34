@@ -21,12 +21,12 @@ class StringField extends \frame\actions\ActionField
 
     public function isTooLong(int $maxLength): bool
     {
-        return strlen($this->get()) > $maxLength;
+        return  mb_strlen($this->get()) > $maxLength;
     }
 
     public function isTooShort(int $minLength): bool
     {
-        return strlen($this->get()) < $minLength;
+        return mb_strlen($this->get()) < $minLength;
     }
 
     public function isRegExp(string $pattern): bool
