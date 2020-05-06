@@ -15,7 +15,8 @@ interface User {
 interface Comment {
     author: User,
     date: string,
-    text: string
+    text: string,
+    isNew: boolean
 }
 
 interface CommentsProps {
@@ -69,9 +70,7 @@ class Comments extends React.Component<CommentsProps, CommentsState> {
             <>
                 {this.state.list.length !== 0 &&
                     <>
-                    <span className="content__title">
-                        Комментарии ({this.state.list.length})
-                    </span>
+                    <span className="content__title">Комментарии ({this.state.list.length})</span>
                         <div className="box box--table">
                             <Table
                                 headers={['Автор', 'Дата']}
@@ -82,11 +81,13 @@ class Comments extends React.Component<CommentsProps, CommentsState> {
                                             avatarUrl={comment.author.avatarUrl}
                                             isOnline={comment.author.isOnline}
                                         />,
-                                        comment.date
+                                        <>
+                                            <span className="table__date">{comment.date}</span>
+                                            &nbsp;
+                                            {comment.isNew && <span className="mark mark--red">New</span>}
+                                        </>
                                     ],
-                                    details: [{
-                                        content: decodeHTML(comment.text)
-                                    }]
+                                    details: [{ content: decodeHTML(comment.text) }]
                                 }))}
                             />
                         </div>
@@ -106,9 +107,7 @@ class Comments extends React.Component<CommentsProps, CommentsState> {
                     />
                 </div>
                 {this.props.pagerHtml && 
-                    <div className="box" 
-                        dangerouslySetInnerHTML={{ __html: this.props.pagerHtml }}
-                    ></div>
+                    <div className="box" dangerouslySetInnerHTML={{ __html: this.props.pagerHtml }}></div>
                 }
             </>
         );
@@ -152,7 +151,8 @@ class Comments extends React.Component<CommentsProps, CommentsState> {
                         {
                             author: props.me,
                             date: result.result.date,
-                            text: encodeHTML(text)
+                            text: encodeHTML(text),
+                            isNew: false
                         }
                     ]
                 }));

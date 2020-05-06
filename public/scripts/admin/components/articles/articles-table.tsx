@@ -29,7 +29,7 @@ class ArticlesTable extends React.Component<ArticlesTableProps> {
                         href={`/admin/users/profile/${article.author}`}
                         className="table__link"
                     >{decodeHTML(article.author)}</a>,
-                    article.date
+                    <span className="table__date">{article.date}</span>
                 ]
             })
         })

@@ -11,6 +11,7 @@ use frame\lists\paged\PagerView;
 use frame\actions\ViewAction;
 use engine\comments\actions\AddComment;
 use engine\comments\CommentList;
+use engine\comments\Comment;
 use frame\tools\JsonEncoder;
 use engine\users\cash\my_rights;
 use engine\articles\actions\DeleteArticleAction;
@@ -71,8 +72,11 @@ foreach ($comments as $comment) {
             'isOnline' => (bool) $commentAuthor->online
         ],
         'date' => date('d.m.Y H:i', $comment->date),
-        'text' => $comment->text
+        'text' => $comment->text,
+        'isNew' => $comment->isNewFor($me)
     ];
+
+    $comment->setReadedFor($me);
 }
 
 $articleCommentsData = JsonEncoder::forHtmlAttribute($articleCommentsData);
