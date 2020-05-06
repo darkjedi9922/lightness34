@@ -29,9 +29,6 @@ abstract class CashValue
     protected static function cash(string $key, callable $creator)
     {
         Events::getDriver()->emit(self::EVENT_CALL, static::class, $key, $creator);
-        $key = static::class . "/$key";
-        $storage = static::getStorage();
-        if (!$storage->isCashed($key)) $storage->cash($key, $creator());
-        return $storage->getValue($key);
+        return static::getStorage()->cash(static::class . "/$key", $creator);
     }
 }
