@@ -78,7 +78,7 @@ class Debug
         if ($e->getPrevious()) {
             $result .= static::getErrorMessage($e->getPrevious()) . "\nNext: ";
         }
-        if ($message !== '') $result .= "$type #$code: $message in $file($line)";
+        if ($message !== '') $result .= "$type #$code in $file($line) --> $message";
         else $result .= "$type #$code in $file($line)";
         $result .= "\n\nStack trace:\n" . static::getBackTrace($e->getTrace());
         return $result . "\n";

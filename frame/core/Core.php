@@ -58,6 +58,8 @@ class Core
         // экземпляр (объект) этого использования, либо null.
         if (is_object($use)) return $use;
         else if (empty($use)) {
+            if (!(new \ReflectionClass($driverClass))->isInstantiable())
+                throw new DriverNotSetupException($driverClass);
             // Тут создаем экземпляр драйвера.
             $this->uses[$driverClass] = new $driverClass;
             return $this->uses[$driverClass];
