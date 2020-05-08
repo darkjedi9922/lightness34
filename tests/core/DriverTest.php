@@ -63,4 +63,22 @@ class DriverTest extends TestCase
             throw $e;
         }
     }
+
+    public function testCanBeSetupFromCoreConstructorWithIntAndStringKeyArray()
+    {
+        $app = new Core([Events::class => EventsDriverExample::class]);
+
+        $this->assertInstanceOf(
+            EventsDriverExample::class,
+            Events::getDriver()
+        );
+        $this->assertInstanceOf(
+            EventsDriverExample::class,
+            EventsDriverExample::getDriver()
+        );
+        $this->assertEquals(
+            Events::getDriver(),
+            EventsDriverExample::getDriver()
+        );
+    }
 }

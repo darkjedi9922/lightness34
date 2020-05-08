@@ -17,13 +17,16 @@ class Core
     private $uses = [];
     private $executed = false;
 
-    public function __construct()
-    { 
+    public function __construct(array $drivers = [])
+    {
         // Должно находится в самом начале т.к. последующие действия могут в своей
         // реализации обращаться в Core::$app.
         static::$app = $this;
 
         date_default_timezone_set('Europe/Kiev');
+
+        foreach ($drivers as $driverClass => $replacedDriverClass)
+            $this->replaceDriver($driverClass, $replacedDriverClass);
     }
 
     public function __destruct()
