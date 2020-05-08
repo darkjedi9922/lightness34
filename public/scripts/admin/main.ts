@@ -20,6 +20,7 @@ import EventHistory from './components/events/event-history';
 import Menu from './components/menu';
 import ActionHistory from './components/pages/actions/history';
 import ArticlePage from './components/articles/article-page';
+import NewComments from './components/pages/new-comments';
 
 setupReactComponent('#stat-cash-history', CashUseHistory);
 setupReactComponent('#stat-views-history', ViewHistory);
@@ -28,6 +29,7 @@ setupReactComponent('#messages-page', MessagesPage);
 setupReactComponent('#stat-routes-history', RouteHistory);
 setupReactComponent('#stat-queries-history', QueryHistory);
 setupReactComponent('#article-comments', Comments);
+setupReactComponent('#new-comments', NewComments);
 setupReactComponent('#add-user-page', AddUserPage);
 setupReactComponent('#profile-page', ProfilePage);
 setupReactComponent('#db-tables', DatabaseTables);

@@ -14,6 +14,7 @@ class CommentsRightsDesc extends RightsDesc
             'delete-all' => 'Deleting all comments',
             'delete-own' => 'Deleting own comments',
             'configure' => 'Configure the module',
+            'see-new-list' => 'See a list of new comments'
         ];
     }
 

@@ -32,14 +32,24 @@ if ($articleRights->can('see-list')) $globalItems[] = [
     'icon' => 'doc-text'
 ];
 
-if ($articleRights->can('see-new-list')) $globalItems[] = [
+$newsItems = [];
+
+if ($articleRights->can('see-new-list')) $newsItems[] = [
+    'name' => 'Статьи',
+    'link' => '/admin/new/articles',
+    'icon' => 'doc-text'
+];
+
+if ($commentsRights->can('see-new-list')) $newsItems[] = [
+    'name' => 'Комментарии',
+    'link' => '/admin/new/comments',
+    'icon' => 'commenting'
+];
+
+if (!empty($newsItems)) $globalItems[] = [
     'name' => 'Новое',
     'icon' => 'rss',
-    'submenu' => [[
-        'name' => 'Статьи',
-        'link' => '/admin/new/articles',
-        'icon' => 'doc-text'
-    ]]
+    'submenu' => $newsItems
 ];
 
 $settingsItems = [];

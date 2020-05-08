@@ -32,7 +32,7 @@ $tableProps = JsonEncoder::forHtmlAttribute($tableProps);
         <span class="breadcrumbs__item">Новое</span>
         <span class="breadcrumbs__divisor"></span>
         <span class="breadcrumbs__item breadcrumbs__item--current">
-            Статьи (<?= $articles->countOnPage() ?>)
+            Статьи (<?= $articles->countAll() ?>)
         </span>
     </div>
     <div class="actions">
