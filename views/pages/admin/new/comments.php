@@ -7,12 +7,16 @@ use engine\users\User;
 use frame\tools\Init;
 use frame\tools\JsonEncoder;
 use frame\modules\Modules;
+use frame\stdlib\cash\config;
+use engine\users\cash\user_me;
 
 Init::accessRight('articles/comments', 'see-new-list');
 $pagenumber = pagenumber::get();
 $items = new NewCommentPagedList($pagenumber);
+$me = user_me::get();
 
 $commentListProps = [];
+$setReaded = config::get('comments')->{'new.setReadedOnNewsPage'};
 foreach ($items as $comment) {
     /** @var Comment $comment */
     $author = User::selectIdentity($comment->author_id);
@@ -27,6 +31,8 @@ foreach ($items as $comment) {
         'date' => date('d.m.Y H:i', $comment->date),
         'text' => $comment->text
     ];
+
+    if ($setReaded) $comment->setReadedFor($me);
 }
 
 $props = JsonEncoder::forHtmlAttribute([

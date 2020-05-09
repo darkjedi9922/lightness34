@@ -36,6 +36,15 @@ $formProps = [
             'list->order',
             $config->get('list.order')
         )
+    ], [
+        'type' => 'checkbox',
+        'title' => 'Новые комментарии на странице новостей',
+        'name' => 'new->setReadedOnNewsPage',
+        'label' => 'Отмечать просмотренными',
+        'defaultChecked' => $edit->getPost(
+            'new->setReadedOnNewsPage',
+            $config->get('new.setReadedOnNewsPage')
+        )
     ]],
     'buttonText' => 'Сохранить',
     'short' => true

@@ -1,4 +1,5 @@
 {
     "list.amount": 10,
-    "list.order": "ASC"
+    "list.order": "ASC",
+    "new.setReadedOnNewsPage": false
 }
