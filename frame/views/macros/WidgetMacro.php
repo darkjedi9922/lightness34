@@ -1,6 +1,6 @@
 <?php namespace frame\views\macros;
 
-use frame\route\macros\GetMacro;
+use frame\route\GetMacro;
 use frame\views\Widget;
 use frame\route\Response;
 

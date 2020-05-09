@@ -1,6 +1,6 @@
 <?php namespace frame\api;
 
-use frame\route\macros\RouteNamespaceMacro;
+use frame\route\RouteNamespaceMacro;
 use frame\route\Response;
 use frame\stdlib\cash\config;
 use frame\stdlib\cash\router;

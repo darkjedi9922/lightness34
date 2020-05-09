@@ -1,6 +1,6 @@
 <?php namespace tests\route\examples;
 
-use frame\route\macros\RouteNamespaceMacro;
+use frame\route\RouteNamespaceMacro;
 
 class RouteNamespaceMacroExample extends RouteNamespaceMacro
 {

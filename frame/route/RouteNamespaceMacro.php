@@ -1,4 +1,4 @@
-<?php namespace frame\route\macros;
+<?php namespace frame\route;
 
 use frame\events\Macro;
 use frame\stdlib\cash\router;
