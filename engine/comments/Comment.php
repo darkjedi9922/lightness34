@@ -48,6 +48,13 @@ class Comment extends Identity
         $this->getReadTracker($for)->setReaded();
     }
 
+    public function delete()
+    {
+        parent::delete();
+        $tracker = new ReadStateTracker('comments', $this->id);
+        $tracker->reset();
+    }
+
     private function getReadTracker(User $for): ReadStateTracker
     {
         return StaticCashStorage::getDriver()->cash(

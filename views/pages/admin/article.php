@@ -15,6 +15,7 @@ use engine\comments\Comment;
 use frame\tools\JsonEncoder;
 use engine\users\cash\my_rights;
 use engine\articles\actions\DeleteArticleAction;
+use engine\comments\actions\DeleteComment;
 
 $id = (int)Init::requireGet('id');
 $article = Article::selectIdentity($id);
@@ -62,9 +63,22 @@ $articleCommentsData = [
     'addUrl' => $add->getUrl()
 ];
 
+$commentRights = my_rights::get('articles/comments');
+$deleteComment = new ViewAction(DeleteComment::class);
 foreach ($comments as $comment) {
     /** @var Comment $comment */
     $commentAuthor = User::selectIdentity($comment->author_id);
+
+    if ($commentRights->canOneOf([
+        'delete-own' => [$comment],
+        'delete-all' => null
+    ])) {
+        $deleteComment->setArg('id', $comment->id);
+        $deleteCommentUrl = $deleteComment->getUrl();
+    } else {
+        $deleteCommentUrl = null;
+    }
+
     $articleCommentsData['list'][] = [
         'author' => [
             'avatarUrl' => '/' . $commentAuthor->getAvatarUrl(),
@@ -73,7 +87,8 @@ foreach ($comments as $comment) {
         ],
         'date' => date('d.m.Y H:i', $comment->date),
         'text' => $comment->text,
-        'isNew' => $comment->isNewFor($me)
+        'isNew' => $comment->isNewFor($me),
+        'deleteUrl' => $deleteCommentUrl
     ];
 
     $comment->setReadedFor($me);

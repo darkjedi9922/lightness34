@@ -69,30 +69,49 @@ class Comments extends React.Component<CommentsProps, CommentsState> {
     // }
 
     public render(): React.ReactNode {
+        const props = this.props;
+        const headers = ['Автор', 'Дата'];
+
+        let isActionsColumnPresent = false;
+        if (props.list.find((comment) => !isNil(comment.deleteUrl))) {
+            headers.push('');
+            isActionsColumnPresent = true;
+        }
+
+        const items = [];
+        this.state.list.map((comment) => {
+            const cells = [
+                <UserCell
+                    login={comment.author.login}
+                    avatarUrl={comment.author.avatarUrl}
+                    isOnline={comment.author.isOnline}
+                />,
+                <>
+                    <span className="table__date">{comment.date}</span>
+                    &nbsp;
+                    {comment.isNew && <span className="mark mark--red">New</span>}
+                </>
+            ];
+
+            if (!isNil(comment.deleteUrl)) cells.push(<ButtonCell
+                href={comment.deleteUrl}
+                color="red"
+                icon="trash"
+            >Удалить</ButtonCell>);
+
+            items.push({
+                cells,
+                details: [{ content: decodeHTML(comment.text) }]
+            });
+        });
+
         return (
             <>
                 {this.state.list.length !== 0 &&
                     <>
                     <span className="content__title">Комментарии ({this.state.list.length})</span>
                         <div className="box box--table">
-                            <Table
-                                headers={['Автор', 'Дата']}
-                                items={this.state.list.map((comment) => ({
-                                    cells: [
-                                        <UserCell
-                                            login={comment.author.login}
-                                            avatarUrl={comment.author.avatarUrl}
-                                            isOnline={comment.author.isOnline}
-                                        />,
-                                        <>
-                                            <span className="table__date">{comment.date}</span>
-                                            &nbsp;
-                                            {comment.isNew && <span className="mark mark--red">New</span>}
-                                        </>
-                                    ],
-                                    details: [{ content: decodeHTML(comment.text) }]
-                                }))}
-                            />
+                            <Table headers={headers} items={items}/>
                         </div>
                     </>
                 }
