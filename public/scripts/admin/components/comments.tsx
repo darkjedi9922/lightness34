@@ -5,6 +5,8 @@ import Form, { TextField } from './form/Form';
 import FormTextarea from './form/FormTextarea';
 import Table from './table/table';
 import UserCell from './table/user-cell';
+import ButtonCell from './table/button-cell';
+import { isNil } from 'lodash';
 
 interface User {
     avatarUrl: string
@@ -16,7 +18,8 @@ interface Comment {
     author: User,
     date: string,
     text: string,
-    isNew: boolean
+    isNew: boolean,
+    deleteUrl?: string
 }
 
 interface CommentsProps {
