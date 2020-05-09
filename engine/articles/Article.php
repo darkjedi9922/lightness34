@@ -50,6 +50,13 @@ class Article extends Identity
         return !$this->createReadTracker($for)->isReaded();
     }
 
+    public function delete()
+    {
+        parent::delete();
+        $tracker = new ReadStateTracker('articles', $this->id);
+        $tracker->reset();
+    }
+
     private function createReadTracker(User $for): ReadStateTracker
     {
         return new ReadStateTracker('articles', $this->id, $for->id);
