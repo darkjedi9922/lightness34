@@ -9,6 +9,10 @@ use engine\users\cash\user_me;
 use frame\actions\fields\IntegerField;
 use frame\actions\fields\StringField;
 use frame\modules\Modules;
+use engine\users\cash\my_rights;
+use frame\auth\UserRights;
+use frame\actions\ViewAction;
+use engine\comments\actions\DeleteComment;
 
 class AddComment extends ActionBody
 {
@@ -16,6 +20,8 @@ class AddComment extends ActionBody
     private $module;
     /** @var int */
     private $materialId;
+    /** @var UserRights */
+    private $rights;
 
     public function listGet(): array
     {
@@ -37,7 +43,9 @@ class AddComment extends ActionBody
         $this->module = Modules::getDriver()->findById($get['module_id']->get());
         Init::require($this->module !== null);
         Init::require(get_class($this->module) === CommentsModule::class);
-        Init::accessRight($this->module->getName(), 'add');
+        
+        $this->rights = my_rights::get($this->module->getName());
+        Init::access($this->rights->can('add'));
         $this->materialId = $get['material_id']->get();
     }
 
@@ -53,9 +61,15 @@ class AddComment extends ActionBody
         $comment->date = $date;
         $id = $comment->insert();
 
+        $deleteUrl = ($this->rights->canOneOf([
+            'delete-own' => [$comment],
+            'delete-all' => null
+        ]) ? (new ViewAction(DeleteComment::class, ['id' => $id]))->getUrl() : null);
+
         return [
             'id' => $id,
-            'date' => date('d.m.Y H:i', $date)
+            'date' => date('d.m.Y H:i', $date),
+            'deleteUrl' => $deleteUrl
         ];
     }
 }

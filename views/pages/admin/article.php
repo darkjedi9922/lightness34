@@ -53,7 +53,8 @@ $articleProps = [
 $articleCommentsData = [
     'me' => [
         'avatarUrl' => '/' . $me->getAvatarUrl(),
-        'login' => $me->login
+        'login' => $me->login,
+        'isOnline' => (bool) $me->online
     ],
     // 'moduleId' => Modules::getDriver()->findByName('articles/comments')->getId(),
     // 'materialId' => $article->id,

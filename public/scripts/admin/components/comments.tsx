@@ -47,7 +47,8 @@ interface APIAddAnswer {
     errors: Array<number>,
     result: {
         id: number,
-        date: string
+        date: string,
+        deleteUrl?: string
     }
 }
 
@@ -69,16 +70,9 @@ class Comments extends React.Component<CommentsProps, CommentsState> {
     // }
 
     public render(): React.ReactNode {
-        const props = this.props;
         const headers = ['Автор', 'Дата'];
-
-        let isActionsColumnPresent = false;
-        if (props.list.find((comment) => !isNil(comment.deleteUrl))) {
-            headers.push('');
-            isActionsColumnPresent = true;
-        }
-
         const items = [];
+        
         this.state.list.map((comment) => {
             const cells = [
                 <UserCell
@@ -174,7 +168,8 @@ class Comments extends React.Component<CommentsProps, CommentsState> {
                             author: props.me,
                             date: result.result.date,
                             text: encodeHTML(text),
-                            isNew: false
+                            isNew: false,
+                            deleteUrl: result.result.deleteUrl
                         }
                     ]
                 }));
