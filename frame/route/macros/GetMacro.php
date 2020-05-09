@@ -1,5 +1,6 @@
-<?php namespace frame\events;
+<?php namespace frame\route\macros;
 
+use frame\events\Macro;
 use frame\stdlib\cash\router;
 
 abstract class GetMacro extends Macro
