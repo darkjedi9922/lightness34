@@ -6,12 +6,18 @@ use engine\messages\Message;
 use frame\tools\Logger;
 use frame\tools\trackers\read\ReadLimitedProgressTracker as Tracker;
 use engine\users\cash\my_rights;
+use engine\comments\Comment;
 
 $me = user_me::get();
-$articleRights = my_rights::get('articles');
-if ($articleRights->can('see-new-list')) {
+
+$unreadedArticles = 0;
+if (my_rights::get('articles')->can('see-new-list'))
     $unreadedArticles = Article::countUnreaded($me->id);
-}
+
+$unreadedComments = 0;
+if (my_rights::get('articles/comments')->can('see-new-list'))
+    $unreadedComments = Comment::countUnreaded($me->id);
+
 $adminRights = my_rights::get('admin');
 if ($adminRights->can('see-logs')) {
     $logger = new Logger(ROOT_DIR . '/log.txt');
@@ -28,8 +34,11 @@ if ($messagesRights->can('use')) $unreadedMessages = Message::countUnreaded($me-
 </div>
 <div class="head-bar__right">
     <div class="notice-bar">
-        <?php if ($articleRights->can('see-new-list') && $unreadedArticles !== 0) : ?>
-            <a href="/admin/new/articles"><i class="fontello icon-rss"></i> <?= $unreadedArticles ?></a>
+        <?php if ($unreadedArticles !== 0) : ?>
+            <a href="/admin/new/articles"><i class="icon-doc-text-inv"></i> <?= $unreadedArticles ?></a>
+        <?php endif ?>
+        <?php if ($unreadedComments !== 0) : ?>
+            <a href="/admin/new/comments"><i class="icon-commenting"></i> <?= $unreadedComments ?></a>
         <?php endif ?>
         <?php if ($adminRights->can('see-logs') && $logNewRecords !== 0) : ?>
             <a href="/admin/log"><i class="fontello icon-attention"></i> <?= $logNewRecords ?></a>
