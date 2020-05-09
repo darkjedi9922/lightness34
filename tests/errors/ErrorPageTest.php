@@ -2,7 +2,7 @@
 use PHPUnit\Framework\TestCase;
 use frame\core\Core;
 use frame\errors\Errors;
-use frame\errors\HttpError;
+use frame\route\HttpError;
 use tests\errors\stubs\HttpErrorHandlerStub;
 use frame\stdlib\cash\config;
 use frame\views\ViewRouter;

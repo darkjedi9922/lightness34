@@ -1,7 +1,7 @@
 <?php namespace frame\views\macros;
 
 use frame\stdlib\cash\router;
-use frame\errors\HttpError;
+use frame\route\HttpError;
 use frame\views\ViewRouter;
 
 class ShowPage extends \frame\events\Macro

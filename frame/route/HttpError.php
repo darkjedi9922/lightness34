@@ -1,6 +1,7 @@
-<?php namespace frame\errors;
+<?php namespace frame\route;
 
 use frame\tools\Logger;
+use frame\errors\LogLevel;
 
 class HttpError extends \Exception implements LogLevel
 {

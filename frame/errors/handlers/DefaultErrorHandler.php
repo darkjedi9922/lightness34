@@ -2,7 +2,7 @@
 
 use frame\errors\StrictException;
 use frame\route\Response;
-use frame\errors\HttpError;
+use frame\route\HttpError;
 use frame\tools\Debug;
 use frame\stdlib\cash\config;
 

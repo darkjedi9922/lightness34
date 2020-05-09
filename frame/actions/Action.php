@@ -1,6 +1,6 @@
 <?php namespace frame\actions;
 
-use frame\errors\HttpError;
+use frame\route\HttpError;
 use frame\events\Events;
 
 /**

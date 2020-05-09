@@ -1,7 +1,7 @@
 <?php namespace frame\errors\handlers;
 
 use frame\route\Response;
-use frame\errors\HttpError;
+use frame\route\HttpError;
 use frame\stdlib\cash\config;
 
 class StrictExceptionHandler implements ErrorHandler

@@ -7,7 +7,7 @@ use tests\actions\examples\PostListActionExample;
 use tests\actions\examples\BoolPostListActionExample;
 use tests\actions\examples\AlwaysSucceedActionExample;
 use tests\actions\examples\AlwaysFailActionExample;
-use frame\errors\HttpError;
+use frame\route\HttpError;
 use frame\actions\ActionRouter;
 use frame\actions\Action;
 use frame\actions\fields\FileField;

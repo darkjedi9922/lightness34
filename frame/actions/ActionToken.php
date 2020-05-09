@@ -1,7 +1,7 @@
 <?php namespace frame\actions;
 
 use frame\tools\Client;
-use frame\errors\HttpError;
+use frame\route\HttpError;
 
 class ActionToken
 {

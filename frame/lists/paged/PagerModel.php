@@ -1,7 +1,7 @@
 <?php namespace frame\lists\paged;
 
 use frame\stdlib\cash\router;
-use frame\errors\HttpError;
+use frame\route\HttpError;
 use frame\lists\paged\PagerView;
 
 /**

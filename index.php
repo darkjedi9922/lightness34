@@ -14,7 +14,7 @@ use frame\errors\Errors;
 use frame\errors\handlers\DefaultErrorHandler;
 use frame\errors\handlers\HttpErrorHandler;
 use frame\errors\handlers\StrictExceptionHandler;
-use frame\errors\HttpError;
+use frame\route\HttpError;
 use frame\errors\StrictException;
 use frame\events\Events;
 use frame\modules\Modules;

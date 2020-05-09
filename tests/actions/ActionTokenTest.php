@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 use frame\actions\Action;
-use frame\errors\HttpError;
+use frame\route\HttpError;
 use frame\actions\ActionRouter;
 use frame\actions\ActionToken;
 use tests\actions\examples\EmptyActionExample;

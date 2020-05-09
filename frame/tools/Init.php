@@ -1,7 +1,7 @@
 <?php namespace frame\tools;
 
 use engine\users\cash\my_rights;
-use frame\errors\HttpError;
+use frame\route\HttpError;
 use frame\auth\Auth;
 use engine\users\cash\user_me;
 use frame\stdlib\cash\router;
