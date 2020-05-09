@@ -51,7 +51,7 @@ class Comment extends Identity
     private function getReadTracker(User $for): ReadStateTracker
     {
         return StaticCashStorage::getDriver()->cash(
-            "comment-{$for->getId()}-rt",
+            "comment-{$this->getId()}-{$for->getId()}-rt",
             function() use ($for) {
                 return new ReadStateTracker(
                     'comments',
