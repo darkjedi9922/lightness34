@@ -1,6 +1,5 @@
 import setupReactComponent from './setup-app';
 import QueryHistory from './components/database/query-history';
-import QueriesPage from './components/pages/database/queries';
 import RouteHistory from './components/pages/routes/history';
 import DatabaseTables from './components/database/db-tables';
 import ViewHistory from './components/views/view-history';
@@ -36,7 +35,6 @@ setupReactComponent('#db-tables', DatabaseTables);
 setupReactComponent('#dialog-list', DialogsPage);
 setupReactComponent('#articles', ArticlesTable);
 setupReactComponent('#modules', ModulesList);
-setupReactComponent('#queries', QueriesPage);
 setupReactComponent('#log-page', LogPage);
 setupReactComponent('#users', UsersTable);
 setupReactComponent('#stat-events-history', EventHistory);
