@@ -5,10 +5,22 @@ import {
 import Table, { SortOrder } from '../../table/table';
 import { round } from 'lodash';
 import MultipleChartSettings, { MultipleChartSettingsData } from './MultipleChartSettings';
+import { ChartProps, SecondInterval } from '../_common';
+import ContentHeader from '../../content-header';
+import Breadcrumbs from '../../common/Breadcrumbs';
+import $ from 'jquery';
 
 export enum SortColumn {
     MAX = 'max',
     AVG = 'avg'
+}
+
+interface MultipleStatsAPIResult {
+    [object: string]: [{
+        value?: number,
+        time: string,
+        timestamp: number
+    }]
 }
 
 export interface TimeIntervalValues {
@@ -18,18 +30,16 @@ export interface TimeIntervalValues {
     values: { [objectName: string]: any }
 }
 
-export interface MultipleChartProps {
+interface MultipleChartState {
     intervals: TimeIntervalValues[],
-    sortColumn: SortColumn,
+    limit: number,
+    sortField: SortColumn,
     sortOrder: SortOrder,
-    onUpdate: (newData: MultipleChartSettingsData, setFinished: () => void) => void
+    secondInterval: SecondInterval
+    intervalCount: number,
 }
 
-class MultipleChart extends React.Component<MultipleChartProps> {
-    public constructor(props: MultipleChartProps) {
-        super(props);
-    }
-
+class MultipleChart extends React.Component<ChartProps, MultipleChartState> {
     private lineColors = [
         '#3F51B5', // blue
         '#4CAF50', // green
@@ -37,14 +47,41 @@ class MultipleChart extends React.Component<MultipleChartProps> {
         '#b3ab00', // yellow
         '#9c27b0' // purple
     ];
+    
+    public constructor(props: ChartProps) {
+        super(props);
+        this.state = {
+            intervals: null,
+            secondInterval: SecondInterval.DAY,
+            intervalCount: 10,
+            limit: 5,
+            sortField: SortColumn.MAX,
+            sortOrder: SortOrder.DESC,
+        }
+
+        this.onMultipleChartUpdate = this.onMultipleChartUpdate.bind(this);
+    }
+
+    public componentDidMount() {
+        this.loadChartData({
+            sortField: this.state.sortField,
+            sortOrder: this.state.sortOrder,
+            secondInterval: this.state.secondInterval
+        }, this.props.onInitLoad);
+    }
 
     public render(): React.ReactNode {
         const props = this.props;
+        const state = this.state;
+        if (!props.isReady) return <></>;
         return <>
+            <ContentHeader>
+                <Breadcrumbs items={[...props.basePaths, { 'name': props.title }]} />
+            </ContentHeader>
             <div className="box chart">
                 <ResponsiveContainer height={200} width="99%">
                     <AreaChart
-                        data={this.props.intervals.map((interval) => {
+                        data={state.intervals.map((interval) => {
                             return {
                                 time: interval.time,
                                 // Нужно заменить все null в значениях на 0,
@@ -68,8 +105,8 @@ class MultipleChart extends React.Component<MultipleChartProps> {
                         <XAxis dataKey="time" />
                         <YAxis />
                         <Tooltip isAnimationActive={false} />
-                        {this.props.intervals.length && Object
-                            .keys(this.props.intervals[0].values)
+                        {state.intervals.length && Object
+                            .keys(state.intervals[0].values)
                             .map((name: string, index: number) => (
                                 <Area
                                     key={index}
@@ -90,9 +127,9 @@ class MultipleChart extends React.Component<MultipleChartProps> {
                     className="chart-table"
                     headers={[
                         'Route',
-                        <span>{this.props.sortColumn === SortColumn.AVG ? 'Avg' : 'Max'}</span>
+                        <span>{state.sortField === SortColumn.AVG ? 'Avg' : 'Max'}</span>
                     ]}
-                    items={(this.props.intervals.length ? Object.keys(this.props.intervals[0].values) : [])
+                    items={(state.intervals.length ? Object.keys(state.intervals[0].values) : [])
                         .map((name: string, index: number) => {
                             return {
                                 cells: [
@@ -103,7 +140,7 @@ class MultipleChart extends React.Component<MultipleChartProps> {
                                         ></i>
                                         {name}
                                     </>,
-                                    this.props.sortColumn === SortColumn.AVG 
+                                    state.sortField === SortColumn.AVG 
                                         ? this.findAverageOf(name)
                                         : this.findMaxOf(name)
                                 ]
@@ -120,10 +157,68 @@ class MultipleChart extends React.Component<MultipleChartProps> {
                 />
                 <div className="box__details">
                     <span className="box__header">Настройки</span>
-                    <MultipleChartSettings onUpdate={this.props.onUpdate} />
+                    <MultipleChartSettings onUpdate={this.onMultipleChartUpdate} />
                 </div>
             </div>
         </>
+    }
+
+    private loadChartData(
+        settings: MultipleChartSettingsData,
+        setFinished?: () => void
+    ) {
+        this.loadMultipleStats(settings).then((result) => {
+            this.setState({
+                intervals: result,
+                sortField: settings.sortField,
+                sortOrder: settings.sortOrder,
+                secondInterval: settings.secondInterval
+            });
+            setFinished && setFinished();
+        });
+    }
+
+    private loadMultipleStats(
+        settings: MultipleChartSettingsData
+    ): Promise<TimeIntervalValues[]> {
+        return new Promise<TimeIntervalValues[]>((resolve, reject) => {
+            $.ajax({
+                url: this.props.apiUrl,
+                method: 'get',
+                data: {
+                    limit: this.state.limit,
+                    field: settings.sortField,
+                    order: settings.sortOrder,
+                    intervals: this.state.intervalCount,
+                    sec_interval: settings.secondInterval
+                },
+                dataType: 'json',
+                success: (result: MultipleStatsAPIResult) => {
+                    const intervals: TimeIntervalValues[] = [];
+                    for (const objectName in result) {
+                        if (result.hasOwnProperty(objectName)) {
+                            const data = result[objectName];
+                            // Все objectName в ответе имеют одинаковое количество
+                            // одинаковых временных интервалов.
+                            for (let i = 0; i < data.length; i++) {
+                                const valueData = data[i];
+                                // Поэтому будем обновлять те же интервалы,
+                                // добавляя в них каждый новый objectName.
+                                if (!intervals[i]) intervals[i] = {
+                                    time: valueData.time,
+                                    values: {}
+                                }
+                                intervals[i].values[objectName] = valueData.value;
+                            }
+                        }
+                    }
+                    resolve(intervals);
+                },
+                error: (jqXHR, textStatus, errorThrown) => {
+                    reject(this.props.apiUrl + ' error:' + errorThrown);
+                }
+            })
+        })
     }
 
     private getColorByNumber(number: number): string {
@@ -132,8 +227,8 @@ class MultipleChart extends React.Component<MultipleChartProps> {
 
     private findMaxOf(name: string): number {
         let max = Number.MIN_SAFE_INTEGER;
-        for (let i = 0; i < this.props.intervals.length; i++) {
-            const values = this.props.intervals[i];
+        for (let i = 0; i < this.state.intervals.length; i++) {
+            const values = this.state.intervals[i];
             let currentValue = values.values[name];
             if (currentValue === null) currentValue = 0;
             if (currentValue > max) max = currentValue;
@@ -144,14 +239,21 @@ class MultipleChart extends React.Component<MultipleChartProps> {
     private findAverageOf(name: string): number {
         let average = 0;
         let count = 0;
-        for (let i = 0; i < this.props.intervals.length; i++) {
-            const values = this.props.intervals[i];
+        for (let i = 0; i < this.state.intervals.length; i++) {
+            const values = this.state.intervals[i];
             const currentValue = values.values[name];
             if (currentValue === null) continue;
             average += currentValue;
             count += 1;
         }
         return round(average / count, 3);
+    }
+
+    private onMultipleChartUpdate(
+        newSettings: MultipleChartSettingsData,
+        setFinished: () => void
+    ) {
+        this.loadChartData(newSettings, setFinished);
     }
 }
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { isNil } from 'lodash';
 import classNames from 'classnames';
 
-interface BreadcrumbsItem {
+export interface BreadcrumbsItem {
     name: string,
     link?: string
 }
