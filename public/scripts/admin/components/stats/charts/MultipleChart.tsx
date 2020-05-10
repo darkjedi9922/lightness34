@@ -5,15 +5,10 @@ import {
 import Table, { SortOrder } from '../../table/table';
 import { round } from 'lodash';
 import MultipleChartSettings, { MultipleChartSettingsData } from './MultipleChartSettings';
-import { ChartProps, SecondInterval } from '../_common';
+import { ChartProps, SecondInterval, SortColumn } from '../_common';
 import ContentHeader from '../../content-header';
 import Breadcrumbs from '../../common/Breadcrumbs';
 import $ from 'jquery';
-
-export enum SortColumn {
-    MAX = 'max',
-    AVG = 'avg'
-}
 
 interface MultipleStatsAPIResult {
     [object: string]: [{
@@ -23,7 +18,7 @@ interface MultipleStatsAPIResult {
     }]
 }
 
-export interface TimeIntervalValues {
+interface TimeIntervalValues {
     time: string,
     // Значения в values, могут быть null. Тогда они не будут учитываться при
     // подсчете среднего значения. Во всех других случаях они преобразуются в 0. 

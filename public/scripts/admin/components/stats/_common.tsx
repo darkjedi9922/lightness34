@@ -7,6 +7,11 @@ export enum SecondInterval {
     MONTH = DAY * 30
 }
 
+export enum SortColumn {
+    MAX = 'max',
+    AVG = 'avg'
+}
+
 export interface ChartProps {
     title: string,
     apiUrl: string,

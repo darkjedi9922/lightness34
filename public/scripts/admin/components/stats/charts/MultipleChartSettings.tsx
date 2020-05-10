@@ -1,8 +1,8 @@
 import React from 'react';
 import Form, { RadioField } from '../../form/Form';
-import { SortColumn } from './MultipleChart';
 import { SortOrder } from '../../table/table';
 import classNames from 'classnames';
+import { SortColumn } from '../_common';
 
 export interface MultipleChartSettingsData {
     sortField: SortColumn,

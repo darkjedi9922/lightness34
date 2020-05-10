@@ -37,14 +37,14 @@ class StatCharts extends React.Component<ChartsProps, ChartsState> {
                 onInitLoad={this.onChartInitLoad}
             />
             <MultipleChart
-                title='Макс. количество'
+                title='По количеству'
                 apiUrl={`/api/stats/${this.props.stat}/count`}
                 basePaths={basePaths}
                 isReady={isAllLoaded}
                 onInitLoad={this.onChartInitLoad}
             />
             <MultipleChart
-                title='Макс. время'
+                title='По времени'
                 apiUrl={`/api/stats/${this.props.stat}/durations`}
                 basePaths={basePaths}
                 isReady={isAllLoaded}
