@@ -1,9 +1,9 @@
 import React from 'react';
-import { SortOrder } from '../../table/Table';
-import RouteRequest from '../../routes/RouteRequest';
-import Parameter from '../../common/Parameter';
-import Status, { Type } from '../../common/Status';
-import HistoryPage from '../../stats/HistoryPage';
+import { SortOrder } from '../table/Table';
+import RouteRequest from './RouteRequest';
+import Parameter from '../common/Parameter';
+import Status, { Type } from '../common/Status';
+import HistoryPage from '../stats/HistoryPage';
 
 interface Route {
     route: string,

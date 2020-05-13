@@ -2,10 +2,10 @@ import React from 'react';
 import {
     AreaChart, Area, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer
 } from 'recharts';
-import Table from '../../table/table';
+import Table from '../../table/Table';
 import { round, maxBy, meanBy, sumBy } from 'lodash';
 import { ChartProps, SecondInterval } from '../_common';
-import ContentHeader from '../../content-header';
+import ContentHeader from '../../content/ContentHeader';
 import Breadcrumbs from '../../common/Breadcrumbs';
 import $ from 'jquery';
 

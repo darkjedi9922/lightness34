@@ -2,11 +2,11 @@ import React from 'react';
 import {
     AreaChart, Area, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer
 } from 'recharts';
-import Table, { SortOrder } from '../../table/table';
+import Table, { SortOrder } from '../../table/Table';
 import { round } from 'lodash';
 import MultipleChartSettings, { MultipleChartSettingsData } from './MultipleChartSettings';
 import { ChartProps, SecondInterval, SortColumn } from '../_common';
-import ContentHeader from '../../content-header';
+import ContentHeader from '../../content/ContentHeader';
 import Breadcrumbs from '../../common/Breadcrumbs';
 import $ from 'jquery';
 

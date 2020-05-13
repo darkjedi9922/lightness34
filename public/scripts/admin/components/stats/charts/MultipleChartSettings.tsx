@@ -1,6 +1,6 @@
 import React from 'react';
 import Form, { RadioField } from '../../form/Form';
-import { SortOrder } from '../../table/table';
+import { SortOrder } from '../../table/Table';
 import classNames from 'classnames';
 import { SortColumn } from '../_common';
 

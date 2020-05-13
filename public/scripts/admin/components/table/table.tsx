@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import Item, { TableItem } from './item';
+import TableItem, { TableItemData } from './TableItem';
 import { isNil } from 'lodash';
 
 export enum SortOrder {
@@ -16,7 +16,7 @@ interface SortParameters {
     onSort?: (column: number, order: SortOrder) => void
 }
 
-interface SortedTableItem extends TableItem {
+interface SortedTableItem extends TableItemData {
     // Указывать, если нужно сортировать таблицу по значениям.
     pureCellsToSort?: (number|string)[]
 }
@@ -101,12 +101,12 @@ class Table extends React.Component<TableProps, TableState> {
                     </thead>
                 }
                 {this.state.sort
-                    ? this.state.sort.sortedItems.map((item) => <Item 
+                    ? this.state.sort.sortedItems.map((item) => <TableItem 
                         key={this.props.items.indexOf(item)}
                         item={item}
                         collapsable={this.props.collapsable}
                     />)
-                    : this.props.items.map((item, index) => <Item
+                    : this.props.items.map((item, index) => <TableItem
                         key={index}
                         item={item}
                         collapsable={this.props.collapsable}
