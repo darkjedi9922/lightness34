@@ -1,6 +1,6 @@
 <?php namespace frame\auth;
 
-use frame\stdlib\tools\transmitters\CookieTransmitter;
+use frame\route\CookieTransmitter;
 
 class Auth
 {

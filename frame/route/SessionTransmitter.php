@@ -1,4 +1,4 @@
-<?php namespace frame\stdlib\tools\transmitters;
+<?php namespace frame\route;
 
 use function lightlib\session_start_once;
 

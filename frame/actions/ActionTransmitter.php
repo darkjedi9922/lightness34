@@ -1,6 +1,6 @@
 <?php namespace frame\actions;
 
-use frame\stdlib\tools\transmitters\SessionTransmitter;
+use frame\route\SessionTransmitter;
 
 class ActionTransmitter
 {

@@ -1,4 +1,4 @@
-<?php namespace frame\stdlib\tools\transmitters;
+<?php namespace frame\route;
 
 class CookieTransmitter extends \frame\tools\DataTransmitter
 {
