@@ -31,7 +31,7 @@ interface Props {
 
 interface State {
     isLoaded: boolean,
-    isUpdating: boolean,
+    updatingColumnIndex?: number,
     data: object[],
     countAll: number,
     pagerHtml: string,
@@ -45,7 +45,7 @@ class HistoryPage extends React.Component<Props, State> {
         const tb = props.tableBuilder;
         this.state = {
             isLoaded: false,
-            isUpdating: false,
+            updatingColumnIndex: null,
             data: [],
             countAll: 0,
             pagerHtml: null,
@@ -57,7 +57,7 @@ class HistoryPage extends React.Component<Props, State> {
     }
 
     public componentDidMount(): void {
-        this.loadValues();
+        this.loadValues(this.state.sortField, this.state.sortOrder);
     }
 
     public render(): React.ReactNode {
@@ -84,13 +84,10 @@ class HistoryPage extends React.Component<Props, State> {
                     <Table
                         className={builder.className}
                         collapsable={true}
-                        headers={builder.headers.map((header, index) => {
-                            const sortFields = props.tableBuilder.mapHeadersToSortFields;
-                            const isUpdating = state.isUpdating && index === sortFields.indexOf(state.sortField);
-                            return <span>
-                                {header} {isUpdating && <i className="icon-spin1 animate-spin table__loading"/>}
-                            </span>
-                        })}
+                        headers={builder.headers.map((header, index) => (
+                            <span>{header} {state.updatingColumnIndex === index 
+                                && <i className="icon-spin1 animate-spin table__loading"/>}</span>
+                        ))}
                         sort={{
                             defaultCellIndex: props.tableBuilder.mapHeadersToSortFields.indexOf(state.sortField),
                             defaultOrder: state.sortOrder,
@@ -107,12 +104,12 @@ class HistoryPage extends React.Component<Props, State> {
         </>
     }
 
-    private loadValues(): void {
+    private loadValues(sortField: string, sortOrder: SortOrder): void {
         $.ajax({
             url: this.props.apiDataUrl,
             data: {
-                sort: this.state.sortField,
-                order: this.state.sortOrder,
+                sort: sortField,
+                order: sortOrder,
                 p: parseUrl(window.location.search, true).query['p'] || 1
             },
             dataType: 'json',
@@ -122,19 +119,22 @@ class HistoryPage extends React.Component<Props, State> {
                     countAll: result.countAll,
                     pagerHtml: result.pagerHtml,
                     isLoaded: true,
-                    isUpdating: false
+                    updatingColumnIndex: null,
+                    sortField: sortField,
+                    sortOrder: sortOrder
                 })
             }
         })
     }
 
     private onTableSort(column: number, order: SortOrder): void {
-        if (this.state.isUpdating) return;
+        if (this.state.updatingColumnIndex !== null) return;
         this.setState({
-            isUpdating: true,
-            sortField: this.props.tableBuilder.mapHeadersToSortFields[column],
-            sortOrder: order
-        }, this.loadValues.bind(this));
+            updatingColumnIndex: column,
+        }, () => this.loadValues(
+            this.props.tableBuilder.mapHeadersToSortFields[column], 
+            order
+        ));
     }
 }
 
