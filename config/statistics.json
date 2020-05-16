@@ -6,5 +6,5 @@
         "admin/settings/statistics",
         "engine/statistics/actions"
     ],
-    "historyListLimit": 30
+    "historyListLimit": 20
 }
