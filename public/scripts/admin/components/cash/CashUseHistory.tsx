@@ -33,7 +33,7 @@ class CashUseHistory extends React.Component {
             breadcrumbsNamePart="Кэш"
             apiDataUrl="/api/stats/cash/history"
             tableBuilder={{
-                headers: ['Route', 'Used cash values', 'Cash calls', 'Status', 'Time'],
+                headers: ['Route', 'Values', 'Calls', 'Status', 'Time'],
                 defaultSortColumnIndex: 4,
                 defaultSortOrder: SortOrder.DESC,
                 mapHeadersToSortFields: [
@@ -48,7 +48,7 @@ class CashUseHistory extends React.Component {
                     route.values.length,
                     this.getCashCalls(route),
                     <div className="stat-status">{this.statusMarks[this.getStatus(route)]}</div>,
-                    route.time
+                    <span className="routes__time">{route.time}</span>
                 ],
                 buildRowDetails: (route: CashRoute) => (() => {
                     if (!route.values.length) return [];

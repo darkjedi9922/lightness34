@@ -52,7 +52,7 @@ class QueryHistory extends React.Component<Props> {
                     route.queries.length,
                     <span className="table__duration">{this.calcSumLoad(route)} sec</span>,
                     <div className="stat-status">{this.statusMarks[this.getStatus(route)]}</div>,
-                    route.time
+                    <span className="routes__time">{route.time}</span>
                 ],
                 buildRowDetails: (route: QueryRoute) => [{
                     title: 'Queries',

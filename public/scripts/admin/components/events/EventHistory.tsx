@@ -36,7 +36,7 @@ class EventHistory extends React.Component {
                     route.subscribers.length,
                     route.emits.length,
                     route.handles.length,
-                    route.time
+                    <span className="routes__time">{route.time}</span>
                 ],
                 buildRowDetails: (route: Route) => [{
                     title: 'Subscribers',

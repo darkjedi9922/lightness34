@@ -68,7 +68,7 @@ class ViewHistory extends React.Component<ViewsHistoryProps> {
                     route.views.length,
                     <span className="table__duration">{route.sumLoad} sec</span>,
                     <div className="stat-status">{this.statusMarks[route.status]}</div>,
-                    route.time
+                    <span className="routes__time">{route.time}</span>
                 ],
                 buildRowDetails: (route: ViewRoute) => (() => {
                     if (!route.views.length) return [{

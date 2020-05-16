@@ -70,7 +70,7 @@ class ActionHistory extends React.Component {
                     <>{action.class}&nbsp;{action.isAjax && <Label color="yellow">ajax</Label>}</>,
                     <DurationCell>{`${action.secondDuration.toString()} sec`}</DurationCell>,
                     <ActionStatus {...action} />,
-                    action.time
+                    <span className="routes__time">{action.time}</span>
                 ],
                 buildRowDetails: (action: ActionStat) => [{
                     title: 'Get Data',
