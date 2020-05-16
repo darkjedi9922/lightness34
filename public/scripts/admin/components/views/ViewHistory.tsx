@@ -5,7 +5,6 @@ import { isNil } from 'lodash';
 import Status, { Type } from '../common/Status';
 import Parameter from '../common/Parameter';
 import { DetailsProps } from '../table/TableDetails';
-import { round } from 'lodash';
 import HistoryPage from '../stats/HistoryPage';
 
 interface MetaData {
@@ -29,6 +28,8 @@ interface ViewStat {
 interface ViewRoute {
     route: string
     views: ViewStat[],
+    sumLoad: number,
+    status: ViewRouteStatus,
     time: string
 }
 
@@ -65,8 +66,8 @@ class ViewHistory extends React.Component<ViewsHistoryProps> {
                 buildRowCells: (route: ViewRoute) => [
                     <RouteRequest route={route.route} />,
                     route.views.length,
-                    <span className="table__duration">{this.calcSumLoad(route)} sec</span>,
-                    <div className="stat-status">{this.statusMarks[this.getStatus(route)]}</div>,
+                    <span className="table__duration">{route.sumLoad} sec</span>,
+                    <div className="stat-status">{this.statusMarks[route.status]}</div>,
                     route.time
                 ],
                 buildRowDetails: (route: ViewRoute) => (() => {
@@ -129,22 +130,6 @@ class ViewHistory extends React.Component<ViewsHistoryProps> {
                 })()
             }}
         />
-    }
-
-    private calcSumLoad(route: ViewRoute): number {
-        return round(route.views.reduce<number>((prevValue, currentStat) => {
-            return prevValue + currentStat.durationSec
-        }, 0), 3)
-    }
-
-    private getStatus(route: ViewRoute): ViewRouteStatus
-    {
-        return route.views.length
-            ? (
-                route.views.find((view) =>
-                    !isNil(view.error))
-                    ? ViewRouteStatus.HAS_ERRORS : ViewRouteStatus.ALL_OK
-            ) : ViewRouteStatus.NO_VIEWS;
     }
 }
 
