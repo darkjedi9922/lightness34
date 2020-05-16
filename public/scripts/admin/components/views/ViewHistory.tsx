@@ -83,9 +83,9 @@ class ViewHistory extends React.Component<ViewsHistoryProps> {
                                     cells: [
                                         view.class,
                                         <>
-                                            {view.name}
+                                            <RouteRequest route={view.name} label="index view" />
                                             {!isNil(view.error) && <>&nbsp;<span className="mark mark--red">Error</span></>}
-                                            {view.meta.length > 0 && <>&nbsp;<span className="mark mark--blue">Meta</span></>}
+                                            {view.meta.length > 0 && <>&nbsp;<span className="mark mark--blue">{view.meta.length} meta</span></>}
                                         </>,
                                         !isNil(view.layoutName)
                                             ? (
