@@ -7,19 +7,15 @@ interface Props {
     label?: string
 }
 
-class RouteRequest extends React.Component<Props> {
-    public render(): React.ReactNode {
-        return (
-            <span className={classNames([
-                'routes__pagename',
-                {'routes__pagename--index': this.props.route === ''}
-            ])}>
-                {this.props.route !== '' 
-                    ? this.props.route 
-                    : (isNil(this.props.label) ? 'index request' : this.props.label)}
-            </span>
-        );
-    }
-}
+const RouteRequest = function(props: Props) {
+    return <span className={classNames([
+        'routes__pagename',
+        { 'routes__pagename--index': props.route === '' }
+    ])}>
+        {props.route !== ''
+            ? props.route
+            : (isNil(props.label) ? 'index request' : props.label)}
+    </span>
+};
 
 export default RouteRequest;
