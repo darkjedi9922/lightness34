@@ -3,7 +3,7 @@
 use frame\tools\Init;
 use frame\tools\JsonEncoder;
 use engine\statistics\lists\MultipleIntervalDataList;
-use frame\stdlib\cash\router;
+use frame\stdlib\cash\route;
 
 class MultipleChartAPI
 {
@@ -17,7 +17,7 @@ class MultipleChartAPI
 
     public function jsonResult()
     {
-        $router = router::get();
+        $router = route::get();
 
         $limit = $router->getArg('limit') ?? 5;
         $sortField = $router->getArg('field') ?? 'max'; // 'max' or 'avg'

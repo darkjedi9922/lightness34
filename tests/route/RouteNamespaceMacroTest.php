@@ -5,6 +5,8 @@ use frame\route\Request;
 use PHPUnit\Framework\TestCase;
 use tests\route\examples\RouteNamespaceMacroExample;
 use tests\route\stubs\RequestStub;
+use frame\route\Router;
+use frame\stdlib\drivers\route\UrlRouter;
 
 /**
  * @runTestsInSeparateProcesses
@@ -13,8 +15,10 @@ class RouteNamespaceMacroTest extends TestCase
 {
     public static function setUpBeforeClass(): void
     {
-        $app = new Core;
-        $app->replaceDriver(Request::class, RequestStub::class);
+        $app = new Core([
+            Router::class => UrlRouter::class,
+            Request::class => RequestStub::class
+        ]);
     }
 
     public function testRunsWhenTheRouteNamespaceMatchesCurrentRoute()

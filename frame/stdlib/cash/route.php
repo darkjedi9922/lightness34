@@ -1,7 +1,7 @@
 <?php namespace frame\stdlib\cash;
 
 use frame\route\Request;
-use frame\route\Router as FrameRouter;
+use frame\route\Router;
 use frame\cash\CashValue;
 use frame\cash\CashStorage;
 use frame\stdlib\drivers\cash\StaticCashStorage;
@@ -9,7 +9,7 @@ use frame\stdlib\drivers\cash\StaticCashStorage;
 /**
  * Возвращает роутер текущего запроса.
  */
-class router extends CashValue
+class route extends CashValue
 {
     public static function getStorage(): CashStorage
     {
@@ -17,12 +17,13 @@ class router extends CashValue
     }
 
     /**
-     * @return FrameRouter
+     * @return \frame\route\Route
      */
     public static function get()
     {
         return self::cash('current-router', function() {
-           return new FrameRouter(Request::getDriver()->getRequest());
+            $request = Request::getDriver()->getRequest();
+            return Router::getDriver()->parseRoute($request);
         });
     }
 }

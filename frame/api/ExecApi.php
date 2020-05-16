@@ -3,7 +3,7 @@
 use frame\route\RouteNamespaceMacro;
 use frame\route\Response;
 use frame\stdlib\cash\config;
-use frame\stdlib\cash\router;
+use frame\stdlib\cash\route;
 use frame\tools\JsonEncoder;
 
 class ExecApi extends RouteNamespaceMacro
@@ -27,7 +27,7 @@ class ExecApi extends RouteNamespaceMacro
 
     private function getApiClass(): string
     {
-        $parts = router::get()->getPathParts();
+        $parts = route::get()->getPathParts();
         $lastIndex = count($parts) - 1;
         $parts[$lastIndex] = str_replace('-', '', ucwords($parts[$lastIndex], '-'));
         return '\\' . implode('\\', $parts) . 'Api';

@@ -1,13 +1,13 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use frame\route\Router;
+use frame\stdlib\drivers\route\UrlRouter;
 
-class RouterTest extends TestCase
+class UrlRouterTest extends TestCase
 {
     public function testChecksOnePageNamespace()
     {
-        $router = new Router('/articles/item?id=3');
+        $router = UrlRouter::getDriver()->parseRoute('/articles/item?id=3');
         $this->assertTrue($router->isInNamespace('articles'));
         $this->assertTrue($router->isInNamespace('articles/item'));
         $this->assertFalse($router->isInNamespace('articles/item/id'));
@@ -15,7 +15,7 @@ class RouterTest extends TestCase
 
     public function testCheckManyPageNamespaces()
     {
-        $router = new Router('/articles/item?id=3');
+        $router = UrlRouter::getDriver()->parseRoute('/articles/item?id=3');
         $this->assertTrue($router->isInAnyNamespace([
             'users',
             'images',
@@ -25,19 +25,19 @@ class RouterTest extends TestCase
 
     public function testEmptyNamespaceIncludesAnyPage()
     {
-        $router = new Router('/articles/item?id=3');
+        $router = UrlRouter::getDriver()->parseRoute('/articles/item?id=3');
         $this->assertTrue($router->isInNamespace(''));
 
-        $router = new Router('');
+        $router = UrlRouter::getDriver()->parseRoute('');
         $this->assertTrue($router->isInNamespace(''));
 
-        $router = new Router('?id=3');
+        $router = UrlRouter::getDriver()->parseRoute('?id=3');
         $this->assertTrue($router->isInNamespace(''));
     }
 
     public function testStartSlashIsIgnoredInNamespaceChecking()
     {
-        $router = new Router('articles/item?id=3');
+        $router = UrlRouter::getDriver()->parseRoute('articles/item?id=3');
         $this->assertTrue($router->isInNamespace('/articles'));
     }
 }

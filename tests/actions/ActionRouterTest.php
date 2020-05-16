@@ -5,9 +5,17 @@ use frame\actions\Action;
 use frame\actions\ActionRouter;
 use tests\actions\examples\GetListActionExample;
 use tests\engine\UserDeleteAction;
+use frame\core\Core;
+use frame\route\Router;
+use frame\stdlib\drivers\route\UrlRouter;
 
 class ActionRouterTest extends TestCase
 {
+    public static function setUpBeforeClass(): void
+    {
+        $app = new Core([Router::class => UrlRouter::class]);
+    }
+
     public function testGetsATriggerUrl()
     {
         $get = [Action::ID => 'del', 'object' => 1, 'subject' => 21];

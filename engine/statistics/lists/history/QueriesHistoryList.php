@@ -40,7 +40,7 @@ class QueriesHistoryList extends HistoryList
         $routes = [];
         foreach ($list as $row) {
             $route = [
-                'route' => (new Router($row['route_url']))->pagename,
+                'route' => Router::getDriver()->parseRoute($row['route_url'])->pagename,
                 'queries' => [],
                 'time' => date('d.m.Y H:i', $row['time'])
             ];

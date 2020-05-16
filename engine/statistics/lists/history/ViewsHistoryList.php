@@ -77,7 +77,7 @@ class ViewsHistoryList extends HistoryList
                 ];
             }
             $routes[] = [
-                'route' => (new Router($row['route_url']))->pagename,
+                'route' => Router::getDriver()->parseRoute($row['route_url'])->pagename,
                 'views' => $routeViews,
                 'sumLoad' => round($row['sum_load'], 3),
                 'status' => $row['status'],

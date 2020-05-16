@@ -22,7 +22,7 @@ class pagenumber extends CashValue
     public static function get(bool $previous = false)
     {
         return self::cash("p$previous", function() use ($previous) {
-            $router = router::get($previous);
+            $router = route::get($previous);
             if (!$router) return 1;
             $p = $router->getArg('p');
             if (!$p || $p <= 0) return 1;

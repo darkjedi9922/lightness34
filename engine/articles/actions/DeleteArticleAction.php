@@ -4,7 +4,7 @@ use engine\articles\Article;
 use frame\actions\ActionBody;
 use frame\actions\fields\IntegerField;
 use frame\tools\Init;
-use frame\stdlib\cash\prev_router;
+use frame\stdlib\cash\prev_route;
 
 class DeleteArticleAction extends ActionBody
 {
@@ -34,7 +34,7 @@ class DeleteArticleAction extends ActionBody
 
     public function getSuccessRedirect(): string
     {
-        $prevRouter = prev_router::get();
+        $prevRouter = prev_route::get();
         if ($prevRouter && $prevRouter->isInNamespace('admin'))
             return '/admin/articles';
         return '/articles';

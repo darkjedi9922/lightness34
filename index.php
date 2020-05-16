@@ -18,11 +18,13 @@ use frame\route\HttpError;
 use frame\errors\StrictException;
 use frame\events\Events;
 use frame\modules\Modules;
+use frame\route\Router;
 use frame\route\Request;
 use frame\route\Response;
 use frame\stdlib\configs\JsonConfig;
 use frame\stdlib\configs\PhpConfig;
 use frame\stdlib\drivers\auth\DatabaseRightsStore;
+use frame\stdlib\drivers\route\UrlRouter;
 use frame\stdlib\drivers\route\UrlRequest;
 use frame\stdlib\drivers\route\UrlResponse;
 use frame\views\macros\ApplyDefaultLayout;
@@ -33,11 +35,13 @@ use frame\views\View;
 use frame\database\SqlDriver;
 use frame\stdlib\drivers\database\MySqlDriver;
 
-$app = new Core;
-$app->replaceDriver(Request::class, UrlRequest::class);
-$app->replaceDriver(Response::class, UrlResponse::class);
-$app->replaceDriver(SqlDriver::class, MySqlDriver::class);
-$app->replaceDriver(RightsStore::class, DatabaseRightsStore::class);
+$app = new Core([
+    Router::class => UrlRouter::class,
+    Request::class => UrlRequest::class,
+    Response::class => UrlResponse::class,
+    SqlDriver::class => MySqlDriver::class,
+    RightsStore::class => DatabaseRightsStore::class
+]);
 
 $configRouter = ConfigRouter::getDriver();
 $configRouter->addSupport([JsonConfig::class, PhpConfig::class]);

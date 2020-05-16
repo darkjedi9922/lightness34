@@ -1,6 +1,6 @@
 <?php /** @var frame\views\Page $self */
 
-use frame\stdlib\cash\prev_router;
+use frame\stdlib\cash\prev_route;
 use engine\admin\actions\LoginAction;
 use frame\actions\ViewAction;
 use engine\admin\Auth;
@@ -8,7 +8,7 @@ use frame\tools\JsonEncoder;
 
 $action = new ViewAction(LoginAction::class);
 $auth = new Auth;
-$prevRoute = prev_router::get();
+$prevRoute = prev_route::get();
 $isTimeup = $auth->isTimeup() && $prevRoute && $prevRoute->getPathPart(0) == 'admin';
 
 $loginErrors = [];

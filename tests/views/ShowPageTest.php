@@ -8,12 +8,14 @@ use PHPUnit\Framework\TestCase;
 use tests\route\stubs\RequestStub;
 use frame\views\ViewRouter;
 use tests\views\stubs\ViewRouterStub;
+use frame\route\Router;
+use frame\stdlib\drivers\route\UrlRouter;
 
 class ShowPageTest extends TestCase
 {
     public function testShowsPageFromCurrentRoute()
     {
-        $app = new Core;
+        $app = new Core([Router::class => UrlRouter::class]);
         $app->replaceDriver(Request::class, RequestStub::class);
         $app->replaceDriver(ViewRouter::class, ViewRouterStub::class);
         RequestStub::getDriver()->setRequest('/profile/');

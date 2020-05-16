@@ -31,7 +31,7 @@ class RoutesHistoryList extends HistoryList
         $routes = [];
         foreach ($list as $row) {
             $route = new RouteStat($row);
-            $router = new Router($route->url);
+            $router = Router::getDriver()->parseRoute($route->url);
             $type = null;
             switch ($route->type) {
                 case $route::ROUTE_TYPE_PAGE:

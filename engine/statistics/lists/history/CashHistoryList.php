@@ -4,8 +4,9 @@ use engine\statistics\stats\CashValueStat;
 use frame\database\Records;
 use frame\lists\iterators\IdentityIterator;
 use engine\statistics\stats\RouteStat;
-use frame\route\Router;
+use frame\route\Route;
 use Iterator;
+use frame\route\Router;
 
 class CashHistoryList extends HistoryList
 {
@@ -58,7 +59,7 @@ class CashHistoryList extends HistoryList
                 ];
             }
             $routes[] = [
-                'route' => (new Router($row['route_url']))->pagename,
+                'route' => Router::getDriver()->parseRoute($row['route_url'])->pagename,
                 'values' => $cashValues,
                 'time' => date('d.m.Y H:i', $row['time'])
             ];

@@ -6,15 +6,20 @@ use frame\route\HttpError;
 use frame\actions\ActionRouter;
 use frame\actions\ActionToken;
 use tests\actions\examples\EmptyActionExample;
+use frame\route\Router;
+use frame\stdlib\drivers\route\UrlRouter;
+use frame\core\Core;
 
 /**
  * @runTestsInSeparateProcesses
  */
 class ActionTokenTest extends TestCase
 {
-    /**
-     * @runInSeparateProcess
-     */
+    public static function setUpBeforeClass(): void
+    {
+        $app = new Core([Router::class => UrlRouter::class]);
+    }
+
     public function testSetsTokenToTheGet()
     {
         $action = new Action(new EmptyActionExample);

@@ -15,6 +15,8 @@ use frame\actions\UploadedFile;
 use frame\core\Core;
 use tests\actions\examples\EmptyActionExample;
 use tests\actions\examples\FileFieldActionExample;
+use frame\route\Router;
+use frame\stdlib\drivers\route\UrlRouter;
 
 class ActionTest extends TestCase
 {
@@ -28,7 +30,7 @@ class ActionTest extends TestCase
 
     public static function setUpBeforeClass(): void
     {
-        $app = new Core;
+        $app = new Core([Router::class => UrlRouter::class]);
     }
 
     public function testDefaultIdIsEmptyString()

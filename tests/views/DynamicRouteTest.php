@@ -4,6 +4,7 @@ use tests\views\stubs\ViewRouterStub;
 use frame\route\Router;
 use frame\core\Core;
 use frame\views\ViewRouter;
+use frame\stdlib\drivers\route\UrlRouter;
 
 class DynamicRouteTest extends TestCase
 {
@@ -12,10 +13,11 @@ class DynamicRouteTest extends TestCase
      */
     public function testFindsDynamicPage(string $url, ?string $resultViewfile)
     {
-        $app = new Core;
-        $app->replaceDriver(ViewRouter::class, ViewRouterStub::class);
-
-        $urlRouter = new Router($url);
+        $app = new Core([
+            Router::class => UrlRouter::class,
+            ViewRouter::class => ViewRouterStub::class
+        ]);
+        $urlRouter = Router::getDriver()->parseRoute($url);
         $viewRouter = new ViewRouterStub;
         $page = $viewRouter->findPage($urlRouter);
         if ($resultViewfile === null) $this->assertNull($page);

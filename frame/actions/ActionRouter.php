@@ -8,7 +8,7 @@ class ActionRouter
 {
     public function fromTriggerUrl(string $url): Action
     {
-        $router = new Router($url);
+        $router = Router::getDriver()->parseRoute($url);
         $type = $router->pagename;
         $class = '\\' . str_replace('/', '\\', $type);
 
@@ -23,7 +23,7 @@ class ActionRouter
 
     public function getTriggerUrl(Action $action): string
     {
-        return Router::toUrlOf(
+        return Router::getDriver()->makeRoute(
             '/' . str_replace('\\', '/', get_class($action->getBody())),
             array_merge(
                 [Action::ID => ''],

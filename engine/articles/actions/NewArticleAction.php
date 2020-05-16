@@ -5,7 +5,7 @@ use engine\users\cash\user_me;
 use frame\actions\ActionBody;
 use frame\actions\fields\StringField;
 use frame\tools\Init;
-use frame\stdlib\cash\prev_router;
+use frame\stdlib\cash\prev_route;
 use frame\stdlib\configs\JsonConfig;
 
 /**
@@ -64,7 +64,7 @@ class NewArticleAction extends ActionBody
 
     public function getSuccessRedirect(): string
     {
-        $prevRouter = prev_router::get();
+        $prevRouter = prev_route::get();
         if ($prevRouter && $prevRouter->isInNamespace('admin'))
             return '/admin/article?id=' . $this->id;
         return '/article?id=' . $this->id;

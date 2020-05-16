@@ -1,6 +1,6 @@
 <?php namespace frame\lists\paged;
 
-use frame\stdlib\cash\router;
+use frame\stdlib\cash\route;
 use frame\route\HttpError;
 use frame\lists\paged\PagerView;
 
@@ -72,7 +72,7 @@ class PagerModel
      * Возвращает ссылку на ту же страницу, но с другим номером страницы.
      */
     public function toLink(string $urlPageArgumentName, int $pageNumber): string {
-        return router::get()->toUrl([$urlPageArgumentName => $pageNumber]);
+        return route::get()->toUrl([$urlPageArgumentName => $pageNumber]);
     }
     
     public function countPages(): int {

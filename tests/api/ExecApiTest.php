@@ -13,12 +13,14 @@ use PHPUnit\Framework\TestCase;
 use tests\api\examples\SimpleApi;
 use tests\route\stubs\RequestStub;
 use tests\route\stubs\ResponseStub;
+use frame\route\Router;
+use frame\stdlib\drivers\route\UrlRouter;
 
 class ExecApiTest extends TestCase
 {
     public function testExecutesApiAndReturnsJsonAsResult()
     {
-        $app = new Core;
+        $app = new Core([Router::class => UrlRouter::class]);
         $app->replaceDriver(Request::class, RequestStub::class);
         $app->replaceDriver(Response::class, ResponseStub::class);
         ConfigRouter::getDriver()->addSupport(JsonConfig::class);

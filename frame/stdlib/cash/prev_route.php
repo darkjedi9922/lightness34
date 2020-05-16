@@ -11,7 +11,7 @@ use frame\stdlib\drivers\cash\StaticCashStorage;
  * для всех роутеров (на предпредыдущий через предыдущий не попадешь). Если 
  * предыдущего запроса нет - вернет null.
  */
-class prev_router extends CashValue
+class prev_route extends CashValue
 {
     public static function getStorage(): CashStorage
     {
@@ -19,12 +19,13 @@ class prev_router extends CashValue
     }
 
     /**
-     * @return Router|null
+     * @return Route|null
      */
     public static function get()
     {
         return self::cash('prev-router', function() {
-            if (Request::getDriver()->hasReferer()) return new Router(Request::getDriver()->getReferer());
+            if (Request::getDriver()->hasReferer()) 
+                return Router::getDriver()->parseRoute(Request::getDriver()->getReferer());
             else return null;
         });
     }

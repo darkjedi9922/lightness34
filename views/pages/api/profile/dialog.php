@@ -9,7 +9,7 @@ use engine\users\User;
 use frame\actions\ViewAction;
 use engine\messages\actions\AddMessage;
 use engine\messages\Dialog;
-use frame\stdlib\cash\prev_router;
+use frame\stdlib\cash\prev_route;
 use frame\tools\JsonEncoder;
 use frame\lists\paged\PagerView;
 
@@ -43,7 +43,7 @@ foreach ($list as $message) {
 $pagerHtml = null;
 if ($list->getPager()->countPages() > 1) {
     $viewPager = new PagerView($list->getPager(), 'admin');
-    $viewPager->setMeta('route', prev_router::get()->toUrl());
+    $viewPager->setMeta('route', prev_route::get()->toUrl());
     $pagerHtml = $viewPager->getHtml();
 }
 

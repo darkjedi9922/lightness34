@@ -20,7 +20,7 @@ class ActionMacro extends GetMacro
     {
         Events::getDriver()->emit(self::EVENT_ACTION_TRIGGERED);
         $router = new ActionRouter;
-        $this->action = $router->fromTriggerUrl(\frame\stdlib\cash\router::get()->url);
+        $this->action = $router->fromTriggerUrl(\frame\stdlib\cash\route::get()->url);
         $tokenizer = new ActionToken($this->action);
         $tokenizer->validate();
         $this->action->exec();
@@ -52,7 +52,8 @@ class ActionMacro extends GetMacro
         }
         $transmitter = new ActionTransmitter;
         $transmitter->save($this->action);
-        Response::getDriver()->setUrl(Router::toUrlOf($redirect));
+        $router = Router::getDriver()->getDriver();
+        Response::getDriver()->setUrl($router->makeRoute($redirect));
     }
 
     private function getRedirect(): ?string

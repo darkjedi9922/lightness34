@@ -43,7 +43,7 @@ class EventsHistoryList extends HistoryList
         foreach ($list as $row) {
             // $routeStat = new RouteStat($row);
             $route = [
-                'route' => (new Router($row['route_url']))->pagename,
+                'route' => Router::getDriver()->parseRoute($row['route_url'])->pagename,
                 'subscribers' => [],
                 'emits' => [],
                 'handles' => [],

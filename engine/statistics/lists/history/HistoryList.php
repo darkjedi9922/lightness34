@@ -3,7 +3,7 @@
 use frame\lists\paged\PagedList;
 use frame\stdlib\cash\config;
 use frame\lists\paged\PagerView;
-use frame\stdlib\cash\prev_router;
+use frame\stdlib\cash\prev_route;
 use frame\database\SqlDriver;
 use Iterator;
 
@@ -38,7 +38,7 @@ abstract class HistoryList extends PagedList
     {
         $result = $this->assembleArray($this->getIterator());
         $pager = new PagerView($this->getPager(), 'admin');
-        $prevRouter = prev_router::get();
+        $prevRouter = prev_route::get();
         if ($prevRouter) $pager->setMeta('route', $prevRouter->toUrl());
         
         return [

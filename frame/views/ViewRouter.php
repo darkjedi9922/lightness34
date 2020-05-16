@@ -1,6 +1,6 @@
 <?php namespace frame\views;
 
-use frame\route\Router;
+use frame\route\Route;
 use frame\views\Page;
 
 class ViewRouter extends \frame\core\Driver
@@ -12,7 +12,7 @@ class ViewRouter extends \frame\core\Driver
         return ROOT_DIR . '/views';
     }
 
-    public function findPage(Router $router): ?Page
+    public function findPage(Route $router): ?Page
     {
         $pagename = $router->pagename;
         if (Page::find($pagename)) return new Page($pagename);
