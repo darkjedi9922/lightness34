@@ -4,21 +4,41 @@ use engine\statistics\stats\ActionStat;
 use frame\actions\fields\PasswordField;
 use frame\actions\UploadedFile;
 use frame\stdlib\tools\units\ByteUnit;
-use frame\lists\iterators\IdentityIterator;
 use engine\statistics\stats\RouteStat;
+use Iterator;
+use frame\database\Records;
 
 class ActionsHistoryList extends HistoryList
 {
-    public function getStatIdentityClass(): string
+    protected function queryCountAll(): int
     {
-        return ActionStat::class;
+        return Records::from(ActionStat::getTable())->count('id');
     }
 
-    protected function assembleArray(IdentityIterator $list): array
+    protected function getSqlQuery(
+        string $sortField,
+        string $sortOrder,
+        int $offset,
+        int $limit
+    ): string {
+        $actionTable = ActionStat::getTable();
+        $countTable = 'stat_action_counts';
+        return "SELECT
+            $actionTable.id as action_id,
+            $actionTable.class,
+            $actionTable.duration_sec,
+            $countTable.status
+            FROM $actionTable INNER JOIN $countTable
+                ON $actionTable.id = $countTable.action_id
+            ORDER BY $sortField $sortOrder
+            LIMIT $offset, $limit";
+    }
+
+    protected function assembleArray(Iterator $list): array
     {
         $resultHistory = [];
-        foreach ($list as $action) {
-            /** @var ActionStat $action */
+        foreach ($list as $row) {
+            $action = ActionStat::selectIdentity($row['action_id']);
             $data = json_decode($action->data_json, true);
 
             $actionPost = [];

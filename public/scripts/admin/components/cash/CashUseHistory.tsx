@@ -36,12 +36,12 @@ class CashUseHistory extends React.Component {
                 headers: ['Route', 'Used cash values', 'Cash calls', 'Status', 'Time'],
                 defaultSortColumnIndex: 4,
                 defaultSortOrder: SortOrder.DESC,
-                buildPureValuesToSort: (route: CashRoute) => [
-                    route.route,
-                    route.values.length,
-                    this.getCashCalls(route),
-                    this.getStatus(route),
-                    route.time
+                mapHeadersToSortFields: [
+                    'route_url',
+                    'value_count',
+                    'call_count',
+                    'status',
+                    'route_id'
                 ],
                 buildRowCells: (route: CashRoute) => [
                     <RouteRequest route={route.route} />,

@@ -4,21 +4,26 @@ use engine\statistics\macros\BaseStatCollector;
 use engine\statistics\stats\ActionStat;
 use frame\route\Response;
 use engine\statistics\stats\RouteStat;
+use frame\database\Records;
+use engine\statistics\macros\actions\EndCollectActionStat;
 
 class EndCollectAppStat extends BaseStatCollector
 {
     private $stat;
     private $routeStat;
     private $errorCollector;
+    private $endActionCollector;
 
     public function __construct(
         ActionStat $stat,
         RouteStat $routeStat,
-        CollectActionError $errorCollector
+        CollectActionError $errorCollector,
+        EndCollectActionStat $endActionCollector
     ) {
         $this->stat = $stat;
         $this->routeStat = $routeStat;
         $this->errorCollector = $errorCollector;
+        $this->endActionCollector = $endActionCollector;
     }
 
     protected function collect(...$args)
@@ -42,6 +47,13 @@ class EndCollectAppStat extends BaseStatCollector
         }
 
         $this->stat->route_id = $this->routeStat->getId();
-        $this->stat->insert();
+        $actionId = $this->stat->insert();
+
+        $isFatal = $this->stat->response_type == ActionStat::RESPONSE_TYPE_ERROR;
+        $isFail = $isFatal && $this->endActionCollector->getAction()->hasErrors();
+        Records::from('stat_action_counts')->insert([
+            'action_id' => $actionId,
+            'status' => $isFail ? 1 : ($isFatal ? 2 : 0)
+        ]);
     }
 }

@@ -28,6 +28,7 @@ class CashStatisticsSubModule extends BaseStatisticsSubModule
     public function clearStats()
     {
         Records::from(CashValueStat::getTable())->delete();
+        Records::from('stat_cash_counts')->delete();
     }
 
     public function endCollecting()

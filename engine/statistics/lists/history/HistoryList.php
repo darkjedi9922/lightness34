@@ -1,29 +1,25 @@
 <?php namespace engine\statistics\lists\history;
 
 use frame\lists\paged\PagedList;
-use frame\database\Records;
 use frame\stdlib\cash\config;
-use frame\lists\iterators\IdentityIterator;
-use Iterator;
 use frame\lists\paged\PagerView;
 use frame\stdlib\cash\prev_router;
+use frame\database\SqlDriver;
+use Iterator;
 
 abstract class HistoryList extends PagedList
 {
     private $list;
     private $countAll;
 
-    public function __construct(int $page)
+    public function __construct(int $page, string $sortField, string $sortOrder)
     {
-        $identityClass = $this->getStatIdentityClass();
-        $this->countAll = Records::from($identityClass::getTable())->count('id');
+        $this->countAll = $this->queryCountAll();
         $limit = config::get('statistics')->historyListLimit;
         parent::__construct($page, $this->countAll, $limit);
-
-        $this->list = Records::from($identityClass::getTable())
-            ->order(['id' => 'DESC'])
-            ->range($this->getPager()->getStartMaterialIndex(), $limit)
-            ->select();
+        $offset = $this->getPager()->getStartMaterialIndex();
+        $this->list = SqlDriver::getDriver()->query($this->getSqlQuery(
+            $sortField, $sortOrder, $offset, $limit));
     }
 
     public function countOnPage(): int
@@ -33,7 +29,9 @@ abstract class HistoryList extends PagedList
 
     public function getIterator(): Iterator
     {
-        return new IdentityIterator($this->list, $this->getStatIdentityClass());
+        $this->list->seek(0);
+        while (($line = $this->list->readLine()) !== null)
+            yield $line;
     }
 
     public function toArray(): array
@@ -50,6 +48,12 @@ abstract class HistoryList extends PagedList
         ];
     }
 
-    public abstract function getStatIdentityClass(): string;
-    protected abstract function assembleArray(IdentityIterator $list): array;
+    protected abstract function queryCountAll(): int;
+    protected abstract function getSqlQuery(
+        string $sortField,
+        string $sortOrder,
+        int $offset,
+        int $limit
+    ): string;
+    protected abstract function assembleArray(Iterator $list): array;
 }

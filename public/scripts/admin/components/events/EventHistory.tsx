@@ -24,12 +24,12 @@ class EventHistory extends React.Component {
                 headers: ['Path', 'Subscribers', 'Emits', 'Handles', 'Time'],
                 defaultSortColumnIndex: 4,
                 defaultSortOrder: SortOrder.DESC,
-                buildPureValuesToSort: (route: Route) => [
-                    route.route,
-                    route.subscribers.length,
-                    route.emits.length,
-                    route.handles.length,
-                    route.time
+                mapHeadersToSortFields: [
+                    'route_url',
+                    'subscriber_count',
+                    'emit_count',
+                    'handle_count',
+                    'route_id'
                 ],
                 buildRowCells: (route: Route) => [
                     <RouteRequest route={route.route} />,

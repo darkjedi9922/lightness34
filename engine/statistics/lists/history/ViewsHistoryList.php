@@ -6,22 +6,43 @@ use engine\statistics\stats\ViewStat;
 use engine\statistics\stats\ViewMetaStat;
 use engine\statistics\stats\RouteStat;
 use frame\route\Router;
+use Iterator;
 
 class ViewsHistoryList extends HistoryList
 {
-    public function getStatIdentityClass(): string
+    protected function queryCountAll(): int
     {
-        return RouteStat::class;
+        return Records::from(RouteStat::getTable())->count('id');
     }
 
-    protected function assembleArray(IdentityIterator $list): array
+    protected function getSqlQuery(
+        string $sortField,
+        string $sortOrder,
+        int $offset,
+        int $limit
+    ): string {
+        $routeTable = RouteStat::getTable();
+        $countTable = 'stat_view_counts';
+        return "SELECT
+            $routeTable.id as route_id,
+            $routeTable.url as route_url,
+            $countTable.view_count,
+            $countTable.sum_load,
+            $countTable.status,
+            $routeTable.time
+            FROM $routeTable INNER JOIN $countTable
+                ON $routeTable.id = $countTable.route_id
+            ORDER BY $sortField $sortOrder
+            LIMIT $offset, $limit";
+    }
+
+    protected function assembleArray(Iterator $list): array
     {
         $routes = [];
-        foreach ($list as $routeStat) {
-            /** @var RouteStat $routeStat */
+        foreach ($list as $row) {
             $routeViews = [];
             $viewsIt = new IdentityIterator(
-                Records::from(ViewStat::getTable(), ['route_id' => $routeStat->id])
+                Records::from(ViewStat::getTable(), ['route_id' => $row['route_id']])
                     ->order(['id' => 'ASC'])
                     ->select(),
                 ViewStat::class
@@ -56,9 +77,9 @@ class ViewsHistoryList extends HistoryList
                 ];
             }
             $routes[] = [
-                'route' => (new Router($routeStat->url))->pagename,
+                'route' => (new Router($row['route_url']))->pagename,
                 'views' => $routeViews,
-                'time' => date('d.m.Y H:i', $routeStat->time)
+                'time' => date('d.m.Y H:i', $row['time'])
             ];
         }
 

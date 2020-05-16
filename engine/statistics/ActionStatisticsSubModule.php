@@ -18,6 +18,7 @@ class ActionStatisticsSubModule extends BaseStatisticsSubModule
     private $timer;
     private $routeStat;
     private $collectActionError;
+    private $endActionCollector;
 
     public function __construct(
         string $name,
@@ -30,14 +31,15 @@ class ActionStatisticsSubModule extends BaseStatisticsSubModule
         $this->timer = new TimeStat;
         $this->routeStat = $routeStat;
         $this->collectActionError = new CollectActionError(
-            $this->stat,
-            $this->timer
-        );
+            $this->stat, $this->timer);
+        $this->endActionCollector = new EndCollectActionStat(
+            $this->stat, $this->timer);
     }
 
     public function clearStats()
     {
         Records::from(ActionStat::getTable())->delete();
+        Records::from('stat_action_counts')->delete();
     }
 
     public function endCollecting()
@@ -45,7 +47,8 @@ class ActionStatisticsSubModule extends BaseStatisticsSubModule
         (new EndCollectAppStat(
             $this->stat,
             $this->routeStat,
-            $this->collectActionError
+            $this->collectActionError,
+            $this->endActionCollector
         ))->exec();
     }
 
@@ -56,10 +59,7 @@ class ActionStatisticsSubModule extends BaseStatisticsSubModule
                 $this->stat,
                 $this->timer
             ),
-            Action::EVENT_END => new EndCollectActionStat(
-                $this->stat,
-                $this->timer
-            ),
+            Action::EVENT_END => $this->endActionCollector,
             Errors::EVENT_ERROR => $this->collectActionError
         ];
     }

@@ -32,12 +32,15 @@ class ViewStatisticsSubModule extends BaseStatisticsSubModule
     {
         Records::from(ViewMetaStat::getTable())->delete();
         Records::from(ViewStat::getTable())->delete();
+        Records::from('stat_view_counts')->delete();
     }
 
     public function endCollecting()
     {
         $routeId = $this->routeStat->getId();
         $stats = $this->viewStartCollector->getViewStats();
+        $sumLoad = 0;
+        $hasErrors = false;
         foreach ($stats as $view) {
             /** @var View $view */
             /** @var ViewStat $stat */
@@ -71,7 +74,17 @@ class ViewStatisticsSubModule extends BaseStatisticsSubModule
                 $metaStat->view_id = $stat->id;
                 $metaStat->insert();
             }
+
+            $sumLoad += $stat->duration_sec;
+            if ($stat->error !== null) $hasErrors = true;
         }
+
+        Records::from('stat_view_counts')->insert([
+            'route_id' => $routeId,
+            'view_count' => $stats->count(),
+            'sum_load' => $sumLoad,
+            'status' => $stats->count() ? (!$hasErrors ? 1 : 2) : 0
+        ]);
     }
 
     public function getAppEventHandlers(): array

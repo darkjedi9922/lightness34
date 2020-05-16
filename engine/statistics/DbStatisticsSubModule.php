@@ -29,6 +29,7 @@ class DbStatisticsSubModule extends BaseStatisticsSubModule
     public function clearStats()
     {
         Records::from(QueryStat::getTable())->delete();
+        Records::from('stat_query_counts')->delete();
     }
 
     public function endCollecting()

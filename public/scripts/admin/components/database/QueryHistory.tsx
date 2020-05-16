@@ -40,12 +40,12 @@ class QueryHistory extends React.Component<Props> {
                 headers: ['Route', 'Queries', 'Sum load', 'Status', 'Time'],
                 defaultSortColumnIndex: 4,
                 defaultSortOrder: SortOrder.DESC,
-                buildPureValuesToSort: (route: QueryRoute) => [
-                    route.route,
-                    route.queries.length,
-                    this.calcSumLoad(route),
-                    this.getStatus(route),
-                    route.time
+                mapHeadersToSortFields: [
+                    'route_url',
+                    'query_count',
+                    'sum_load',
+                    'status',
+                    'route_id'
                 ],
                 buildRowCells: (route: QueryRoute) => [
                     <RouteRequest route={route.route}></RouteRequest>,

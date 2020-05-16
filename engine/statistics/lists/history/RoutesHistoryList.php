@@ -5,19 +5,32 @@ use frame\database\Records;
 use frame\lists\iterators\IdentityIterator;
 use engine\statistics\stats\DynamicRouteParam;
 use frame\route\Router;
+use Iterator;
 
 class RoutesHistoryList extends HistoryList
 {
-    public function getStatIdentityClass(): string
+    protected function queryCountAll(): int
     {
-        return RouteStat::class;
+        return Records::from(RouteStat::getTable())->count('id');
     }
 
-    protected function assembleArray(IdentityIterator $list): array
+    protected function getSqlQuery(
+        string $sortField,
+        string $sortOrder,
+        int $offset,
+        int $limit
+    ): string {
+        $table = RouteStat::getTable();
+        return "SELECT * FROM $table
+            ORDER BY $sortField $sortOrder
+            LIMIT $offset, $limit";
+    }
+
+    protected function assembleArray(Iterator $list): array
     {
         $routes = [];
-        foreach ($list as $route) {
-            /** @var RouteStat $route */
+        foreach ($list as $row) {
+            $route = new RouteStat($row);
             $router = new Router($route->url);
             $type = null;
             switch ($route->type) {

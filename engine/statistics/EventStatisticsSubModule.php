@@ -42,6 +42,7 @@ class EventStatisticsSubModule extends BaseStatisticsSubModule
         Records::from('stat_event_emit_handles')->delete();
         Records::from(EventEmitStat::getTable())->delete();
         Records::from(EventSubscriberStat::getTable())->delete();
+        Records::from('stat_event_counts')->delete();
     }
 
     public function endCollecting()

@@ -26,14 +26,9 @@ class RouteHistory extends React.Component {
             tableBuilder={{
                 className: 'routes',
                 headers: ['Path', 'Load', 'Code', 'Time'],
+                mapHeadersToSortFields: ['url', 'duration_sec', 'code', 'id'],
                 defaultSortColumnIndex: 3,
                 defaultSortOrder: SortOrder.DESC,
-                buildPureValuesToSort: (route: Route) => [
-                    route.route,
-                    route.loadSeconds,
-                    route.code,
-                    route.time
-                ],
                 buildRowCells: (route: Route) => [
                     <>
                         <RouteRequest route={route.route} />

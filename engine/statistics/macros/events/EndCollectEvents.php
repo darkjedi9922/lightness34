@@ -12,6 +12,7 @@ class EndCollectEvents extends BaseStatCollector
     private $subscriberCollector;
     private $emitCollector;
     private $startHandleCollector;
+    private $handleCount = 0;
 
     public function __construct(
         RouteStat $routeStat,
@@ -28,9 +29,17 @@ class EndCollectEvents extends BaseStatCollector
     protected function collect(...$args)
     {
         $routeId = $this->routeStat->getId();
+        $subscribers = $this->subscriberCollector->getSubscriberStats();
         $this->insertSubscribers($routeId);
         $this->insertEmits($routeId);
         $this->insertHandles();
+        
+        Records::from('stat_event_counts')->insert([
+            'route_id' => $routeId,
+            'subscriber_count' => $subscribers->count(),
+            'emit_count' => count($this->emitCollector->getEmits()),
+            'handle_count' => $this->handleCount
+        ]);
     }
 
     private function insertSubscribers(int $routeId)
@@ -77,6 +86,7 @@ class EndCollectEvents extends BaseStatCollector
                     'subscriber_id' => $subscribers[$emitHandles[$i][0]]->id,
                     'duration_sec' => $emitHandles[$i][1]
                 ]);
+                $this->handleCount += 1;
             }
         }
     }

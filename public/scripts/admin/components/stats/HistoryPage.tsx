@@ -10,11 +10,11 @@ import parseUrl from 'url-parse';
 interface TableBuilder {
     className?: string,
     headers: string[],
+    mapHeadersToSortFields: string[],
     defaultSortColumnIndex: number,
     defaultSortOrder: SortOrder,
-    buildPureValuesToSort: (dataItem: object) => (number|string)[],
     buildRowCells: (dataItem: object) => any[],
-    buildRowDetails: (dataItem: object) => DetailsProps[]
+    buildRowDetails: (dataItem: object) => DetailsProps[],
 }
 
 interface ApiResult {
@@ -31,38 +31,33 @@ interface Props {
 
 interface State {
     isLoaded: boolean,
+    isUpdating: boolean,
     data: object[],
     countAll: number,
-    pagerHtml: string
+    pagerHtml: string,
+    sortField: string,
+    sortOrder: SortOrder
 }
 
 class HistoryPage extends React.Component<Props, State> {
     public constructor(props: Props) {
         super(props);
+        const tb = props.tableBuilder;
         this.state = {
             isLoaded: false,
+            isUpdating: false,
             data: [],
             countAll: 0,
-            pagerHtml: null
+            pagerHtml: null,
+            sortField: tb.mapHeadersToSortFields[tb.defaultSortColumnIndex],
+            sortOrder: props.tableBuilder.defaultSortOrder
         }
+
+        this.onTableSort = this.onTableSort.bind(this);
     }
 
     public componentDidMount(): void {
-        $.ajax({
-            url: this.props.apiDataUrl,
-            data: {
-                p: parseUrl(window.location.search, true).query['p'] || 1
-            },
-            dataType: 'json',
-            success: (result: ApiResult) => {
-                this.setState({
-                    data: result.list,
-                    countAll: result.countAll,
-                    pagerHtml: result.pagerHtml,
-                    isLoaded: true
-                })
-            }
-        })
+        this.loadValues();
     }
 
     public render(): React.ReactNode {
@@ -89,14 +84,20 @@ class HistoryPage extends React.Component<Props, State> {
                     <Table
                         className={builder.className}
                         collapsable={true}
-                        headers={builder.headers}
+                        headers={builder.headers.map((header, index) => {
+                            const sortFields = props.tableBuilder.mapHeadersToSortFields;
+                            const isUpdating = state.isUpdating && index === sortFields.indexOf(state.sortField);
+                            return <span>
+                                {header} {isUpdating && <i className="icon-spin1 animate-spin table__loading"/>}
+                            </span>
+                        })}
                         sort={{
-                            defaultCellIndex: builder.defaultSortColumnIndex,
-                            defaultOrder: builder.defaultSortOrder,
-                            isAlreadySorted: true
+                            defaultCellIndex: props.tableBuilder.mapHeadersToSortFields.indexOf(state.sortField),
+                            defaultOrder: state.sortOrder,
+                            isAlreadySorted: true,
+                            onSort: this.onTableSort
                         }}
                         items={state.data.map((item) => ({
-                            pureCellsToSort: builder.buildPureValuesToSort(item),
                             cells: builder.buildRowCells(item),
                             details: builder.buildRowDetails(item)
                         }))}
@@ -104,6 +105,36 @@ class HistoryPage extends React.Component<Props, State> {
                 </div>}
             </LoadingContent>
         </>
+    }
+
+    private loadValues(): void {
+        $.ajax({
+            url: this.props.apiDataUrl,
+            data: {
+                sort: this.state.sortField,
+                order: this.state.sortOrder,
+                p: parseUrl(window.location.search, true).query['p'] || 1
+            },
+            dataType: 'json',
+            success: (result: ApiResult) => {
+                this.setState({
+                    data: result.list,
+                    countAll: result.countAll,
+                    pagerHtml: result.pagerHtml,
+                    isLoaded: true,
+                    isUpdating: false
+                })
+            }
+        })
+    }
+
+    private onTableSort(column: number, order: SortOrder): void {
+        if (this.state.isUpdating) return;
+        this.setState({
+            isUpdating: true,
+            sortField: this.props.tableBuilder.mapHeadersToSortFields[column],
+            sortOrder: order
+        }, this.loadValues.bind(this));
     }
 }
 

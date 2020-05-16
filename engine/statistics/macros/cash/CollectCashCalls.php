@@ -34,6 +34,7 @@ class CollectCashCalls extends BaseStatCollector
             $valueStat->class = str_replace('\\', '\\\\', $class);
             $valueStat->value_key = $key;
             $valueStat->call_count = 1;
+            $valueStat->init_error = null;
 
             // Вставляем до попытки создать. Если при создании кеша будут ошибки,
             // stat не будет вставлен в массив потом, следовательно, ошибка не

@@ -90,6 +90,17 @@
         color: $clr-grey;
     }
 
+    &__loading {
+        font-size: 0.9rem;
+        display: inline-flex;
+        justify-content: center;
+
+        &:before {
+            margin: 0;
+            text-align: center;
+        }
+    }
+
     &__details {
         padding: 0 1rem;
         overflow: hidden;

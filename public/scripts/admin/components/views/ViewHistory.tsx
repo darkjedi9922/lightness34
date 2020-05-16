@@ -55,12 +55,12 @@ class ViewHistory extends React.Component<ViewsHistoryProps> {
                 headers: ['Route', 'Views', 'Sum load', 'Status', 'Time'],
                 defaultSortColumnIndex: 4,
                 defaultSortOrder: SortOrder.DESC,
-                buildPureValuesToSort: (route: ViewRoute) => [
-                    route.route,
-                    route.views.length,
-                    this.calcSumLoad(route),
-                    this.getStatus(route),
-                    route.time
+                mapHeadersToSortFields: [
+                    'route_url',
+                    'view_count',
+                    'sum_load',
+                    'status',
+                    'route_id'
                 ],
                 buildRowCells: (route: ViewRoute) => [
                     <RouteRequest route={route.route} />,

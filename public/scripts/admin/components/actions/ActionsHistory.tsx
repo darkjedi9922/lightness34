@@ -60,11 +60,11 @@ class ActionHistory extends React.Component {
                 headers: ['Class', 'Duration', 'Status', 'Time'],
                 defaultSortColumnIndex: 3,
                 defaultSortOrder: SortOrder.DESC,
-                buildPureValuesToSort: (action: ActionStat) => [
-                    action.class,
-                    action.secondDuration,
-                    this.isFail(action) ? 0 : (this.isFatal(action) ? -1 : 1),
-                    action.time
+                mapHeadersToSortFields: [
+                    'class',
+                    'duration_sec',
+                    'status',
+                    'action_id'
                 ],
                 buildRowCells: (action: ActionStat) => [
                     <>{action.class}&nbsp;{action.isAjax && <Label color="yellow">ajax</Label>}</>,
