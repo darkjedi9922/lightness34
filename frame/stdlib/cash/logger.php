@@ -23,6 +23,6 @@ class logger extends CashValue
             $file = $config->{'log.file'};
             $byteLimit = $config->{'log.pageByteLimit'};
             return new PagedLogger(ROOT_DIR . '/' . $file, $byteLimit);
-        })
+        });
     }
 }
