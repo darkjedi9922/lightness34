@@ -3,7 +3,7 @@
 use engine\articles\Article;
 use engine\users\cash\user_me;
 use engine\messages\Message;
-use frame\tools\Logger;
+use frame\tools\logging\SimpleLogger;
 use frame\tools\trackers\read\ReadLimitedProgressTracker as Tracker;
 use engine\users\cash\my_rights;
 use engine\comments\Comment;
@@ -22,7 +22,7 @@ if (my_rights::get('articles/comments')->can('see-new-list'))
 $adminRights = my_rights::get('admin');
 if ($adminRights->can('see-logs')) {
     $logFile = config::get('core')->{'log.file'};
-    $logger = new Logger($logFile);
+    $logger = new SimpleLogger($logFile);
     $logTracker = new Tracker('log', crc32($logFile), count($logger->read()), $me->id);
     $logNewRecords = $logTracker->loadUnreaded();
 }

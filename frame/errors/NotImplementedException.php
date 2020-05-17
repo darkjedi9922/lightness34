@@ -1,6 +1,6 @@
 <?php namespace frame\errors;
 
-use frame\tools\Logger;
+use frame\tools\logging\Logger;
 
 class NotImplementedException extends \Exception implements LogLevel
 {

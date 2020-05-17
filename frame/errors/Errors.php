@@ -6,7 +6,7 @@ use frame\tools\Debug;
 use frame\stdlib\cash\config;
 use frame\stdlib\cash\logger;
 use frame\errors\handlers\ErrorHandler;
-use frame\tools\Logger as FrameLogger;
+use frame\tools\logging\SimpleLogger as FrameLogger;
 
 class Errors extends Driver
 {

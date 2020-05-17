@@ -1,16 +1,17 @@
 <?php
 
 use frame\tools\files\Directory;
-use frame\tools\Logger;
+use frame\tools\logging\Logger;
 use frame\tools\files\File;
 use PHPUnit\Framework\TestCase;
+use frame\tools\logging\SimpleLogger;
 
 class LoggerTest extends TestCase
 {
     public function testCreatesLogFileIfItDoesNotExist()
     {
         $file = ROOT_DIR . '/tests/tools/examples/non-existence-dir/log.txt';
-        $logger = new Logger($file);
+        $logger = new SimpleLogger($file);
         $this->assertFileExists($file);
         Directory::deleteNonEmpty('non-existence-dir');
     }
@@ -18,7 +19,7 @@ class LoggerTest extends TestCase
     public function testWritesAndReadsRecords()
     {
         $file = ROOT_DIR . '/tests/tools/examples/new-log.txt';
-        $logger = new Logger($file);
+        $logger = new SimpleLogger($file);
         
         $eol = PHP_EOL;
         $messageOne = 'Some message text';

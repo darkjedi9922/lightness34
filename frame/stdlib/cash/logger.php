@@ -1,10 +1,10 @@
 <?php namespace frame\stdlib\cash;
 
 use frame\cash\CashValue;
-use frame\tools\Logger as FrameLogger;
 use frame\stdlib\cash\config;
 use frame\cash\CashStorage;
 use frame\stdlib\drivers\cash\StaticCashStorage;
+use frame\tools\logging\SimpleLogger;
 
 class logger extends CashValue
 {
@@ -14,13 +14,14 @@ class logger extends CashValue
     }
 
     /**
-     * @return FrameLogger
+     * @return \frame\tools\logging\Logger
      */
     public static function get()
     {
         return self::cash('app-logger', function() {
-            $file = config::get('core')->{'log.file'};
-            return new FrameLogger(ROOT_DIR . '/' . $file);
-        });
+            $config = config::get('core');
+            $file = $config->{'log.file'};
+            return new SimpleLogger(ROOT_DIR . '/' . $file);
+        })
     }
 }
