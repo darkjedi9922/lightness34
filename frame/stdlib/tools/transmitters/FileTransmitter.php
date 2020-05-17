@@ -49,6 +49,10 @@ class FileTransmitter extends DataTransmitter
         return $this->data;
     }
 
+    /**
+     * Перезагружает содержимое файла.
+     * При этом, все сделанные изменения стираются.
+     */
     public function reload()
     {
         if (file_exists($this->file)) {
