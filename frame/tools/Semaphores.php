@@ -38,4 +38,16 @@ class Semaphores
         if ($_isSemaphoresSupported) return sem_release($semId);
         return flock($semId, LOCK_UN);
     }
+
+    /**
+     * Возвращаемое значение равно возвращаемому значению коллбека (если оно есть).
+     */
+    public static function synchronize(string $key, bool $wait, callable $callback)
+    {
+        $sem = self::get(crc32($key));
+        if (!$sem || !self::acquire($sem, !$wait)) return;
+        $result = $callback();
+        self::release($sem);
+        return $result;
+    }
 }
