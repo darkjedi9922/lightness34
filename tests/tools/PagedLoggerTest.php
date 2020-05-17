@@ -12,16 +12,16 @@ class PagedLoggerTest extends TestCase
     public function testWritesToNewFileWhenByteLimitHasPassed()
     {
         $byteLimit = 1;
-        $currentFile = "{$this->file}.txt";
+        $baseFile = "{$this->file}.txt";
+        $firstFile = "{$this->file}.1.txt";
 
-        $this->assertFileNotExists($currentFile);
-        $logger = new PagedLogger($currentFile, $byteLimit);
+        $this->assertFileNotExists($firstFile);
+        $logger = new PagedLogger($baseFile, $byteLimit);
         $logger->write(Logger::TESTING, '1');
-        $this->assertFileExists($currentFile);
-        $this->assertEquals(['1'], $this->getLogMessages($currentFile));
+        $this->assertFileExists($firstFile);
+        $this->assertEquals(['1'], $this->getLogMessages($firstFile));
         
-        $logLastModificationTime = filemtime($currentFile);
-        $oldFile = "{$this->file}.$logLastModificationTime.txt";
+        $newFile = "{$this->file}.2.txt";
 
         /**
          * PHP кеширует размер файла, поэтому в данном случае кеш нужно очистить.
@@ -29,16 +29,17 @@ class PagedLoggerTest extends TestCase
          */
         clearstatcache();
 
-        $this->assertFileNotExists($oldFile);
+        $this->assertFileNotExists($newFile);
         $logger->write(Logger::TESTING, '2');
-        $this->assertFileExists($oldFile);
-        $this->assertFileExists($currentFile);
+        $this->assertFileExists($newFile);
+        $this->assertFileExists($firstFile);
 
-        $this->assertEquals(['2'], $this->getLogMessages($currentFile));
-        $this->assertEquals(['1'], $this->getLogMessages($oldFile));
+        $this->assertEquals(['2'], $this->getLogMessages($newFile));
+        $this->assertEquals(['1'], $this->getLogMessages($firstFile));
 
-        File::delete($currentFile);
-        File::delete($oldFile);
+        File::delete($firstFile);
+        File::delete($newFile);
+        File::delete(ROOT_DIR . '/runtime/current_log');
     }
 
     /**

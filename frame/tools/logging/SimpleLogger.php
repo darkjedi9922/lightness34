@@ -61,6 +61,11 @@ class SimpleLogger implements Logger
         return $result;
     }
 
+    public function getFile(): string
+    {
+        return $this->filename;
+    }
+
     private $handle = null;
     private $filename = null;
 }
