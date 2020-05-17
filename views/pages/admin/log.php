@@ -8,14 +8,16 @@ use frame\tools\Init;
 use frame\tools\JsonEncoder;
 use frame\tools\Logger;
 use frame\tools\trackers\read\ReadLimitedProgressTracker as Tracker;
+use frame\stdlib\cash\config;
 
 Init::accessRight('admin', 'see-logs');
 
 $me = user_me::get();
 $rights = my_rights::get('admin');
-$clear = new ViewAction(EmptyLogAction::class, ['file' => 'log.txt']);
-$logRecords = (new Logger('log.txt'))->read();
-$tracker = new Tracker('log', crc32('log.txt'), count($logRecords), $me->id);
+$logFile = config::get('core')->{'log.file'};
+$clear = new ViewAction(EmptyLogAction::class, ['file' => $logFile]);
+$logRecords = (new Logger($logFile))->read();
+$tracker = new Tracker('log', crc32($logFile), count($logRecords), $me->id);
 
 $recordsProps = [];
 foreach ($logRecords as $record) {

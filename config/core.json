@@ -2,7 +2,7 @@
     "site.name": "Lightness 3.4 Framework",
     "mode.debug": true,
     "log.enabled": true,
-    "log.file": "log.txt",
+    "log.file": "runtime/logs/log.txt",
     "errors.errorPage": null,
     "errors.403.page": "403",
     "errors.404.page": "404"

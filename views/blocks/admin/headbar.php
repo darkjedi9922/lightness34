@@ -7,6 +7,7 @@ use frame\tools\Logger;
 use frame\tools\trackers\read\ReadLimitedProgressTracker as Tracker;
 use engine\users\cash\my_rights;
 use engine\comments\Comment;
+use frame\stdlib\cash\config;
 
 $me = user_me::get();
 
@@ -20,8 +21,9 @@ if (my_rights::get('articles/comments')->can('see-new-list'))
 
 $adminRights = my_rights::get('admin');
 if ($adminRights->can('see-logs')) {
-    $logger = new Logger(ROOT_DIR . '/log.txt');
-    $logTracker = new Tracker('log', crc32('log.txt'), count($logger->read()), $me->id);
+    $logFile = config::get('core')->{'log.file'};
+    $logger = new Logger($logFile);
+    $logTracker = new Tracker('log', crc32($logFile), count($logger->read()), $me->id);
     $logNewRecords = $logTracker->loadUnreaded();
 }
 $usersRights = my_rights::get('users');
