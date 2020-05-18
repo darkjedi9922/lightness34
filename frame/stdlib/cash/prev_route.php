@@ -4,7 +4,7 @@ use frame\cash\CashValue;
 use frame\route\Request;
 use frame\route\Router;
 use frame\cash\CashStorage;
-use frame\stdlib\drivers\cash\StaticCashStorage;
+use frame\cash\StaticCashStorage;
 
 /**
  * Возвращает роутер предыдущего запроса. Предыдущий запрос всегда одинаковый 

@@ -3,7 +3,7 @@
 use frame\cash\CashValue;
 use engine\users\Group;
 use frame\cash\CashStorage;
-use frame\stdlib\drivers\cash\StaticCashStorage;
+use frame\cash\StaticCashStorage;
 
 class my_group extends CashValue
 {

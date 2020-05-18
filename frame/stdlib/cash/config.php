@@ -4,7 +4,7 @@ use frame\cash\CashValue;
 use frame\config\ConfigRouter;
 use frame\config\NamedConfig;
 use frame\cash\CashStorage;
-use frame\stdlib\drivers\cash\StaticCashStorage;
+use frame\cash\StaticCashStorage;
 use Exception;
 
 class config extends CashValue

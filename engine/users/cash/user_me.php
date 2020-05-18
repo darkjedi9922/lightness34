@@ -6,7 +6,7 @@ use engine\users\User;
 use engine\users\Group;
 use frame\tools\Client;
 use frame\cash\CashStorage;
-use frame\stdlib\drivers\cash\StaticCashStorage;
+use frame\cash\StaticCashStorage;
 
 class user_me extends CashValue
 {

@@ -5,7 +5,7 @@ use frame\database\Records;
 use frame\modules\Modules;
 use engine\users\User;
 use frame\tools\trackers\read\ReadStateTracker;
-use frame\stdlib\drivers\cash\StaticCashStorage;
+use frame\cash\StaticCashStorage;
 use frame\database\SqlDriver;
 
 class Comment extends Identity

@@ -5,7 +5,7 @@ use engine\articles\Article;
 use engine\users\User;
 use engine\users\cash\user_me;
 use frame\cash\CashStorage;
-use frame\stdlib\drivers\cash\StaticCashStorage;
+use frame\cash\StaticCashStorage;
 
 /**
  * Является ли статья новой для пользователя (не читал ли он ее еще).

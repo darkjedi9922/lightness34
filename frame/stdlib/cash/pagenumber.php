@@ -2,7 +2,7 @@
 
 use frame\cash\CashValue;
 use frame\cash\CashStorage;
-use frame\stdlib\drivers\cash\StaticCashStorage;
+use frame\cash\StaticCashStorage;
 
 /**
  * Номер страницы по счету в списке. Определяется get параметром "p".

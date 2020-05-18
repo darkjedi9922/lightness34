@@ -1,4 +1,4 @@
-<?php namespace frame\stdlib\drivers\cash;
+<?php namespace frame\cash;
 
 use frame\cash\CashStorage;
 

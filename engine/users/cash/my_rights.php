@@ -5,7 +5,7 @@ use frame\modules\Modules;
 use frame\auth\UserRights;
 use engine\users\cash\user_me;
 use frame\cash\CashStorage;
-use frame\stdlib\drivers\cash\StaticCashStorage;
+use frame\cash\StaticCashStorage;
 
 class my_rights extends CashValue
 {

@@ -3,7 +3,7 @@
 use frame\cash\CashValue;
 use frame\stdlib\cash\config;
 use frame\cash\CashStorage;
-use frame\stdlib\drivers\cash\StaticCashStorage;
+use frame\cash\StaticCashStorage;
 
 class logger extends CashValue
 {

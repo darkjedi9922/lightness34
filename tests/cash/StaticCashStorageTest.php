@@ -1,6 +1,6 @@
 <?php
 use PHPUnit\Framework\TestCase;
-use frame\stdlib\drivers\cash\StaticCashStorage;
+use frame\cash\StaticCashStorage;
 use frame\core\Core;
 
 class StaticCashStorageTest extends TestCase
