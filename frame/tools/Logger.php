@@ -1,11 +1,24 @@
-<?php namespace frame\tools\logging;
+<?php namespace frame\tools;
 
-use frame\tools\Client;
 use frame\tools\files\File;
+use frame\tools\Client;
 use frame\lists\base\FileLineList;
 
-class SimpleLogger implements Logger
+class Logger
 {
+    const EMERGENCY = 'Emergency';
+    const ALERT     = 'Alert';
+    const CRITICAL  = 'Critical';
+    const ERROR     = 'Error';
+    const WARNING   = 'Warning';
+    const NOTICE    = 'Notice';
+    const INFO      = 'Info';
+    const DEBUG     = 'Debug';
+    const TESTING   = 'Testing';
+
+    private $handle = null;
+    private $filename = null;
+
     public function __construct($filename)
     {
         if (!File::exists($filename)) File::createFullPath($filename);
@@ -14,7 +27,7 @@ class SimpleLogger implements Logger
         $this->filename = $filename;
     }
 
-    public function write($type, $message)
+    public function write(string $type, string $message)
     {
         $date = date('d.m.Y H:i');
         $ip = Client::isCli() ? 'CLI' : Client::getIp();
@@ -32,6 +45,15 @@ class SimpleLogger implements Logger
         fwrite($this->handle, $text);
     }
 
+    /**
+     * Считывает и парсит записи лога и возвращает их в удобном виде с помощью
+     * массива ассоциативных массивов вида [
+     *  'date' => '01.01.2020 12:42',
+     *  'ip' => 'CLI',
+     *  'type' => 'Testing',
+     *  'message' => "Some\nmessage\nwith\several\nlines"
+     * ]
+     */
     public function read(): array
     {
         $result = [];
@@ -65,7 +87,4 @@ class SimpleLogger implements Logger
     {
         return $this->filename;
     }
-
-    private $handle = null;
-    private $filename = null;
 }

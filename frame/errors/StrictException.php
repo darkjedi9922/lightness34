@@ -1,6 +1,6 @@
 <?php namespace frame\errors;
 
-use frame\tools\logging\Logger;
+use frame\tools\Logger;
 
 /**
  * Такие исключения должны игнорировать любые настройки о выводе ошибок

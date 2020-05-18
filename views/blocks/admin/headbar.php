@@ -3,7 +3,7 @@
 use engine\articles\Article;
 use engine\users\cash\user_me;
 use engine\messages\Message;
-use frame\tools\logging\SimpleLogger;
+use frame\tools\Logger;
 use frame\tools\trackers\read\ReadLimitedProgressTracker as Tracker;
 use engine\users\cash\my_rights;
 use engine\comments\Comment;
@@ -23,7 +23,7 @@ $adminRights = my_rights::get('admin');
 if ($adminRights->can('see-logs')) {
     $date = date('d-m-Y');
     $logFile = config::get('core')->{'log.dir'} . "/$date.txt";
-    $logger = new SimpleLogger($logFile);
+    $logger = new Logger($logFile);
     $logTracker = new Tracker('log', crc32($logFile), count($logger->read()), $me->id);
     $logNewRecords = $logTracker->loadUnreaded();
 }
