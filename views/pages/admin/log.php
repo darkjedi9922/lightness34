@@ -1,7 +1,5 @@
 <?php /** @var frame\views\Page $self */
 
-use engine\admin\actions\EmptyLogAction;
-use frame\actions\ViewAction;
 use engine\users\cash\my_rights;
 use engine\users\cash\user_me;
 use frame\tools\Init;
@@ -13,9 +11,8 @@ use frame\stdlib\cash\config;
 Init::accessRight('admin', 'see-logs');
 
 $me = user_me::get();
-$rights = my_rights::get('admin');
-$logFile = config::get('core')->{'log.file'};
-$clear = new ViewAction(EmptyLogAction::class, ['file' => $logFile]);
+$date = date('d-m-Y');
+$logFile = config::get('core')->{'log.dir'} . "/$date.txt";
 $logRecords = (new SimpleLogger($logFile))->read();
 $tracker = new Tracker('log', crc32($logFile), count($logRecords), $me->id);
 
@@ -26,15 +23,15 @@ foreach ($logRecords as $record) {
         'type' => $record['type'],
         'ip' => !$isCli ? $record['ip'] : null,
         'cli' => $isCli,
-        'date' => $record['date'],
+        'time' => explode(' ', $record['date'])[1],
         'message' => $record['message']
     ];
 }
 
 $logPageProps = [
+    'date' => date('d.m.Y'),
     'records' => $recordsProps,
-    'readedRecords' => $tracker->loadProgress(),
-    'clearLogUrl' => $rights->can('clear-logs') ? $clear->getUrl() : null
+    'readedRecords' => $tracker->loadProgress()
 ];
 $logPageProps = JsonEncoder::forHtmlAttribute($logPageProps);
 

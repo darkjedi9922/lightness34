@@ -3,21 +3,21 @@ import Breadcrumbs from '../common/Breadcrumbs';
 import Table from '../table/Table';
 import Status, { Type } from '../common/Status';
 import Mark from '../common/Mark';
-import { isNil } from 'lodash';
 import classNames from 'classnames';
+import ContentHeader from '../content/ContentHeader';
 
 interface LogRecord {
     type: string,
     ip?: string, // depends on cli flag
     cli: boolean,
-    date: string,
+    time: string,
     message: string
 }
 
 interface Props {
+    date: string,
     records: LogRecord[],
     readedRecords: number,
-    clearLogUrl?: string
 }
 
 class LogPage extends React.Component<Props> {
@@ -25,28 +25,23 @@ class LogPage extends React.Component<Props> {
         const unreadedRecords = this.props.records.length - this.props.readedRecords;
         return (
             <div className="log">
-                <div className="content__header">
+                <ContentHeader>
                     <div className="breadcrumbs-wrapper">
                         <Breadcrumbs items={[{
-                            name: `Лог (${this.props.records.length})`
+                            name: `Лог ${this.props.date} (${this.props.records.length})`
                         }]} />
                         <span className={classNames(
                             "content__count",
-                            {"content__count--yellow": unreadedRecords}
+                            { "content__count--yellow": unreadedRecords }
                         )}>
                             <i className="icon-flash-1"></i>
                             {unreadedRecords}
                         </span>
                     </div>
-                    {!isNil(this.props.clearLogUrl) &&
-                        <a href={this.props.clearLogUrl} className="button">
-                            Очистить лог
-                        </a>
-                    }
-                </div>
+                </ContentHeader>
                 <div className="box box--table">
                     <Table
-                        headers={['Тип', 'IP', 'Дата']}
+                        headers={['Тип', 'IP', 'Время']}
                         items={this.props.records.map((record, index) => ({
                             cells: [
                                 <Mark 
@@ -85,7 +80,7 @@ class LogPage extends React.Component<Props> {
                                     ? <Status type={Type.NONE} message="From CLI" />
                                     : record.ip,
                                 <>
-                                    <span className="log__date">{record.date}</span>
+                                    <span className="log__date">{record.time}</span>
                                     &nbsp;
                                     {index + 1 > this.props.readedRecords
                                         ? <span className="mark mark--red">

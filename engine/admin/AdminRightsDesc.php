@@ -8,8 +8,7 @@ class AdminRightsDesc extends RightsDesc
     {
         return [
             'enter' => 'Enter into admin panel',
-            'see-logs' => 'See logs',
-            'clear-logs' => 'Clear logs'
+            'see-logs' => 'See logs'
         ];
     }
 }

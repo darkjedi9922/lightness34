@@ -21,7 +21,8 @@ if (my_rights::get('articles/comments')->can('see-new-list'))
 
 $adminRights = my_rights::get('admin');
 if ($adminRights->can('see-logs')) {
-    $logFile = config::get('core')->{'log.file'};
+    $date = date('d-m-Y');
+    $logFile = config::get('core')->{'log.dir'} . "/$date.txt";
     $logger = new SimpleLogger($logFile);
     $logTracker = new Tracker('log', crc32($logFile), count($logger->read()), $me->id);
     $logNewRecords = $logTracker->loadUnreaded();

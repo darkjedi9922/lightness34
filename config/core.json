@@ -2,8 +2,7 @@
     "site.name": "Lightness 3.4 Framework",
     "mode.debug": true,
     "log.enabled": true,
-    "log.file": "runtime/logs/log.txt",
-    "log.pageByteLimit": 1048576,
+    "log.dir": "runtime/logs",
     "errors.errorPage": null,
     "errors.403.page": "403",
     "errors.404.page": "404"
