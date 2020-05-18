@@ -17,7 +17,7 @@ class Directory
         return mkdir($path, 0777, true);
     }
 
-    public static function deleteNonEmpty(string $path): bool
+    public static function empty(string $path): bool
     {
         if (!file_exists($path)) return true;
         if (!is_dir($path)) return unlink($path);
@@ -28,6 +28,15 @@ class Directory
                 return false;
         }
 
+        return true;
+    }
+
+    public static function deleteNonEmpty(string $path): bool
+    {
+        if (!file_exists($path)) return true;
+        if (!is_dir($path)) return unlink($path);
+
+        self::empty($path);
         return rmdir($path);
     }
 

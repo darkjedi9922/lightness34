@@ -40,6 +40,22 @@ class DirectoryTest extends TestCase
         $this->assertDirectoryNotExists($path);
     }
 
+    public function testEmptiesDirectory()
+    {
+        $path = ROOT_DIR . '/tests/tools/examples/new-dir';
+        mkdir($path);
+        mkdir("$path/new-subdir");
+        File::create("$path/new-file.txt");
+        File::create("$path/new-subdir/new-subfile.txt");
+
+        Directory::empty($path);
+        $this->assertDirectoryNotExists("$path/new-subdir");
+        $this->assertFileNotExists("$path/new-file.txt");
+
+        Directory::delete($path);
+        $this->assertDirectoryNotExists($path);
+    }
+
     public function newDirPathsProvider()
     {
         return [[
