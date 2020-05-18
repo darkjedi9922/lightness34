@@ -10,6 +10,7 @@ class EndCollectActionStat extends BaseStatCollector
     private $stat;
     private $timer;
     private $action = null;
+    private $hasErrors = false;
 
     public function __construct(ActionStat $stat, TimeStat $timer)
     {
@@ -17,15 +18,16 @@ class EndCollectActionStat extends BaseStatCollector
         $this->timer = $timer;
     }
 
-    public function getAction(): ?Action
+    public function hasActionErrors(): bool
     {
-        return $this->action;
+        return $this->hasErrors;
     }
 
     protected function collect(...$args)
     {
         /** @var Action $action */
         $this->action = $args[0];
+        $this->hasErrors = $this->action->hasErrors();
 
         $this->stat->duration_sec = $this->timer->resultInSeconds();
         $this->updateResultData($this->action);
