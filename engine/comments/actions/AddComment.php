@@ -2,7 +2,8 @@
 
 use frame\actions\ActionBody;
 use engine\comments\Comment;
-use frame\tools\Init;
+use frame\auth\InitAccess;
+use frame\route\InitRoute;
 use frame\modules\Module;
 use engine\comments\CommentsModule;
 use engine\users\cash\user_me;
@@ -41,11 +42,11 @@ class AddComment extends ActionBody
     public function initialize(array $get)
     {
         $this->module = Modules::getDriver()->findById($get['module_id']->get());
-        Init::require($this->module !== null);
-        Init::require(get_class($this->module) === CommentsModule::class);
+        InitRoute::require($this->module !== null);
+        InitRoute::require(get_class($this->module) === CommentsModule::class);
         
         $this->rights = my_rights::get($this->module->getName());
-        Init::access($this->rights->can('add'));
+        InitAccess::access($this->rights->can('add'));
         $this->materialId = $get['material_id']->get();
     }
 

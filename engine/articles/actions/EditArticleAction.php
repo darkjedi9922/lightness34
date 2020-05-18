@@ -4,7 +4,7 @@ use engine\articles\Article;
 use frame\actions\ActionBody;
 use frame\actions\fields\IntegerField;
 use frame\actions\fields\StringField;
-use frame\tools\Init;
+use frame\auth\InitAccess;
 use frame\stdlib\cash\prev_route;
 use frame\stdlib\configs\JsonConfig;
 
@@ -35,7 +35,7 @@ class EditArticleAction extends ActionBody
     public function initialize(array $get)
     {
         $this->article = Article::selectIdentity($get['id']->get());
-        Init::accessOneRight('articles', [
+        InitAccess::accessOneRight('articles', [
             'edit-own' => [$this->article],
             'edit-all' => null
         ]);

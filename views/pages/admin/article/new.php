@@ -1,11 +1,11 @@
 <?php /** @var frame\views\Page $self */
 
-use frame\tools\Init;
+use frame\auth\InitAccess;
 use frame\tools\JsonEncoder;
 use frame\actions\ViewAction;
 use engine\articles\actions\NewArticleAction;
 
-Init::accessRight('articles', 'add');
+InitAccess::accessRight('articles', 'add');
 
 $add = new ViewAction(NewArticleAction::class);
 

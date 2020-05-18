@@ -1,11 +1,11 @@
 <?php namespace engine\admin\actions;
 
-use engine\users\cash\user_me;
 use frame\actions\ActionBody;
 use engine\users\Group;
 use frame\actions\fields\IntegerField;
 use frame\database\Records;
-use frame\tools\Init;
+use frame\auth\InitAccess;
+use frame\route\InitRoute;
 
 /**
  * Параметры:
@@ -28,10 +28,10 @@ class DeleteUserGroupAction extends ActionBody
 
     public function initialize(array $get)
     {
-        Init::accessGroup(Group::ROOT_ID);
+        InitAccess::accessGroup(Group::ROOT_ID);
         $this->group = Group::selectIdentity($get['id']->get());
-        Init::require($this->group !== null);
-        Init::require(!$this->group->isSystem());
+        InitRoute::require($this->group !== null);
+        InitRoute::require(!$this->group->isSystem());
     }
 
     public function succeed(array $post, array $files)

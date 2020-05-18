@@ -1,6 +1,6 @@
 <?php /** @var frame\views\Page $self */
 
-use frame\tools\Init;
+use frame\auth\InitAccess;
 use engine\users\Group;
 use engine\users\cash\user_me;
 use frame\stdlib\cash\config;
@@ -10,7 +10,7 @@ use frame\tools\JsonEncoder;
 
 $me = user_me::get();
 
-Init::access((int) $me->group_id === Group::ROOT_ID);
+InitAccess::access((int) $me->group_id === Group::ROOT_ID);
 
 $config = config::get('core');
 $edit = new ViewAction(EditConfigAction::class, ['name' => 'core']);

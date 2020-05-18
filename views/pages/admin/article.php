@@ -1,6 +1,6 @@
 <?php /** @var frame\views\Page $self */
 
-use frame\tools\Init;
+use frame\route\InitRoute;
 use engine\articles\Article;
 use engine\users\User;
 use frame\stdlib\cash\pagenumber;
@@ -17,10 +17,10 @@ use engine\users\cash\my_rights;
 use engine\articles\actions\DeleteArticleAction;
 use engine\comments\actions\DeleteComment;
 
-$id = (int)Init::requireGet('id');
+$id = (int)InitRoute::requireGet('id');
 $article = Article::selectIdentity($id);
 
-Init::require($article !== null);
+InitRoute::require($article !== null);
 
 $me = user_me::get();
 $author = User::selectIdentity($article->author_id);
@@ -44,7 +44,7 @@ $articleProps = [
     'author' => [
         'login' => $author->login,
         'avatarUrl' => '/' . $author->getAvatarUrl(),
-        'isOnline' => (bool) $author->online
+        'isOnline' => (bool)$author->online
     ],
     'text' => $article->content,
     'date' => date('d.m.Y H:i', $article->date)
@@ -54,7 +54,7 @@ $articleCommentsData = [
     'me' => [
         'avatarUrl' => '/' . $me->getAvatarUrl(),
         'login' => $me->login,
-        'isOnline' => (bool) $me->online
+        'isOnline' => (bool)$me->online
     ],
     // 'moduleId' => Modules::getDriver()->findByName('articles/comments')->getId(),
     // 'materialId' => $article->id,
@@ -84,7 +84,7 @@ foreach ($comments as $comment) {
         'author' => [
             'avatarUrl' => '/' . $commentAuthor->getAvatarUrl(),
             'login' => $commentAuthor->login,
-            'isOnline' => (bool) $commentAuthor->online
+            'isOnline' => (bool)$commentAuthor->online
         ],
         'date' => date('d.m.Y H:i', $comment->date),
         'text' => $comment->text,
@@ -102,9 +102,7 @@ $article->setReaded(user_me::get());
 
 <div class="content__header">
     <div class="breadcrumbs">
-        <a href="/admin/articles?p=<?= $prevPagenumber ?>" 
-            class="breadcrumbs__item breadcrumbs__item--link"
-        >Статьи</a>
+        <a href="/admin/articles?p=<?= $prevPagenumber ?>" class="breadcrumbs__item breadcrumbs__item--link">Статьи</a>
         <span class="breadcrumbs__divisor"></span>
         <span class="breadcrumbs__item breadcrumbs__item--current">ID <?= $article->id ?></span>
     </div>

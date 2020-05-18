@@ -1,7 +1,8 @@
 <?php namespace engine\users\actions;
 
 use frame\actions\ActionBody;
-use frame\tools\Init;
+use frame\auth\InitAccess;
+use frame\route\InitRoute;
 use engine\users\User;
 use frame\actions\fields\IntegerField;
 
@@ -25,8 +26,8 @@ class DeleteAvatarAction extends ActionBody
     public function initialize(array $get)
     {
         $this->user = User::selectIdentity($get['uid']->get());
-        Init::require($this->user !== null);
-        Init::accessOneRight('users', [
+        InitRoute::require($this->user !== null);
+        InitAccess::accessOneRight('users', [
             'edit-all' => [$this->user], 
             'edit-own' => [$this->user]
         ]);

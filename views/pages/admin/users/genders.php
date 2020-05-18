@@ -1,6 +1,6 @@
 <?php /** @var frame\views\Page $self */
 
-use frame\tools\Init;
+use frame\auth\InitAccess;
 use frame\lists\base\IdentityList;
 use engine\users\Gender;
 use frame\actions\ViewAction;
@@ -8,7 +8,7 @@ use engine\admin\actions\AddGender;
 use engine\admin\actions\DeleteGender;
 use frame\tools\JsonEncoder;
 
-Init::accessRight('users', 'configure-genders');
+InitAccess::accessRight('users', 'configure-genders');
 $genders = new IdentityList(Gender::class);
 $addGender = new ViewAction(AddGender::class);
 $deleteGender = new ViewAction(DeleteGender::class);

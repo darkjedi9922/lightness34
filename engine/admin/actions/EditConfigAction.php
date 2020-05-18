@@ -1,7 +1,7 @@
 <?php namespace engine\admin\actions;
 
 use frame\actions\ActionBody;
-use frame\tools\Init;
+use frame\route\InitRoute;
 use frame\actions\fields\StringField;
 use frame\stdlib\configs\JsonConfig;
 
@@ -33,7 +33,7 @@ class EditConfigAction extends ActionBody
     {
         $name = $get['name']->get();
         $this->config = new JsonConfig(ROOT_DIR . '/config/' . $name);
-        Init::require(!empty($this->config->getData()));
+        InitRoute::require(!empty($this->config->getData()));
     }
     
     public function succeed(array $post, array $files)

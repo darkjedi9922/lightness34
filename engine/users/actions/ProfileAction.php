@@ -3,7 +3,7 @@
 use frame\actions\ActionBody;
 use frame\actions\UploadedFile;
 use frame\errors\NotImplementedException;
-use frame\tools\Init;
+use frame\route\InitRoute;
 use engine\users\User;
 use engine\users\Gender;
 use frame\stdlib\cash\config;
@@ -116,7 +116,7 @@ abstract class ProfileAction extends ActionBody
     protected function validateGender(int $id, ?int $current = null): array
     {
         if ($current !== null && $id === $current) return [];
-        Init::require(Gender::selectIdentity($id) !== null);
+        InitRoute::require(Gender::selectIdentity($id) !== null);
         return [];
     }
 

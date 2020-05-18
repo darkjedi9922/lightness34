@@ -1,16 +1,17 @@
 <?php /** @var frame\views\Page $self */
 
-use frame\tools\Init;
+use frame\auth\InitAccess;
+use frame\route\InitRoute;
 use engine\articles\Article;
 use frame\actions\ViewAction;
 use engine\articles\actions\EditArticleAction;
 use frame\tools\JsonEncoder;
 
-$id = (int)Init::requireGet('id');
+$id = (int)InitRoute::requireGet('id');
 $article = Article::selectIdentity($id);
 
-Init::require($article !== null);
-Init::accessOneRight('articles', [
+InitRoute::require($article !== null);
+InitAccess::accessOneRight('articles', [
     'edit-own' => [$article],
     'edit-all' => null
 ]);

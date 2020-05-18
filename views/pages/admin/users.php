@@ -5,10 +5,10 @@ use engine\users\UserPagedList;
 use engine\users\User;
 use engine\users\Group;
 use engine\users\Gender;
-use frame\tools\Init;
+use frame\auth\InitAccess;
 use engine\users\cash\my_rights;
 
-Init::accessRight('users', 'see-list');
+InitAccess::accessRight('users', 'see-list');
 
 $pagenumber = pagenumber::get();
 $users = new UserPagedList($pagenumber);

@@ -5,7 +5,7 @@ use engine\users\Group;
 use frame\actions\ActionBody;
 use frame\actions\fields\StringField;
 use frame\database\Records;
-use frame\tools\Init;
+use frame\auth\InitAccess;
 
 class NewUserGroupAction extends ActionBody
 {
@@ -20,7 +20,7 @@ class NewUserGroupAction extends ActionBody
 
     public function initialize(array $get)
     {
-        Init::access((int)user_me::get()->group_id === Group::ROOT_ID);
+        InitAccess::access((int)user_me::get()->group_id === Group::ROOT_ID);
     }
     
     public function validate(array $post, array $files): array

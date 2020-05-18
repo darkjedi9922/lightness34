@@ -1,6 +1,6 @@
 <?php /** @var frame\views\Page $self */
 
-use frame\tools\Init;
+use frame\auth\InitAccess;
 use engine\users\cash\user_me;
 use engine\messages\actions\DeleteDialog;
 use engine\messages\DialogPagedList;
@@ -12,7 +12,7 @@ use frame\actions\ViewAction;
 use frame\lists\paged\PagerView;
 use frame\tools\JsonEncoder;
 
-Init::accessRight('messages', 'use');
+InitAccess::accessRight('messages', 'use');
 $me = user_me::get();
 $page = pagenumber::get();
 $dialogs = new DialogPagedList($page);

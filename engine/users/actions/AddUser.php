@@ -13,7 +13,7 @@ use frame\actions\ActionBody;
 use frame\actions\UploadedFile;
 use frame\stdlib\cash\prev_route;
 use frame\tools\Client;
-use frame\tools\Init;
+use frame\auth\InitAccess;
 
 class AddUser extends ActionBody
 {
@@ -46,7 +46,7 @@ class AddUser extends ActionBody
 
     public function initialize(array $get)
     {
-        Init::accessRight('users', 'add');
+        InitAccess::accessRight('users', 'add');
     }
 
     public function validate(array $post, array $files): array

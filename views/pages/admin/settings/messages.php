@@ -1,13 +1,13 @@
 <?php /** @var frame\views\Page $self */
 
-use frame\tools\Init;
+use frame\auth\InitAccess;
 use engine\users\Group;
 use frame\stdlib\cash\config;
 use frame\actions\ViewAction;
 use engine\admin\actions\EditConfigAction;
 use frame\tools\JsonEncoder;
 
-Init::accessRight('messages', 'setup');
+InitAccess::accessRight('messages', 'setup');
 $config = config::get('messages');
 $edit = new ViewAction(EditConfigAction::class, ['name' => 'messages']);
 

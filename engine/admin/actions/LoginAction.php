@@ -6,7 +6,7 @@ use engine\users\Encoder;
 use frame\actions\ActionBody;
 use frame\actions\fields\PasswordField;
 use frame\stdlib\configs\JsonConfig;
-use frame\tools\Init;
+use frame\auth\InitAccess;
 
 /**
  * Права: доступ в админ-панель.
@@ -29,7 +29,7 @@ class LoginAction extends ActionBody
 
     public function initialize(array $get)
     {
-        Init::accessRight('admin', 'enter');
+        InitAccess::accessRight('admin', 'enter');
         $this->auth = new Auth;
     }
 

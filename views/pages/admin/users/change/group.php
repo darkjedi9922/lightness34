@@ -1,6 +1,7 @@
 <?php /** @var frame\views\Page $self */
 
-use frame\tools\Init;
+use frame\auth\InitAccess;
+use frame\route\InitRoute;
 use frame\lists\base\IdentityList;
 use engine\users\Group;
 use engine\users\User;
@@ -11,13 +12,13 @@ use frame\tools\JsonEncoder;
 
 $me = user_me::get();
 
-Init::access((int)$me->group_id === Group::ROOT_ID);
+InitAccess::access((int)$me->group_id === Group::ROOT_ID);
 
-$id = (int)Init::requireGet('id');
+$id = (int)InitRoute::requireGet('id');
 $user = User::selectIdentity($id);
 
-Init::require($user !== null);
-Init::require((int)$user->group_id !== Group::ROOT_ID);
+InitRoute::require($user !== null);
+InitRoute::require((int)$user->group_id !== Group::ROOT_ID);
 
 $groups = new IdentityList(Group::class);
 $action = new ViewAction(ChangeUserGroupAction::class, ['uid' => $id]);
@@ -27,7 +28,7 @@ foreach ($groups as $group) {
     if ($group->id === GROUP::GUEST_ID || $group->id === Group::ROOT_ID) continue;
     $groupsProps[] = [
         'label' => $group->name,
-        'value' => (string) $group->id
+        'value' => (string)$group->id
     ];
 }
 
@@ -38,7 +39,7 @@ $formProps = [
         'type' => 'radio',
         'name' => 'group_id',
         'values' => $groupsProps,
-        'currentValue' => (string) $user->group_id,
+        'currentValue' => (string)$user->group_id,
         'short' => true
     ]],
     'buttonText' => 'Сохранить'

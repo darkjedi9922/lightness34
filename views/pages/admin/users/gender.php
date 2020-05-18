@@ -1,16 +1,17 @@
 <?php /** @var frame\views\Page $self */
 
-use frame\tools\Init;
+use frame\auth\InitAccess;
+use frame\route\InitRoute;
 use engine\users\Gender;
 use frame\actions\ViewAction;
 use engine\admin\actions\EditGender;
 use frame\tools\JsonEncoder;
 
-Init::accessRight('users', 'configure-genders');
-$id = (int)Init::requireGet('id');
+InitAccess::accessRight('users', 'configure-genders');
+$id = (int)InitRoute::requireGet('id');
 $gender = Gender::selectIdentity($id);
 
-Init::require($gender !== null);
+InitRoute::require($gender !== null);
 
 $edit = new ViewAction(EditGender::class, ['id' => $id]);
 

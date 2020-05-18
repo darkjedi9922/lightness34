@@ -2,8 +2,8 @@
 
 use frame\actions\ActionBody;
 use engine\users\Gender;
-use frame\tools\Init;
-use engine\users\Group;
+use frame\auth\InitAccess;
+use frame\route\InitRoute;
 use frame\actions\fields\IntegerField;
 use frame\actions\fields\StringField;
 
@@ -37,9 +37,9 @@ class EditGender extends ActionBody
 
     public function initialize(array $get)
     {
-        Init::accessRight('users', 'configure-genders');
+        InitAccess::accessRight('users', 'configure-genders');
         $this->gender = Gender::selectIdentity($get['id']->get());
-        Init::require($this->gender !== null);
+        InitRoute::require($this->gender !== null);
     }
 
     public function validate(array $post, array $files)

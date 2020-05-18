@@ -1,7 +1,8 @@
 <?php namespace engine\users\actions;
 
 use frame\actions\ActionBody;
-use frame\tools\Init;
+use frame\auth\InitAccess;
+use frame\route\InitRoute;
 use engine\users\cash\user_me;
 use engine\users\Group;
 use engine\users\User;
@@ -36,10 +37,10 @@ class ChangeUserGroupAction extends ActionBody
     public function initialize(array $get)
     {
         $me = user_me::get();
-        Init::access((int) $me->group_id === Group::ROOT_ID);
+        InitAccess::access((int) $me->group_id === Group::ROOT_ID);
         $this->user = User::selectIdentity($get['uid']->get());
-        Init::require($this->user !== null);
-        Init::require($this->user->group_id !== Group::ROOT_ID);
+        InitRoute::require($this->user !== null);
+        InitRoute::require($this->user->group_id !== Group::ROOT_ID);
     }
 
     public function validate(array $post, array $files): array
@@ -47,9 +48,9 @@ class ChangeUserGroupAction extends ActionBody
         $id = $post['group_id']->get();
         if ($id !== $this->user->group_id) {
             $group = Group::selectIdentity($id);
-            Init::require($group !== null);
-            Init::require($group->id !== Group::GUEST_ID);
-            Init::require($group->id !== Group::ROOT_ID);
+            InitRoute::require($group !== null);
+            InitRoute::require($group->id !== Group::GUEST_ID);
+            InitRoute::require($group->id !== Group::ROOT_ID);
         }
 
         return [];

@@ -4,7 +4,7 @@ use frame\actions\ActionBody;
 use frame\actions\fields\BooleanField;
 use frame\actions\fields\IntegerField;
 use frame\stdlib\configs\JsonConfig;
-use frame\tools\Init;
+use frame\auth\InitAccess;
 
 class EditConfig extends ActionBody
 {
@@ -18,7 +18,7 @@ class EditConfig extends ActionBody
 
     public function initialize(array $get)
     {
-        Init::accessRight('stat', 'configure');
+        InitAccess::accessRight('stat', 'configure');
     }
 
     public function succeed(array $post, array $files)

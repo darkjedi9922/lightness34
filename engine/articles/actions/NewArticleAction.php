@@ -4,7 +4,7 @@ use engine\articles\Article;
 use engine\users\cash\user_me;
 use frame\actions\ActionBody;
 use frame\actions\fields\StringField;
-use frame\tools\Init;
+use frame\auth\InitAccess;
 use frame\stdlib\cash\prev_route;
 use frame\stdlib\configs\JsonConfig;
 
@@ -33,7 +33,7 @@ class NewArticleAction extends ActionBody
 
     public function initialize(array $get)
     {
-        Init::accessRight('articles', 'add');
+        InitAccess::accessRight('articles', 'add');
     }
 
     public function validate(array $post, array $files): array

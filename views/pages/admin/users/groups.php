@@ -5,10 +5,10 @@ use frame\actions\ViewAction;
 use engine\users\Group;
 use engine\admin\actions\NewUserGroupAction;
 use frame\lists\base\IdentityList;
-use frame\tools\Init;
+use frame\auth\InitAccess;
 use frame\tools\JsonEncoder;
 
-Init::accessGroup(Group::ROOT_ID);
+InitAccess::accessGroup(Group::ROOT_ID);
 $groups = new IdentityList(Group::class);
 $newGroup  = new ViewAction(NewUserGroupAction::class);
 $delGroup  = new ViewAction(DeleteUserGroupAction::class);

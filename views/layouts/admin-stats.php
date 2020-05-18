@@ -1,4 +1,4 @@
 <?php /** @var frame\views\Layout $self */
-use frame\tools\Init;
-Init::accessRight('stat', 'see');
+use frame\auth\InitAccess;
+InitAccess::accessRight('stat', 'see');
 $self->loadChild()->show();

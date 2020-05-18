@@ -1,7 +1,7 @@
 <?php /** @var frame\views\DynamicPage $self */
 
 use engine\users\User;
-use frame\tools\Init;
+use frame\route\InitRoute;
 use engine\users\Gender;
 use engine\users\Group;
 use engine\users\cash\my_rights;
@@ -13,7 +13,7 @@ use frame\tools\JsonEncoder;
 $login = $self->getArgument(0);
 $profile = User::select(['login' => $login]);
 
-Init::require($profile !== null);
+InitRoute::require($profile !== null);
 
 $gender = Gender::selectIdentity($profile->gender_id);
 $group = Group::selectIdentity($profile->group_id);
@@ -46,7 +46,7 @@ $pageProps = [
             'edit-all' => [$profile],
             'edit-own' => [$profile]
         ]),
-        'canChangeGroup' => $me->group_id === Group::ROOT_ID 
+        'canChangeGroup' => $me->group_id === Group::ROOT_ID
             && $group->id !== Group::ROOT_ID,
         'canUseMessages' => $messagesRights->can('use')
     ],

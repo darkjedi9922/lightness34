@@ -1,13 +1,13 @@
 <?php /** @var frame\views\Page $self */
 
 use engine\statistics\actions\ClearAllStats;
-use frame\tools\Init;
+use frame\auth\InitAccess;
 use frame\stdlib\cash\config;
 use frame\actions\ViewAction;
 use engine\statistics\actions\EditConfig;
 use frame\tools\JsonEncoder;
 
-Init::accessRight('stat', 'configure');
+InitAccess::accessRight('stat', 'configure');
 
 $config = config::get('statistics');
 $edit = new ViewAction(EditConfig::class, ['name' => 'statistics']);

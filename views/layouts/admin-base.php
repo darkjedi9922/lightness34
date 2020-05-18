@@ -1,10 +1,10 @@
 <?php /** @var frame\views\Layout $self */
 
 use engine\admin\Auth;
-use frame\tools\Init;
+use frame\auth\InitAccess;
 use frame\views\Page;
 
-Init::accessRight('admin', 'enter');
+InitAccess::accessRight('admin', 'enter');
 
 $auth = new Auth;
 

@@ -1,7 +1,8 @@
 <?php /** @var frame\views\Page $self */
 
 use frame\stdlib\cash\config;
-use frame\tools\Init;
+use frame\auth\InitAccess;
+use frame\route\InitRoute;
 use engine\users\User;
 use frame\lists\base\IdentityList;
 use engine\users\Gender;
@@ -9,11 +10,11 @@ use engine\users\actions\ProfileEditAction;
 use frame\actions\ViewAction;
 use frame\tools\JsonEncoder;
 
-$uid = (int)Init::requireGet('id');
+$uid = (int)InitRoute::requireGet('id');
 $user = User::selectIdentity($uid);
 
-Init::require($user !== null);
-Init::accessOneRight('users', ['edit-all' => [$user], 'edit-own' => [$user]]);
+InitRoute::require($user !== null);
+InitAccess::accessOneRight('users', ['edit-all' => [$user], 'edit-own' => [$user]]);
 
 $genders = new IdentityList(Gender::class);
 $action = new ViewAction(ProfileEditAction::class, ['id' => $uid]);

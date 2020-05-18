@@ -4,7 +4,8 @@ use frame\actions\ActionBody;
 use frame\actions\fields\IntegerField;
 use engine\comments\Comment;
 use engine\comments\CommentsModule;
-use frame\tools\Init;
+use frame\auth\InitAccess;
+use frame\route\InitRoute;
 use frame\modules\Modules;
 use engine\users\cash\my_rights;
 
@@ -25,14 +26,14 @@ class DeleteComment extends ActionBody
         /** @var IntegerField $id */
         $id = $get['id'];
         $comment = Comment::selectIdentity($id->get());
-        Init::require($comment !== null);
+        InitRoute::require($comment !== null);
         
         /** @var CommentsModule|null $module */
         $module = Modules::getDriver()->findById($comment->module_id);
-        Init::require($module !== null);
+        InitRoute::require($module !== null);
         
         $rights = my_rights::get($module->getName());
-        Init::access($rights->canOneOf([
+        InitAccess::access($rights->canOneOf([
             'delete-all' => null,
             'delete-own' => [$comment]
         ]));

@@ -1,6 +1,6 @@
 <?php namespace engine\statistics\tools;
 
-use frame\tools\Init;
+use frame\route\InitRoute;
 use frame\tools\JsonEncoder;
 use engine\statistics\lists\MultipleIntervalDataList;
 use frame\stdlib\cash\route;
@@ -12,7 +12,7 @@ class MultipleChartAPI
     public function __construct(string $multipleIntervalDataListClass)
     {
         $this->class = $multipleIntervalDataListClass;
-        Init::require(is_subclass_of($this->class, MultipleIntervalDataList::class));
+        InitRoute::require(is_subclass_of($this->class, MultipleIntervalDataList::class));
     }
 
     public function jsonResult()
@@ -26,11 +26,11 @@ class MultipleChartAPI
         $secInterval = $router->getArg('sec_interval')
             ?? MultipleIntervalDataList::DAY_INTERVAL;
 
-        Init::require($limit > 0);
-        Init::require($sortField === 'max' || $sortField === 'avg');
-        Init::require($sortOrder === 'desc' || $sortOrder === 'asc');
-        Init::require($intervals > 0);
-        Init::require($secInterval >= 0);
+        InitRoute::require($limit > 0);
+        InitRoute::require($sortField === 'max' || $sortField === 'avg');
+        InitRoute::require($sortOrder === 'desc' || $sortOrder === 'asc');
+        InitRoute::require($intervals > 0);
+        InitRoute::require($secInterval >= 0);
 
         $class = $this->class;
         /** @var MultipleIntervalDataList $list */

@@ -2,7 +2,8 @@
 
 use frame\actions\ActionBody;
 use engine\users\User;
-use frame\tools\Init;
+use frame\auth\InitAccess;
+use frame\route\InitRoute;
 use engine\users\cash\user_me;
 use frame\actions\fields\IntegerField;
 use frame\actions\fields\StringField;
@@ -31,9 +32,9 @@ class AddMessage extends ActionBody
 
     public function initialize(array $get)
     {
-        Init::accessRight('messages', 'use');
+        InitAccess::accessRight('messages', 'use');
         $this->who = User::selectIdentity($get['to_uid']->get());
-        Init::require($this->who !== null);
+        InitRoute::require($this->who !== null);
     }
 
     public function validate(array $post, array $files)

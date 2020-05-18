@@ -1,15 +1,16 @@
 <?php /** @var frame\views\Page $self */
 
-use frame\tools\Init;
+use frame\auth\InitAccess;
+use frame\route\InitRoute;
 use engine\users\cash\user_me;
 use engine\users\User;
 use frame\stdlib\cash\pagenumber;
 use frame\tools\JsonEncoder;
 
-Init::accessRight('messages', 'use');
-$withId = (int) Init::requireGet('uid');
+InitAccess::accessRight('messages', 'use');
+$withId = (int)InitRoute::requireGet('uid');
 $with = User::selectIdentity($withId);
-Init::require($with !== null);
+InitRoute::require($with !== null);
 $me = user_me::get();
 
 $pageProps = [

@@ -3,7 +3,7 @@
 use frame\actions\ActionBody;
 use frame\modules\Modules;
 use frame\modules\Module;
-use frame\tools\Init;
+use frame\auth\InitAccess;
 use engine\statistics\StatisticsModule;
 use engine\statistics\BaseStatisticsSubModule;
 
@@ -11,7 +11,7 @@ class ClearAllStats extends ActionBody
 {
     public function initialize(array $get)
     {
-        Init::accessRight('stat', 'clear');
+        InitAccess::accessRight('stat', 'clear');
     }
 
     public function succeed(array $post, array $files)

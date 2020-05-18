@@ -7,14 +7,15 @@ use engine\users\Group;
 use frame\auth\GroupRights;
 use frame\modules\Module;
 use frame\modules\Modules;
-use frame\tools\Init;
+use frame\auth\InitAccess;
+use frame\route\InitRoute;
 
-Init::accessGroup(Group::ROOT_ID);
+InitAccess::accessGroup(Group::ROOT_ID);
 
-$id = (int) Init::requireGet('id');
+$id = (int)InitRoute::requireGet('id');
 $group = Group::selectIdentity($id);
 
-Init::require((bool) $group);
+InitRoute::require((bool)$group);
 
 $modules = Modules::getDriver()->toArray();
 $edit = new ViewAction(EditRightsAction::class, ['id' => $id]);
@@ -26,7 +27,7 @@ foreach ($modules as $module) {
     if (!$rightsDesc) continue;
     $rightList = $rightsDesc->listRights();
     $rights = new GroupRights($rightsDesc, $module->getId(), $group->id);
-    
+
     $rightFields = [];
     foreach ($rightList as $right => $desc) {
         $rightFields[] = [

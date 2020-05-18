@@ -1,6 +1,7 @@
 <?php /** @var frame\views\Page $self */
 
-use frame\tools\Init;
+use frame\auth\InitAccess;
+use frame\route\InitRoute;
 use frame\stdlib\cash\pagenumber;
 use engine\messages\MessagePagedList;
 use engine\messages\Message;
@@ -13,13 +14,13 @@ use frame\stdlib\cash\prev_route;
 use frame\tools\JsonEncoder;
 use frame\lists\paged\PagerView;
 
-Init::accessRight('messages', 'use');
+InitAccess::accessRight('messages', 'use');
 
 $me = user_me::get();
-$withWhoId = (int) Init::requireGet('withId');
+$withWhoId = (int) InitRoute::requireGet('withId');
 $who = User::selectIdentity($withWhoId);
 
-Init::require($who !== null);
+InitRoute::require($who !== null);
 
 $page = pagenumber::get();
 $send = new ViewAction(AddMessage::class, ['to_uid' => $withWhoId]);

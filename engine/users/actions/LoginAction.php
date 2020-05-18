@@ -8,7 +8,7 @@ use frame\actions\fields\BooleanField;
 use frame\actions\fields\PasswordField;
 use frame\actions\fields\StringField;
 use engine\users\cash\user_me;
-use frame\tools\Init;
+use frame\auth\InitAccess;
 
 class LoginAction extends ActionBody
 {
@@ -29,7 +29,7 @@ class LoginAction extends ActionBody
 
     public function initialize(array $get)
     {
-        Init::accessLogged(false);
+        InitAccess::accessLogged(false);
     }
 
     public function validate(array $post, array $files): array

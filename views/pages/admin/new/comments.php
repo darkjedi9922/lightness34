@@ -4,7 +4,7 @@ use frame\stdlib\cash\pagenumber;
 use engine\comments\NewCommentPagedList;
 use engine\comments\Comment;
 use engine\users\User;
-use frame\tools\Init;
+use frame\auth\InitAccess;
 use frame\tools\JsonEncoder;
 use frame\modules\Modules;
 use frame\stdlib\cash\config;
@@ -13,7 +13,7 @@ use engine\users\cash\my_rights;
 use frame\actions\ViewAction;
 use engine\comments\actions\DeleteComment;
 
-Init::accessRight('articles/comments', 'see-new-list');
+InitAccess::accessRight('articles/comments', 'see-new-list');
 $pagenumber = pagenumber::get();
 $items = new NewCommentPagedList($pagenumber);
 $me = user_me::get();

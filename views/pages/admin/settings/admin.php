@@ -1,13 +1,13 @@
 <?php /** @var frame\views\Page $self */
 
-use frame\tools\Init;
+use frame\auth\InitAccess;
 use engine\users\Group;
 use frame\stdlib\cash\config;
 use frame\actions\ViewAction;
 use frame\tools\JsonEncoder;
 use engine\admin\actions\EditAdminConfig;
 
-Init::accessGroup(Group::ROOT_ID);
+InitAccess::accessGroup(Group::ROOT_ID);
 
 $config = config::get('admin');
 $edit = new ViewAction(EditAdminConfig::class);

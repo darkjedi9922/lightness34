@@ -1,30 +1,12 @@
-<?php namespace frame\tools;
+<?php namespace frame\auth;
 
+use frame\auth\Auth;
 use engine\users\cash\my_rights;
 use frame\route\HttpError;
-use frame\auth\Auth;
 use engine\users\cash\user_me;
-use frame\stdlib\cash\route;
 
-class Init
+class InitAccess
 {
-    /** @throws HttpError NOT_FOUND */
-    public static function require(bool $expr)
-    {
-        if (!$expr) throw new HttpError(HttpError::NOT_FOUND);
-    }
-
-    /** @throws HttpError NOT_FOUND */
-    public static function requireGet(string $name): string
-    {
-        $router = route::get();
-        if ($router->getArg($name) === null) throw new HttpError(
-            HttpError::NOT_FOUND, 
-            'The '.$name.' url argument does not exist.'
-        );
-        return $router->getArg($name);
-    }
-
     /** @throws HttpError FORBIDDEN */
     public static function access(bool $expr)
     {

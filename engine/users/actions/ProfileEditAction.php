@@ -2,7 +2,8 @@
 
 use engine\users\User;
 use engine\users\Encoder;
-use frame\tools\Init;
+use frame\auth\InitAccess;
+use frame\route\InitRoute;
 use engine\users\cash\user_me;
 use frame\actions\fields\IntegerField;
 use frame\actions\fields\PasswordField;
@@ -58,8 +59,8 @@ class ProfileEditAction extends ProfileAction
 
         $this->user = User::selectIdentity($get['id']->get());
         
-        Init::require($this->user !== null);
-        Init::accessOneRight('users', [
+        InitRoute::require($this->user !== null);
+        InitAccess::accessOneRight('users', [
             'edit-all' => [$this->user], 
             'edit-own' => [$this->user]
         ]);

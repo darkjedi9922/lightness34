@@ -2,7 +2,8 @@
 
 use engine\users\cash\my_group;
 use frame\actions\ActionBody;
-use frame\tools\Init;
+use frame\auth\InitAccess;
+use frame\route\InitRoute;
 use engine\users\Group;
 use frame\actions\fields\MixedField;
 use frame\actions\fields\IntegerField;
@@ -44,13 +45,13 @@ class EditRightsAction extends ActionBody
     public function initialize(array $get)
     {
         $myGroup = my_group::get();
-        Init::access($myGroup->id === $myGroup::ROOT_ID);
+        InitAccess::access($myGroup->id === $myGroup::ROOT_ID);
 
         $this->id = $get['id']->get();
-        Init::require($this->id !== Group::ROOT_ID);
+        InitRoute::require($this->id !== Group::ROOT_ID);
 
         $this->group = Group::selectIdentity($this->id);
-        Init::require((bool) $this->group);
+        InitRoute::require((bool) $this->group);
     }
 
     public function succeed(array $post, array $files)

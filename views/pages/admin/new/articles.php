@@ -4,11 +4,11 @@ use frame\stdlib\cash\pagenumber;
 use engine\articles\NewArticlePagedList;
 use engine\articles\Article;
 use engine\users\User;
-use frame\tools\Init;
+use frame\auth\InitAccess;
 use frame\tools\JsonEncoder;
 use function lightlib\shorten;
 
-Init::accessRight('articles', 'see-new-list');
+InitAccess::accessRight('articles', 'see-new-list');
 $pagenumber = pagenumber::get();
 $articles = new NewArticlePagedList($pagenumber);
 

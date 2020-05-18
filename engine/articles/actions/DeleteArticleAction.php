@@ -3,7 +3,7 @@
 use engine\articles\Article;
 use frame\actions\ActionBody;
 use frame\actions\fields\IntegerField;
-use frame\tools\Init;
+use frame\auth\InitAccess;
 use frame\stdlib\cash\prev_route;
 
 class DeleteArticleAction extends ActionBody
@@ -21,7 +21,7 @@ class DeleteArticleAction extends ActionBody
     public function initialize(array $get)
     {
         $this->article = Article::selectIdentity($get['id']->get());
-        Init::accessOneRight('articles', [
+        InitAccess::accessOneRight('articles', [
             'delete-own' => [$this->article],
             'delete-all' => null
         ]);

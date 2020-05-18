@@ -1,7 +1,7 @@
 <?php namespace engine\admin\actions;
 
 use frame\actions\ActionBody;
-use frame\tools\Init;
+use frame\auth\InitAccess;
 use engine\users\Group;
 use engine\users\Gender;
 use frame\actions\fields\StringField;
@@ -24,7 +24,7 @@ class AddGender extends ActionBody
 
     public function initialize(array $get)
     {
-        Init::accessRight('users', 'configure-genders');
+        InitAccess::accessRight('users', 'configure-genders');
     }
 
     public function validate(array $post, array $files): array

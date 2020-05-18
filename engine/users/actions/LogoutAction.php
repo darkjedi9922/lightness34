@@ -2,7 +2,7 @@
 
 use engine\users\cash\user_me;
 use frame\actions\ActionBody;
-use frame\tools\Init;
+use frame\auth\InitAccess;
 use frame\auth\Auth;
 use frame\database\SqlDriver;
 
@@ -13,7 +13,7 @@ class LogoutAction extends ActionBody
 {
     public function initialize(array $get)
     {
-        Init::accessLogged(true);
+        InitAccess::accessLogged(true);
     }
 
     public function succeed(array $post, array $files)

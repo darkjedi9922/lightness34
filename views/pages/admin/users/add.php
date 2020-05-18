@@ -6,9 +6,9 @@ use frame\actions\ViewAction;
 use frame\stdlib\cash\config;
 use frame\lists\base\IdentityList;
 use frame\tools\JsonEncoder;
-use frame\tools\Init;
+use frame\auth\InitAccess;
 
-Init::accessRight('users', 'add');
+InitAccess::accessRight('users', 'add');
 $add = new ViewAction(AddUser::class);
 
 $genders = [];

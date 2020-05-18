@@ -6,7 +6,7 @@ use engine\users\Group;
 use frame\actions\ActionBody;
 use frame\actions\fields\IntegerField;
 use frame\database\SqlDriver;
-use frame\tools\Init;
+use frame\auth\InitAccess;
 
 class DeleteDialog extends ActionBody
 {
@@ -22,7 +22,7 @@ class DeleteDialog extends ActionBody
 
     public function initialize(array $get)
     {
-        Init::accessRight('messages', 'use');
+        InitAccess::accessRight('messages', 'use');
         $this->uid = $get['uid']->get();
     }
 

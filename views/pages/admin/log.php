@@ -2,13 +2,13 @@
 
 use engine\users\cash\my_rights;
 use engine\users\cash\user_me;
-use frame\tools\Init;
+use frame\auth\InitAccess;
 use frame\tools\JsonEncoder;
 use frame\tools\Logger;
 use frame\tools\trackers\read\ReadLimitedProgressTracker as Tracker;
 use frame\stdlib\cash\config;
 
-Init::accessRight('admin', 'see-logs');
+InitAccess::accessRight('admin', 'see-logs');
 
 $me = user_me::get();
 $date = date('d-m-Y');

@@ -5,7 +5,7 @@ use engine\users\Group;
 use frame\actions\ActionBody;
 use frame\actions\fields\PasswordField;
 use frame\stdlib\cash\config;
-use frame\tools\Init;
+use frame\auth\InitAccess;
 use frame\config\Config as FrameConfig;
 
 class EditAdminConfig extends ActionBody
@@ -26,7 +26,7 @@ class EditAdminConfig extends ActionBody
 
     public function initialize(array $get)
     {
-        Init::accessGroup(Group::ROOT_ID);
+        InitAccess::accessGroup(Group::ROOT_ID);
         $this->config = config::get('admin');
     }
 

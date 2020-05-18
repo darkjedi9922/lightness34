@@ -1,12 +1,12 @@
 <?php /** @var frame\views\Page $self */
 
-use frame\tools\Init;
+use frame\auth\InitAccess;
 use frame\stdlib\cash\config;
 use frame\actions\ViewAction;
 use engine\admin\actions\EditConfigAction;
 use frame\tools\JsonEncoder;
 
-Init::accessRight('articles', 'configure');
+InitAccess::accessRight('articles', 'configure');
 $config = config::get('articles');
 $edit = new ViewAction(EditConfigAction::class, ['name' => 'articles']);
 
