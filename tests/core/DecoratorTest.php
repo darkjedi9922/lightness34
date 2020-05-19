@@ -9,7 +9,7 @@ use tests\core\examples\EventsDecoratorExample;
  */
 class DecoratorTest extends TestCase
 {
-    public function testDecoratesDriverInRuntime()
+    public function testDecoratesDriverObjectInRuntime()
     {
         $counter = 0;
         $app = new Core;
@@ -26,5 +26,12 @@ class DecoratorTest extends TestCase
         Events::getDriver()->emit('test');
         $this->assertEquals(2, $counter);
         $this->assertEquals(1, EventsDecoratorExample::$counter);
+    }
+
+    public function testDecoratesDriverIfItIsNotCreatedYet()
+    {
+        $app = new Core;
+        $app->decorateDriver(Events::class, EventsDecoratorExample::class);
+        $this->assertInstanceOf(EventsDecoratorExample::class, Events::getDriver());
     }
 }

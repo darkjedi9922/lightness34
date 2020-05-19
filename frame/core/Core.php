@@ -14,7 +14,8 @@ class Core
      */
     public static $app = null;
 
-    private $uses = [];
+    private $drivers = [];
+    private $decorators = [];
     private $executed = false;
 
     public function __construct(array $drivers = [])
@@ -40,39 +41,32 @@ class Core
 
     public function replaceDriver(string $driverClass, string $newDriverClass)
     {
-        $this->uses[$driverClass] = [$newDriverClass];
+        $this->drivers[$driverClass] = $newDriverClass;
     }
 
     public function decorateDriver(string $driverClass, string $decoratorClass)
     {
-        $use = $this->uses[$driverClass] ?? [];
-        if (is_object($use)) {
-            $this->uses[$driverClass] = new $decoratorClass($use);
-        } else {
-            $use[] = $decoratorClass;
-            $this->uses[$driverClass] = $use;
-        } 
+        $use = $this->drivers[$driverClass] ?? [];
+        if (is_object($use))
+            $this->drivers[$driverClass] = new $decoratorClass($use);
+        else $this->decorators[$driverClass][] = $decoratorClass;
     }
 
     public function getDriver(string $driverClass): object
     {
-        $use = $this->uses[$driverClass] ?? [];
+        $use = $this->drivers[$driverClass] ?? null;
         // Элементом $use может быть либо строка с классом, либо уже готовый
         // экземпляр (объект) этого использования, либо null.
         if (is_object($use)) return $use;
-        else if (empty($use)) {
-            // Тут создаем экземпляр драйвера.
-            $this->uses[$driverClass] = new $driverClass;
-            return $this->uses[$driverClass];
-        } else {
-            // При i = 0 это Driver.
-            $object = $this->getDriver($use[0]);
-            for ($i = 1, $c = count($use); $i < $c; ++$i) {
-                // Оборачиваем в декораторы (i > 0).
-                $object = new $use[0]($object);
-            }
-            return $object;
-        }
+        
+        if ($use === null) $object = new $driverClass;
+        else $object = $this->getDriver($use);
+
+        $decorators = $this->decorators[$driverClass] ?? [];
+        for ($i = 0, $c = count($decorators); $i < $c; ++$i)
+            $object = new $decorators[$i]($object);
+
+        return $this->drivers[$driverClass] = $object;
     }
 
     public function exec()
