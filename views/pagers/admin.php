@@ -1,6 +1,5 @@
 <?php /** @var frame\lists\paged\PagerView $self */
 
-use frame\stdlib\cash\route;
 use frame\route\Router;
 
 $pager = $self->getPager();
@@ -12,7 +11,7 @@ $last = $pager->getLast();
 // Дадим возможность принимать пользовательский маршрут вместо текущего.
 $customRoute = $self->getMeta('route');
 $router = $customRoute === null
-    ? route::get()
+    ? Router::getDriver()->getCurrentRoute()
     : Router::getDriver()->parseRoute($customRoute);
 ?>
 

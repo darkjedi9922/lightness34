@@ -7,8 +7,8 @@ use frame\events\Events;
 use engine\statistics\BaseStatisticsSubModule;
 use engine\statistics\macros\BaseStatCollector;
 use engine\statistics\tools\StatEvents;
-use frame\stdlib\cash\config;
-use frame\stdlib\cash\route;
+use frame\config\ConfigRouter;
+use frame\route\Router;
 use frame\modules\Modules;
 
 class StatisticsModule extends Module
@@ -37,9 +37,9 @@ class StatisticsModule extends Module
             Modules::getDriver()->set($submodule);
         }
 
-        $config = config::get('statistics');
+        $config = ConfigRouter::getDriver()->findConfig('statistics');
         if ($config->enabled) {
-            $router = route::get();
+            $router = Router::getDriver()->getCurrentRoute();
             if ($router->isInAnyNamespace($config->ignoreRouteNamespaces)) return;
             $this->setupEventHandlers($submodules);
         }

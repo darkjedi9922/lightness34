@@ -2,14 +2,14 @@
 
 use engine\statistics\actions\ClearAllStats;
 use frame\auth\InitAccess;
-use frame\stdlib\cash\config;
+use frame\config\ConfigRouter;
 use frame\actions\ViewAction;
 use engine\statistics\actions\EditConfig;
 use frame\tools\JsonEncoder;
 
 InitAccess::accessRight('stat', 'configure');
 
-$config = config::get('statistics');
+$config = ConfigRouter::getDriver()->findConfig('statistics');
 $edit = new ViewAction(EditConfig::class, ['name' => 'statistics']);
 $clearAll = new ViewAction(ClearAllStats::class);
 

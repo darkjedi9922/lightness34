@@ -4,7 +4,7 @@ use frame\errors\StrictException;
 use frame\route\Response;
 use frame\route\HttpError;
 use frame\tools\Debug;
-use frame\stdlib\cash\config;
+use frame\config\ConfigRouter;
 
 use function lightlib\ob_restart_all;
 
@@ -18,7 +18,7 @@ class DefaultErrorHandler implements ErrorHandler
         if (Response::getDriver()->getCode() === HttpError::OK) 
             Response::getDriver()->setCode(HttpError::INTERNAL_SERVER_ERROR);
 
-        $page = config::get('core')->{'errors.errorPage'};
+        $page = ConfigRouter::getDriver()->findConfig('core')->{'errors.errorPage'};
         if ($page !== null) {
             try {
                 (new ErrorPage($page, $error))->show();

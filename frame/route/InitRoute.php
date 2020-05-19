@@ -1,7 +1,7 @@
 <?php namespace frame\route;
 
 use frame\route\HttpError;
-use frame\stdlib\cash\route;
+use frame\route\Router;
 
 class InitRoute
 {
@@ -14,7 +14,7 @@ class InitRoute
     /** @throws HttpError NOT_FOUND */
     public static function requireGet(string $name): string
     {
-        $router = route::get();
+        $router = Router::getDriver()->getCurrentRoute();
         if ($router->getArg($name) === null) throw new HttpError(
             HttpError::NOT_FOUND,
             'The ' . $name . ' url argument does not exist.'

@@ -2,9 +2,9 @@
 
 use frame\lists\paged\PagedList;
 use frame\lists\iterators\IdentityIterator;
-use frame\stdlib\cash\config;
+use frame\config\ConfigRouter;
 use frame\database\SqlDriver;
-use engine\users\cash\user_me;
+use engine\users\User;
 
 class NewCommentPagedList extends PagedList
 {
@@ -13,9 +13,9 @@ class NewCommentPagedList extends PagedList
 
     public function __construct(int $page)
     {
-        $me = user_me::get();
+        $me = User::getMe();
         $countAll = Comment::countUnreaded($me->id);
-        $config = config::get('comments');
+        $config = ConfigRouter::getDriver()->findConfig('comments');
         $pageLimit = $config->{'list.amount'};
         $order = $config->{'list.order'};
 

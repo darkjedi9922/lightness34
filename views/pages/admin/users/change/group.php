@@ -7,10 +7,9 @@ use engine\users\Group;
 use engine\users\User;
 use engine\users\actions\ChangeUserGroupAction;
 use frame\actions\ViewAction;
-use engine\users\cash\user_me;
 use frame\tools\JsonEncoder;
 
-$me = user_me::get();
+$me = User::getMe();
 
 InitAccess::access((int)$me->group_id === Group::ROOT_ID);
 

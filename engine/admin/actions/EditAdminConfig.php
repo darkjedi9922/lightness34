@@ -4,7 +4,7 @@ use engine\users\Encoder;
 use engine\users\Group;
 use frame\actions\ActionBody;
 use frame\actions\fields\PasswordField;
-use frame\stdlib\cash\config;
+use frame\config\ConfigRouter;
 use frame\auth\InitAccess;
 use frame\config\Config as FrameConfig;
 
@@ -27,7 +27,7 @@ class EditAdminConfig extends ActionBody
     public function initialize(array $get)
     {
         InitAccess::accessGroup(Group::ROOT_ID);
-        $this->config = config::get('admin');
+        $this->config = ConfigRouter::getDriver()->findConfig('admin');
     }
 
     public function validate(array $post, array $files): array

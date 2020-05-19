@@ -1,7 +1,7 @@
 <?php
-use frame\stdlib\cash\config;
+use frame\config\ConfigRouter;
 
-$config = config::get('core');
+$config = ConfigRouter::getDriver()->findConfig('core');
 ?>
 
 <div class="header__header">

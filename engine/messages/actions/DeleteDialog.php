@@ -1,7 +1,7 @@
 <?php namespace engine\messages\actions;
 
 use engine\messages\Message;
-use engine\users\cash\user_me;
+use engine\users\User;
 use engine\users\Group;
 use frame\actions\ActionBody;
 use frame\actions\fields\IntegerField;
@@ -29,7 +29,7 @@ class DeleteDialog extends ActionBody
     public function succeed(array $post, array $files)
     {
         $table = Message::getTable();
-        $me = user_me::get();
+        $me = User::getMe();
         $member1SortedId = $me->id;
         $member2SortedId = $this->uid;
         if ($member2SortedId < $member1SortedId) {

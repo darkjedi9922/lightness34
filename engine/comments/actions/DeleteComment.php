@@ -7,7 +7,7 @@ use engine\comments\CommentsModule;
 use frame\auth\InitAccess;
 use frame\route\InitRoute;
 use frame\modules\Modules;
-use engine\users\cash\my_rights;
+use engine\users\User;
 
 class DeleteComment extends ActionBody
 {
@@ -32,7 +32,7 @@ class DeleteComment extends ActionBody
         $module = Modules::getDriver()->findById($comment->module_id);
         InitRoute::require($module !== null);
         
-        $rights = my_rights::get($module->getName());
+        $rights = User::getMyRights($module->getName());
         InitAccess::access($rights->canOneOf([
             'delete-all' => null,
             'delete-own' => [$comment]

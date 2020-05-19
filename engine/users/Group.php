@@ -2,6 +2,8 @@
 
 use frame\database\Identity;
 use frame\auth\UserGroup;
+use frame\cash\StaticCashStorage;
+use engine\users\User;
 
 class Group extends Identity implements UserGroup
 {
@@ -11,6 +13,13 @@ class Group extends Identity implements UserGroup
     public static function getTable(): string
     {
         return 'user_groups';
+    }
+
+    public static function getMine(): Group
+    {
+        return StaticCashStorage::getDriver()->cash('my-group', function () {
+            return self::selectIdentity(User::getMe()->getGroupId());
+        });
     }
 
     public function isSystem(): bool

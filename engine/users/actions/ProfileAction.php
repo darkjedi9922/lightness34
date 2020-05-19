@@ -6,7 +6,7 @@ use frame\errors\NotImplementedException;
 use frame\route\InitRoute;
 use engine\users\User;
 use engine\users\Gender;
-use frame\stdlib\cash\config;
+use frame\config\ConfigRouter;
 use frame\stdlib\tools\units\ByteUnit;
 
 abstract class ProfileAction extends ActionBody
@@ -28,7 +28,7 @@ abstract class ProfileAction extends ActionBody
 
     public function initialize(array $get)
     {
-        $this->config = config::get('users');
+        $this->config = ConfigRouter::getDriver()->findConfig('users');
     }
 
     public function succeed(array $post, array $files)

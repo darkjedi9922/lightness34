@@ -2,17 +2,17 @@
 
 use frame\auth\InitAccess;
 use engine\users\Group;
-use engine\users\cash\user_me;
-use frame\stdlib\cash\config;
+use engine\users\User;
+use frame\config\ConfigRouter;
 use engine\admin\actions\EditConfigAction;
 use frame\actions\ViewAction;
 use frame\tools\JsonEncoder;
 
-$me = user_me::get();
+$me = User::getMe();
 
 InitAccess::access((int) $me->group_id === Group::ROOT_ID);
 
-$config = config::get('core');
+$config = ConfigRouter::getDriver()->findConfig('core');
 $edit = new ViewAction(EditConfigAction::class, ['name' => 'core']);
 
 $formProps = [

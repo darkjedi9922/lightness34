@@ -1,7 +1,7 @@
 <?php namespace frame\route;
 
 use frame\events\Macro;
-use frame\stdlib\cash\route;
+use frame\route\Router;
 
 abstract class RouteNamespaceMacro extends Macro
 {
@@ -14,7 +14,7 @@ abstract class RouteNamespaceMacro extends Macro
 
     public function exec(...$args)
     {
-        $router = route::get();
+        $router = Router::getDriver()->getCurrentRoute();
         if ($router->isInNamespace($this->namespace)) $this->run();
     }
 

@@ -1,6 +1,6 @@
 <?php namespace engine\admin\actions;
 
-use engine\users\cash\user_me;
+use engine\users\User;
 use engine\users\Group;
 use frame\actions\ActionBody;
 use frame\actions\fields\StringField;
@@ -20,7 +20,7 @@ class NewUserGroupAction extends ActionBody
 
     public function initialize(array $get)
     {
-        InitAccess::access((int)user_me::get()->group_id === Group::ROOT_ID);
+        InitAccess::access((int)User::getMe()->group_id === Group::ROOT_ID);
     }
     
     public function validate(array $post, array $files): array

@@ -1,7 +1,7 @@
 <?php namespace engine\comments;
 
 use frame\lists\paged\IdentityPagedList;
-use frame\stdlib\cash\config;
+use frame\config\ConfigRouter;
 
 class CommentList extends IdentityPagedList
 {
@@ -30,6 +30,6 @@ class CommentList extends IdentityPagedList
 
     protected function loadPageLimit(): int
     {
-        return config::get('comments')->{'list.amount'};
+        return ConfigRouter::getDriver()->findConfig('comments')->{'list.amount'};
     }
 }

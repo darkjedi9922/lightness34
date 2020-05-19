@@ -2,9 +2,9 @@
 
 use engine\users\actions\LoginAction;
 use frame\actions\ViewAction;
-use engine\users\cash\user_me;
+use engine\users\User;
 
-$me = user_me::get();
+$me = User::getMe();
 $action = new ViewAction(LoginAction::class);
 
 $self->setMeta('title', 'Вход');

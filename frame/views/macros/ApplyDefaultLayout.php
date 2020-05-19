@@ -4,7 +4,7 @@ use frame\events\Macro;
 use frame\views\View;
 use frame\views\Layouted;
 
-use frame\stdlib\cash\config;
+use frame\config\ConfigRouter;
 
 class ApplyDefaultLayout extends Macro
 {
@@ -12,7 +12,7 @@ class ApplyDefaultLayout extends Macro
 
     public function __construct()
     {
-        $this->layouts = config::get('layouts')->getData();
+        $this->layouts = ConfigRouter::getDriver()->findConfig('layouts')->getData();
         if (isset($this->layouts['namespaces']))
             krsort($this->layouts['namespaces']);
     }

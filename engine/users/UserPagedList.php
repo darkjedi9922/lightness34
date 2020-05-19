@@ -2,7 +2,7 @@
 
 use frame\lists\paged\IdentityPagedList;
 use engine\users\User;
-use frame\stdlib\cash\config;
+use frame\config\ConfigRouter;
 
 class UserPagedList extends IdentityPagedList
 {
@@ -13,7 +13,7 @@ class UserPagedList extends IdentityPagedList
 
     protected function loadPageLimit(): int
     {
-        return config::get('users')->{'list.amount'};
+        return ConfigRouter::getDriver()->findConfig('users')->{'list.amount'};
     }
 
     public function getOrderFields(): array

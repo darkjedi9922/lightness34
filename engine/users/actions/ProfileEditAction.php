@@ -4,7 +4,6 @@ use engine\users\User;
 use engine\users\Encoder;
 use frame\auth\InitAccess;
 use frame\route\InitRoute;
-use engine\users\cash\user_me;
 use frame\actions\fields\IntegerField;
 use frame\actions\fields\PasswordField;
 use frame\actions\fields\StringField;
@@ -65,7 +64,7 @@ class ProfileEditAction extends ProfileAction
             'edit-own' => [$this->user]
         ]);
 
-        $this->me = user_me::get();
+        $this->me = User::getMe();
         $this->database = SqlDriver::getDriver();
     }
 
@@ -162,7 +161,7 @@ class ProfileEditAction extends ProfileAction
             $this->user->password
         );
         
-        if ($this->user->id === user_me::get()->id) {
+        if ($this->user->id === User::getMe()->id) {
             $auth = new Auth;
             $auth->login($this->user->sid, $auth->isRemembered());
         }

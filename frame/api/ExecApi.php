@@ -2,8 +2,8 @@
 
 use frame\route\RouteNamespaceMacro;
 use frame\route\Response;
-use frame\stdlib\cash\config;
-use frame\stdlib\cash\route;
+use frame\config\ConfigRouter;
+use frame\route\Router;
 use frame\tools\JsonEncoder;
 
 class ExecApi extends RouteNamespaceMacro
@@ -16,7 +16,7 @@ class ExecApi extends RouteNamespaceMacro
             $api = new $apiClass;
             $result = $api->exec();
             if ($result !== null) {
-                $prettyJson = config::get('core')->{'mode.debug'};
+                $prettyJson = ConfigRouter::getDriver()->findConfig('core')->{'mode.debug'};
                 $response->setText(JsonEncoder::forViewText($result, $prettyJson));
             }
         } else {
@@ -27,7 +27,7 @@ class ExecApi extends RouteNamespaceMacro
 
     private function getApiClass(): string
     {
-        $parts = route::get()->getPathParts();
+        $parts = Router::getDriver()->getCurrentRoute()->getPathParts();
         $lastIndex = count($parts) - 1;
         $parts[$lastIndex] = str_replace('-', '', ucwords($parts[$lastIndex], '-'));
         return '\\' . implode('\\', $parts) . 'Api';

@@ -1,7 +1,7 @@
 <?php namespace frame\errors\handlers;
 
 use frame\route\Response;
-use frame\stdlib\cash\config;
+use frame\config\ConfigRouter;
 
 class HttpErrorHandler implements ErrorHandler
 {
@@ -11,7 +11,7 @@ class HttpErrorHandler implements ErrorHandler
     public function handle($error)
     {
         $code = $error->getCode();
-        $page = config::get('core')->{"errors.$code.page"};
+        $page = ConfigRouter::getDriver()->findConfig('core')->{"errors.$code.page"};
         Response::getDriver()->setCode($code);
         if (ErrorPage::find($page)) {
             $view = new ErrorPage($page, $error);

@@ -2,14 +2,14 @@
 
 use frame\auth\InitAccess;
 use engine\users\Group;
-use frame\stdlib\cash\config;
+use frame\config\ConfigRouter;
 use frame\actions\ViewAction;
 use frame\tools\JsonEncoder;
 use engine\admin\actions\EditAdminConfig;
 
 InitAccess::accessGroup(Group::ROOT_ID);
 
-$config = config::get('admin');
+$config = ConfigRouter::getDriver()->findConfig('admin');
 $edit = new ViewAction(EditAdminConfig::class);
 
 $currentPasswordErrors = [];

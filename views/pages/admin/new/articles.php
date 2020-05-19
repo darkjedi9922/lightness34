@@ -1,6 +1,6 @@
 <?php /** @var frame\views\Page $self */
 
-use frame\stdlib\cash\pagenumber;
+use frame\lists\paged\PagerModel;
 use engine\articles\NewArticlePagedList;
 use engine\articles\Article;
 use engine\users\User;
@@ -9,7 +9,7 @@ use frame\tools\JsonEncoder;
 use function lightlib\shorten;
 
 InitAccess::accessRight('articles', 'see-new-list');
-$pagenumber = pagenumber::get();
+$pagenumber = PagerModel::getRoutePage();
 $articles = new NewArticlePagedList($pagenumber);
 
 $tableProps = ['items' => []];

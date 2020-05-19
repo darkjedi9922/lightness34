@@ -1,18 +1,17 @@
 <?php /** @var frame\views\Page $self */
 
-use frame\stdlib\cash\pagenumber;
+use frame\lists\paged\PagerModel;
 use engine\users\UserPagedList;
 use engine\users\User;
 use engine\users\Group;
 use engine\users\Gender;
 use frame\auth\InitAccess;
-use engine\users\cash\my_rights;
 
 InitAccess::accessRight('users', 'see-list');
 
-$pagenumber = pagenumber::get();
+$pagenumber = PagerModel::getRoutePage();
 $users = new UserPagedList($pagenumber);
-$rights = my_rights::get('users');
+$rights = User::getMyRights('users');
 
 $tableProps = ['items' => []];
 foreach ($users as $user) {

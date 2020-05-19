@@ -1,6 +1,6 @@
 <?php namespace engine\users\actions;
 
-use engine\users\cash\user_me;
+use engine\users\User;
 use frame\actions\ActionBody;
 use frame\auth\InitAccess;
 use frame\auth\Auth;
@@ -18,7 +18,7 @@ class LogoutAction extends ActionBody
 
     public function succeed(array $post, array $files)
     {
-        $me = user_me::get();
+        $me = User::getMe();
         $me->online = 0;
         $me->update();
         

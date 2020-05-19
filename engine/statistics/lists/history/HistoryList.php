@@ -1,9 +1,9 @@
 <?php namespace engine\statistics\lists\history;
 
 use frame\lists\paged\PagedList;
-use frame\stdlib\cash\config;
+use frame\config\ConfigRouter;
 use frame\lists\paged\PagerView;
-use frame\stdlib\cash\prev_route;
+use frame\route\Router;
 use frame\database\SqlDriver;
 use Iterator;
 
@@ -15,7 +15,7 @@ abstract class HistoryList extends PagedList
     public function __construct(int $page, string $sortField, string $sortOrder)
     {
         $this->countAll = $this->queryCountAll();
-        $limit = config::get('statistics')->historyListLimit;
+        $limit = ConfigRouter::getDriver()->findConfig('statistics')->historyListLimit;
         parent::__construct($page, $this->countAll, $limit);
         $offset = $this->getPager()->getStartMaterialIndex();
         $this->list = SqlDriver::getDriver()->query($this->getSqlQuery(
@@ -38,7 +38,7 @@ abstract class HistoryList extends PagedList
     {
         $result = $this->assembleArray($this->getIterator());
         $pager = new PagerView($this->getPager(), 'admin');
-        $prevRouter = prev_route::get();
+        $prevRouter = Router::getDriver()->getPreviousRoute();
         if ($prevRouter) $pager->setMeta('route', $prevRouter->toUrl());
         
         return [

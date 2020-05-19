@@ -2,27 +2,26 @@
 
 use frame\auth\InitAccess;
 use frame\route\InitRoute;
-use frame\stdlib\cash\pagenumber;
+use frame\lists\paged\PagerModel;
 use engine\messages\MessagePagedList;
 use engine\messages\Message;
-use engine\users\cash\user_me;
 use engine\users\User;
 use frame\actions\ViewAction;
 use engine\messages\actions\AddMessage;
 use engine\messages\Dialog;
-use frame\stdlib\cash\prev_route;
+use frame\route\Router;
 use frame\tools\JsonEncoder;
 use frame\lists\paged\PagerView;
 
 InitAccess::accessRight('messages', 'use');
 
-$me = user_me::get();
+$me = User::getMe();
 $withWhoId = (int) InitRoute::requireGet('withId');
 $who = User::selectIdentity($withWhoId);
 
 InitRoute::require($who !== null);
 
-$page = pagenumber::get();
+$page = PagerModel::getRoutePage();
 $send = new ViewAction(AddMessage::class, ['to_uid' => $withWhoId]);
 
 $list = new MessagePagedList($page, $withWhoId);
@@ -44,7 +43,7 @@ foreach ($list as $message) {
 $pagerHtml = null;
 if ($list->getPager()->countPages() > 1) {
     $viewPager = new PagerView($list->getPager(), 'admin');
-    $viewPager->setMeta('route', prev_route::get()->toUrl());
+    $viewPager->setMeta('route', Router::getDriver()->getPreviousRoute()->toUrl());
     $pagerHtml = $viewPager->getHtml();
 }
 

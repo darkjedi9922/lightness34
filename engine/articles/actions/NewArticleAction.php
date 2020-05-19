@@ -1,11 +1,11 @@
 <?php namespace engine\articles\actions;
 
 use engine\articles\Article;
-use engine\users\cash\user_me;
+use engine\users\User;
 use frame\actions\ActionBody;
 use frame\actions\fields\StringField;
 use frame\auth\InitAccess;
-use frame\stdlib\cash\prev_route;
+use frame\route\Router;
 use frame\stdlib\configs\JsonConfig;
 
 /**
@@ -57,14 +57,14 @@ class NewArticleAction extends ActionBody
         $article = new Article;
         $article->title = $post['title']->get();
         $article->content = $post['text']->get();
-        $article->author_id = user_me::get()->id;
+        $article->author_id = User::getMe()->id;
         $article->date = time();
         $this->id = $article->insert();
     }
 
     public function getSuccessRedirect(): string
     {
-        $prevRouter = prev_route::get();
+        $prevRouter = Router::getDriver()->getPreviousRoute();
         if ($prevRouter && $prevRouter->isInNamespace('admin'))
             return '/admin/article?id=' . $this->id;
         return '/article?id=' . $this->id;

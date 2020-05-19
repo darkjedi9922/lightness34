@@ -1,7 +1,7 @@
 <?php namespace engine\users\actions\fields;
 
 use frame\actions\fields\StringField;
-use frame\stdlib\cash\config;
+use frame\config\ConfigRouter;
 use engine\users\User;
 
 class UserLogin extends StringField
@@ -11,7 +11,7 @@ class UserLogin extends StringField
     public function __construct(string $value)
     {
         parent::__construct($value);
-        $this->config = config::get('users');
+        $this->config = ConfigRouter::getDriver()->findConfig('users');
     }
 
     public function isTooLongByConfig(): bool

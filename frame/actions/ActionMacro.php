@@ -20,7 +20,8 @@ class ActionMacro extends GetMacro
     {
         Events::getDriver()->emit(self::EVENT_ACTION_TRIGGERED);
         $router = new ActionRouter;
-        $this->action = $router->fromTriggerUrl(\frame\stdlib\cash\route::get()->url);
+        $route = Router::getDriver()->getCurrentRoute();
+        $this->action = $router->fromTriggerUrl($route->url);
         $tokenizer = new ActionToken($this->action);
         $tokenizer->validate();
         $this->action->exec();

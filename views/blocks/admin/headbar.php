@@ -1,34 +1,33 @@
 <?php /** @var frame\views\Block $self */
 
 use engine\articles\Article;
-use engine\users\cash\user_me;
+use engine\users\User;
 use engine\messages\Message;
 use frame\tools\Logger;
 use frame\tools\trackers\read\ReadLimitedProgressTracker as Tracker;
-use engine\users\cash\my_rights;
 use engine\comments\Comment;
-use frame\stdlib\cash\config;
+use frame\config\ConfigRouter;
 
-$me = user_me::get();
+$me = User::getMe();
 
 $unreadedArticles = 0;
-if (my_rights::get('articles')->can('see-new-list'))
+if (User::getMyRights('articles')->can('see-new-list'))
     $unreadedArticles = Article::countUnreaded($me->id);
 
 $unreadedComments = 0;
-if (my_rights::get('articles/comments')->can('see-new-list'))
+if (User::getMyRights('articles/comments')->can('see-new-list'))
     $unreadedComments = Comment::countUnreaded($me->id);
 
-$adminRights = my_rights::get('admin');
+$adminRights = User::getMyRights('admin');
 if ($adminRights->can('see-logs')) {
     $date = date('d-m-Y');
-    $logFile = config::get('core')->{'log.dir'} . "/$date.txt";
+    $logFile = ConfigRouter::getDriver()->findConfig('core')->{'log.dir'} . "/$date.txt";
     $logger = new Logger($logFile);
     $logTracker = new Tracker('log', crc32($logFile), count($logger->read()), $me->id);
     $logNewRecords = $logTracker->loadUnreaded();
 }
-$usersRights = my_rights::get('users');
-$messagesRights = my_rights::get('messages');
+$usersRights = User::getMyRights('users');
+$messagesRights = User::getMyRights('messages');
 if ($messagesRights->can('use')) $unreadedMessages = Message::countUnreaded($me->id);
 ?>
 

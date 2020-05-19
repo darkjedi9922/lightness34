@@ -1,18 +1,17 @@
 <?php /** @var frame\views\Page $self */
 
-use frame\stdlib\cash\pagenumber;
+use frame\lists\paged\PagerModel;
 use engine\articles\Article;
 use engine\articles\ArticlePagedList;
-use engine\users\cash\my_rights;
 use engine\users\User;
 use function lightlib\shorten;
 use frame\tools\JsonEncoder;
 use frame\auth\InitAccess;
 
 InitAccess::accessRight('articles', 'see-list');
-$pagenumber = pagenumber::get();
+$pagenumber = PagerModel::getRoutePage();
 $articles = new ArticlePagedList($pagenumber);
-$rights = my_rights::get('articles');
+$rights = User::getMyRights('articles');
 
 $tableProps = ['items' => []];
 foreach ($articles as $article) {

@@ -1,7 +1,7 @@
 <?php namespace frame\route;
 
 use frame\events\Macro;
-use frame\stdlib\cash\route;
+use frame\route\Router;
 
 abstract class GetMacro extends Macro
 {
@@ -14,7 +14,7 @@ abstract class GetMacro extends Macro
 
     public function exec(...$args)
     {
-        $value = route::get()->getArg($this->name);
+        $value = Router::getDriver()->getCurrentRoute()->getArg($this->name);
         if ($value !== null) $this->triggerExec($value);
     }
 

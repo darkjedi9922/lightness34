@@ -1,5 +1,7 @@
 <?php namespace frame\config;
 
+use frame\cash\StaticCashStorage;
+
 /**
  * Используется для нахождения конфигов, только по их имени
  * без пути к ним и расширения.
@@ -30,10 +32,14 @@ class ConfigRouter extends \frame\core\Driver
      */
     public function findConfig(string $name): ?NamedConfig
     {
-        $name = "{$this->getConfigsDir()}/$name";
-        foreach ($this->supported as $configClass)
-            if ($configClass::exists($name)) return new $configClass($name);
-        return null;
+        return StaticCashStorage::getDriver()->cash("config-$name",
+            function() use ($name) {
+                $name = "{$this->getConfigsDir()}/$name";
+                foreach ($this->supported as $configClass)
+                    if ($configClass::exists($name)) return new $configClass($name);
+                return null;
+            }
+        );
     }
 
     /**

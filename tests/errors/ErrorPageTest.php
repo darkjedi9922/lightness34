@@ -4,7 +4,6 @@ use frame\core\Core;
 use frame\errors\Errors;
 use frame\route\HttpError;
 use tests\errors\stubs\HttpErrorHandlerStub;
-use frame\stdlib\cash\config;
 use frame\views\ViewRouter;
 use tests\errors\stubs\ViewRouterStub;
 use frame\config\ConfigRouter;
@@ -20,7 +19,7 @@ class ErrorPageTest extends TestCase
         $app = new Core;
         
         ConfigRouter::getDriver()->addSupport(JsonConfig::class);
-        $config = config::get('core');
+        $config = ConfigRouter::getDriver()->findConfig('core');
         $config->{'log.enabled'} = false;
         
         $app->replaceDriver(ViewRouter::class, ViewRouterStub::class);

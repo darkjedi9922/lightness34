@@ -3,7 +3,7 @@
 use engine\users\actions\AddUser;
 use engine\users\Gender;
 use frame\actions\ViewAction;
-use frame\stdlib\cash\config;
+use frame\config\ConfigRouter;
 use frame\lists\base\IdentityList;
 use frame\tools\JsonEncoder;
 use frame\auth\InitAccess;
@@ -19,7 +19,7 @@ foreach (new IdentityList(Gender::class) as $gender) {
     ];
 }
 
-$config = config::get('users');
+$config = ConfigRouter::getDriver()->findConfig('users');
 $avatarMaxSizeValue = $config->{'avatar.max_size.value'};
 $avatarMaxSizeUnit = $config->{'avatar.max_size.unit'};
 

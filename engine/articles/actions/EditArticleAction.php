@@ -5,7 +5,7 @@ use frame\actions\ActionBody;
 use frame\actions\fields\IntegerField;
 use frame\actions\fields\StringField;
 use frame\auth\InitAccess;
-use frame\stdlib\cash\prev_route;
+use frame\route\Router;
 use frame\stdlib\configs\JsonConfig;
 
 class EditArticleAction extends ActionBody
@@ -66,7 +66,7 @@ class EditArticleAction extends ActionBody
 
     public function getSuccessRedirect(): string
     {
-        $prevRouter = prev_route::get();
+        $prevRouter = Router::getDriver()->getPreviousRoute();
         if ($prevRouter && $prevRouter->isInNamespace('admin'))
             return '/admin/article?id=' . $this->article->id;
         return '/article?id=' . $this->article->id;

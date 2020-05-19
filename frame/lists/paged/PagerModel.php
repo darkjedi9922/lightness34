@@ -1,8 +1,9 @@
 <?php namespace frame\lists\paged;
 
-use frame\stdlib\cash\route;
 use frame\route\HttpError;
 use frame\lists\paged\PagerView;
+use frame\cash\StaticCashStorage;
+use frame\route\Router;
 
 /**
 * Класс для реализации счетчика/переключателя страниц 
@@ -13,6 +14,19 @@ class PagerModel
     private $current;
     private $allCount;
     private $pageLimit;
+
+    public static function getRoutePage(bool $previous = false): int
+    {
+        return StaticCashStorage::getDriver()->cash("pagenumber$previous",
+            function() use ($previous) {
+                $router = Router::getDriver()->getPreviousRoute();
+                if (!$router) return 1;
+                $p = $router->getArg('p');
+                if (!$p || $p <= 0) return 1;
+                else return $p;
+            }
+        );
+    }
 
     public static function calcLast(int $allCount, int $pageLimit): int {
         $last = ceil($allCount / $pageLimit);
@@ -72,7 +86,7 @@ class PagerModel
      * Возвращает ссылку на ту же страницу, но с другим номером страницы.
      */
     public function toLink(string $urlPageArgumentName, int $pageNumber): string {
-        return route::get()->toUrl([$urlPageArgumentName => $pageNumber]);
+        return Router::getDriver()->getCurrentRoute()->toUrl([$urlPageArgumentName => $pageNumber]);
     }
     
     public function countPages(): int {

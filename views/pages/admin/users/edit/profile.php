@@ -1,6 +1,6 @@
 <?php /** @var frame\views\Page $self */
 
-use frame\stdlib\cash\config;
+use frame\config\ConfigRouter;
 use frame\auth\InitAccess;
 use frame\route\InitRoute;
 use engine\users\User;
@@ -18,7 +18,7 @@ InitAccess::accessOneRight('users', ['edit-all' => [$user], 'edit-own' => [$user
 
 $genders = new IdentityList(Gender::class);
 $action = new ViewAction(ProfileEditAction::class, ['id' => $uid]);
-$config = config::get('users');
+$config = ConfigRouter::getDriver()->findConfig('users');
 
 $loginErrors = [];
 if ($action->hasError(ProfileEditAction::E_NO_LOGIN))

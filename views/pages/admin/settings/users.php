@@ -1,13 +1,13 @@
 <?php /** @var frame\views\Page $self */
 
 use frame\auth\InitAccess;
-use frame\stdlib\cash\config;
+use frame\config\ConfigRouter;
 use engine\admin\actions\EditConfigAction;
 use frame\actions\ViewAction;
 use frame\tools\JsonEncoder;
 
 InitAccess::accessRight('users', 'setup');
-$config = config::get('users');
+$config = ConfigRouter::getDriver()->findConfig('users');
 $edit = new ViewAction(EditConfigAction::class, ['name' => 'users']);
 
 $formProps = [

@@ -1,16 +1,15 @@
 <?php /** @var frame\views\Block $self */
 
-use engine\users\cash\my_rights;
+use engine\users\User;
 use engine\users\Group;
-use engine\users\cash\user_me;
 
-$adminRights = my_rights::get('admin');
-$usersRights = my_rights::get('users');
-$messageRights = my_rights::get('messages');
-$articleRights = my_rights::get('articles');
-$commentsRights = my_rights::get('articles/comments');
-$statsRights = my_rights::get('stat');
-$isIRoot = user_me::get()->group_id === Group::ROOT_ID;
+$adminRights = User::getMyRights('admin');
+$usersRights = User::getMyRights('users');
+$messageRights = User::getMyRights('messages');
+$articleRights = User::getMyRights('articles');
+$commentsRights = User::getMyRights('articles/comments');
+$statsRights = User::getMyRights('stat');
+$isIRoot = User::getMe()->group_id === Group::ROOT_ID;
 
 $globalItems = [];
 

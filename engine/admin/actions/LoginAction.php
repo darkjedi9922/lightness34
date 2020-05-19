@@ -1,6 +1,6 @@
 <?php namespace engine\admin\actions;
 
-use frame\stdlib\cash\prev_route;
+use frame\route\Router;
 use engine\admin\Auth;
 use engine\users\Encoder;
 use frame\actions\ActionBody;
@@ -60,7 +60,7 @@ class LoginAction extends ActionBody
         // Если "я" пытался перейти на какую-либо страницу в админ-панели,
         // но по каким-то причинам пришлось авторизоваться, нужно перейти 
         // на изначально желаемую страницу.
-        $prevRouter = prev_route::get();
+        $prevRouter = Router::getDriver()->getPreviousRoute();
         if ($prevRouter && $prevRouter->getPathPart(0) === 'admin' 
             && $prevRouter->getPathPart(1)) return $prevRouter->toUrl();
         // Иначе переходим на главную.

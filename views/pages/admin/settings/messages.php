@@ -2,13 +2,13 @@
 
 use frame\auth\InitAccess;
 use engine\users\Group;
-use frame\stdlib\cash\config;
+use frame\config\ConfigRouter;
 use frame\actions\ViewAction;
 use engine\admin\actions\EditConfigAction;
 use frame\tools\JsonEncoder;
 
 InitAccess::accessRight('messages', 'setup');
-$config = config::get('messages');
+$config = ConfigRouter::getDriver()->findConfig('messages');
 $edit = new ViewAction(EditConfigAction::class, ['name' => 'messages']);
 
 $formProps = [

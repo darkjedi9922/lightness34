@@ -11,7 +11,7 @@ use engine\users\Group;
 use engine\users\User;
 use frame\actions\ActionBody;
 use frame\actions\UploadedFile;
-use frame\stdlib\cash\prev_route;
+use frame\route\Router;
 use frame\tools\Client;
 use frame\auth\InitAccess;
 
@@ -117,7 +117,7 @@ class AddUser extends ActionBody
 
     public function getSuccessRedirect(): ?string
     {
-        $prevRouter = prev_route::get();
+        $prevRouter = Router::getDriver()->getPreviousRoute();
         if ($prevRouter && $prevRouter->isInNamespace('admin'))
             return "/admin/users/profile/{$this->login}";
         else return '';

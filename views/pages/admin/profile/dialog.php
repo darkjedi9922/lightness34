@@ -2,16 +2,15 @@
 
 use frame\auth\InitAccess;
 use frame\route\InitRoute;
-use engine\users\cash\user_me;
 use engine\users\User;
-use frame\stdlib\cash\pagenumber;
+use frame\lists\paged\PagerModel;
 use frame\tools\JsonEncoder;
 
 InitAccess::accessRight('messages', 'use');
 $withId = (int)InitRoute::requireGet('uid');
 $with = User::selectIdentity($withId);
 InitRoute::require($with !== null);
-$me = user_me::get();
+$me = User::getMe();
 
 $pageProps = [
     'me' => [
@@ -22,7 +21,7 @@ $pageProps = [
         'id' => $with->id,
         'login' => $with->login
     ],
-    'pagenumber' => pagenumber::get()
+    'pagenumber' => PagerModel::getRoutePage()
 ];
 $pageProps = JsonEncoder::forHtmlAttribute($pageProps);
 ?>

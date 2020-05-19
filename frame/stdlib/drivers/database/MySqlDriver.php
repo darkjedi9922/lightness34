@@ -1,7 +1,7 @@
 <?php namespace frame\stdlib\drivers\database;
 
 use frame\database\SqlDriver;
-use frame\stdlib\cash\config;
+use frame\config\ConfigRouter;
 
 class MySqlDriver extends SqlDriver
 {
@@ -12,7 +12,7 @@ class MySqlDriver extends SqlDriver
      */
     public function __construct()
     {
-        $config = config::get('db');
+        $config = ConfigRouter::getDriver()->findConfig('db');
         $host = $config->{'host'};
         $login = $config->{'username'};
         $password = $config->{'password'};

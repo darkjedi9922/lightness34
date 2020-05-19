@@ -1,9 +1,9 @@
 <?php /** @var frame\views\Layout $self */
 
-use frame\stdlib\cash\config;
+use frame\config\ConfigRouter;
 use function lightlib\versionify;
 
-$config = config::get('core');
+$config = ConfigRouter::getDriver()->findConfig('core');
 ?>
 
 <!DOCTYPE html>

@@ -5,12 +5,12 @@ use frame\views\Widget;
 use frame\auth\Auth;
 use frame\actions\ViewAction;
 use engine\users\actions\LogoutAction;
-use engine\users\cash\my_rights;
+use engine\users\User;
 
 $auth = new Auth;
 if ($auth->isLogged()) {
     $logout = new ViewAction(LogoutAction::class);
-    $adminRights = my_rights::get('admin');
+    $adminRights = User::getMyRights('admin');
 }
 
 $mechanisms = [[

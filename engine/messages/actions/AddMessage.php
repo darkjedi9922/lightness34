@@ -4,7 +4,6 @@ use frame\actions\ActionBody;
 use engine\users\User;
 use frame\auth\InitAccess;
 use frame\route\InitRoute;
-use engine\users\cash\user_me;
 use frame\actions\fields\IntegerField;
 use frame\actions\fields\StringField;
 use frame\database\Records;
@@ -46,7 +45,7 @@ class AddMessage extends ActionBody
 
     public function succeed(array $post, array $files)
     {
-        $me = user_me::get();
+        $me = User::getMe();
         $date = time();
         $member1Id = null;
         $member2Id = null;

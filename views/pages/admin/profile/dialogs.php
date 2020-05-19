@@ -1,11 +1,10 @@
 <?php /** @var frame\views\Page $self */
 
 use frame\auth\InitAccess;
-use engine\users\cash\user_me;
 use engine\messages\actions\DeleteDialog;
 use engine\messages\DialogPagedList;
 use engine\messages\Dialog;
-use frame\stdlib\cash\pagenumber;
+use frame\lists\paged\PagerModel;
 use function lightlib\shorten;
 use engine\users\User;
 use frame\actions\ViewAction;
@@ -13,8 +12,8 @@ use frame\lists\paged\PagerView;
 use frame\tools\JsonEncoder;
 
 InitAccess::accessRight('messages', 'use');
-$me = user_me::get();
-$page = pagenumber::get();
+$me = User::getMe();
+$page = PagerModel::getRoutePage();
 $dialogs = new DialogPagedList($page);
 $pageCount = $dialogs->getPager()->countPages();
 

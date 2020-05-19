@@ -2,8 +2,8 @@
 
 use frame\lists\paged\PagedList;
 use frame\database\SqlDriver;
-use engine\users\cash\user_me;
-use frame\stdlib\cash\config;
+use engine\users\User;
+use frame\config\ConfigRouter;
 
 class DialogPagedList extends PagedList
 {	
@@ -11,7 +11,7 @@ class DialogPagedList extends PagedList
 
     public function __construct(int $page) 
     {
-        $me = user_me::get();
+        $me = User::getMe();
 
         $countAll = (int) SqlDriver::getDriver()->query(
             "SELECT COUNT(`COUNT(id)`) FROM (
@@ -23,7 +23,7 @@ class DialogPagedList extends PagedList
             ) AS dialogs"
         )->readScalar();
 
-        $pageLimit = config::get('messages')->{'dialogs.list.amount'};
+        $pageLimit = ConfigRouter::getDriver()->findConfig('messages')->{'dialogs.list.amount'};
 
         parent::__construct($page, $countAll, $pageLimit);
 

@@ -4,7 +4,7 @@ use frame\route\Request;
 use engine\statistics\stats\TimeStat;
 use engine\statistics\stats\RouteStat;
 use engine\statistics\macros\BaseStatCollector;
-use frame\stdlib\cash\route;
+use frame\route\Router;
 
 class StartCollectRouteStat extends BaseStatCollector
 {
@@ -20,7 +20,7 @@ class StartCollectRouteStat extends BaseStatCollector
     protected function collect(...$args)
     {
         $this->timer->start();
-        $this->stat->url = route::get()->url;
+        $this->stat->url = Router::getDriver()->getCurrentRoute()->url;
         $this->stat->type = RouteStat::ROUTE_TYPE_PAGE;
         $this->stat->ajax = Request::getDriver()->isAjax();
         $this->stat->time = time();

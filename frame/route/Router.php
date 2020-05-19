@@ -1,9 +1,29 @@
 <?php namespace frame\route;
 
 use frame\core\Driver;
+use frame\route\Request;
+use frame\cash\StaticCashStorage;
 
 abstract class Router extends Driver
 {
+    public function getCurrentRoute(): Route
+    {
+        return StaticCashStorage::getDriver()->cash('current-router', function() {
+            $request = Request::getDriver()->getRequest();
+            return $this->parseRoute($request);
+        });
+    }
+
+    public function getPreviousRoute(): ?Route
+    {
+        return StaticCashStorage::getDriver()->cash('prev-router', function() {
+            $request = Request::getDriver();
+            if ($request->hasReferer())
+                return $this->parseRoute($request->getReferer());
+            else return null;
+        });
+    }
+
     public abstract function parseRoute(string $route): Route;
     
     /**

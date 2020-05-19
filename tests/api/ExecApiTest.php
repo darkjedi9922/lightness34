@@ -6,7 +6,6 @@ use frame\core\Core;
 use frame\events\Events;
 use frame\route\Request;
 use frame\route\Response;
-use frame\stdlib\cash\config;
 use frame\stdlib\configs\JsonConfig;
 use frame\tools\JsonEncoder;
 use PHPUnit\Framework\TestCase;
@@ -29,7 +28,7 @@ class ExecApiTest extends TestCase
 
         $app->exec();
 
-        $prettyJson = config::get('core')->{'mode.debug'};
+        $prettyJson = ConfigRouter::getDriver()->findConfig('core')->{'mode.debug'};
         $expectedResult = SimpleApi::$expectedResult;
         $expectedOutput = JsonEncoder::forViewText($expectedResult, $prettyJson);
 

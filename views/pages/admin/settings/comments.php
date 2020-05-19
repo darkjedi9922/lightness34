@@ -1,13 +1,13 @@
 <?php /** @var frame\views\Page $self */
 
 use frame\auth\InitAccess;
-use frame\stdlib\cash\config;
+use frame\config\ConfigRouter;
 use frame\actions\ViewAction;
 use engine\admin\actions\EditConfigAction;
 use frame\tools\JsonEncoder;
 
 InitAccess::accessRight('articles/comments', 'configure');
-$config = config::get('comments');
+$config = ConfigRouter::getDriver()->findConfig('comments');
 $edit = new ViewAction(EditConfigAction::class, ['name' => 'comments']);
 
 $formProps = [

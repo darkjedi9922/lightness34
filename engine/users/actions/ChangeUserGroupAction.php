@@ -3,7 +3,6 @@
 use frame\actions\ActionBody;
 use frame\auth\InitAccess;
 use frame\route\InitRoute;
-use engine\users\cash\user_me;
 use engine\users\Group;
 use engine\users\User;
 use frame\actions\fields\IntegerField;
@@ -36,7 +35,7 @@ class ChangeUserGroupAction extends ActionBody
 
     public function initialize(array $get)
     {
-        $me = user_me::get();
+        $me = User::getMe();
         InitAccess::access((int) $me->group_id === Group::ROOT_ID);
         $this->user = User::selectIdentity($get['uid']->get());
         InitRoute::require($this->user !== null);

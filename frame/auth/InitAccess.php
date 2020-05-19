@@ -1,9 +1,8 @@
 <?php namespace frame\auth;
 
 use frame\auth\Auth;
-use engine\users\cash\my_rights;
 use frame\route\HttpError;
-use engine\users\cash\user_me;
+use engine\users\User;
 
 class InitAccess
 {
@@ -23,7 +22,7 @@ class InitAccess
     /** @throws HttpError FORBIDDEN */
     public static function accessGroup(int $groupId)
     {
-        static::access((int) user_me::get()->group_id === $groupId);
+        static::access((int) User::getMe()->group_id === $groupId);
     }
 
     /** 
@@ -33,7 +32,7 @@ class InitAccess
      */
     public static function accessRight(string $module, string $right, ...$args)
     {
-        if (!my_rights::get($module)->can($right, ...$args)) 
+        if (!User::getMyRights($module)->can($right, ...$args)) 
             throw new HttpError(HttpError::FORBIDDEN);
     }
 
@@ -44,7 +43,7 @@ class InitAccess
      */
     public static function accessOneRight(string $module, array $rights)
     {
-        if (!my_rights::get($module)->canOneOf($rights))
+        if (!User::getMyRights($module)->canOneOf($rights))
             throw new HttpError(HttpError::FORBIDDEN);
     }
 }

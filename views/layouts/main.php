@@ -2,12 +2,11 @@
 
 use frame\auth\Auth;
 use frame\views\Widget;
-use engine\users\cash\my_rights;
-use engine\users\cash\user_me;
+use engine\users\User;
 
-$userRights = my_rights::get('users');
+$userRights = User::getMyRights('users');
 $auth = new Auth;
-$me = user_me::get();
+$me = User::getMe();
 
 $doShowMiniProfile = $auth->isLogged();
 $doShowWelcomeWidget = !$auth->isLogged() && $userRights->can('add');

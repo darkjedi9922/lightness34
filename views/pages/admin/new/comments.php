@@ -1,32 +1,30 @@
 <?php /** @var frame\views\Page $self */
 
-use frame\stdlib\cash\pagenumber;
+use frame\lists\paged\PagerModel;
 use engine\comments\NewCommentPagedList;
 use engine\comments\Comment;
 use engine\users\User;
 use frame\auth\InitAccess;
 use frame\tools\JsonEncoder;
 use frame\modules\Modules;
-use frame\stdlib\cash\config;
-use engine\users\cash\user_me;
-use engine\users\cash\my_rights;
+use frame\config\ConfigRouter;
 use frame\actions\ViewAction;
 use engine\comments\actions\DeleteComment;
 
 InitAccess::accessRight('articles/comments', 'see-new-list');
-$pagenumber = pagenumber::get();
+$pagenumber = PagerModel::getRoutePage();
 $items = new NewCommentPagedList($pagenumber);
-$me = user_me::get();
+$me = User::getMe();
 
 $commentListProps = [];
-$setReaded = config::get('comments')->{'new.setReadedOnNewsPage'};
+$setReaded = ConfigRouter::getDriver()->findConfig('comments')->{'new.setReadedOnNewsPage'};
 $deleteComment = new ViewAction(DeleteComment::class);
 foreach ($items as $comment) {
     /** @var Comment $comment */
     $author = User::selectIdentity($comment->author_id);
     $module = Modules::getDriver()->findById($comment->module_id);
 
-    if (my_rights::get($module->getName())->canOneOf([
+    if (User::getMyRights($module->getName())->canOneOf([
         'delete-own' => [$comment],
         'delete-all' => null
     ])) {

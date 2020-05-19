@@ -3,8 +3,7 @@
 use frame\route\InitRoute;
 use engine\articles\Article;
 use engine\users\User;
-use frame\stdlib\cash\pagenumber;
-use engine\users\cash\user_me;
+use frame\lists\paged\PagerModel;
 use engine\users\Group;
 use frame\modules\Modules;
 use frame\lists\paged\PagerView;
@@ -13,7 +12,6 @@ use engine\comments\actions\AddComment;
 use engine\comments\CommentList;
 use engine\comments\Comment;
 use frame\tools\JsonEncoder;
-use engine\users\cash\my_rights;
 use engine\articles\actions\DeleteArticleAction;
 use engine\comments\actions\DeleteComment;
 
@@ -22,16 +20,16 @@ $article = Article::selectIdentity($id);
 
 InitRoute::require($article !== null);
 
-$me = user_me::get();
+$me = User::getMe();
 $author = User::selectIdentity($article->author_id);
 $group = Group::selectIdentity($author->group_id);
-$prevPagenumber = pagenumber::get(true);
-$page = pagenumber::get();
+$prevPagenumber = PagerModel::getRoutePage(true);
+$page = PagerModel::getRoutePage();
 $moduleId = Modules::getDriver()->findByName('articles/comments')->getId();
 $materialId = $article->id;
 $comments = new CommentList($moduleId, $materialId, $page);
 $pages = $comments->getPager()->countPages();
-$articleRights = my_rights::get('articles');
+$articleRights = User::getMyRights('articles');
 
 $delete = new ViewAction(DeleteArticleAction::class, ['id' => $id]);
 $add = new ViewAction(AddComment::class, [
@@ -64,7 +62,7 @@ $articleCommentsData = [
     'addUrl' => $add->getUrl()
 ];
 
-$commentRights = my_rights::get('articles/comments');
+$commentRights = User::getMyRights('articles/comments');
 $deleteComment = new ViewAction(DeleteComment::class);
 foreach ($comments as $comment) {
     /** @var Comment $comment */
@@ -97,7 +95,7 @@ foreach ($comments as $comment) {
 
 $articleCommentsData = JsonEncoder::forHtmlAttribute($articleCommentsData);
 
-$article->setReaded(user_me::get());
+$article->setReaded(User::getMe());
 ?>
 
 <div class="content__header">

@@ -1,9 +1,9 @@
 <?php namespace engine\messages;
 
-use engine\users\cash\user_me;
+use engine\users\User;
 use frame\lists\paged\PagedList;
 use frame\database\SqlDriver;
-use frame\stdlib\cash\config;
+use frame\config\ConfigRouter;
 use frame\lists\iterators\IdentityIterator;
 
 class MessagePagedList extends PagedList
@@ -13,9 +13,9 @@ class MessagePagedList extends PagedList
 
     public function __construct(int $page, int $userId)
     {
-        $me = user_me::get();
+        $me = User::getMe();
         $db = SqlDriver::getDriver();
-        $config = config::get('messages');
+        $config = ConfigRouter::getDriver()->findConfig('messages');
 
         $countAll = (int) $db->query(
             "SELECT COUNT(id) FROM messages WHERE (

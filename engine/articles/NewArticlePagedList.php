@@ -2,9 +2,9 @@
 
 use frame\lists\paged\PagedList;
 use frame\lists\iterators\IdentityIterator;
-use frame\stdlib\cash\config;
+use frame\config\ConfigRouter;
 use frame\database\SqlDriver;
-use engine\users\cash\user_me;
+use engine\users\User;
 
 class NewArticlePagedList extends PagedList
 {
@@ -13,9 +13,9 @@ class NewArticlePagedList extends PagedList
 
     public function __construct(int $page)
     {
-        $me = user_me::get();
+        $me = User::getMe();
         $countAll = Article::countUnreaded($me->id);
-        $pageLimit = config::get('articles')->{'list.amount'};
+        $pageLimit = ConfigRouter::getDriver()->findConfig('articles')->{'list.amount'};
 
         parent::__construct($page, $countAll, $pageLimit);
 

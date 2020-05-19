@@ -1,14 +1,14 @@
 <?php namespace frame\views\macros;
 
-use frame\stdlib\cash\route;
 use frame\route\HttpError;
+use frame\route\Router;
 use frame\views\ViewRouter;
 
 class ShowPage extends \frame\events\Macro
 {
     public function exec(...$args)
     {
-        $router = route::get();
+        $router = Router::getDriver()->getCurrentRoute();
         $page = ViewRouter::getDriver()->findPage($router);
         if ($page) $page->show();
         else throw new HttpError(

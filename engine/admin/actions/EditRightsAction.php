@@ -1,6 +1,5 @@
 <?php namespace engine\admin\actions;
 
-use engine\users\cash\my_group;
 use frame\actions\ActionBody;
 use frame\auth\InitAccess;
 use frame\route\InitRoute;
@@ -44,7 +43,7 @@ class EditRightsAction extends ActionBody
 
     public function initialize(array $get)
     {
-        $myGroup = my_group::get();
+        $myGroup = Group::getMine();
         InitAccess::access($myGroup->id === $myGroup::ROOT_ID);
 
         $this->id = $get['id']->get();

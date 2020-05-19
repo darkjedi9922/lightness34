@@ -3,6 +3,8 @@
 use frame\tools\files\File;
 use frame\tools\Client;
 use frame\lists\base\FileLineList;
+use frame\cash\StaticCashStorage;
+use frame\config\ConfigRouter;
 
 class Logger
 {
@@ -18,6 +20,15 @@ class Logger
 
     private $handle = null;
     private $filename = null;
+
+    public static function getCurrent(): Logger
+    {
+        return StaticCashStorage::getDriver()->cash('app-logger', function() {
+            $dir = ConfigRouter::getDriver()->findConfig('core')->{'log.dir'};
+            $date = date('d-m-Y');
+            return new self("$dir/$date.txt");
+        });
+    }
 
     public function __construct($filename)
     {
