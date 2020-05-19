@@ -28,9 +28,7 @@ use frame\stdlib\drivers\route\UrlRouter;
 use frame\stdlib\drivers\route\UrlRequest;
 use frame\stdlib\drivers\route\UrlResponse;
 use frame\views\macros\ApplyDefaultLayout;
-use frame\views\macros\BlockMacro;
 use frame\views\macros\ShowPage;
-use frame\views\macros\WidgetMacro;
 use frame\views\View;
 use frame\database\SqlDriver;
 use frame\stdlib\drivers\database\MySqlDriver;
@@ -61,8 +59,6 @@ $modules->set(new CommentsModule('comments', $articles));
 
 $events = Events::getDriver();
 $events->on(Core::EVENT_APP_START, new ActionMacro('action'));
-$events->on(Core::EVENT_APP_START, new BlockMacro('block'));
-$events->on(Core::EVENT_APP_START, new WidgetMacro('widget'));
 $events->on(Core::EVENT_APP_START, new ShowPage);
 $events->on(View::EVENT_BEFORE_RENDER, new ApplyDefaultLayout);
 
