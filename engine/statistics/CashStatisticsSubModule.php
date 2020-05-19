@@ -6,9 +6,11 @@ use engine\statistics\macros\cash\CollectCashCalls;
 use engine\statistics\macros\cash\CollectCashError;
 use frame\modules\Module;
 use frame\errors\Errors;
-use frame\cash\CashValue;
 use engine\statistics\stats\RouteStat;
 use engine\statistics\stats\CashValueStat;
+use frame\core\Core;
+use frame\cash\StaticCashStorage;
+use engine\statistics\tools\StatCashStorage;
 
 class CashStatisticsSubModule extends BaseStatisticsSubModule
 {
@@ -23,6 +25,7 @@ class CashStatisticsSubModule extends BaseStatisticsSubModule
         parent::__construct($name, $parent);
         $this->routeStat = $routeStat;
         $this->callsCollector = new CollectCashCalls;
+        Core::$app->decorateDriver(StaticCashStorage::class, StatCashStorage::class);
     }
 
     public function clearStats()
@@ -44,7 +47,7 @@ class CashStatisticsSubModule extends BaseStatisticsSubModule
         $errorCollector = new CollectCashError($this->callsCollector);
 
         return [
-            CashValue::EVENT_CALL => $this->callsCollector,
+            StatCashStorage::EVENT_CASH_CALL => $this->callsCollector,
             Errors::EVENT_ERROR => $errorCollector
         ];
     }

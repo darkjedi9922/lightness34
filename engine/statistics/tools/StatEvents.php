@@ -50,33 +50,38 @@ class StatEvents extends Decorator
     public function on(string $event, callable $macro)
     {
         $this->manager->on($event, $macro);
-        $this->manager->emit(self::EVENT_SUBSCRIBE, $event, $macro);
+        if ($event !== StatCashStorage::EVENT_CASH_CALL)
+            $this->manager->emit(self::EVENT_SUBSCRIBE, $event, $macro);
     }
 
     public function off(string $event, callable $macro)
     {
         $this->manager->off($event, $macro);
-        $this->manager->emit(self::EVENT_UNSUBSCRIBE, $event, $macro);
+        if ($event !== StatCashStorage::EVENT_CASH_CALL)
+            $this->manager->emit(self::EVENT_UNSUBSCRIBE, $event, $macro);
     }
 
     public function emit(string $event, ...$args): array
     {
         $emitId = ++$this->lastEmitId;
-        $this->manager->emit(self::EVENT_EMIT, $emitId, $event, $args);
+        if ($event !== StatCashStorage::EVENT_CASH_CALL)
+            $this->manager->emit(self::EVENT_EMIT, $emitId, $event, $args);
 
         $result = [];
         $subscribers = $this->manager->getSubscribers()[$event] ?? [];
         if (!empty($subscribers)) {
             for ($i = 0, $c = count($subscribers); $i < $c; ++$i) {
                 $macro = $subscribers[$i];
-                $this->manager->emit(
-                    self::EVENT_MACRO_START, $emitId, $event, $macro, $args
-                );
+                if ($event !== StatCashStorage::EVENT_CASH_CALL)
+                    $this->manager->emit(
+                        self::EVENT_MACRO_START, $emitId, $event, $macro, $args
+                    );
                 $result[] = $macro;
                 $macro(...$args);
-                $this->manager->emit(
-                    self::EVENT_MACRO_END, $emitId, $event, $macro, $args
-                );
+                if ($event !== StatCashStorage::EVENT_CASH_CALL)
+                    $this->manager->emit(
+                        self::EVENT_MACRO_END, $emitId, $event, $macro, $args
+                    );
             }
         }
 
