@@ -1,6 +1,7 @@
 import React from 'react'
 import { isNil } from 'lodash'
 import classNames from 'classnames'
+import { decodeHTML } from 'buk'
 
 export enum Type {
     EMPTY = 'empty',
@@ -27,7 +28,7 @@ class Status extends React.Component<Props> {
             <span className={classNames(
                 "status__message",
                 {'status__message--empty': this.props.emptyMessage}
-            )}>{this.props.message}</span>
+            )}>{decodeHTML(this.props.message)}</span>
             {hasHint && <span className="status__hint">{this.props.hint}</span>}
         </span>
     }
