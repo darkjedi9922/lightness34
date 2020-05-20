@@ -1,6 +1,6 @@
 import React from 'react';
 import Breadcrumbs from '../common/Breadcrumbs';
-import Table from '../table/Table';
+import Table, { SortOrder } from '../table/Table';
 import Status, { Type } from '../common/Status';
 import Mark from '../common/Mark';
 import classNames from 'classnames';
@@ -42,7 +42,13 @@ class LogPage extends React.Component<Props> {
                 <div className="box box--table">
                     <Table
                         headers={['Тип', 'IP', 'Время']}
+                        sort={{
+                            defaultCellIndex: 2,
+                            defaultOrder: SortOrder.DESC,
+                            isAlreadySorted: false
+                        }}
                         items={this.props.records.map((record, index) => ({
+                            pureCellsToSort: [record.type, record.ip, index],
                             cells: [
                                 <Mark 
                                     className="log__type"
@@ -99,12 +105,12 @@ class LogPage extends React.Component<Props> {
                                     messageParts.shift();
                                     const message = messageParts.join('\n');
                                     return (
-                                        <p className="log__message">
+                                        <div className="log__message">
                                             <p className="log__message--header">
                                                 {header}
                                             </p>
                                             {messageParts.length !== 1 && message}
-                                        </p>
+                                        </div>
                                     )
                                 })()
                             }]

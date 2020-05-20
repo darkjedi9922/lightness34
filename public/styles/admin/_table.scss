@@ -26,9 +26,11 @@
             border: solid 1px #bfbfbf;
             border-radius: 0.75rem;
 
-            i.icon-down-dir:before {
-                margin-right: 0;
-                width: auto;
+            i.icon-down-dir, i.icon-up-dir {
+                &:before {
+                    margin-right: 0;
+                    width: auto;
+                }
             }
         }
 
