@@ -42,9 +42,13 @@ class ActionsHistoryList extends HistoryList
             $data = json_decode($action->data_json, true);
 
             $actionPost = [];
+            
             /** @var ActionBody $body */
-            $body = new $action->class;
-            $postDesc = $body->listPost();
+            if (class_exists($action->class)) {
+                $body = new $action->class;
+                $postDesc = $body->listPost();
+            } else $postDesc = [];
+
             foreach ($data['data']['post'] as $field => $value) {
                 $type = $postDesc[$field] ?? null;
                 $actionPost[] = [
@@ -123,6 +127,7 @@ class ActionsHistoryList extends HistoryList
                 'responseType' => $responseType,
                 'responseInfo' => $action->response_info,
                 'isAjax' => (bool) $routeStat->ajax,
+                'status' => $row['status'],
                 'secondDuration' => $action->duration_sec,
                 'time' => date('d.m.Y H:i', $routeStat->time)
             ];

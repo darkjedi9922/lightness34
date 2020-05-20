@@ -4,7 +4,6 @@ import HistoryPage from '../stats/HistoryPage';
 import { SortOrder } from '../table/Table';
 import Label from '../common/label';
 import DurationCell from '../table/DurationCell';
-import ActionStatus from './ActionStatus';
 import Parameter from '../common/Parameter';
 import Status, { Type } from '../common/Status';
 
@@ -47,11 +46,24 @@ export interface ActionStat {
     responseType: ActionResponseType,
     responseInfo?: string,
     isAjax: boolean,
+    status: number,
     secondDuration: number,
     time: string
 }
 
+enum ActionStatus {
+    SUCCESS = 0,
+    FAILURE = 1,
+    FATAL = 2
+}
+
 class ActionHistory extends React.Component {
+    private statusLabels = {
+        0: ['Success', 'ok'],
+        1: ['Failure', 'warning'],
+        2: ['Fatal', 'error']
+    };
+
     public render(): React.ReactNode {
         return <HistoryPage
             breadcrumbsNamePart="Действия"
@@ -69,7 +81,9 @@ class ActionHistory extends React.Component {
                 buildRowCells: (action: ActionStat) => [
                     <>{action.class}&nbsp;{action.isAjax && <Label color="yellow">ajax</Label>}</>,
                     <DurationCell>{`${action.secondDuration.toString()} sec`}</DurationCell>,
-                    <ActionStatus {...action} />,
+                    <span className={`routes__code routes__code--status routes__code--${this.statusLabels[action.status][1]}`}>
+                        {this.statusLabels[action.status][0]}
+                    </span>,
                     <span className="routes__time">{action.time}</span>
                 ],
                 buildRowDetails: (action: ActionStat) => [{
@@ -119,14 +133,14 @@ class ActionHistory extends React.Component {
                         ? <Parameter value="No result data" empty={true} />
                         : map(action.data.result, (value, key) => <Parameter name={key} value={value} />)
                 }, ...(() => {
-                    if (this.isFail(action)) return [{
+                    if (action.status === ActionStatus.FAILURE) return [{
                         content: <Status
                             type={Type.WARNING}
                             name="Validation error codes: "
                             message={action.data.errors.join(', ')}
                         />
                     }];
-                    if (this.isFatal(action)) return [{
+                    if (action.status === ActionStatus.FATAL) return [{
                         content: <Status
                             type={Type.ERROR}
                             name="Fatal error: "
@@ -147,14 +161,6 @@ class ActionHistory extends React.Component {
                 })()],
             }}
         />
-    }
-
-    private isFail(action): boolean {
-        return this.isFatal(action) && action.data.errors.length !== 0;
-    }
-
-    private isFatal(action): boolean {
-        return action.responseType === ActionResponseType.ERROR;
     }
 }
 

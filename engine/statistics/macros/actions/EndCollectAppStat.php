@@ -50,7 +50,7 @@ class EndCollectAppStat extends BaseStatCollector
         $actionId = $this->stat->insert();
 
         $isFatal = $this->stat->response_type == ActionStat::RESPONSE_TYPE_ERROR;
-        $isFail = $isFatal && $this->endActionCollector->hasActionErrors();
+        $isFail = !$isFatal && $this->endActionCollector->hasActionErrors();
         Records::from('stat_action_counts')->insert([
             'action_id' => $actionId,
             'status' => $isFail ? 1 : ($isFatal ? 2 : 0)
