@@ -3,8 +3,6 @@
 use frame\database\SqlDriver;
 use ArrayIterator;
 
-use function lightlib\last;
-
 abstract class MultipleIntervalDataList extends TimeIntervalList
 {
     const SORT_FIELD_MAX = 'max';
@@ -23,8 +21,8 @@ abstract class MultipleIntervalDataList extends TimeIntervalList
         string $sortField,
         string $sortOrder
     ) {
-        $currentInterval = (int)(time() / $secondInterval) * $secondInterval;
-        $minInterval = $currentInterval - $secondInterval * ($intervalCount - 1);
+        $currentInterval = (int)(time() / $secondInterval) * $secondInterval + $secondInterval;
+        $minInterval = $currentInterval - $secondInterval * ($intervalCount + 1);
         parent::__construct($minInterval, $currentInterval, $secondInterval);
         $this->objectsLimit = $objectsLimit;
         $this->sortField = $sortField;
@@ -53,58 +51,20 @@ abstract class MultipleIntervalDataList extends TimeIntervalList
 
     public function assembleArray(): array
     {
-        $result = [];
+        $objectTimestampValues = [];
         $queryResult = SqlDriver::getDriver()->query($this->getQuery());
-        $interval = $this->getSecondInterval();
         while (($line = $queryResult->readLine()) !== null) {
-            $url = $line['object'];
-            $currentTime = $line['interval_time'];
-            $lastTime = null;
-            if (!isset($result[$url])) {
-                $result[$url] = [];
-                // Левая граница не включается в TimeIntervalList,
-                // поэтому возьмем границу на один интервал перед ней.
-                $lastTime = $this->getLeftBorder() - $interval;
-            } else {
-                $lastTime = last($result[$url])['timestamp'];
-            }
-
-            foreach (
-                // Заполняем промежуток до текущего значения нулями по количеству
-                // интервальных промежутков между текущим и следующим.
-                new TimeIntervalList($lastTime, $currentTime, $interval) 
-                as $timestamp
-            ) {
-                $result[$url][] = [
-                    'value' => null,
-                    'time' => $this->getIntervalDate($timestamp),
-                    'timestamp' => $timestamp
-                ];
-            }
-
-            // Затем добавляем текущее время.
-            $result[$url][] = [
-                'value' => $line['value'],
-                'time' => $this->getIntervalDate($currentTime),
-                'timestamp' => $currentTime
-            ];
+            $object = $line['object'];
+            $timestamp = $line['interval_time'];
+            $value = $line['value'];
+            $objectTimestampValues[$object][$timestamp] = $value;
         }
 
-        // Нужно добавить нулевые интервалы от последнего интервала 
-        // до текущего момента.
-        foreach ($result as &$data) {
-            foreach (
-                new TimeIntervalList(
-                    last($data)['timestamp'],
-                    // Правая гранциа не включается в TimeIntervalList, поэтому берем
-                    // границу на интервал после нее.
-                    $this->getRightBorder() + $this->getSecondInterval(),
-                    $this->getSecondInterval()
-                )
-                as $timestamp
-            ) {
-                $data[] = [
-                    'value' => null,
+        $result = [];
+        foreach (parent::getIterator() as $timestamp) {
+            foreach ($objectTimestampValues as $object => $timestampValues) {
+                $result[$object][] = [
+                    'value' => $timestampValues[$timestamp] ?? $this->getEmptyValue(),
                     'time' => $this->getIntervalDate($timestamp),
                     'timestamp' => $timestamp
                 ];
