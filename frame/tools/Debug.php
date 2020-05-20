@@ -61,7 +61,15 @@ class Debug
             $reflection = new \ReflectionObject($var);
             if ($reflection->isAnonymous()) return ['anonymous', 'object'];
             return [get_class($var), 'object'];
-        } else if (is_array($var)) return ['array', 'array'];
+        } else if (is_array($var)) {
+            $strValues = [];
+            foreach ($var as $key => $value) {
+                list($valueRepr, $_valueType) = static::getStringAndType($value);
+                $strValues[] = "$key => $valueRepr";
+            }
+            $strRepr = "[" . implode(', ', $strValues) . "]";
+            return [$strRepr, 'array'];
+        }
         else if (is_bool($var)) return [$var ? 'true' : 'false', 'boolean'];
         else if (is_null($var)) return ['null', 'null'];
         else return [strval($var), gettype($var)];
