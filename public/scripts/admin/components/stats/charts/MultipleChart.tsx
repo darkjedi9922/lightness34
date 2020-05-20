@@ -50,7 +50,7 @@ class MultipleChart extends React.Component<ChartProps, MultipleChartState> {
             secondInterval: SecondInterval.DAY,
             intervalCount: 10,
             limit: 5,
-            sortField: SortColumn.MAX,
+            sortField: SortColumn.AVG,
             sortOrder: SortOrder.DESC,
         }
 

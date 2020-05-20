@@ -4,6 +4,7 @@ use frame\route\InitRoute;
 use frame\tools\JsonEncoder;
 use engine\statistics\lists\MultipleIntervalDataList;
 use frame\route\Router;
+use frame\config\ConfigRouter;
 
 class MultipleChartAPI
 {
@@ -35,6 +36,7 @@ class MultipleChartAPI
         $class = $this->class;
         /** @var MultipleIntervalDataList $list */
         $list = new $class($limit, $intervals, $secInterval, $sortField, $sortOrder);
-        echo JsonEncoder::forViewText($list->assembleArray());
+        $pretty = ConfigRouter::getDriver()->findConfig('core')->{'mode.debug'};
+        echo JsonEncoder::forViewText($list->assembleArray(), $pretty);
     }
 }

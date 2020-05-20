@@ -62,7 +62,7 @@ class MultipleChartSettings extends React.Component<SettingsProps, SettingsState
     public constructor(props: SettingsProps) {
         super(props);
         this.state = {
-            sortField: SortColumn.MAX,
+            sortField: SortColumn.AVG,
             sortOrder: SortOrder.DESC,
             intervalUnit: 'Дни',
             secondInterval: this.secondIntervals['Дни']['1 день'],
