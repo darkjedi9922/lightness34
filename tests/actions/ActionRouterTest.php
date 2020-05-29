@@ -8,6 +8,8 @@ use tests\engine\UserDeleteAction;
 use frame\core\Core;
 use frame\route\Router;
 use frame\stdlib\drivers\route\UrlRouter;
+use tests\actions\examples\PostListActionExample;
+use tests\actions\examples\BoolPostListActionExample;
 
 class ActionRouterTest extends TestCase
 {
@@ -80,5 +82,18 @@ class ActionRouterTest extends TestCase
         // Если Action правильно создался из триггерного запроса, то их запросы
         // должны совпасть.
         $this->assertEquals($triggerUrl, $execUrl);
+    }
+
+    /** @runInSeparateProcess */
+    public function testPostFieldsAreFieldFromGlobalPost()
+    {
+        $router = new ActionRouter;
+        $setupAction = new Action(new BoolPostListActionExample);
+        $triggerUrl = $router->getTriggerUrl($setupAction);
+
+        $_POST['sum'] = 7;
+        $execAction = $router->fromTriggerUrl($triggerUrl);
+        
+        $this->assertEquals(7, $execAction->getData(Action::POST, 'sum'));
     }
 }
