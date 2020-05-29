@@ -3,6 +3,17 @@
     "mode.debug": true,
     "log.enabled": true,
     "log.dir": "runtime/logs",
+    "errors.logLevels": [
+        "Emergency",
+        "Alert",
+        "Critical",
+        "Error",
+        "Warning",
+        "Notice",
+        "Info",
+        "Debug",
+        "Testing"
+    ],
     "errors.errorPage": null,
     "errors.403.page": "403",
     "errors.404.page": "404"

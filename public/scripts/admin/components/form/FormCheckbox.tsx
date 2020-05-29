@@ -15,14 +15,16 @@ class FormCheckbox extends React.Component<CheckboxFieldProps> {
                 "checkbox",
                 {'checkbox--disabled': props.field.disabled}
             )}>
-                <input type="hidden" name={props.field.name} value="0"/>
+                {isNil(props.field.value) &&
+                    <input type="hidden" name={props.field.name} value="0"/>
+                }
                 <input
                     className="checkbox__input"
                     type="checkbox"
                     name={props.field.name}
                     defaultChecked={props.field.defaultChecked}
                     disabled={props.field.disabled}
-                    value="1"
+                    value={!isNil(props.field.value) ? props.field.value : '1'}
                 /> 
                 <div className="checkbox__box">
                     <i className="checkbox__icon icon-ok"></i>

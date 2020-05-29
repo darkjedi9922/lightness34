@@ -31,6 +31,7 @@ export interface TextareaField extends TextField {
 export interface CheckboxField extends Field {
     type: 'checkbox',
     label?: string,
+    value?: string,
     defaultChecked?: boolean,
     disabled?: boolean
 }

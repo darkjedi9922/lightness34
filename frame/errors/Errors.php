@@ -89,13 +89,15 @@ class Errors extends Driver
      */
     public function handleError(\Throwable $e)
     {
-        $logging = ConfigRouter::getDriver()->findConfig('core')->{'log.enabled'};
+        $coreConfig = ConfigRouter::getDriver()->findConfig('core');
+        $logging = $coreConfig->{'log.enabled'};
         if ($logging) {
             $logger = Logger::getCurrent();
             $level = is_subclass_of($e, LogLevel::class) 
                 ? $e->getLogLevel()
                 : Logger::ERROR;
-            $logger->write($level, Debug::getErrorMessage($e));
+            if (in_array($level, $coreConfig->{'errors.logLevels'}))
+                $logger->write($level, Debug::getErrorMessage($e));
         }
 
         Events::getDriver()->emit(self::EVENT_ERROR, $e);

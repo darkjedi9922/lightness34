@@ -7,10 +7,12 @@ use frame\config\ConfigRouter;
 use engine\admin\actions\EditConfigAction;
 use frame\actions\ViewAction;
 use frame\tools\JsonEncoder;
+use frame\tools\Logger;
+use function lightlib\array_map_assoc;
 
 $me = User::getMe();
 
-InitAccess::access((int) $me->group_id === Group::ROOT_ID);
+InitAccess::access((int)$me->group_id === Group::ROOT_ID);
 
 $config = ConfigRouter::getDriver()->findConfig('core');
 $edit = new ViewAction(EditConfigAction::class, ['name' => 'core']);
@@ -44,6 +46,18 @@ $formProps = [
             'log->enabled',
             $config->{'log.enabled'}
         )
+    ], [
+        'type' => 'group',
+        'title' => 'Настройки уровня логирования',
+        'fields' => array_map_assoc(function($_name, $value) use ($config) {
+            return [
+                'type' => 'checkbox',
+                'name' => "errors->logLevels[]",
+                'label' => $value,
+                'defaultChecked' => in_array($value, $config->{'errors.logLevels'}),
+                'value' => $value
+            ];
+        }, (new ReflectionClass(Logger::class))->getConstants())
     ]],
     'buttonText' => 'Сохранить',
     'short' => true
