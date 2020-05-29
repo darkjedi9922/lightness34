@@ -358,3 +358,10 @@ function remove_suffix(string $str, string $needle): string
         return substr($str, 0, -strlen($needle));
     return $str;
 }
+
+function array_map_assoc(callable $callback, array $array): array
+{
+    $result = [];
+    foreach ($array as $key => $value) $result[] = $callback($key, $value);
+    return $result;
+}
