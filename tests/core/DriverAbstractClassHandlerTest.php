@@ -26,7 +26,9 @@ class DriverAbstractClassHandlerTest extends TestCase
     public function testThrowsDriverExceptionIfItIsAbstractAndNotReplacedFromCore()
     {
         $app = new Core;
-        ConfigRouter::getDriver()->addSupport(JsonConfig::class);
+        $configs = ConfigRouter::getDriver();
+        $configs->addSupport(JsonConfig::class);
+        $configs->findConfig('core')->set('log.enabled', false);
         $driverClass = AbstractDriverExample::class;
 
         $this->expectException(DriverNotSetupException::class);
@@ -47,7 +49,9 @@ class DriverAbstractClassHandlerTest extends TestCase
     public function testThrowsDriverExceptionIfItIsAbstractAndNotReplacedFromDriver()
     {
         $app = new Core;
-        ConfigRouter::getDriver()->addSupport(JsonConfig::class);
+        $configs = ConfigRouter::getDriver();
+        $configs->addSupport(JsonConfig::class);
+        $configs->findConfig('core')->set('log.enabled', false);
         $driverClass = AbstractDriverExample::class;
 
         $this->expectException(DriverNotSetupException::class);
