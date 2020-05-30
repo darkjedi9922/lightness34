@@ -5,6 +5,7 @@ import Status, { Type } from '../common/Status';
 import Mark from '../common/Mark';
 import classNames from 'classnames';
 import ContentHeader from '../content/ContentHeader';
+import { isNil } from 'lodash';
 
 interface LogRecord {
     type: string,
@@ -18,6 +19,7 @@ interface Props {
     date: string,
     records: LogRecord[],
     readedRecords: number,
+    pagerHtml?: string
 }
 
 class LogPage extends React.Component<Props> {
@@ -38,6 +40,7 @@ class LogPage extends React.Component<Props> {
                             {unreadedRecords}
                         </span>
                     </div>
+                    {!isNil(this.props.pagerHtml) && <div dangerouslySetInnerHTML={{ __html: this.props.pagerHtml }}></div>}
                 </ContentHeader>
                 <div className="box box--table">
                     <Table

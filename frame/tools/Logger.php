@@ -26,7 +26,7 @@ class Logger
         return StaticCashStorage::getDriver()->cash('app-logger', function() {
             $dir = ConfigRouter::getDriver()->findConfig('core')->{'log.dir'};
             $date = date('d-m-Y');
-            return new self("$dir/$date.txt");
+            return new self(ROOT_DIR . "/$dir/$date.txt");
         });
     }
 

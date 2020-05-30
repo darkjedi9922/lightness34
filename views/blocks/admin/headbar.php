@@ -20,10 +20,8 @@ if (User::getMyRights('articles/comments')->can('see-new-list'))
 
 $adminRights = User::getMyRights('admin');
 if ($adminRights->can('see-logs')) {
-    $date = date('d-m-Y');
-    $logFile = ConfigRouter::getDriver()->findConfig('core')->{'log.dir'} . "/$date.txt";
-    $logger = new Logger($logFile);
-    $logTracker = new Tracker('log', crc32($logFile), count($logger->read()), $me->id);
+    $logger = Logger::getCurrent();
+    $logTracker = new Tracker('log', crc32($logger->getFile()), count($logger->read()), $me->id);
     $logNewRecords = $logTracker->loadUnreaded();
 }
 $usersRights = User::getMyRights('users');
