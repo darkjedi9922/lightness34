@@ -19,7 +19,9 @@ class PagerModel
     {
         return StaticCashStorage::getDriver()->cash("pagenumber$previous",
             function() use ($previous) {
-                $router = Router::getDriver()->getPreviousRoute();
+                $router = !$previous
+                    ? Router::getDriver()->getCurrentRoute()
+                    : Router::getDriver()->getPreviousRoute();
                 if (!$router) return 1;
                 $p = $router->getArg('p');
                 if (!$p || $p <= 0) return 1;
