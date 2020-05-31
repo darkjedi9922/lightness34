@@ -80,7 +80,7 @@ class Form extends React.Component<FormProps> {
 
     public componentDidMount(): void {
         window.addEventListener('load', () => {
-            this.maximizeKeysWidth();
+            this.maximizeKeysWidth(ReactDOM.findDOMNode(this) as Element);
         });
     }
 
@@ -178,15 +178,18 @@ class Form extends React.Component<FormProps> {
         ))
     }
 
-    private maximizeKeysWidth(): void {
-        const rootEl = ReactDOM.findDOMNode(this);
+    private maximizeKeysWidth(formRoot: Element): void {
         let maxKeyWidth = -1;
-        const keyElements = $(rootEl).find("> .form__row > .form__key");
+        const keyElements = $(formRoot).find("> .form__row > .form__key");
         keyElements.map((index, element) => {
             let width = $(element).width();
             if (width > maxKeyWidth) maxKeyWidth = width;
         })
         if (maxKeyWidth !== -1) keyElements.css('min-width', `${maxKeyWidth}px`);
+
+        $(formRoot).find('> .form__row--group').each((index, element) => {
+            this.maximizeKeysWidth(element)
+        });
     }
 
     private onSubmit(event: React.FormEvent<HTMLFormElement>): void {
