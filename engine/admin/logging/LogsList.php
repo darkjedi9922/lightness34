@@ -1,4 +1,4 @@
-<?php namespace engine\admin;
+<?php namespace engine\admin\logging;
 
 use frame\lists\paged\PagedList;
 use frame\config\ConfigRouter;
@@ -10,17 +10,30 @@ class LogsList extends PagedList
 {
     private $logFiles = [];
 
-    public function __construct(int $page)
+    public static function loadLogFiles(): array
     {
         $config = ConfigRouter::getDriver()->findConfig('core');
         $logFilePattern = ROOT_DIR . '/' . $config->{'log.dir'} . '/*.txt';
-        $this->logFiles = glob($logFilePattern);
-        usort($this->logFiles, function($aFile, $bFile) {
-            $datetime1 = $this->createLogDateTime($aFile);
-            $datetime2 = $this->createLogDateTime($bFile);
+        $result = glob($logFilePattern);
+        usort($result, function ($aFile, $bFile) {
+            $datetime1 = self::createLogDateTime($aFile);
+            $datetime2 = self::createLogDateTime($bFile);
             return $datetime1 == $datetime2 ? 0 :
                 -($datetime1 < $datetime2 ? -1 : 1);
         });
+        return $result;
+    }
+
+    private static function createLogDateTime(string $file): DateTime
+    {
+        // Переводит формат "d-m-Y.txt" имени файла в формат строки Y-m-d для PHP
+        $date = implode('-', array_reverse(explode('-', basename($file, '.txt'))));
+        return new DateTime($date);
+    }
+
+    public function __construct(int $page)
+    {
+        $this->logFiles = self::loadLogFiles();
         parent::__construct($page, count($this->logFiles), 1);
     }
 
@@ -40,12 +53,5 @@ class LogsList extends PagedList
         $index = $this->getPager()->getCurrent() - 1;
         if (!isset($this->logFiles[$index])) return null;
         return new Logger($this->logFiles[$index]);
-    }
-
-    private function createLogDateTime(string $file): DateTime
-    {
-        // Переводит формат "d-m-Y.txt" имени файла в формат строки Y-m-d для PHP
-        $date = implode('-', array_reverse(explode('-', basename($file, '.txt'))));
-        return new DateTime($date);
     }
 }

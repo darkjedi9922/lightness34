@@ -3,10 +3,8 @@
 use engine\articles\Article;
 use engine\users\User;
 use engine\messages\Message;
-use frame\tools\Logger;
-use frame\tools\trackers\read\ReadLimitedProgressTracker as Tracker;
 use engine\comments\Comment;
-use frame\config\ConfigRouter;
+use engine\admin\logging\LogReadTracker;
 
 $me = User::getMe();
 
@@ -20,9 +18,8 @@ if (User::getMyRights('articles/comments')->can('see-new-list'))
 
 $adminRights = User::getMyRights('admin');
 if ($adminRights->can('see-logs')) {
-    $logger = Logger::getCurrent();
-    $logTracker = new Tracker('log', crc32($logger->getFile()), count($logger->read()), $me->id);
-    $logNewRecords = $logTracker->loadUnreaded();
+    $logTracker = new LogReadTracker($me->id);
+    $logNewRecords = $logTracker->countUnreadedRecordsFromAllLogs();
 }
 $usersRights = User::getMyRights('users');
 $messagesRights = User::getMyRights('messages');

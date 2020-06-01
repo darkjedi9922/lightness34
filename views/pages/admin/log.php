@@ -3,10 +3,10 @@
 use engine\users\User;
 use frame\auth\InitAccess;
 use frame\tools\JsonEncoder;
-use frame\tools\trackers\read\ReadLimitedProgressTracker as Tracker;
-use engine\admin\LogsList;
+use engine\admin\logging\LogsList;
 use frame\lists\paged\PagerModel;
 use frame\lists\paged\PagerView;
+use engine\admin\logging\LogReadTracker;
 
 InitAccess::accessRight('admin', 'see-logs');
 
@@ -15,7 +15,7 @@ $logsList = new LogsList(PagerModel::getRoutePage());
 $logger = $logsList->getLogger();
 $logFile = $logger->getFile();
 $logRecords = $logger->read();
-$tracker = new Tracker('log', crc32($logFile), count($logRecords), $me->id);
+$tracker = new LogReadTracker($me->id);
 
 $recordsProps = [];
 foreach ($logRecords as $record) {
@@ -32,14 +32,14 @@ foreach ($logRecords as $record) {
 $logPageProps = [
     'date' => str_replace('-', '.', basename($logFile, '.txt')),
     'records' => $recordsProps,
-    'readedRecords' => $tracker->loadProgress(),
+    'readedRecords' => $tracker->countReadedFromLog($logFile),
     'pagerHtml' => $logsList->countAll() > 1
         ? (new PagerView($logsList->getPager(), 'admin'))->getHtml()
         : null
 ];
 $logPageProps = JsonEncoder::forHtmlAttribute($logPageProps);
 
-$tracker->updateSetFinished();
+$tracker->setLogReaded($logFile);
 ?>
 
 <div id="log-page" data-props="<?= $logPageProps ?>"></div>
