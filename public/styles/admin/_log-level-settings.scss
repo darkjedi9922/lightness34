@@ -1,0 +1,15 @@
+.log-level-settings {
+    display: flex;
+    flex-wrap: wrap;
+
+    &__item {
+        display: flex;
+        align-items: center;
+        margin: 0.5rem 0;
+        width: 20%;
+
+        // &:not(:last-child) {
+        //     margin-right: 1rem;
+        // }
+    }
+}
