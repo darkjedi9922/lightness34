@@ -25,6 +25,7 @@ class FormCheckbox extends React.Component<CheckboxFieldProps> {
                     defaultChecked={props.field.defaultChecked}
                     disabled={props.field.disabled}
                     value={!isNil(props.field.value) ? props.field.value : '1'}
+                    onChange={props.field.onChange}
                 /> 
                 <div className="checkbox__box">
                     <i className="checkbox__icon icon-ok"></i>

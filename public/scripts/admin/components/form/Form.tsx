@@ -33,7 +33,8 @@ export interface CheckboxField extends Field {
     label?: string,
     value?: string,
     defaultChecked?: boolean,
-    disabled?: boolean
+    disabled?: boolean,
+    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 export interface RadioField extends Field {
