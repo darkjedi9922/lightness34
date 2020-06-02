@@ -1,11 +1,12 @@
 import React from 'react';
 import { isNil } from 'lodash';
 import classNames from 'classnames';
+import { MarkColor } from './_common';
 
 interface MarkProps {
     icon?: string,
     label: string,
-    color: string,
+    color: MarkColor,
     className?: string
 }
 

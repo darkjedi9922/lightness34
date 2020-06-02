@@ -2,6 +2,7 @@ import React from 'react';
 import Breadcrumbs from '../common/Breadcrumbs';
 import Parameter from '../common/Parameter';
 import Mark from '../common/Mark';
+import { MarkColor } from '../common/_common';
 
 interface User {
     id: number,
@@ -51,12 +52,12 @@ class ProfilePage extends React.Component<ProfileProps> {
                             ? <Mark
                                 className="profile__status"
                                 label="Online"
-                                color="green"
+                                color={MarkColor.GREEN}
                             />
                             : <Mark
                                 className="profile__status"
                                 label="Offline"
-                                color="red"
+                                color={MarkColor.RED}
                             />
                         }
                     </div>

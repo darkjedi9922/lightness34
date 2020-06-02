@@ -6,6 +6,7 @@ import Mark from '../common/Mark';
 import classNames from 'classnames';
 import ContentHeader from '../content/ContentHeader';
 import { isNil } from 'lodash';
+import { MarkColor } from '../common/_common';
 
 interface LogRecord {
     type: string,
@@ -60,14 +61,14 @@ class LogPage extends React.Component<Props> {
                                         switch (record.type) {
                                             case 'Emergency':
                                             case 'Critical':
-                                            case 'Error': return 'red';
+                                            case 'Error': return MarkColor.RED;
                                             case 'Alert':
-                                            case 'Warning': return 'yellow';
-                                            case 'Notice': return 'blue';
-                                            case 'Info': return 'green';
+                                            case 'Warning': return MarkColor.YELLOW;
+                                            case 'Notice': return MarkColor.BLUE;
+                                            case 'Info': return MarkColor.GREEN;
                                             case 'Debug':
-                                            case 'Testing': return 'purple';
-                                            default: return 'grey';
+                                            case 'Testing': return MarkColor.PURPLE;
+                                            default: return MarkColor.GREY;
                                         }
                                     })()}
                                     icon={(() => {

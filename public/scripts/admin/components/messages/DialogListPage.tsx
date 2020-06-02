@@ -6,6 +6,7 @@ import Table from '../table/Table';
 import Mark from '../common/Mark';
 import UserCell from '../users/UserCell';
 import ButtonCell from '../table/ButtonCell';
+import { MarkColor } from '../common/_common';
 
 interface Message {
     text: string,
@@ -71,11 +72,11 @@ class DialogListPage extends React.Component<Props> {
                                     <ButtonCell href={`/admin/profile/dialog?uid=${dialog.whoId}`} icon="email">Перейти</ButtonCell>
                                 </span>,
                                 dialog.newCount !== 0
-                                ? <Mark color="red" label={`${dialog.newCount} new`} className="dialogs__status"/>
+                                ? <Mark color={MarkColor.RED} label={`${dialog.newCount} new`} className="dialogs__status"/>
                                 : (
                                     dialog.sentCount !== 0
-                                    ? <Mark color="green" label={`${dialog.sentCount} sent`} className="dialogs__status" />
-                                    : <Mark color="grey" label="Readed" className="dialogs__status"/>
+                                    ? <Mark color={MarkColor.GREEN} label={`${dialog.sentCount} sent`} className="dialogs__status" />
+                                    : <Mark color={MarkColor.GREY} label="Readed" className="dialogs__status"/>
                                 ),
                                 <span className="table__date">{dialog.lastMessage.date}</span>,
                                 <ButtonCell href={dialog.deleteUrl} color="red" icon="trash">Очистить</ButtonCell>,
