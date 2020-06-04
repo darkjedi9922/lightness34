@@ -1,0 +1,1 @@
+<?= 'some/alias/string' ?>
