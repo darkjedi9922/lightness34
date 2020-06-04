@@ -6,7 +6,7 @@ use frame\core\Core;
 use frame\views\ViewRouter;
 use frame\stdlib\drivers\route\UrlRouter;
 
-class DynamicRouteTest extends TestCase
+class ViewDynamicRouteTest extends TestCase
 {
     /**
      * @dataProvider pagePathsProvider
