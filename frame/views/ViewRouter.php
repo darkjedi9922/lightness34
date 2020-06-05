@@ -15,7 +15,7 @@ class ViewRouter extends Driver
     {
         $pagename = $route->pagename;
         if (Page::find($pagename)) return new Page($pagename);
-        $viewDynamicRouter = new ViewDynamicRouter;
+        $viewDynamicRouter = new ViewDynamicRouter(DynamicPage::class);
         $route = $viewDynamicRouter->findRealRoute($pagename);
         if ($route) {
             $view = new DynamicPage($route->url);

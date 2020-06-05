@@ -2,17 +2,18 @@
 
 use frame\route\DynamicRouter;
 use frame\views\ViewRouter;
-use frame\views\DynamicPage;
 
 class ViewDynamicRouter extends DynamicRouter
 {
     private $pagesDir;
+    private $viewClass;
 
-    public function __construct()
+    public function __construct(string $viewClass)
     {
         parent::__construct('$meta');
         $baseFolder = ViewRouter::getDriver()->getBaseFolder();
-        $this->pagesDir = $baseFolder . '/' . DynamicPage::getNamespace();
+        $this->pagesDir = $baseFolder . '/' . $viewClass::getNamespace();
+        $this->viewClass = $viewClass;
     }
 
     protected function doesRealSubRouteExist(string $subRoute): bool
@@ -22,6 +23,6 @@ class ViewDynamicRouter extends DynamicRouter
 
     protected function doesRealEndRouteExist(string $endRoute): bool
     {
-        return DynamicPage::find($endRoute) !== null;
+        return $this->viewClass::find($endRoute) !== null;
     }
 }
