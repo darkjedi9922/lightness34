@@ -7,12 +7,11 @@ class UrlRouter extends Router
 {
     public function parseRoute(string $route): Route
     {
-        $url = trim($route, '=&');
-        $pagename = trim(parse_url($url, PHP_URL_PATH), '/');
+        $pagename = trim(parse_url($route, PHP_URL_PATH), '/');
         $pathElements = explode('/', $pagename);
-        $query = parse_url($url, PHP_URL_QUERY);
+        $query = parse_url($route, PHP_URL_QUERY);
         parse_str($query, $args);
-        return new Route($url, $pagename, $pathElements, $args);
+        return new Route($route, $pagename, $pathElements, $args);
     }
 
     public function makeRoute($route, array $newArgs = []): string

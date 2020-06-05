@@ -5,6 +5,24 @@ use frame\stdlib\drivers\route\UrlRouter;
 
 class UrlRouterTest extends TestCase
 {
+    /**
+     * @dataProvider routeProvider
+     */
+    public function testParsesPagename(string $route, string $pagename)
+    {
+        $route = UrlRouter::getDriver()->parseRoute($route);
+        $this->assertEquals($pagename, $route->pagename);
+    }
+
+    public function routeProvider(): array
+    {
+        return [
+            ['a/b/c', 'a/b/c'],
+            ['a/b/$/d', 'a/b/$/d'],
+            ['/a/0/', 'a/0']
+        ];
+    }
+
     public function testChecksOnePageNamespace()
     {
         $router = UrlRouter::getDriver()->parseRoute('/articles/item?id=3');
