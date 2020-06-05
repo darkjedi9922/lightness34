@@ -2,7 +2,7 @@ import React from 'react';
 import { isNil, isEmpty, map } from 'lodash';
 import HistoryPage from '../stats/HistoryPage';
 import { SortOrder } from '../table/Table';
-import Label from '../common/label';
+import Label from '../common/Label';
 import DurationCell from '../table/DurationCell';
 import Parameter from '../common/Parameter';
 import Status, { Type } from '../common/Status';
