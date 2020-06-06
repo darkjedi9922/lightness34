@@ -5,20 +5,14 @@ use frame\route\Request;
 
 class ConsoleRequest extends Request
 {
-    public function getRequest(): string
+    public function getCurrentRequest(): string
     {
         return implode(' ', $_SERVER['argv']);
     }
 
-    public function getReferer(): string
+    public function getPreviousRequest(): ?string
     {
-        throw new Exception('Previous request does not exist');
-        return '';
-    }
-
-    public function hasReferer(): bool
-    {
-        return false;
+        return null;
     }
 
     public function isAjax(): bool

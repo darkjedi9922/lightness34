@@ -9,7 +9,7 @@ abstract class Router extends Driver
     public function getCurrentRoute(): Route
     {
         return StaticCashStorage::getDriver()->cash('current-router', function() {
-            $request = Request::getDriver()->getRequest();
+            $request = Request::getDriver()->getCurrentRequest();
             return $this->parseRoute($request);
         });
     }
@@ -18,9 +18,9 @@ abstract class Router extends Driver
     {
         return StaticCashStorage::getDriver()->cash('prev-router', function() {
             $request = Request::getDriver();
-            if ($request->hasReferer())
-                return $this->parseRoute($request->getReferer());
-            else return null;
+            $previousRequest = $request->getPreviousRequest();
+            if ($previousRequest === null) return null;
+            return $this->parseRoute($previousRequest);
         });
     }
 

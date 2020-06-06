@@ -5,15 +5,12 @@ abstract class Request extends \frame\core\Driver
     /**
      * Возвращает строку запроса, которая была запрошена.
      */
-    public abstract function getRequest(): string;
+    public abstract function getCurrentRequest(): string;
 
     /**
-     * Предыдущий запрос.
-     * @throws \Exception если предыдущего запроса не существует
+     * Строка предыдущего запроса или NULL, если его не существует.
      */
-    public abstract function getReferer(): string;
-    
-    public abstract function hasReferer(): bool;
+    public abstract function getPreviousRequest(): ?string;
 
     public abstract function isAjax(): bool;
 }

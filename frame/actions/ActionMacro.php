@@ -49,7 +49,7 @@ class ActionMacro extends GetMacro
     {
         if ($this->isDefaultRedirect($redirect)) {
             $request = Request::getDriver();
-            $redirect = $request->hasReferer() ? $request->getReferer() : '/';
+            $redirect = $request->getPreviousRequest() ?? '/';
         }
         $transmitter = new ActionTransmitter;
         $transmitter->save($this->action);

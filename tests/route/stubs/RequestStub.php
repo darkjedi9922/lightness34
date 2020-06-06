@@ -3,10 +3,10 @@
 class RequestStub extends \frame\route\Request
 {
     private $request = '';
-    private $referer = null;
+    private $previous = null;
     private $isAjax = false;
 
-    public function getRequest(): string
+    public function getCurrentRequest(): string
     {
         return $this->request;
     }
@@ -16,20 +16,14 @@ class RequestStub extends \frame\route\Request
         $this->request = $request;
     }
 
-    public function setReferer(string $referer)
+    public function setPreviousRequest(string $request)
     {
-        $this->referer = $referer;
+        $this->previous = $request;
     }
 
-    public function getReferer(): string
+    public function getPreviousRequest(): ?string
     {
-        if ($this->referer === null) throw new \Exception;
-        return $this->referer;
-    }
-
-    public function hasReferer(): bool
-    {
-        return $this->referer !== null;
+        return $this->referer ?? null;
     }
 
     public function setAjax(bool $ajax)
