@@ -1,13 +1,12 @@
 <?php namespace frame\console\route;
 
-use Exception;
 use frame\route\Request;
 
 class ConsoleRequest extends Request
 {
     public function getCurrentRequest(): string
     {
-        return implode(' ', $_SERVER['argv']);
+        return implode(' ', array_slice($_SERVER['argv'], 1));
     }
 
     public function getPreviousRequest(): ?string

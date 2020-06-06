@@ -5,10 +5,9 @@ use frame\route\Router;
 
 class ConsoleRouter extends Router
 {
-    public function parseRoute(string $request): Route
+    public function parseRoute(string $route): Route
     {
-        $routeParts = array_slice(explode(' ', $request), 1);
-        $route = implode(' ', $routeParts);
+        $routeParts = explode(' ', $route);
         $result = new Route($route, $route, $routeParts, []);
         return $result;
     }
