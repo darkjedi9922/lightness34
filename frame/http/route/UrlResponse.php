@@ -1,8 +1,9 @@
-<?php namespace frame\stdlib\drivers\route;
+<?php namespace frame\http\route;
 
+use frame\route\Response;
 use function lightlib\ob_restart_all;
 
-class UrlResponse extends \frame\route\Response
+class UrlResponse extends Response
 {
     private $redirect = null;
 

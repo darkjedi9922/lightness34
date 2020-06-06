@@ -3,7 +3,7 @@ use PHPUnit\Framework\TestCase;
 use frame\lists\paged\PagerModel;
 use frame\core\Core;
 use frame\route\Router;
-use frame\stdlib\drivers\route\UrlRouter;
+use frame\http\route\UrlRouter;
 use frame\route\Request;
 use tests\route\stubs\RequestStub;
 

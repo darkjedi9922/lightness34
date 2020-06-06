@@ -4,7 +4,7 @@ use tests\views\stubs\ViewRouterStub;
 use frame\route\Router;
 use frame\core\Core;
 use frame\views\ViewRouter;
-use frame\stdlib\drivers\route\UrlRouter;
+use frame\http\route\UrlRouter;
 
 class ViewDynamicRouteTest extends TestCase
 {

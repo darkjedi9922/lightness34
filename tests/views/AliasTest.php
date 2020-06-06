@@ -2,7 +2,7 @@
 use PHPUnit\Framework\TestCase;
 use frame\core\Core;
 use frame\route\Router;
-use frame\stdlib\drivers\route\UrlRouter;
+use frame\http\route\UrlRouter;
 use frame\views\Alias;
 use frame\views\ViewRouter;
 use tests\views\stubs\ViewRouterStub;

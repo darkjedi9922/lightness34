@@ -1,6 +1,6 @@
 <?php namespace tests\route\stubs;
 
-use frame\stdlib\drivers\route\UrlResponse;
+use frame\http\route\UrlResponse;
 use frame\events\Events;
 
 class ResponseStub extends UrlResponse

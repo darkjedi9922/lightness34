@@ -12,7 +12,7 @@ use frame\route\Request;
 use frame\route\Response;
 use frame\stdlib\configs\JsonConfig;
 use frame\stdlib\configs\PhpConfig;
-use frame\stdlib\drivers\route\UrlResponse;
+use frame\http\route\UrlResponse;
 use frame\views\macros\ShowPage;
 use frame\views\ViewRouter;
 

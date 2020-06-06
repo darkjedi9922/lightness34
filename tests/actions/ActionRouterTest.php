@@ -7,7 +7,7 @@ use tests\actions\examples\GetListActionExample;
 use tests\engine\UserDeleteAction;
 use frame\core\Core;
 use frame\route\Router;
-use frame\stdlib\drivers\route\UrlRouter;
+use frame\http\route\UrlRouter;
 use tests\actions\examples\PostListActionExample;
 use tests\actions\examples\BoolPostListActionExample;
 

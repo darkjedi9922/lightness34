@@ -1,7 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use frame\stdlib\drivers\route\UrlRouter;
+use frame\http\route\UrlRouter;
 
 class UrlRouterTest extends TestCase
 {

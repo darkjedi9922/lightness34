@@ -16,7 +16,7 @@ use frame\core\Core;
 use tests\actions\examples\EmptyActionExample;
 use tests\actions\examples\FileFieldActionExample;
 use frame\route\Router;
-use frame\stdlib\drivers\route\UrlRouter;
+use frame\http\route\UrlRouter;
 
 class ActionTest extends TestCase
 {

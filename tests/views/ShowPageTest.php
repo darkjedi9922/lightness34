@@ -9,7 +9,7 @@ use tests\route\stubs\RequestStub;
 use frame\views\ViewRouter;
 use tests\views\stubs\ViewRouterStub;
 use frame\route\Router;
-use frame\stdlib\drivers\route\UrlRouter;
+use frame\http\route\UrlRouter;
 
 class ShowPageTest extends TestCase
 {

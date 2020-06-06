@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 use tests\route\examples\RouteNamespaceMacroExample;
 use tests\route\stubs\RequestStub;
 use frame\route\Router;
-use frame\stdlib\drivers\route\UrlRouter;
+use frame\http\route\UrlRouter;
 
 /**
  * @runTestsInSeparateProcesses

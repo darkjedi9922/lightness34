@@ -7,7 +7,7 @@ use frame\actions\ActionRouter;
 use frame\actions\ActionToken;
 use tests\actions\examples\EmptyActionExample;
 use frame\route\Router;
-use frame\stdlib\drivers\route\UrlRouter;
+use frame\http\route\UrlRouter;
 use frame\core\Core;
 
 /**

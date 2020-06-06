@@ -1,6 +1,8 @@
-<?php namespace frame\stdlib\drivers\route;
+<?php namespace frame\http\route;
 
-class UrlRequest extends \frame\route\Request
+use frame\route\Request;
+
+class UrlRequest extends Request
 {
     public function getCurrentRequest(): string
     {

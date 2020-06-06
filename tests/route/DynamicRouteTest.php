@@ -4,7 +4,7 @@ use frame\route\Route;
 use tests\route\examples\DynamicRouterMock;
 use frame\core\Core;
 use frame\route\Router;
-use frame\stdlib\drivers\route\UrlRouter;
+use frame\http\route\UrlRouter;
 
 class DynamicRouteTest extends TestCase
 {

@@ -1,4 +1,4 @@
-<?php namespace frame\stdlib\drivers\route;
+<?php namespace frame\http\route;
 
 use frame\route\Router;
 use frame\route\Route;

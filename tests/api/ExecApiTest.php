@@ -13,7 +13,7 @@ use tests\api\examples\SimpleApi;
 use tests\route\stubs\RequestStub;
 use tests\route\stubs\ResponseStub;
 use frame\route\Router;
-use frame\stdlib\drivers\route\UrlRouter;
+use frame\http\route\UrlRouter;
 
 class ExecApiTest extends TestCase
 {
