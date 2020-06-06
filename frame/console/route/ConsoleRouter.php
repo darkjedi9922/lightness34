@@ -8,7 +8,7 @@ class ConsoleRouter extends Router
     public function parseRoute(string $route): Route
     {
         $routeParts = explode(' ', $route);
-        $result = new Route($route, $route, $routeParts, []);
+        $result = new Route($route, implode('/', $routeParts), $routeParts, []);
         return $result;
     }
 
