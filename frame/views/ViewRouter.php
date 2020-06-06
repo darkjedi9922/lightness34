@@ -11,14 +11,26 @@ class ViewRouter extends Driver
         return ROOT_DIR . '/views';
     }
 
+    public function getPageClass(): string
+    {
+        return Page::class;
+    }
+
+    public function getDynamicPageClass(): string
+    {
+        return DynamicPage::class;
+    }
+
     public function findPage(Route $route): ?Page
     {
         $pagename = $route->pagename;
-        if (Page::find($pagename)) return new Page($pagename);
-        $viewDynamicRouter = new ViewDynamicRouter(DynamicPage::class);
+        $pageClass = $this->getPageClass();
+        if ($pageClass::find($pagename)) return new $pageClass($pagename);
+        $dynamicPageClass = $this->getDynamicPageClass();
+        $viewDynamicRouter = new ViewDynamicRouter($dynamicPageClass);
         $route = $viewDynamicRouter->findRealRoute($pagename);
         if ($route) {
-            $view = new DynamicPage($route->url);
+            $view = new $dynamicPageClass($route->url);
             $view->setMeta('$', $route->args);
             return $view;
         }

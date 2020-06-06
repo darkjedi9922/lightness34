@@ -3,13 +3,13 @@
 abstract class Request extends \frame\core\Driver
 {
     /**
-     * Возвращает url, который был запрошен (откуда бы ни было)
+     * Возвращает строку запроса, которая была запрошена.
      */
     public abstract function getRequest(): string;
 
     /**
-     * Предыдущий url.
-     * @throws \Exception если предыдущего url не существует
+     * Предыдущий запрос.
+     * @throws \Exception если предыдущего запроса не существует
      */
     public abstract function getReferer(): string;
     

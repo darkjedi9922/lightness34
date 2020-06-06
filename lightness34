@@ -1,0 +1,32 @@
+#!/usr/bin/env php
+<?php require_once __DIR__ . '/bootstrap.php';
+
+use frame\config\ConfigRouter;
+use frame\console\route\ConsoleRequest;
+use frame\console\route\ConsoleRouter;
+use frame\console\views\ConsoleViewRouter;
+use frame\core\Core;
+use frame\events\Events;
+use frame\route\Router;
+use frame\route\Request;
+use frame\route\Response;
+use frame\stdlib\configs\JsonConfig;
+use frame\stdlib\configs\PhpConfig;
+use frame\stdlib\drivers\route\UrlResponse;
+use frame\views\macros\ShowPage;
+use frame\views\ViewRouter;
+
+$app = new Core([
+    Router::class => ConsoleRouter::class,
+    Request::class => ConsoleRequest::class,
+    Response::class => UrlResponse::class,
+    ViewRouter::class => ConsoleViewRouter::class
+]);
+
+$configRouter = ConfigRouter::getDriver();
+$configRouter->addSupport([JsonConfig::class, PhpConfig::class]);
+
+$events = Events::getDriver();
+$events->on(Core::EVENT_APP_START, new ShowPage);
+
+$app->exec();
