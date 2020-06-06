@@ -1,7 +1,7 @@
-<?php namespace frame\tools;
+<?php namespace frame\http;
 
 use function lightlib\session_start_once;
-use frame\route\CookieTransmitter;
+use frame\http\CookieTransmitter;
 use function lightlib\stored;
 
 class Client

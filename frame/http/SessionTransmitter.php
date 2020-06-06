@@ -1,8 +1,9 @@
-<?php namespace frame\route;
+<?php namespace frame\http;
 
+use frame\tools\DataTransmitter;
 use function lightlib\session_start_once;
 
-class SessionTransmitter extends \frame\tools\DataTransmitter
+class SessionTransmitter extends DataTransmitter
 {
     /**
      * О конструкторе сказать нечего

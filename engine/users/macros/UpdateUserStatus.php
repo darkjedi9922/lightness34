@@ -3,7 +3,7 @@
 use engine\users\User;
 use frame\auth\Auth;
 use frame\events\Macro;
-use frame\tools\Client;
+use frame\http\Client;
 
 class UpdateUserStatus extends Macro
 {

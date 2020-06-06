@@ -1,6 +1,8 @@
-<?php namespace frame\route;
+<?php namespace frame\http;
 
-class CookieTransmitter extends \frame\tools\DataTransmitter
+use frame\tools\DataTransmitter;
+
+class CookieTransmitter extends DataTransmitter
 {
     /**
      * @var int Продолжительность жизни печенек в секундах

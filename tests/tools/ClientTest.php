@@ -1,7 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use frame\tools\Client;
+use frame\http\Client;
 
 class ClientTest extends TestCase
 {

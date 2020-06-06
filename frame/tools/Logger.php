@@ -1,7 +1,7 @@
 <?php namespace frame\tools;
 
 use frame\tools\files\File;
-use frame\tools\Client;
+use frame\http\Client;
 use frame\lists\base\FileLineList;
 use frame\cash\StaticCashStorage;
 use frame\config\ConfigRouter;

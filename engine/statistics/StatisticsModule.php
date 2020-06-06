@@ -10,6 +10,7 @@ use engine\statistics\tools\StatEvents;
 use frame\config\ConfigRouter;
 use frame\route\Router;
 use frame\modules\Modules;
+use frame\http\Client;
 
 class StatisticsModule extends Module
 {

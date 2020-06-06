@@ -4,7 +4,7 @@ use frame\database\Identity;
 use frame\auth\GroupUser;
 use frame\cash\StaticCashStorage;
 use frame\auth\Auth;
-use frame\tools\Client;
+use frame\http\Client;
 use engine\users\Group;
 use frame\modules\Modules;
 use frame\auth\UserRights;

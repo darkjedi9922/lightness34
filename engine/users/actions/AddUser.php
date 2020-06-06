@@ -12,7 +12,7 @@ use engine\users\User;
 use frame\actions\ActionBody;
 use frame\actions\UploadedFile;
 use frame\route\Router;
-use frame\tools\Client;
+use frame\http\Client;
 use frame\auth\InitAccess;
 
 class AddUser extends ActionBody
