@@ -1,0 +1,7 @@
+{
+    "name": "lightness/lightness34",
+    "description": "A framework for site building",
+    "require": {
+        "phpunit/phpunit": "8.5.*"
+    }
+}

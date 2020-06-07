@@ -1,6 +1,3 @@
-# logs
-log.txt
-
 # umls
 _dev/uml/*.png
 _dev/uml/*.jpg
@@ -17,8 +14,8 @@ _dev/uml/*.svg
 # machine.
 config/db.json
 
-# vendor
-vendor/phpunit
+# Composer dependency directory
+vendor
 
 # User avatars folder
 public/images/avatars
@@ -35,7 +32,6 @@ public/images/avatars
 # npm
 node_modules
 public/build
-public/package-lock.json
 public/npm-debug.log
 
 # other
