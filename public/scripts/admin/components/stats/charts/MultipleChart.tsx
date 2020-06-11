@@ -4,7 +4,7 @@ import {
 } from 'recharts';
 import Table, { SortOrder } from '../../table/Table';
 import { round } from 'lodash';
-import MultipleChartSettings, { MultipleChartSettingsData } from './MultipleChartSettings';
+import ChartSettings, { ChartSettingsData } from './ChartSettings';
 import { ChartProps, SecondInterval, SortColumn } from '../_common';
 import ContentHeader from '../../content/ContentHeader';
 import Breadcrumbs from '../../common/Breadcrumbs';
@@ -152,14 +152,17 @@ class MultipleChart extends React.Component<ChartProps, MultipleChartState> {
                 />
                 <div className="box__details">
                     <span className="box__header">Настройки</span>
-                    <MultipleChartSettings onUpdate={this.onMultipleChartUpdate} />
+                    <ChartSettings
+                        onUpdate={this.onMultipleChartUpdate}
+                        multipleSettings={true}
+                    />
                 </div>
             </div>
         </>
     }
 
     private loadChartData(
-        settings: MultipleChartSettingsData,
+        settings: ChartSettingsData,
         setFinished?: () => void
     ) {
         this.loadMultipleStats(settings).then((result) => {
@@ -174,7 +177,7 @@ class MultipleChart extends React.Component<ChartProps, MultipleChartState> {
     }
 
     private loadMultipleStats(
-        settings: MultipleChartSettingsData
+        settings: ChartSettingsData
     ): Promise<TimeIntervalValues[]> {
         return new Promise<TimeIntervalValues[]>((resolve, reject) => {
             $.ajax({
@@ -245,7 +248,7 @@ class MultipleChart extends React.Component<ChartProps, MultipleChartState> {
     }
 
     private onMultipleChartUpdate(
-        newSettings: MultipleChartSettingsData,
+        newSettings: ChartSettingsData,
         setFinished: () => void
     ) {
         this.loadChartData(newSettings, setFinished);

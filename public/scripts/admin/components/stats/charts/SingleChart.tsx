@@ -2,12 +2,13 @@ import React from 'react';
 import {
     AreaChart, Area, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer
 } from 'recharts';
-import Table from '../../table/Table';
+import Table, { SortOrder } from '../../table/Table';
 import { round, maxBy, meanBy, sumBy } from 'lodash';
-import { ChartProps, SecondInterval } from '../_common';
+import { ChartProps, SecondInterval, SortColumn } from '../_common';
 import ContentHeader from '../../content/ContentHeader';
 import Breadcrumbs from '../../common/Breadcrumbs';
 import $ from 'jquery';
+import ChartSettings, { ChartSettingsData } from './ChartSettings';
 
 interface TimeIntervalValue {
     time: string,
@@ -30,10 +31,15 @@ class SingleChart extends React.Component<ChartProps, SingleChartState> {
             secondInterval: SecondInterval.DAY,
             intervalCount: 10
         }
+        this.onChartUpdate = this.onChartUpdate.bind(this);
     }
 
     public componentDidMount() {
-        this.loadChartData(this.props.onInitLoad);
+        this.loadChartData({
+            sortField: SortColumn.AVG, // will not be used
+            sortOrder: SortOrder.DESC, // will not be used
+            secondInterval: this.state.secondInterval
+        }, this.props.onInitLoad);
     }
 
     public render(): React.ReactNode {
@@ -76,21 +82,34 @@ class SingleChart extends React.Component<ChartProps, SingleChartState> {
                         ]
                     }]}
                 />
+                <div className="box__details">
+                    <span className="box__header">Настройки</span>
+                    <ChartSettings
+                        onUpdate={this.onChartUpdate}
+                        multipleSettings={false}
+                    />
+                </div>
             </div>
         </>
     }
 
-    private loadChartData(setFinished?: () => void) {
-        this.loadSingleStats().then((result) => {
-            this.setState({ intervals: result })
+    private loadChartData(settings: ChartSettingsData, setFinished?: () => void) {
+        this.loadSingleStats(settings).then((result) => {
+            this.setState({
+                intervals: result,
+                secondInterval: settings.secondInterval
+            })
             setFinished && setFinished();
         });
     }
 
-    private loadSingleStats(): Promise<TimeIntervalValue[]> {
+    private loadSingleStats(settings: ChartSettingsData): Promise<TimeIntervalValue[]> {
         return new Promise<TimeIntervalValue[]>((resolve, reject) => {
             $.ajax({
                 url: this.props.apiUrl,
+                data: {
+                    sec_interval: settings.secondInterval
+                },
                 dataType: 'json',
                 success: (result: TimeIntervalValue[]) => {
                     resolve(result);
@@ -100,6 +119,14 @@ class SingleChart extends React.Component<ChartProps, SingleChartState> {
                 }
             })
         })
+    }
+
+    private onChartUpdate(newSettings: ChartSettingsData, setFinished: () => void) {
+        this.loadChartData({
+            sortField: SortColumn.AVG, // will not be used
+            sortOrder: SortOrder.DESC, // will not be used
+            secondInterval: newSettings.secondInterval
+        }, setFinished)
     }
 }
 

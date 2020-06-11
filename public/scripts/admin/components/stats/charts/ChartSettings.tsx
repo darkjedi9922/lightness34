@@ -4,14 +4,15 @@ import { SortOrder } from '../../table/Table';
 import classNames from 'classnames';
 import { SortColumn } from '../_common';
 
-export interface MultipleChartSettingsData {
+export interface ChartSettingsData {
     sortField: SortColumn,
     sortOrder: SortOrder,
     secondInterval: number
 }
 
 interface SettingsProps {
-    onUpdate: (newData: MultipleChartSettingsData, setFinished: () => void) => void
+    onUpdate: (newData: ChartSettingsData, setFinished: () => void) => void,
+    multipleSettings: boolean
 }
 
 interface SettingsState {
@@ -22,7 +23,7 @@ interface SettingsState {
     isUpdating: boolean
 }
 
-class MultipleChartSettings extends React.Component<SettingsProps, SettingsState> {
+class ChartSettings extends React.Component<SettingsProps, SettingsState> {
     private secondIntervals = {
         'Минуты': {
             '5 минут': 60 * 5,
@@ -82,34 +83,37 @@ class MultipleChartSettings extends React.Component<SettingsProps, SettingsState
     }
 
     public render(): React.ReactElement {
+        const props = this.props;
         return <div className="box-settings">
-            <div className="box-settings__column">
-                <Form
-                    className="chart-form"
-                    method="get"
-                    fields={[{
-                        type: 'radio',
-                        title: 'Значение',
-                        name: 'field',
-                        values: [
-                            { label: 'Среднее', value: SortColumn.AVG },
-                            { label: 'Максимальное', value: SortColumn.MAX }
-                        ],
-                        currentValue: this.state.sortField,
-                        onChange: (event) => this.setState({ sortField: event.target.value as SortColumn })
-                    } as RadioField, {
-                        type: 'radio',
-                        title: 'Сортировка',
-                        name: 'sort',
-                        values: [
-                            { label: 'По убыванию', value: SortOrder.DESC },
-                            { label: 'По возврастанию', value: SortOrder.ASC }
-                        ],
-                        currentValue: this.state.sortOrder,
-                        onChange: (event) => this.setState({ sortOrder: event.target.value as SortOrder })
-                    } as RadioField]}
-                />
-            </div>
+            {props.multipleSettings &&
+                <div className="box-settings__column">
+                    <Form
+                        className="chart-form"
+                        method="get"
+                        fields={[{
+                            type: 'radio',
+                            title: 'Значение',
+                            name: 'field',
+                            values: [
+                                { label: 'Среднее', value: SortColumn.AVG },
+                                { label: 'Максимальное', value: SortColumn.MAX }
+                            ],
+                            currentValue: this.state.sortField,
+                            onChange: (event) => this.setState({ sortField: event.target.value as SortColumn })
+                        } as RadioField, {
+                            type: 'radio',
+                            title: 'Сортировка',
+                            name: 'sort',
+                            values: [
+                                { label: 'По убыванию', value: SortOrder.DESC },
+                                { label: 'По возврастанию', value: SortOrder.ASC }
+                            ],
+                            currentValue: this.state.sortOrder,
+                            onChange: (event) => this.setState({ sortOrder: event.target.value as SortOrder })
+                        } as RadioField]}
+                    />
+                </div>
+            }
             <div className="box-settings__column">
                 <Form
                     className="chart-form"
@@ -171,4 +175,4 @@ class MultipleChartSettings extends React.Component<SettingsProps, SettingsState
     }
 }
 
-export default MultipleChartSettings;
+export default ChartSettings;
