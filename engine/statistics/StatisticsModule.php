@@ -39,7 +39,7 @@ class StatisticsModule extends Module
         }
 
         $config = ConfigRouter::getDriver()->findConfig('statistics');
-        if ($config->enabled) {
+        if ($config->enabled && !Client::isCli()) {
             $router = Router::getDriver()->getCurrentRoute();
             if ($router->isInAnyNamespace($config->ignoreRouteNamespaces)) return;
             $this->setupEventHandlers($submodules);
