@@ -25,19 +25,17 @@ abstract class IntervalSummaryCountList extends TimeIntervalList
     public function getIterator(): Generator
     {
         $result = array_reverse($this->result->readAll());
-        $currentRow = 0;
+        $intervals = [];
+        foreach ($result as $item) {
+            // $item is an array ['value' => int, 'interval_time' => int]
+            $intervals[$item['interval_time']] = $item['value'];
+        }
+
         $times = parent::getIterator();
-
         foreach ($times as $interval) {
-            $count = 0;
-            if (($result[$currentRow]['interval_time'] ?? null) === $interval) {
-                $count = $result[$currentRow]['value'];
-                $currentRow += 1;
-            }
-
             yield [
                 'time' => $this->getIntervalDate($interval),
-                'value' => $count
+                'value' => $intervals[$interval] ?? 0
             ];
         }
     }
