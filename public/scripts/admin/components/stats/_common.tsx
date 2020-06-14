@@ -19,5 +19,6 @@ export interface ChartProps {
     isReady: boolean,
     objectName: string,
     valueUnit?: string,
+    yAxisLabel: string,
     onInitLoad: () => void
 }

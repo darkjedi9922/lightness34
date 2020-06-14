@@ -36,6 +36,7 @@ class ChartsPage extends React.Component<Props, State> {
                 basePaths={basePaths}
                 isReady={isAllLoaded}
                 objectName={this.props.objectName}
+                yAxisLabel="Count"
                 onInitLoad={this.onChartInitLoad}
             />
             <MultipleChart
@@ -44,6 +45,7 @@ class ChartsPage extends React.Component<Props, State> {
                 basePaths={basePaths}
                 isReady={isAllLoaded}
                 objectName={this.props.objectName}
+                yAxisLabel="Count"
                 onInitLoad={this.onChartInitLoad}
             />
             <MultipleChart
@@ -53,6 +55,7 @@ class ChartsPage extends React.Component<Props, State> {
                 isReady={isAllLoaded}
                 objectName={this.props.objectName}
                 valueUnit="sec"
+                yAxisLabel="Seconds"
                 onInitLoad={this.onChartInitLoad}
             />
             {!isAllLoaded && <>

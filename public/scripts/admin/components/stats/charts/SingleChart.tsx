@@ -1,6 +1,7 @@
 import React from 'react';
 import {
-    AreaChart, Area, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer
+    AreaChart, Area, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer,
+    Label
 } from 'recharts';
 import Table, { SortOrder } from '../../table/Table';
 import { round, maxBy, meanBy, sumBy } from 'lodash';
@@ -57,8 +58,10 @@ class SingleChart extends React.Component<ChartProps, SingleChartState> {
                         margin={{top: 10, right: 30, left: -10, bottom: 10}}
                     >
                         <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="time" />
-                        <YAxis />
+                        <XAxis dataKey="time">
+                            <Label value="Intervals" offset={0} position="bottom" />
+                        </XAxis>
+                        <YAxis label={{ value: props.yAxisLabel, viewBox: { x: 50, y: -5, height: 150, width: 100 }, position: 'insideTopLeft' }} />
                         <Tooltip isAnimationActive={false} />
                         <Area
                             type="monotone"
