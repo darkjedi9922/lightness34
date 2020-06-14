@@ -54,7 +54,7 @@ class SingleChart extends React.Component<ChartProps, SingleChartState> {
                 <ResponsiveContainer height={200} width="99%">
                     <AreaChart
                         data={state.intervals}
-                        margin={{top: 10, right: 30, left: -20, bottom: 10}}
+                        margin={{top: 10, right: 30, left: -10, bottom: 10}}
                     >
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="time" />

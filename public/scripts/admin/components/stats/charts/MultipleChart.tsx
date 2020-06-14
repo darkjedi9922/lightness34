@@ -94,7 +94,7 @@ class MultipleChart extends React.Component<ChartProps, MultipleChartState> {
                                 })()
                             }
                         })}
-                        margin={{top: 10, right: 30, left: -20, bottom: 10}}
+                        margin={{top: 10, right: 30, left: -10, bottom: 10}}
                     >
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="time" />
