@@ -138,7 +138,7 @@ if ($statsRights->can('see')) $globalItems[] = [
             'icon' => 'clock',
             'link' => '/admin/statistics/events/history'
         ], [
-            'name' => 'Обработка',
+            'name' => 'Статистика',
             'icon' => 'chart-area',
             'link' => '/admin/statistics/events/charts'
         ]]
@@ -198,7 +198,7 @@ if ($statsRights->can('see')) $globalItems[] = [
             'icon' => 'clock',
             'link' => '/admin/statistics/cash/history',
         ], [
-            'name' => 'Вызовы',
+            'name' => 'Статистика',
             'icon' => 'chart-area',
             'link' => '/admin/statistics/cash/charts'
         ]]

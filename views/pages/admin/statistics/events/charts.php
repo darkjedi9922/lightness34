@@ -3,7 +3,8 @@ use frame\tools\JsonEncoder;
 
 $props = JsonEncoder::forHtmlAttribute([
     'name' => 'Вызовы обработчиков событий',
-    'stat' => 'events'
+    'stat' => 'events',
+    'objectName' => 'Macro'
 ]);
 ?>
 

@@ -7,7 +7,8 @@ import SingleChart from './charts/SingleChart';
 
 interface Props {
     name: string,
-    stat: string
+    stat: string,
+    objectName: string
 }
 
 interface State {
@@ -34,6 +35,7 @@ class ChartsPage extends React.Component<Props, State> {
                 apiUrl={`/api/stats/${this.props.stat}/summary`}
                 basePaths={basePaths}
                 isReady={isAllLoaded}
+                objectName={this.props.objectName}
                 onInitLoad={this.onChartInitLoad}
             />
             <MultipleChart
@@ -41,6 +43,7 @@ class ChartsPage extends React.Component<Props, State> {
                 apiUrl={`/api/stats/${this.props.stat}/count`}
                 basePaths={basePaths}
                 isReady={isAllLoaded}
+                objectName={this.props.objectName}
                 onInitLoad={this.onChartInitLoad}
             />
             <MultipleChart
@@ -48,6 +51,8 @@ class ChartsPage extends React.Component<Props, State> {
                 apiUrl={`/api/stats/${this.props.stat}/durations`}
                 basePaths={basePaths}
                 isReady={isAllLoaded}
+                objectName={this.props.objectName}
+                valueUnit="sec"
                 onInitLoad={this.onChartInitLoad}
             />
             {!isAllLoaded && <>

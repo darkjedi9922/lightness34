@@ -4,6 +4,7 @@ use frame\tools\JsonEncoder;
 $props = JsonEncoder::forHtmlAttribute([
     'name' => 'Действия',
     'stat' => 'actions',
+    'objectName' => 'Action'
 ]);
 ?>
 

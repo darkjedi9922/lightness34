@@ -17,5 +17,7 @@ export interface ChartProps {
     apiUrl: string,
     basePaths: BreadcrumbsItem[],
     isReady: boolean,
+    objectName: string,
+    valueUnit?: string,
     onInitLoad: () => void
 }

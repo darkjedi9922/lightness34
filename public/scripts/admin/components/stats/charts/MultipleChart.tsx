@@ -121,7 +121,7 @@ class MultipleChart extends React.Component<ChartProps, MultipleChartState> {
                 <Table 
                     className="chart-table"
                     headers={[
-                        'Route',
+                        this.props.objectName,
                         <span>{state.sortField === SortColumn.AVG ? 'Avg' : 'Max'}</span>
                     ]}
                     items={(state.intervals.length ? Object.keys(state.intervals[0].values) : [])
@@ -135,9 +135,12 @@ class MultipleChart extends React.Component<ChartProps, MultipleChartState> {
                                         ></i>
                                         {name}
                                     </>,
-                                    state.sortField === SortColumn.AVG 
+                                    <>
+                                    {state.sortField === SortColumn.AVG 
                                         ? this.findAverageOf(name)
-                                        : this.findMaxOf(name)
+                                        : this.findMaxOf(name)}
+                                    <span className="table__duration"> {props.valueUnit}</span>
+                                    </>
                                 ]
                             }
                         })
