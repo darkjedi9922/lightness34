@@ -71,7 +71,7 @@ abstract class MultipleIntervalDataList extends TimeIntervalList
             }
         }
 
-        return $result;
+        return $this->removeAllEmptyValueIntervals($result);
     }
 
     /**
@@ -86,4 +86,18 @@ abstract class MultipleIntervalDataList extends TimeIntervalList
      * @return mixed|null
      */
     protected abstract function getEmptyValue();
+
+    private function removeAllEmptyValueIntervals(array $result): array
+    {
+        return array_filter($result, function ($timestampValues) {
+            return !$this->doIntervalsHaveOnlyEmptyValues($timestampValues);
+        });
+    }
+
+    private function doIntervalsHaveOnlyEmptyValues(array $timestampValues): bool
+    {
+        return empty(array_filter($timestampValues, function ($timestampValue) {
+            return $timestampValue['value'] !== $this->getEmptyValue();
+        }));
+    }
 }
