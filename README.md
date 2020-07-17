@@ -4,22 +4,41 @@ This project is a PHP framework for site building.
 
 The framework aims on strong component and code structuring. The first purpose is simplifying of creating page routes without configurations.
 
-## Implemented Mechanisms
+## Implemented Features
 
-1. **Routing.** It automatically finds out the page to view.
-2. **Views.** Views are used to show visible parts of a site. One view is only one markup file. It can be HTML or PHP files.
-3. **Database access.** It gives convenient access to MySQL database.
-4. **Actions**. Handle forms and validate them.
-5. **Error Handlers**. Handle errors of any type from notices to fatal in one way that can be different to different error types.
-6. **Events and Macros**. Emit and handle events with macros.
-7. **Reading trackers**. They allow to track reading state or progress any objects for users.
-8. **Cash**. Pre-defined variables that are created when they are used first time. Should not use cash values in the frame classes because these values make testing and architecture of that classes more difficult.
-9. **Dynamic pages**. It allows to form dynamic routes sort of `page/non-existence-page/another-non-existence-page`. In this example `page` is a existing page that is really present as viewfile, and next parts of the url are *virtual* pages. Their names can be accessed from viewfile of dynamic page. That feature can be used, for example, to form routes like `article/my-first-article` where `my-first-article` is a name of the article that will be loaded from database in `article` viewfile.
-10. **Lists**. Convenient way to make lists of Identities.
-11. **Pagination.** The lists mechanism includes `Pager`'s that allows to split contents of lists by page numbers.
-12. **Authorization.** The way to authorize users.
-13. **Modules**. They allows to create parts of a site based on the same stuctures. Also modules are an important part of **user rights mechanism** (*see below*).
-14. **User/Group rights.** Gives a convenient way to define group rights. The groups are part of users, so there are also user rights that can have additional checks on the defined user. 
+### Mechanisms
+
+1. **Routing.** The framework provides and uses classes for parsing URLs, getting their parameters, data from HTTP-requests and for setting parameters of HTTP-responses.
+2. **Views.** Views are used to show visible parts of a site. They include pages, blocks, widgets, layouts. The page routes match file hierarchy of the page view directory and support human-friendly URL.
+3. **Database.** Work with MySQL and execution of SQL-queries. There is a simple implementation of ORM for work with separate records as objects. Also it includes a simple query builder.
+4. **Actions**. Actions let developers handle forms and other CRUD requests which refers to creation, editing and deleting providing an abstract class to their step-by-step implementation.
+5. **Error Handlers**. Setup the single error handler which cat catch and handle all types of PHP errors with user error handlers. The mechanism includes showing of error page views.
+6. **Events**. The app and framework classes can have events on which it is possible to subscribe and handle from any part of the app. The algorithm which handles HTTP-requests is based on the events.
+7. **Configuration.** Gives an opportunity to use different config types which can be interchanged using configs only by a name without an extension. The default built-in types are JSON and PHP.
+8. **Authorization.** User authorization with opportunity of login remembering based on using *cookies*. Also the mechanism lets developers define their own implementations.
+9. **Access Control.** Definition of user rights splitting them by modules and opportunity of implementation above the rights own checks with own logic. The mechanism is based on the best of RBAC and ABAC.
+10. **Cash**. Single definition of values which have time- or memory-consuming initialization. Fifferent types of cash storages can be applied to the values. There is a static type but developers can create their own.
+11. **Drivers**. The mechanism of drivers define implementation of abstract functional in order to interchange it at the global level. Also the drivers support decoration at runtime.
+
+### Additional
+
+1. **Reading Trackers**. They allow to attach state and progress tracking of website content reading for every user.
+2. **Pagination**. Splitting lists by page numbers. The paginators are views so it is possible to setup their view with logic.
+3. **JSON for Frontend.** Generation JSON which can be included to HTML and JavaScript in order to send data from PHP to JavaScript without API requests.
+4. **Cookie and Sessions.** There are utilites for work with cookie and sessions of clients. Additionally, cookies is updated without page reloading.
+5. **Logging.** All errors are written in a log in details including the call stack. The records can be logged splitting by levels.
+6. **Semaphores.** Crossplatform implementation of semaphores for access synchronization of parallel processes with special blocking flags.
+7. **Units.** Utilites for work with units including conversion and finding the most human-readable value.
+8. **Daemons**. Implementation of event handlers that are like daemon processes in operating systems which are run regularly in set time interval.
+
+### Built-in User Modules
+
+1. **Users.** Adding, editing users. Viewing profile lists. The module includes controlling their genders and groups.
+2. **Messages.** Users can talk to each other in dialogs. The module gives opportunities to control dialog lists and messages.
+3. **Articles.** Adding, editing, removing articles, viewing all articles and also lists of the new for a user articles.
+4. **Comments.** Adding comments to module materials. The module is implemented as submodule so it can be attached to any module.
+5. **Statistics.** Dinamically plugs in collecting of main mechanisms work statistics and provides API for getting it.
+6. **Admin Panel.** Viewing information about modules, their data including application statistics and also configuring them.
 
 ## Getting Started
 
