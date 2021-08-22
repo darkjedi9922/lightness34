@@ -4,17 +4,16 @@ use PHPUnit\Framework\TestCase;
 use tests\stubs\RightsDescStub;
 use tests\stubs\ModuleStub;
 use engine\users\User;
+use frame\auth\AuthDriver;
 use frame\core\Core;
-use frame\auth\RightsStore;
 use frame\auth\UserRights;
-use tests\modules\drivers\RightsStoreStub;
 
 class UserRightsTest extends TestCase
 {
     public static function setUpBeforeClass(): void
     {
         $app = new Core;
-        $app->replaceDriver(RightsStore::class, RightsStoreStub::class);
+        $app->replaceDriver(AuthDriver::class, AuthDriverStub::class);
     }
 
     public function testIfARightHasAnAdditionCheckForUserItIsCheckedToo()

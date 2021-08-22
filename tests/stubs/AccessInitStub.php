@@ -1,14 +1,14 @@
 <?php namespace tests\stubs;
 
 use frame\core\Core;
-use frame\tools\init\AccessInit;
 use frame\modules\Module;
 use frame\auth\UserRights;
 use frame\auth\GroupUser;
+use frame\auth\InitAccess;
 use frame\auth\RightsStore;
 use tests\modules\drivers\RightsStoreStub;
 
-class AccessInitStub extends AccessInit
+class AccessInitStub extends InitAccess
 {
     protected function createUserRights(Module $module, GroupUser $for): UserRights
     {

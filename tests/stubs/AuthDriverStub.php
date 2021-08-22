@@ -1,9 +1,10 @@
-<?php namespace tests\modules\drivers;
+<?php namespace tests\stubs;
 
-use frame\auth\RightsStore;
+use frame\auth\AuthDriver;
+use frame\auth\GroupUser;
 use tests\stubs\ModuleStub;
 
-class RightsStoreStub extends RightsStore
+class AuthDriverStub extends AuthDriver
 {
     private $table;
 
@@ -22,6 +23,11 @@ class RightsStoreStub extends RightsStore
             'group_id' => 3,
             'rights' => 0b0010000 // can 'execute-order'
         ]];
+    }
+
+    public function getUserMe(): GroupUser
+    {
+        return new GroupUser;
     }
 
     public function loadRights(int $moduleId, int $groupId): int

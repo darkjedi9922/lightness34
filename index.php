@@ -7,7 +7,6 @@ use engine\messages\MessagesModule;
 use engine\statistics\StatisticsModule;
 use engine\users\UsersModule;
 use frame\actions\ActionMacro;
-use frame\auth\RightsStore;
 use frame\config\ConfigRouter;
 use frame\core\Core;
 use frame\errors\Errors;
@@ -23,7 +22,6 @@ use frame\route\Request;
 use frame\route\Response;
 use frame\stdlib\configs\JsonConfig;
 use frame\stdlib\configs\PhpConfig;
-use frame\stdlib\drivers\auth\DatabaseRightsStore;
 use frame\stdlib\drivers\route\UrlRouter;
 use frame\stdlib\drivers\route\UrlRequest;
 use frame\stdlib\drivers\route\UrlResponse;
@@ -38,7 +36,7 @@ $app = new Core([
     Request::class => UrlRequest::class,
     Response::class => UrlResponse::class,
     SqlDriver::class => MySqlDriver::class,
-    RightsStore::class => DatabaseRightsStore::class
+    frame\auth\AuthDriver::class => engine\drivers\AuthDriver::class
 ]);
 
 $configRouter = ConfigRouter::getDriver();

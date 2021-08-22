@@ -13,7 +13,7 @@ class GroupRights
         $this->moduleId = $moduleId;
         $this->groupId = $groupId;
         if ($groupId !== UserGroup::ROOT_ID) {
-            $this->rights = RightsStore::getDriver()->loadRights($moduleId, $groupId);
+            $this->rights = AuthDriver::getDriver()->loadRights($moduleId, $groupId);
         }
     }
 
@@ -45,9 +45,6 @@ class GroupRights
     {
         if ($this->groupId === UserGroup::ROOT_ID) 
             throw new \Exception('The root rights cannot be modified.');
-        
-        RightsStore::getDriver()->saveRights(
-            $this->moduleId, $this->groupId, $this->rights
-        );
+        AuthDriver::getDriver()->saveRights($this->moduleId, $this->groupId, $this->rights);
     }
 }
