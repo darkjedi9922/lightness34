@@ -9,11 +9,12 @@ use frame\modules\Modules;
 use frame\lists\paged\PagerView;
 use frame\actions\ViewAction;
 use engine\comments\actions\AddComment;
-use engine\comments\CommentList;
 use engine\comments\Comment;
 use frame\tools\JsonEncoder;
 use engine\articles\actions\DeleteArticleAction;
 use engine\comments\actions\DeleteComment;
+use frame\config\ConfigRouter;
+use frame\database\Records;
 
 $id = (int)InitRoute::requireGet('id');
 $article = Article::selectIdentity($id);
@@ -27,8 +28,15 @@ $prevPagenumber = PagerModel::getRoutePage(true);
 $page = PagerModel::getRoutePage();
 $moduleId = Modules::getDriver()->findByName('articles/comments')->getId();
 $materialId = $article->id;
-$comments = new CommentList($moduleId, $materialId, $page);
-$pages = $comments->getPager()->countPages();
+$conditions = ['module_id' => $moduleId, 'material_id' => $materialId];
+$commentCount = Records::from(Comment::getTable(), $conditions)->count('id');
+$commentConfig = ConfigRouter::getDriver()->findConfig('comments');
+$pageLimit = $commentConfig->get('list.amount');
+$pager = new PagerModel($page, $commentCount, $pageLimit);
+$comments = Records::from(Comment::getTable(), $conditions)
+    ->range($pager->getOffset(), $pager->getLimit())
+    ->order(['id' => $commentConfig->get('list.order')])->select();
+$pages = $pager->countPages();
 $articleRights = User::getMyRights('articles');
 
 $delete = new ViewAction(DeleteArticleAction::class, ['id' => $id]);
@@ -54,18 +62,15 @@ $articleCommentsData = [
         'login' => $me->login,
         'isOnline' => (bool)$me->online
     ],
-    // 'moduleId' => Modules::getDriver()->findByName('articles/comments')->getId(),
-    // 'materialId' => $article->id,
     'list' => [],
-    'pagerHtml' => ($pages > 1 ? (new PagerView($comments->getPager(), 'admin'))->getHtml() : ''),
-    // 'page' => $page,
+    'pagerHtml' => ($pages > 1 ? (new PagerView($pager, 'admin'))->getHtml() : ''),
     'addUrl' => $add->getUrl()
 ];
 
 $commentRights = User::getMyRights('articles/comments');
 $deleteComment = new ViewAction(DeleteComment::class);
-foreach ($comments as $comment) {
-    /** @var Comment $comment */
+while ($comment = $comments->readLine()) {
+    $comment = new Comment($comment);
     $commentAuthor = User::selectIdentity($comment->author_id);
 
     if ($commentRights->canOneOf([

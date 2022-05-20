@@ -95,7 +95,14 @@ class PagerModel
         return $this->getLast();
     }
     
+    /**
+     * @deprecated Use getLimit instead
+     */
     public function countPageLimit(): int {
+        return $this->pageLimit;
+    }
+
+    public function getLimit(): int {
         return $this->pageLimit;
     }
 
@@ -106,8 +113,13 @@ class PagerModel
     /**
      * Индекс строки в БД, с которой нужно начинать выборку для данного 
      * номера страницы.
+     * @deprecated Use getOffset instead
      */
     public function getStartMaterialIndex(): int {
         return ($this->current - 1) * $this->pageLimit;
+    }
+
+    public function getOffset(): int {
+        return $this->getStartMaterialIndex();
     }
 }

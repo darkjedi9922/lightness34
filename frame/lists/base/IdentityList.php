@@ -1,7 +1,6 @@
 <?php namespace frame\lists\base;
 
-use frame\database\SqlDriver;
-use function lightlib\array_assemble;
+use frame\database\Records;
 use frame\lists\iterators\IdentityIterator;
 
 class IdentityList implements BaseList
@@ -18,14 +17,15 @@ class IdentityList implements BaseList
      */
     public function __construct(
         string $identityClass, 
-        array $orderFields = ['id' => 'ASC']
+        array $orderFields = ['id' => 'ASC'],
+        ?int $offset = null,
+        ?int $limit = null
     ) {
-        $orderBy = !empty($orderFields) ?
-            'ORDER BY ' . array_assemble($orderFields, ', ', ' ') : '';
-        
-        $this->query = SqlDriver::getDriver()->query(
-            "SELECT * FROM {$identityClass::getTable()} $orderBy"
-        );
+        $query = Records::from($identityClass::getTable())->order($orderFields);
+        if ($offset !== null && $limit !== null) {
+            $query = $query->range($offset, $limit);
+        }
+        $this->query = $query->select();
         $this->iterator = new IdentityIterator($this->query, $identityClass);
     }
 

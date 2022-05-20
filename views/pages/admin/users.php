@@ -1,16 +1,20 @@
 <?php /** @var frame\views\Page $self */
 
 use frame\lists\paged\PagerModel;
-use engine\users\UserPagedList;
 use engine\users\User;
 use engine\users\Group;
 use engine\users\Gender;
 use frame\auth\InitAccess;
+use frame\config\ConfigRouter;
+use frame\database\Records;
+use frame\lists\base\IdentityList;
 
 InitAccess::accessRight('users', 'see-list');
 
-$pagenumber = PagerModel::getRoutePage();
-$users = new UserPagedList($pagenumber);
+$pageLimit = ConfigRouter::getDriver()->findConfig('users')->{'list.amount'};
+$countUsers = Records::from(User::getTable())->count('id');
+$pager = new PagerModel(PagerModel::getRoutePage(), $countUsers, $pageLimit);
+$users = new IdentityList(User::class, ['id' => 'ASC'], $pager->getOffset(), $pager->getLimit());
 $rights = User::getMyRights('users');
 
 $tableProps = ['items' => []];
@@ -34,12 +38,12 @@ foreach ($users as $user) {
 <div class="content__header">
     <div class="breadcrumbs">
         <span class="breadcrumbs__item breadcrumbs__item--current">
-            Пользователи (<?= $users->countOnPage() ?>)
+            Пользователи (<?= $users->count() ?>)
         </span>
     </div>
-    <?php if ($users->getPager()->countPages() > 1): ?>
+    <?php if ($pager->countPages() > 1): ?>
     <div class="content__pager">
-        <?php $users->getPager()->show('admin') ?>
+        <?php $pager->show('admin') ?>
     </div>
     <?php endif ?>
     <?php if ($rights->can('add')): ?>
